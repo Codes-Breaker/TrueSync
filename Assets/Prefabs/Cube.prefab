@@ -58,6 +58,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
@@ -82,6 +83,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &114352763778701458
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -146,13 +148,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df3e4ecc2c78eaa409dad488c230d65d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _localPosition:
-    x:
-      _serializedValue: 0
-    y:
-      _serializedValue: 17136919552
-    z:
-      _serializedValue: 0
   _position:
     x:
       _serializedValue: 0
@@ -160,15 +155,6 @@ MonoBehaviour:
       _serializedValue: 17136919552
     z:
       _serializedValue: 0
-  _localRotation:
-    x:
-      _serializedValue: 0
-    y:
-      _serializedValue: 0
-    z:
-      _serializedValue: 0
-    w:
-      _serializedValue: 4294967296
   _rotation:
     x:
       _serializedValue: 0
@@ -185,14 +171,6 @@ MonoBehaviour:
       _serializedValue: 4294967296
     z:
       _serializedValue: 4294967296
-  _localScale:
-    x:
-      _serializedValue: 4294967296
-    y:
-      _serializedValue: 4294967296
-    z:
-      _serializedValue: 4294967296
   _serialized: 1
   tsCollider: {fileID: 0}
   tsParent: {fileID: 0}
-  tsChildren: []

@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
+using TrueSync.Physics3D;
 
 namespace TrueSync
 {
@@ -839,6 +840,12 @@ namespace TrueSync
 
                     instance.scheduler.UpdateAllCoroutines();
                     lockstep.Update();
+
+                    //foreach (var body in PhysicsManager.instance.GetWorld().Bodies())
+                    //{
+                    //    if (body is RigidBody rB)
+                    //        Debug.LogError($"body {rB.Shape.GetType().FullName} {rB.position.x} - {rB.position.y} - {rB.position.z} tick {lockstep.Ticks}");
+                    //}
                 }
             }
         }

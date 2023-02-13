@@ -14,6 +14,8 @@ GameObject:
   - component: {fileID: 114753539753264282}
   - component: {fileID: 114984643399764904}
   - component: {fileID: 114268731396021292}
+  - component: {fileID: 2937265529762089607}
+  - component: {fileID: 8873081936658653850}
   m_Layer: 0
   m_Name: Sphere (1)
   m_TagString: Untagged
@@ -58,10 +60,11 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 6e9d3fd228536204fbf776a5af9b222b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -82,6 +85,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &114753539753264282
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -95,7 +99,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _mass:
-    _serializedValue: 0
+    _serializedValue: 214748364800
   _useGravity: 1
   _isKinematic: 0
   _linearDrag:
@@ -146,13 +150,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df3e4ecc2c78eaa409dad488c230d65d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _localPosition:
-    x:
-      _serializedValue: 3994319616
-    y:
-      _serializedValue: 3951369984
-    z:
-      _serializedValue: 1632087552
   _position:
     x:
       _serializedValue: 3994319616
@@ -160,15 +157,6 @@ MonoBehaviour:
       _serializedValue: 3951369984
     z:
       _serializedValue: 1632087552
-  _localRotation:
-    x:
-      _serializedValue: 0
-    y:
-      _serializedValue: 0
-    z:
-      _serializedValue: 0
-    w:
-      _serializedValue: 4294967296
   _rotation:
     x:
       _serializedValue: 0
@@ -185,14 +173,34 @@ MonoBehaviour:
       _serializedValue: 4294967296
     z:
       _serializedValue: 4294967296
-  _localScale:
-    x:
-      _serializedValue: 4294967296
-    y:
-      _serializedValue: 4294967296
-    z:
-      _serializedValue: 4294967296
   _serialized: 1
   tsCollider: {fileID: 0}
   tsParent: {fileID: 0}
-  tsChildren: []
+--- !u!114 &2937265529762089607
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1803149329682410}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 901ff32c44501584ba61d219043637fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &8873081936658653850
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1803149329682410}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f75e3edb6c498d04482a7157d8813725, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  friction:
+    _serializedValue: 3865470464
+  restitution:
+    _serializedValue: 0

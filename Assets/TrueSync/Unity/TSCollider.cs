@@ -9,7 +9,7 @@ namespace TrueSync {
      **/
     [RequireComponent(typeof(TSTransform))]
     [Serializable]
-    [ExecuteInEditMode]
+    //[ExecuteInEditMode]
     public abstract class TSCollider : MonoBehaviour, ICollider {
 
         private Shape shape;

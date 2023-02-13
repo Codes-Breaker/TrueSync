@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 namespace TrueSync
 {
 	public abstract class AbstractLockstep
@@ -399,6 +400,7 @@ namespace TrueSync
 					}
 				}
 			}
+
 		}
 
         // 检查游戏是否可以开始
