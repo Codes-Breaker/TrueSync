@@ -7,7 +7,7 @@ public class AnimalController : MonoBehaviour
 
     public float speed;
     public float jumpForce;
-
+    public bool isWalk;
     public Rigidbody body;
     public bool isGrounded;
     public bool releasing = false;
@@ -31,6 +31,8 @@ public class AnimalController : MonoBehaviour
     private void FixedUpdate()
     {
         var vector3Move = new Vector3(-Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+        var upRotation = new Vector3(1, 0, 0);
+        var downRotation = new Vector3(0, -1, 0);
         if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0)
         {
             body.gameObject.GetComponent<ConfigurableJoint>().targetRotation = Quaternion.Slerp(body.gameObject.GetComponent<ConfigurableJoint>().targetRotation, Quaternion.LookRotation(vector3Move), 0.1f);
@@ -57,6 +59,15 @@ public class AnimalController : MonoBehaviour
             body.AddForce(new Vector3(1, 0, 0) * speed);
         }
 
+        if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S))
+        {
+            isWalk = true;
+        }
+        else
+        {
+            isWalk = false;
+        }
+
         if (Input.GetAxis("Jump") > 0)
         {
             if (isGrounded)
@@ -66,9 +77,10 @@ public class AnimalController : MonoBehaviour
             }
         }
 
+
         if (Input.GetKey(KeyCode.LeftShift))
         {
-            if (body.transform.localScale.x < maxScale)
+            if (body.transform.localScale.x < maxScale && !releasing)
             {
                 body.transform.localScale = Vector3.Lerp(body.transform.localScale, new Vector3(maxScale, maxScale, maxScale), 0.1f);
                 neckPoint.targetRotation = Quaternion.Euler(0, 0, -45);
@@ -84,11 +96,11 @@ public class AnimalController : MonoBehaviour
                     body.transform.localScale = new Vector3(1, 1, 1);
                     releasing = false; 
                 }
-                else if (body.transform.localScale.x > 1.29f)
+                else if (body.transform.localScale.x > 1f)
                 {
                     if (!releasing)
                     {
-                        body.AddForce(body.transform.right * speed * 100.0f);
+                        body.AddForce(body.transform.right * speed * 50.0f);
                     }
                     else
                     {

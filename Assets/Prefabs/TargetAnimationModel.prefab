@@ -660,6 +660,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2685184600175135818}
   - component: {fileID: 2685184600175135819}
+  - component: {fileID: 517360526}
   m_Layer: 0
   m_Name: TargetAnimationModel
   m_TagString: Untagged
@@ -701,6 +702,20 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &517360526
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2685184600175135821}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e9a244f77d47594fa094d52f2573a42, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  controller: {fileID: 0}
+  animator: {fileID: 2685184600175135819}
 --- !u!1 &2685184600287792911
 GameObject:
   m_ObjectHideFlags: 0
@@ -928,6 +943,7 @@ MonoBehaviour:
   fallTime: 0
   maxFallTime: 3
   fall: 0
+  body: {fileID: 0}
 --- !u!1 &2685184600486035904
 GameObject:
   m_ObjectHideFlags: 0

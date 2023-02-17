@@ -7,7 +7,7 @@ public class LimbCollision : MonoBehaviour
     public AnimalController playerController;
     private void Start()
     {
-        playerController = GameObject.FindObjectOfType<AnimalController>().GetComponent<AnimalController>();
+
     }
 
     private void OnCollisionEnter(Collision collision)

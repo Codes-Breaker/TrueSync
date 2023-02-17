@@ -5,14 +5,33 @@ using UnityEngine;
 public class CollisionStun : MonoBehaviour
 {
     public float fallTime = 0;
-    public float maxFallTime = 3;
+    public float maxFallTime = 2;
     public bool fall;
+    public ConfigurableJoint body;
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.impulse.magnitude > 50)
         {
             fall = true;
             fallTime = 0;
+            maxFallTime = 3;
+            body.targetRotation = Quaternion.Euler( body.transform.rotation.eulerAngles.x, body.transform.rotation.eulerAngles.y, body.transform.rotation.eulerAngles.z);
+            SetBalance(0, 0);
+        }
+        else if (collision.impulse.magnitude > 25)
+        {
+            fall = true;
+            fallTime = 0;
+            maxFallTime = 2;
+            body.targetRotation = Quaternion.Euler(body.transform.rotation.eulerAngles.x, body.transform.rotation.eulerAngles.y, body.transform.rotation.eulerAngles.z);
+            SetBalance(0, 0);
+        }
+        else if (collision.impulse.magnitude > 10)
+        {
+            fall = true;
+            fallTime = 0;
+            maxFallTime = 1;
+            body.targetRotation = Quaternion.Euler(body.transform.rotation.eulerAngles.x, body.transform.rotation.eulerAngles.y, body.transform.rotation.eulerAngles.z);
             SetBalance(0, 0);
         }
     }
