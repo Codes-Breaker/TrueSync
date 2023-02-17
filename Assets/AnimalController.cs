@@ -12,7 +12,7 @@ public class AnimalController : MonoBehaviour
     public bool isGrounded;
     public bool releasing = false;
     public float maxScale;
-
+    public Transform releaseEffect;
     public ConfigurableJoint neckPoint;
     public Transform cameraFollowPoint;
     // Start is called before the first frame update
@@ -94,7 +94,8 @@ public class AnimalController : MonoBehaviour
                 if (body.transform.localScale.x - 1.0f < 0.02f)
                 {
                     body.transform.localScale = new Vector3(1, 1, 1);
-                    releasing = false; 
+                    releasing = false;
+                    releaseEffect.gameObject.SetActive(false);
                 }
                 else if (body.transform.localScale.x > 1f)
                 {
@@ -108,7 +109,7 @@ public class AnimalController : MonoBehaviour
                     }
                     body.transform.localScale = Vector3.Lerp(body.transform.localScale, new Vector3(1.0f, 1.0f, 1.0f), 0.01f);
                     neckPoint.targetRotation = Quaternion.Euler(0, 0, 0);
-
+                    releaseEffect.gameObject.SetActive(true);
                     releasing = true;
                 }
                 else
