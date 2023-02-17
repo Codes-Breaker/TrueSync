@@ -9,7 +9,7 @@ public class CollisionStun : MonoBehaviour
     public bool fall;
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.impulse.magnitude > 10)
+        if (collision.impulse.magnitude > 50)
         {
             fall = true;
             fallTime = 0;

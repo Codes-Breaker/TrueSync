@@ -14,34 +14,47 @@ public class AnimalController : MonoBehaviour
     public float maxScale;
 
     public ConfigurableJoint neckPoint;
-
+    public Transform cameraFollowPoint;
     // Start is called before the first frame update
     void Start()
     {
         body = GetComponent<Rigidbody>();
     }
 
+    private void Update()
+    {
+        var point = new Vector3(body.transform.position.x, body.transform.position.y, body.transform.position.z);
+        cameraFollowPoint.transform.position = Vector3.Lerp(cameraFollowPoint.transform.position, point, 0.1f);
+    }
+
 
     private void FixedUpdate()
     {
+        var vector3Move = new Vector3(-Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+        if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0)
+        {
+            body.gameObject.GetComponent<ConfigurableJoint>().targetRotation = Quaternion.Slerp(body.gameObject.GetComponent<ConfigurableJoint>().targetRotation, Quaternion.LookRotation(vector3Move), 0.1f);
+        }
+
+
         if (Input.GetKey(KeyCode.W))
         {
-            body.AddForce(body.transform.right * speed);
+            body.AddForce(new Vector3(0, 0, 1) * speed);
         }
 
         if (Input.GetKey(KeyCode.A))
         {
-            body.AddForce(body.transform.forward * speed);
+            body.AddForce(new Vector3(-1, 0, 0) * speed);
         }
 
         if (Input.GetKey(KeyCode.S))
         {
-            body.AddForce(-body.transform.right * speed);
+            body.AddForce(new Vector3(0, 0, -1) * speed);
         }
 
         if (Input.GetKey(KeyCode.D))
         {
-            body.AddForce(-body.transform.forward * speed);
+            body.AddForce(new Vector3(1, 0, 0) * speed);
         }
 
         if (Input.GetAxis("Jump") > 0)
@@ -59,6 +72,7 @@ public class AnimalController : MonoBehaviour
             {
                 body.transform.localScale = Vector3.Lerp(body.transform.localScale, new Vector3(maxScale, maxScale, maxScale), 0.1f);
                 neckPoint.targetRotation = Quaternion.Euler(0, 0, -45);
+                releasing = false;
             }
         }
         else

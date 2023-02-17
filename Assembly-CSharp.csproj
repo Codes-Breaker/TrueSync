@@ -127,6 +127,7 @@
     <Compile Include="Assets\TrueSync\Unity\TSRigidBody.cs" />
     <Compile Include="Assets\Nappin\PhysicsBasedCharacterController\Scripts\Extensions\Ladder.cs" />
     <Compile Include="Assets\TrueSync\Physics\Farseer\Controllers\Controller.cs" />
+    <Compile Include="Assets\LimbCollision.cs" />
     <Compile Include="Assets\GameManager.cs" />
     <Compile Include="Assets\TrueSync\Unity\LayerCollisionMatrix.cs" />
     <Compile Include="Assets\TrueSync\Physics\Farseer\Common\Decomposition\CDT\Orientation.cs" />
@@ -152,6 +153,7 @@
     <Compile Include="Assets\TrueSync\Physics\Jitter\Collision\Shapes\TerrainShape.cs" />
     <Compile Include="Assets\TrueSync\Physics\Farseer\Common\Decomposition\CDT\TriangulationPoint.cs" />
     <Compile Include="Assets\TrueSync\Unity\TSRaycastHit2D.cs" />
+    <Compile Include="Assets\CopyMotion.cs" />
     <Compile Include="Assets\TrueSync\Physics\Farseer\Collision\IBroadPhase.cs" />
     <Compile Include="Assets\Suriyun\Addon-PetZoo\Core\AgentLinkMover.cs" />
     <Compile Include="Assets\TrueSync\Physics\Farseer\Common\ConvexHull\ChainHull.cs" />
@@ -290,6 +292,7 @@
     <Compile Include="Assets\TrueSync\Physics\Jitter\Collision\CollisionSystem.cs" />
     <Compile Include="Assets\TrueSync\Physics\Jitter\Dynamics\ArbiterMap.cs" />
     <Compile Include="Assets\TrueSync\Physics\Jitter\Collision\Octree.cs" />
+    <Compile Include="Assets\CollisionStun.cs" />
     <Compile Include="Assets\Nappin\PhysicsBasedCharacterController\Scripts\Extensions\ToggleController.cs" />
     <Compile Include="Assets\TrueSync\Physics\Farseer\Dynamics\Joints\RevoluteJoint.cs" />
     <Compile Include="Assets\TrueSync\Physics\Jitter\Dynamics\Joints\PrismaticJoint3D.cs" />
@@ -311,6 +314,7 @@
     <Compile Include="Assets\TrueSync\Physics\Farseer\Common\Curve.cs" />
     <Compile Include="Assets\TrueSync\Physics\Jitter\Extra\Clones\RigidBodyClone.cs" />
     <Compile Include="Assets\TrueSync\Physics\Farseer\Common\Decomposition\SeidelDecomposer.cs" />
+    <Compile Include="Assets\AnimalController.cs" />
     <Compile Include="Assets\TrueSync\Physics\Farseer\Common\Decomposition\Seidel\QueryGraph.cs" />
     <Compile Include="Assets\StompyRobot\SROptions\SROptions.Attributes.cs" />
     <Compile Include="Assets\Nappin\PhysicsBasedCharacterController\Scripts\Extensions\SpeedArea.cs" />
@@ -320,10 +324,6 @@
     <Compile Include="Assets\TrueSync\Physics\Farseer\Common\Decomposition\CDT\TriangulationConstraint.cs" />
     <Compile Include="Assets\TrueSync\Unity\TSPolygonCollider2D.cs" />
     <Compile Include="Assets\TrueSync\Physics\Farseer\Dynamics\World.cs" />
-    <Compile Include="Assets\AnimalController.cs" />
-    <Compile Include="Assets\LimbCollision.cs" />
-    <Compile Include="Assets\CopyMotion.cs" />
-    <Compile Include="Assets\CollisionStun.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Suriyun\UnityChanShader\Shader\Unitychan_chara_fuku.shader" />
