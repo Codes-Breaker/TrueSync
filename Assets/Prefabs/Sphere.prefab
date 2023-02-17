@@ -14,8 +14,8 @@ GameObject:
   - component: {fileID: 114011082038123182}
   - component: {fileID: 114034942504043106}
   - component: {fileID: 114392464968775286}
-  - component: {fileID: 7418153261354197764}
   - component: {fileID: 7238579180172641236}
+  - component: {fileID: 2591712306513963009}
   m_Layer: 0
   m_Name: Sphere
   m_TagString: Untagged
@@ -33,7 +33,6 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.28, y: 0.92, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -57,7 +56,6 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -178,18 +176,6 @@ MonoBehaviour:
   _serialized: 1
   tsCollider: {fileID: 0}
   tsParent: {fileID: 0}
---- !u!114 &7418153261354197764
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1227087555414640}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 10e09eab63cfd26459991fefe7da9bc2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &7238579180172641236
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -203,6 +189,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   friction:
-    _serializedValue: 3865470464
+    _serializedValue: 0
   restitution:
     _serializedValue: 0
+--- !u!114 &2591712306513963009
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1227087555414640}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e36fa30f86ac28d49b23c90ee10f13a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 0
+  runSpeed: 0
+  walkSpeed: 1

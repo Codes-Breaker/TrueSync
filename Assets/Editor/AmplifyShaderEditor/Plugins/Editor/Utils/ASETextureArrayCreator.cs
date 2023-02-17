@@ -177,12 +177,7 @@ namespace AmplifyShaderEditor
 				EditorGUILayout.PropertyField( m_sizeY, new GUIContent( "Y" ) );
 			}
 			EditorGUIUtility.labelWidth = 100;
-#if UNITY_2017_1_OR_NEWER
 			m_lockRatio.boolValue = GUILayout.Toggle( m_lockRatio.boolValue, "L", "minibutton", GUILayout.Width( 18 ) );
-#else
-			GUILayout.Toggle( m_lockRatio.boolValue, "L", "minibutton", GUILayout.Width( 18 ) );
-			m_lockRatio.boolValue = true;
-#endif
 			if( m_lockRatio.boolValue )
 			{
 				m_sizeX.intValue = m_sizes[ m_selectedSize.intValue ];
@@ -285,7 +280,15 @@ namespace AmplifyShaderEditor
 		[SerializeField]
 		private TextureArrayCreatorAsset m_dummyAsset;
 
-		private static List<TextureFormat> UncompressedFormats = new List<TextureFormat>() { TextureFormat.ARGB32, TextureFormat.RGBA32, TextureFormat.RGB24, TextureFormat.Alpha8 };
+		private static List<TextureFormat> UncompressedFormats = new List<TextureFormat>() 
+		{
+			TextureFormat.RGBAFloat,
+			TextureFormat.RGBAHalf,
+			TextureFormat.ARGB32, 
+			TextureFormat.RGBA32, 
+			TextureFormat.RGB24, 
+			TextureFormat.Alpha8 
+		};
 
 		private GUIStyle m_contentStyle = null;
 
@@ -589,11 +592,12 @@ namespace AmplifyShaderEditor
 				Graphics.Blit( asset.AllTextures[ i ], rt );
 				GL.sRGBWrite = cachedsrgb;
 
-				Texture2D t2d = new Texture2D( sizeX, sizeY, asset.SelectedFormatEnum, asset.MipMaps, asset.LinearMode );
+				bool isCompressed = UncompressedFormats.FindIndex( x => x.Equals( asset.SelectedFormatEnum ) ) < 0;
+				TextureFormat validReadPixelsFormat = isCompressed ? TextureFormat.RGBAFloat : asset.SelectedFormatEnum;
+				Texture2D t2d = new Texture2D( sizeX, sizeY, validReadPixelsFormat, asset.MipMaps, asset.LinearMode );
 				t2d.ReadPixels( new Rect( 0, 0, sizeX, sizeY ), 0, 0, asset.MipMaps );
 				RenderTexture.active = null;
 
-				bool isCompressed = UncompressedFormats.FindIndex( x => x.Equals( asset.SelectedFormatEnum ) ) < 0;
 				if( isCompressed )
 				{
 					EditorUtility.CompressTexture( t2d, asset.SelectedFormatEnum, asset.Quality );
@@ -679,11 +683,12 @@ namespace AmplifyShaderEditor
 				Graphics.Blit( asset.AllTextures[ i ], rt );
 				GL.sRGBWrite = cachedsrgb;
 
-				Texture2D t2d = new Texture2D( sizeX, sizeY, asset.SelectedFormatEnum, asset.MipMaps, asset.LinearMode );
+				bool isCompressed = UncompressedFormats.FindIndex( x => x.Equals( asset.SelectedFormatEnum ) ) < 0;
+				TextureFormat validReadPixelsFormat = isCompressed ? TextureFormat.RGBAFloat : asset.SelectedFormatEnum;
+				Texture2D t2d = new Texture2D( sizeX, sizeY, validReadPixelsFormat, asset.MipMaps, asset.LinearMode );
 				t2d.ReadPixels( new Rect( 0, 0, sizeX, sizeY ), 0, 0, asset.MipMaps );
 				RenderTexture.active = null;
 
-				bool isCompressed = UncompressedFormats.FindIndex( x => x.Equals( asset.SelectedFormatEnum ) ) < 0;
 				if( isCompressed )
 				{
 					EditorUtility.CompressTexture( t2d, asset.SelectedFormatEnum, asset.Quality );
@@ -751,11 +756,12 @@ namespace AmplifyShaderEditor
 				Graphics.Blit( asset.AllTextures[ i ], rt );
 				GL.sRGBWrite = cachedsrgb;
 
-				Texture2D t2d = new Texture2D( sizeX, sizeY, asset.SelectedFormatEnum, asset.MipMaps, asset.LinearMode );
+				bool isCompressed = UncompressedFormats.FindIndex( x => x.Equals( asset.SelectedFormatEnum ) ) < 0;
+				TextureFormat validReadPixelsFormat = isCompressed ? TextureFormat.RGBAFloat : asset.SelectedFormatEnum;
+				Texture2D t2d = new Texture2D( sizeX, sizeY, validReadPixelsFormat, asset.MipMaps, asset.LinearMode );
 				t2d.ReadPixels( new Rect( 0, 0, sizeX, sizeY ), 0, 0, asset.MipMaps );
 				RenderTexture.active = null;
 
-				bool isCompressed = UncompressedFormats.FindIndex( x => x.Equals( asset.SelectedFormatEnum ) ) < 0;
 				if( isCompressed )
 				{
 					EditorUtility.CompressTexture( t2d, asset.SelectedFormatEnum, asset.Quality );

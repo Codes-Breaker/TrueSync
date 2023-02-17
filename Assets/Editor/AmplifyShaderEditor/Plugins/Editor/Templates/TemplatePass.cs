@@ -128,10 +128,10 @@ namespace AmplifyShaderEditor
 			}
 
 			Dictionary<string, TemplateShaderPropertyData> ownDuplicatesDict = new Dictionary<string, TemplateShaderPropertyData>( duplicatesHelper );
-			TemplateHelperFunctions.CreateShaderGlobalsList( passInfo.Data, ref m_availableShaderGlobals, ref ownDuplicatesDict );
+			TemplateHelperFunctions.CreateShaderGlobalsList( passInfo.Data, ref m_availableShaderGlobals, ref ownDuplicatesDict,subshaderIdx,passIdx );
 			if( m_modules.SRPType == TemplateSRPType.BuiltIn )
 			{
-				TemplateHelperFunctions.CheckUnityBuiltinGlobalMacros( passInfo.Data, ref m_availableShaderGlobals, ref ownDuplicatesDict );
+				TemplateHelperFunctions.CheckUnityBuiltinGlobalMacros( passInfo.Data, ref m_availableShaderGlobals, ref ownDuplicatesDict, subshaderIdx, passIdx );
 			}
 
 			// Vertex and Interpolator data
@@ -168,7 +168,7 @@ namespace AmplifyShaderEditor
 			if( m_tessDomainData != null )
 				idManager.RegisterId( m_tessDomainData.StartIdx, uniquePrefix + m_tessDomainData.Id, m_tessDomainData.Id );
 
-			TemplateHelperFunctions.FetchInlineVars( passInfo.Data, ref idManager );
+			TemplateHelperFunctions.FetchInlineVars( passInfo.Data, ref idManager );			
 
 			//Fetch local variables must be done after fetching code areas as it needs them to see is variable is on vertex or fragment
 			TemplateHelperFunctions.FetchLocalVars( passInfo.Data, ref m_localVarsList, m_vertexFunctionData, m_fragmentFunctionData );

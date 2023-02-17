@@ -3,6 +3,7 @@ Shader /*ase_name*/ "Hidden/Universal/Unlit" /*end*/
 	Properties
 	{
 		/*ase_props*/
+
 		//_TessPhongStrength( "Tess Phong Strength", Range( 0, 1 ) ) = 0.5
 		//_TessValue( "Tess Max Tessellation", Range( 1, 32 ) ) = 16
 		//_TessMin( "Tess Min Distance", Float ) = 10
@@ -19,10 +20,12 @@ Shader /*ase_name*/ "Hidden/Universal/Unlit" /*end*/
 				Opaque:SetPropertyOnSubShader:RenderQueue,Geometry
 				Opaque:SetPropertyOnPass:Forward:ZWrite,On
 				Opaque:HideOption:  Blend
+				Opaque:RemoveDefine:_SURFACE_TYPE_TRANSPARENT 1
 				Transparent:SetPropertyOnSubShader:RenderType,Transparent
 				Transparent:SetPropertyOnSubShader:RenderQueue,Transparent
 				Transparent:SetPropertyOnPass:Forward:ZWrite,Off
 				Transparent:ShowOption:  Blend
+				Transparent:SetDefine:_SURFACE_TYPE_TRANSPARENT 1
 			Option:  Blend:Alpha,Premultiply,Additive,Multiply:Alpha
 				Alpha:SetPropertyOnPass:Forward:BlendRGB,SrcAlpha,OneMinusSrcAlpha
 				Premultiply:SetPropertyOnPass:Forward:BlendRGB,One,OneMinusSrcAlpha
@@ -145,18 +148,28 @@ Shader /*ase_name*/ "Hidden/Universal/Unlit" /*end*/
 			Port:Forward:Alpha Clip Threshold
 				On:SetDefine:_ALPHATEST_ON 1
 		*/
+
 		Tags
 		{
 			"RenderPipeline" = "UniversalPipeline"
 			"RenderType"="Opaque"
 			"Queue"="Geometry+0" 
 		}
-		
+
 		Cull Back
 		AlphaToMask Off
+
+		/*ase_stencil*/
+
 		HLSLINCLUDE
+
 		#pragma target 2.0
 
+		#pragma prefer_hlslcc gles
+		#pragma exclude_renderers d3d11_9x
+
+		#ifndef ASE_TESS_FUNCS
+		#define ASE_TESS_FUNCS
 		float4 FixedTess( float tessValue )
 		{
 			return tessValue;
@@ -255,6 +268,8 @@ Shader /*ase_name*/ "Hidden/Universal/Unlit" /*end*/
 			}
 			return tess;
 		}
+		#endif //ASE_TESS_FUNCS
+
 		ENDHLSL
 
 		/*ase_pass*/
@@ -272,8 +287,6 @@ Shader /*ase_name*/ "Hidden/Universal/Unlit" /*end*/
 			/*ase_stencil*/
 
 			HLSLPROGRAM
-			#pragma prefer_hlslcc gles
-			#pragma exclude_renderers d3d11_9x
 
 			#pragma vertex vert
 			#pragma fragment frag
@@ -283,11 +296,7 @@ Shader /*ase_name*/ "Hidden/Universal/Unlit" /*end*/
 			#include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Color.hlsl"
 			#include "Packages/com.unity.render-pipelines.core/ShaderLibrary/UnityInstancing.hlsl"
 			#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/ShaderGraphFunctions.hlsl"
-
-			#if ASE_SRP_VERSION <= 70108
-			#define REQUIRES_VERTEX_SHADOW_COORD_INTERPOLATOR
-			#endif
-
+			
 			/*ase_pragma*/
 
 			struct VertexInput
@@ -302,13 +311,13 @@ Shader /*ase_name*/ "Hidden/Universal/Unlit" /*end*/
 			{
 				float4 clipPos : SV_POSITION;
 				#if defined(ASE_NEEDS_FRAG_WORLD_POSITION)
-				float3 worldPos : TEXCOORD0;
+					float3 worldPos : TEXCOORD0;
 				#endif
 				#if defined(REQUIRES_VERTEX_SHADOW_COORD_INTERPOLATOR) && defined(ASE_NEEDS_FRAG_SHADOWCOORDS)
-				float4 shadowCoord : TEXCOORD1;
+					float4 shadowCoord : TEXCOORD1;
 				#endif
 				#ifdef ASE_FOG
-				float fogFactor : TEXCOORD2;
+					float fogFactor : TEXCOORD2;
 				#endif
 				/*ase_interp(3,):sp=sp;wp=tc0;sc=tc1*/
 				UNITY_VERTEX_INPUT_INSTANCE_ID
@@ -325,6 +334,7 @@ Shader /*ase_name*/ "Hidden/Universal/Unlit" /*end*/
 				float _TessMaxDisp;
 			#endif
 			CBUFFER_END
+
 			/*ase_globals*/
 
 			/*ase_funcs*/
@@ -337,35 +347,43 @@ Shader /*ase_name*/ "Hidden/Universal/Unlit" /*end*/
 				UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
 
 				/*ase_vert_code:v=VertexInput;o=VertexOutput*/
+
 				#ifdef ASE_ABSOLUTE_VERTEX_POS
 					float3 defaultVertexValue = v.vertex.xyz;
 				#else
 					float3 defaultVertexValue = float3(0, 0, 0);
 				#endif
+
 				float3 vertexValue = /*ase_vert_out:Vertex Offset;Float3;3;-1;_VertexP*/defaultVertexValue/*end*/;
+
 				#ifdef ASE_ABSOLUTE_VERTEX_POS
 					v.vertex.xyz = vertexValue;
 				#else
 					v.vertex.xyz += vertexValue;
 				#endif
+
 				v.ase_normal = /*ase_vert_out:Vertex Normal;Float3;4;-1;_NormalP*/v.ase_normal/*end*/;
 
 				float3 positionWS = TransformObjectToWorld( v.vertex.xyz );
 				float4 positionCS = TransformWorldToHClip( positionWS );
 
 				#if defined(ASE_NEEDS_FRAG_WORLD_POSITION)
-				o.worldPos = positionWS;
+					o.worldPos = positionWS;
 				#endif
+
 				#if defined(REQUIRES_VERTEX_SHADOW_COORD_INTERPOLATOR) && defined(ASE_NEEDS_FRAG_SHADOWCOORDS)
-				VertexPositionInputs vertexInput = (VertexPositionInputs)0;
-				vertexInput.positionWS = positionWS;
-				vertexInput.positionCS = positionCS;
-				o.shadowCoord = GetShadowCoord( vertexInput );
+					VertexPositionInputs vertexInput = (VertexPositionInputs)0;
+					vertexInput.positionWS = positionWS;
+					vertexInput.positionCS = positionCS;
+					o.shadowCoord = GetShadowCoord( vertexInput );
 				#endif
+
 				#ifdef ASE_FOG
-				o.fogFactor = ComputeFogFactor( positionCS.z );
+					o.fogFactor = ComputeFogFactor( positionCS.z );
 				#endif
+
 				o.clipPos = positionCS;
+
 				return o;
 			}
 
@@ -454,8 +472,9 @@ Shader /*ase_name*/ "Hidden/Universal/Unlit" /*end*/
 				UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX( IN );
 
 				#if defined(ASE_NEEDS_FRAG_WORLD_POSITION)
-				/*ase_local_var:wp*/float3 WorldPosition = IN.worldPos;
+					/*ase_local_var:wp*/float3 WorldPosition = IN.worldPos;
 				#endif
+
 				/*ase_local_var:sc*/float4 ShadowCoords = float4( 0, 0, 0, 0 );
 
 				#if defined(ASE_NEEDS_FRAG_SHADOWCOORDS)
@@ -465,7 +484,9 @@ Shader /*ase_name*/ "Hidden/Universal/Unlit" /*end*/
 						ShadowCoords = TransformWorldToShadowCoord( WorldPosition );
 					#endif
 				#endif
+
 				/*ase_frag_code:IN=VertexOutput*/
+
 				float3 Color = /*ase_frag_out:Color;Float3;0;-1;_ColorP*/float3( 0, 0, 0 )/*end*/;
 				float Alpha = /*ase_frag_out:Alpha;Float;1;-1;_AlphaP*/1/*end*/;
 				float AlphaClipThreshold = /*ase_frag_out:Alpha Clip Threshold;Float;2;-1;_AlphaClipP*/0.5/*end*/;
@@ -484,7 +505,6 @@ Shader /*ase_name*/ "Hidden/Universal/Unlit" /*end*/
 
 				return half4( Color, Alpha );
 			}
-
 			ENDHLSL
 		}
 
@@ -493,18 +513,17 @@ Shader /*ase_name*/ "Hidden/Universal/Unlit" /*end*/
 		{
 			/*ase_main_pass*/
 			Name "Forward"
-			Tags{"LightMode" = "UniversalForward"}
+			Tags { "LightMode" = "UniversalForward" }
 			
 			Blend One Zero
 			ZWrite On
 			ZTest LEqual
 			Offset 0,0
 			ColorMask RGBA
+
 			/*ase_stencil*/
 
 			HLSLPROGRAM
-			#pragma prefer_hlslcc gles
-			#pragma exclude_renderers d3d11_9x
 
 			#pragma vertex vert
 			#pragma fragment frag
@@ -514,11 +533,7 @@ Shader /*ase_name*/ "Hidden/Universal/Unlit" /*end*/
 			#include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Color.hlsl"
 			#include "Packages/com.unity.render-pipelines.core/ShaderLibrary/UnityInstancing.hlsl"
 			#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/ShaderGraphFunctions.hlsl"
-
-			#if ASE_SRP_VERSION <= 70108
-			#define REQUIRES_VERTEX_SHADOW_COORD_INTERPOLATOR
-			#endif
-
+			
 			/*ase_pragma*/
 
 			struct VertexInput
@@ -533,13 +548,13 @@ Shader /*ase_name*/ "Hidden/Universal/Unlit" /*end*/
 			{
 				float4 clipPos : SV_POSITION;
 				#if defined(ASE_NEEDS_FRAG_WORLD_POSITION)
-				float3 worldPos : TEXCOORD0;
+					float3 worldPos : TEXCOORD0;
 				#endif
 				#if defined(REQUIRES_VERTEX_SHADOW_COORD_INTERPOLATOR) && defined(ASE_NEEDS_FRAG_SHADOWCOORDS)
-				float4 shadowCoord : TEXCOORD1;
+					float4 shadowCoord : TEXCOORD1;
 				#endif
 				#ifdef ASE_FOG
-				float fogFactor : TEXCOORD2;
+					float fogFactor : TEXCOORD2;
 				#endif
 				/*ase_interp(3,):sp=sp;wp=tc0;sc=tc1*/
 				UNITY_VERTEX_INPUT_INSTANCE_ID
@@ -556,10 +571,11 @@ Shader /*ase_name*/ "Hidden/Universal/Unlit" /*end*/
 				float _TessMaxDisp;
 			#endif
 			CBUFFER_END
+
 			/*ase_globals*/
 
 			/*ase_funcs*/
-			
+
 			VertexOutput VertexFunction ( VertexInput v /*ase_vert_input*/ )
 			{
 				VertexOutput o = (VertexOutput)0;
@@ -568,35 +584,43 @@ Shader /*ase_name*/ "Hidden/Universal/Unlit" /*end*/
 				UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
 
 				/*ase_vert_code:v=VertexInput;o=VertexOutput*/
+
 				#ifdef ASE_ABSOLUTE_VERTEX_POS
 					float3 defaultVertexValue = v.vertex.xyz;
 				#else
 					float3 defaultVertexValue = float3(0, 0, 0);
 				#endif
+
 				float3 vertexValue = /*ase_vert_out:Vertex Offset;Float3;5;-1;_Vertex*/defaultVertexValue/*end*/;
+
 				#ifdef ASE_ABSOLUTE_VERTEX_POS
 					v.vertex.xyz = vertexValue;
 				#else
 					v.vertex.xyz += vertexValue;
 				#endif
+
 				v.ase_normal = /*ase_vert_out:Vertex Normal;Float3;6;-1;_Normal*/v.ase_normal/*end*/;
 
 				float3 positionWS = TransformObjectToWorld( v.vertex.xyz );
 				float4 positionCS = TransformWorldToHClip( positionWS );
 
 				#if defined(ASE_NEEDS_FRAG_WORLD_POSITION)
-				o.worldPos = positionWS;
+					o.worldPos = positionWS;
 				#endif
+
 				#if defined(REQUIRES_VERTEX_SHADOW_COORD_INTERPOLATOR) && defined(ASE_NEEDS_FRAG_SHADOWCOORDS)
-				VertexPositionInputs vertexInput = (VertexPositionInputs)0;
-				vertexInput.positionWS = positionWS;
-				vertexInput.positionCS = positionCS;
-				o.shadowCoord = GetShadowCoord( vertexInput );
+					VertexPositionInputs vertexInput = (VertexPositionInputs)0;
+					vertexInput.positionWS = positionWS;
+					vertexInput.positionCS = positionCS;
+					o.shadowCoord = GetShadowCoord( vertexInput );
 				#endif
+
 				#ifdef ASE_FOG
-				o.fogFactor = ComputeFogFactor( positionCS.z );
+					o.fogFactor = ComputeFogFactor( positionCS.z );
 				#endif
+
 				o.clipPos = positionCS;
+
 				return o;
 			}
 
@@ -685,8 +709,9 @@ Shader /*ase_name*/ "Hidden/Universal/Unlit" /*end*/
 				UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX( IN );
 
 				#if defined(ASE_NEEDS_FRAG_WORLD_POSITION)
-				/*ase_local_var:wp*/float3 WorldPosition = IN.worldPos;
+					/*ase_local_var:wp*/float3 WorldPosition = IN.worldPos;
 				#endif
+
 				/*ase_local_var:sc*/float4 ShadowCoords = float4( 0, 0, 0, 0 );
 
 				#if defined(ASE_NEEDS_FRAG_SHADOWCOORDS)
@@ -696,6 +721,7 @@ Shader /*ase_name*/ "Hidden/Universal/Unlit" /*end*/
 						ShadowCoords = TransformWorldToShadowCoord( WorldPosition );
 					#endif
 				#endif
+
 				/*ase_frag_code:IN=VertexOutput*/
 				float3 BakedAlbedo = /*ase_frag_out:Baked Albedo;Float3;0;-1;_Albedo*/0/*end*/;
 				float3 BakedEmission = /*ase_frag_out:Baked Emission;Float3;1;-1;_Emission*/0/*end*/;
@@ -718,7 +744,6 @@ Shader /*ase_name*/ "Hidden/Universal/Unlit" /*end*/
 
 				return half4( Color, Alpha );
 			}
-
 			ENDHLSL
 		}
 
@@ -727,18 +752,23 @@ Shader /*ase_name*/ "Hidden/Universal/Unlit" /*end*/
 		{
 			/*ase_hide_pass*/
 			Name "ShadowCaster"
-			Tags{"LightMode" = "ShadowCaster"}
+			Tags { "LightMode" = "ShadowCaster" }
 
 			ZWrite On
 			ZTest LEqual
 			AlphaToMask Off
+			ColorMask 0
 
 			HLSLPROGRAM
-			#pragma prefer_hlslcc gles
-			#pragma exclude_renderers d3d11_9x
-
+			
 			#pragma vertex vert
 			#pragma fragment frag
+
+			#if ASE_SRP_VERSION >= 110000
+				#pragma multi_compile _ _CASTING_PUNCTUAL_LIGHT_SHADOW
+			#endif
+
+			#define SHADERPASS SHADERPASS_SHADOWCASTER
 
 			#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
 			#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
@@ -759,10 +789,10 @@ Shader /*ase_name*/ "Hidden/Universal/Unlit" /*end*/
 			{
 				float4 clipPos : SV_POSITION;
 				#if defined(ASE_NEEDS_FRAG_WORLD_POSITION)
-				float3 worldPos : TEXCOORD0;
+					float3 worldPos : TEXCOORD0;
 				#endif
 				#if defined(REQUIRES_VERTEX_SHADOW_COORD_INTERPOLATOR) && defined(ASE_NEEDS_FRAG_SHADOWCOORDS)
-				float4 shadowCoord : TEXCOORD1;
+					float4 shadowCoord : TEXCOORD1;
 				#endif
 				/*ase_interp(2,):sp=sp;wp=tc0;sc=tc1*/
 				UNITY_VERTEX_INPUT_INSTANCE_ID
@@ -779,11 +809,15 @@ Shader /*ase_name*/ "Hidden/Universal/Unlit" /*end*/
 				float _TessMaxDisp;
 			#endif
 			CBUFFER_END
+
 			/*ase_globals*/
 
 			/*ase_funcs*/
 
 			float3 _LightDirection;
+			#if ASE_SRP_VERSION >= 110000 
+				float3 _LightPosition;
+			#endif
 
 			VertexOutput VertexFunction( VertexInput v/*ase_vert_input*/ )
 			{
@@ -793,12 +827,15 @@ Shader /*ase_name*/ "Hidden/Universal/Unlit" /*end*/
 				UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO( o );
 
 				/*ase_vert_code:v=VertexInput;o=VertexOutput*/
+
 				#ifdef ASE_ABSOLUTE_VERTEX_POS
 					float3 defaultVertexValue = v.vertex.xyz;
 				#else
 					float3 defaultVertexValue = float3(0, 0, 0);
 				#endif
+
 				float3 vertexValue = /*ase_vert_out:Vertex Offset;Float3;2;-1;_Vertex*/defaultVertexValue/*end*/;
+
 				#ifdef ASE_ABSOLUTE_VERTEX_POS
 					v.vertex.xyz = vertexValue;
 				#else
@@ -810,17 +847,33 @@ Shader /*ase_name*/ "Hidden/Universal/Unlit" /*end*/
 				float3 positionWS = TransformObjectToWorld( v.vertex.xyz );
 
 				#if defined(ASE_NEEDS_FRAG_WORLD_POSITION)
-				o.worldPos = positionWS;
+					o.worldPos = positionWS;
 				#endif
 
 				float3 normalWS = TransformObjectToWorldDir( v.ase_normal );
 
-				float4 clipPos = TransformWorldToHClip( ApplyShadowBias( positionWS, normalWS, _LightDirection ) );
-
-				#if UNITY_REVERSED_Z
-					clipPos.z = min(clipPos.z, clipPos.w * UNITY_NEAR_CLIP_VALUE);
+				#if ASE_SRP_VERSION >= 110000 
+				#if _CASTING_PUNCTUAL_LIGHT_SHADOW
+					float3 lightDirectionWS = normalize(_LightPosition - positionWS);
 				#else
-					clipPos.z = max(clipPos.z, clipPos.w * UNITY_NEAR_CLIP_VALUE);
+					float3 lightDirectionWS = _LightDirection;
+				#endif
+
+				float4 clipPos = TransformWorldToHClip(ApplyShadowBias(positionWS, normalWS, lightDirectionWS));
+
+					#if UNITY_REVERSED_Z
+						clipPos.z = min(clipPos.z, UNITY_NEAR_CLIP_VALUE);
+					#else
+						clipPos.z = max(clipPos.z, UNITY_NEAR_CLIP_VALUE);
+					#endif
+				#else
+						float4 clipPos = TransformWorldToHClip( ApplyShadowBias( positionWS, normalWS, _LightDirection ) );
+
+						#if UNITY_REVERSED_Z
+							clipPos.z = min(clipPos.z, clipPos.w * UNITY_NEAR_CLIP_VALUE);
+						#else
+							clipPos.z = max(clipPos.z, clipPos.w * UNITY_NEAR_CLIP_VALUE);
+						#endif
 				#endif
 
 				#if defined(REQUIRES_VERTEX_SHADOW_COORD_INTERPOLATOR) && defined(ASE_NEEDS_FRAG_SHADOWCOORDS)
@@ -829,11 +882,12 @@ Shader /*ase_name*/ "Hidden/Universal/Unlit" /*end*/
 					vertexInput.positionCS = clipPos;
 					o.shadowCoord = GetShadowCoord( vertexInput );
 				#endif
+
 				o.clipPos = clipPos;
 
 				return o;
 			}
-			
+
 			#if defined(TESSELLATION_ON)
 			struct VertexControl
 			{
@@ -919,8 +973,9 @@ Shader /*ase_name*/ "Hidden/Universal/Unlit" /*end*/
 				UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX( IN );
 
 				#if defined(ASE_NEEDS_FRAG_WORLD_POSITION)
-				/*ase_local_var:wp*/float3 WorldPosition = IN.worldPos;
+					/*ase_local_var:wp*/float3 WorldPosition = IN.worldPos;
 				#endif
+
 				/*ase_local_var:sc*/float4 ShadowCoords = float4( 0, 0, 0, 0 );
 
 				#if defined(ASE_NEEDS_FRAG_SHADOWCOORDS)
@@ -932,6 +987,7 @@ Shader /*ase_name*/ "Hidden/Universal/Unlit" /*end*/
 				#endif
 
 				/*ase_frag_code:IN=VertexOutput*/
+
 				float Alpha = /*ase_frag_out:Alpha;Float;0;-1;_Alpha*/1/*end*/;
 				float AlphaClipThreshold = /*ase_frag_out:Alpha Clip Threshold;Float;1;-1;_AlphaClip*/0.5/*end*/;
 				float AlphaClipThresholdShadow = /*ase_frag_out:Alpha Clip Threshold Shadow;Float;4;-1;_AlphaClipShadow*/0.5/*end*/;
@@ -949,7 +1005,6 @@ Shader /*ase_name*/ "Hidden/Universal/Unlit" /*end*/
 				#endif
 				return 0;
 			}
-
 			ENDHLSL
 		}
 
@@ -958,16 +1013,14 @@ Shader /*ase_name*/ "Hidden/Universal/Unlit" /*end*/
 		{
 			/*ase_hide_pass*/
 			Name "DepthOnly"
-			Tags{"LightMode" = "DepthOnly"}
+			Tags { "LightMode" = "DepthOnly" }
 
 			ZWrite On
 			ColorMask 0
 			AlphaToMask Off
 
 			HLSLPROGRAM
-			#pragma prefer_hlslcc gles
-			#pragma exclude_renderers d3d11_9x
-
+			
 			#pragma vertex vert
 			#pragma fragment frag
 
@@ -1010,6 +1063,7 @@ Shader /*ase_name*/ "Hidden/Universal/Unlit" /*end*/
 				float _TessMaxDisp;
 			#endif
 			CBUFFER_END
+
 			/*ase_globals*/
 
 			/*ase_funcs*/
@@ -1022,12 +1076,15 @@ Shader /*ase_name*/ "Hidden/Universal/Unlit" /*end*/
 				UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
 
 				/*ase_vert_code:v=VertexInput;o=VertexOutput*/
+
 				#ifdef ASE_ABSOLUTE_VERTEX_POS
 					float3 defaultVertexValue = v.vertex.xyz;
 				#else
 					float3 defaultVertexValue = float3(0, 0, 0);
 				#endif
+
 				float3 vertexValue = /*ase_vert_out:Vertex Offset;Float3;2;-1;_Vertex*/defaultVertexValue/*end*/;
+
 				#ifdef ASE_ABSOLUTE_VERTEX_POS
 					v.vertex.xyz = vertexValue;
 				#else
@@ -1039,16 +1096,17 @@ Shader /*ase_name*/ "Hidden/Universal/Unlit" /*end*/
 				float3 positionWS = TransformObjectToWorld( v.vertex.xyz );
 
 				#if defined(ASE_NEEDS_FRAG_WORLD_POSITION)
-				o.worldPos = positionWS;
+					o.worldPos = positionWS;
 				#endif
 
 				o.clipPos = TransformWorldToHClip( positionWS );
 				#if defined(REQUIRES_VERTEX_SHADOW_COORD_INTERPOLATOR) && defined(ASE_NEEDS_FRAG_SHADOWCOORDS)
 					VertexPositionInputs vertexInput = (VertexPositionInputs)0;
 					vertexInput.positionWS = positionWS;
-					vertexInput.positionCS = clipPos;
+					vertexInput.positionCS = o.clipPos;
 					o.shadowCoord = GetShadowCoord( vertexInput );
 				#endif
+
 				return o;
 			}
 
@@ -1137,8 +1195,9 @@ Shader /*ase_name*/ "Hidden/Universal/Unlit" /*end*/
 				UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX( IN );
 
 				#if defined(ASE_NEEDS_FRAG_WORLD_POSITION)
-				/*ase_local_var:wp*/float3 WorldPosition = IN.worldPos;
+					/*ase_local_var:wp*/float3 WorldPosition = IN.worldPos;
 				#endif
+
 				/*ase_local_var:sc*/float4 ShadowCoords = float4( 0, 0, 0, 0 );
 
 				#if defined(ASE_NEEDS_FRAG_SHADOWCOORDS)
@@ -1150,6 +1209,7 @@ Shader /*ase_name*/ "Hidden/Universal/Unlit" /*end*/
 				#endif
 
 				/*ase_frag_code:IN=VertexOutput*/
+
 				float Alpha = /*ase_frag_out:Alpha;Float;0;-1;_Alpha*/1/*end*/;
 				float AlphaClipThreshold = /*ase_frag_out:Alpha Clip Threshold;Float;1;-1;_AlphaClip*/0.5/*end*/;
 
@@ -1170,13 +1230,11 @@ Shader /*ase_name*/ "Hidden/Universal/Unlit" /*end*/
 		{
 			/*ase_hide_pass*/
 			Name "Meta"
-			Tags{"LightMode" = "Meta"}
+			Tags { "LightMode" = "Meta" }
 
 			Cull Off
 
 			HLSLPROGRAM
-			#pragma prefer_hlslcc gles
-			#pragma exclude_renderers d3d11_9x
 
 			#pragma vertex vert
 			#pragma fragment frag
@@ -1202,10 +1260,10 @@ Shader /*ase_name*/ "Hidden/Universal/Unlit" /*end*/
 			{
 				float4 clipPos : SV_POSITION;
 				#if defined(ASE_NEEDS_FRAG_WORLD_POSITION)
-				float3 worldPos : TEXCOORD0;
+					float3 worldPos : TEXCOORD0;
 				#endif
 				#if defined(REQUIRES_VERTEX_SHADOW_COORD_INTERPOLATOR) && defined(ASE_NEEDS_FRAG_SHADOWCOORDS)
-				float4 shadowCoord : TEXCOORD1;
+					float4 shadowCoord : TEXCOORD1;
 				#endif
 				/*ase_interp(2,):sp=sp;wp=tc0;sc=tc1*/
 				UNITY_VERTEX_INPUT_INSTANCE_ID
@@ -1222,6 +1280,7 @@ Shader /*ase_name*/ "Hidden/Universal/Unlit" /*end*/
 				float _TessMaxDisp;
 			#endif
 			CBUFFER_END
+
 			/*ase_globals*/
 
 			/*ase_funcs*/
@@ -1234,12 +1293,15 @@ Shader /*ase_name*/ "Hidden/Universal/Unlit" /*end*/
 				UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
 
 				/*ase_vert_code:v=VertexInput;o=VertexOutput*/
+
 				#ifdef ASE_ABSOLUTE_VERTEX_POS
 					float3 defaultVertexValue = v.vertex.xyz;
 				#else
 					float3 defaultVertexValue = float3(0, 0, 0);
 				#endif
+
 				float3 vertexValue = /*ase_vert_out:Vertex Offset;Float3;4;-1;_Vertex*/defaultVertexValue/*end*/;
+
 				#ifdef ASE_ABSOLUTE_VERTEX_POS
 					v.vertex.xyz = vertexValue;
 				#else
@@ -1251,16 +1313,18 @@ Shader /*ase_name*/ "Hidden/Universal/Unlit" /*end*/
 				float3 positionWS = TransformObjectToWorld( v.vertex.xyz );
 
 				#if defined(ASE_NEEDS_FRAG_WORLD_POSITION)
-				o.worldPos = positionWS;
+					o.worldPos = positionWS;
 				#endif
 
 				o.clipPos = MetaVertexPosition( v.vertex, v.texcoord1.xy, v.texcoord1.xy, unity_LightmapST, unity_DynamicLightmapST );
+
 				#if defined(REQUIRES_VERTEX_SHADOW_COORD_INTERPOLATOR) && defined(ASE_NEEDS_FRAG_SHADOWCOORDS)
 					VertexPositionInputs vertexInput = (VertexPositionInputs)0;
 					vertexInput.positionWS = positionWS;
 					vertexInput.positionCS = o.clipPos;
 					o.shadowCoord = GetShadowCoord( vertexInput );
 				#endif
+
 				return o;
 			}
 
@@ -1349,8 +1413,9 @@ Shader /*ase_name*/ "Hidden/Universal/Unlit" /*end*/
 				UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX( IN );
 
 				#if defined(ASE_NEEDS_FRAG_WORLD_POSITION)
-				/*ase_local_var:wp*/float3 WorldPosition = IN.worldPos;
+					/*ase_local_var:wp*/float3 WorldPosition = IN.worldPos;
 				#endif
+
 				/*ase_local_var:sc*/float4 ShadowCoords = float4( 0, 0, 0, 0 );
 
 				#if defined(ASE_NEEDS_FRAG_SHADOWCOORDS)
@@ -1362,6 +1427,7 @@ Shader /*ase_name*/ "Hidden/Universal/Unlit" /*end*/
 				#endif
 
 				/*ase_frag_code:IN=VertexOutput*/
+
 				float3 BakedAlbedo = /*ase_frag_out:Baked Albedo;Float3;0;-1;_Albedo*/0/*end*/;
 				float3 BakedEmission = /*ase_frag_out:Baked Emission;Float3;1;-1;_Emission*/0/*end*/;
 				float Alpha = /*ase_frag_out:Alpha;Float;2;-1;_Alpha*/1/*end*/;
@@ -1374,13 +1440,14 @@ Shader /*ase_name*/ "Hidden/Universal/Unlit" /*end*/
 				MetaInput metaInput = (MetaInput)0;
 				metaInput.Albedo = BakedAlbedo;
 				metaInput.Emission = BakedEmission;
-				
+
 				return MetaFragment(metaInput);
 			}
 			ENDHLSL
 		}
 		/*ase_pass_end*/
 	}
+	/*ase_lod*/
 	CustomEditor "UnityEditor.ShaderGraph.PBRMasterGUI"
 	FallBack "Hidden/InternalErrorShader"
 }

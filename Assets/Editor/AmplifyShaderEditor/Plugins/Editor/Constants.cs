@@ -9,6 +9,17 @@ namespace AmplifyShaderEditor
 
 	public struct Constants
 	{
+		public readonly static string[] FaceMacros =
+		{
+			"#if defined(SHADER_API_GLCORE) || defined(SHADER_API_GLES) || defined(SHADER_API_GLES3) || defined(SHADER_API_D3D9)",
+			"#define FRONT_FACE_SEMANTIC VFACE",
+			"#define FRONT_FACE_TYPE float",
+			"#else",
+			"#define FRONT_FACE_SEMANTIC SV_IsFrontFace",
+			"#define FRONT_FACE_TYPE bool",
+			"#endif"
+		};
+
 		/*public readonly static string[] CustomASEStandardArgsMacros =
 		{
 			"#if defined(SHADER_API_D3D11) || defined(SHADER_API_XBOXONE) || defined(UNITY_COMPILER_HLSLCC)//ASE Args Macros",
@@ -73,6 +84,50 @@ namespace AmplifyShaderEditor
 			"#define ASE_TEXTURECUBE_PARAMS(textureName) textureName, sampler##textureName",
 			"#define ASE_TEXTURE2D_ARRAY_PARAMS(textureName) textureName, sampler##textureName\n"
 		};*/
+
+		public readonly static RenderTextureFormat PreviewFormat = RenderTextureFormat.ARGBFloat;
+		public readonly static int PreviewSize = 128;
+
+		public readonly static List<string> UnityNativeInspectors = new List<string>
+		{
+			"Rendering.HighDefinition.LightingShaderGraphGUI",
+			"Rendering.HighDefinition.HDUnlitGUI",
+			"UnityEditor.Rendering.HighDefinition.HDLitGUI",
+			"UnityEditor.ShaderGraph.PBRMasterGUI",
+			"UnityEditor.Rendering.HighDefinition.DecalGUI",
+			"UnityEditor.Rendering.HighDefinition.FabricGUI",
+			"UnityEditor.Experimental.Rendering.HDPipeline.HDLitGUI",
+			"Rendering.HighDefinition.DecalGUI",
+			"Rendering.HighDefinition.LitShaderGraphGUI",
+			"Rendering.HighDefinition.DecalShaderGraphGUI",
+			"UnityEditor.ShaderGraphUnlitGUI",
+			"UnityEditor.ShaderGraphLitGUI",
+			"UnityEditor.Rendering.Universal.DecalShaderGraphGUI"
+		};
+
+		public readonly static Dictionary<string, string> CustomInspectorHD7To10 = new Dictionary<string, string>
+		{
+			{ "UnityEditor.Rendering.HighDefinition.DecalGUI","Rendering.HighDefinition.DecalGUI"},
+			{ "UnityEditor.Rendering.HighDefinition.FabricGUI","Rendering.HighDefinition.LightingShaderGraphGUI"},
+			{ "UnityEditor.Rendering.HighDefinition.HDLitGUI","Rendering.HighDefinition.LitShaderGraphGUI"},
+			{ "UnityEditor.Experimental.Rendering.HDPipeline.HDLitGUI","Rendering.HighDefinition.LitShaderGraphGUI"},
+		};
+
+
+		public readonly static Dictionary<string , string> CustomInspectorURP10To12 = new Dictionary<string , string>
+		{
+			{ "UnityEditor.ShaderGraph.PBRMasterGUI","UnityEditor.ShaderGraphLitGUI"},
+		};
+
+		public readonly static Dictionary<string , string> CustomInspectorHDLegacyTo11 = new Dictionary<string , string>
+		{
+			{ "UnityEditor.Rendering.HighDefinition.DecalGUI","Rendering.HighDefinition.DecalShaderGraphGUI"},
+			{ "Rendering.HighDefinition.DecalGUI","Rendering.HighDefinition.DecalShaderGraphGUI"},
+			{ "UnityEditor.Rendering.HighDefinition.FabricGUI","Rendering.HighDefinition.LightingShaderGraphGUI"},
+			{ "UnityEditor.Rendering.HighDefinition.HDLitGUI","Rendering.HighDefinition.LitShaderGraphGUI"},
+			{ "UnityEditor.Experimental.Rendering.HDPipeline.HDLitGUI","Rendering.HighDefinition.LitShaderGraphGUI"},
+		};
+
 
 		public readonly static string CustomASEStandardSamplerParams = "#define ASE_TEXTURE_PARAMS(textureName) textureName\n";
 		public readonly static string[] CustomASESRPTextureArrayMacros = 
@@ -151,16 +206,15 @@ namespace AmplifyShaderEditor
 			{ TextureType.Texture3D, WirePortDataType.SAMPLER3D},
 			{ TextureType.Cube,WirePortDataType.SAMPLERCUBE},
 			{ TextureType.Texture2DArray,WirePortDataType.SAMPLER2DARRAY},
+			{ TextureType.ProceduralTexture,WirePortDataType.SAMPLER2D},
 		};
+
+		public readonly static string SamplingMacrosDirective = "#define ASE_USING_SAMPLING_MACROS 1";
 
 		// STANDARD
 		public readonly static string[] CustomASEStandarSamplingMacrosHelper =
 		{
-#if UNITY_2018_1_OR_NEWER
 			"#if defined(SHADER_API_D3D11) || defined(SHADER_API_XBOXONE) || defined(UNITY_COMPILER_HLSLCC) || defined(SHADER_API_PSSL) || (defined(SHADER_TARGET_SURFACE_ANALYSIS) && !defined(SHADER_TARGET_SURFACE_ANALYSIS_MOJOSHADER))//ASE Sampler Macros",
-#else
-			"#if defined(SHADER_API_D3D11) || defined(SHADER_API_XBOXONE) || defined(UNITY_COMPILER_HLSLCC) || defined(SHADER_API_PSSL)//ASE Sampler Macros",
-#endif
 			"#else//ASE Sampling Macros",
 			"#endif//ASE Sampling Macros\n"
 		};
@@ -275,7 +329,7 @@ namespace AmplifyShaderEditor
 			{ TextureType.Cube,"texCUBE{0}( {1}, {2} )"},
 			{ TextureType.Texture2DArray,"tex2DArray{0}( {1}, {2} )"}
 		};
-
+		public readonly static char LineFeedSeparator = '$';
 		public readonly static char SemiColonSeparator = '@';
 		public readonly static string AppDataFullName = "appdata_full";
 		public readonly static string CustomAppDataFullName = "appdata_full_custom";
@@ -289,7 +343,7 @@ namespace AmplifyShaderEditor
 		"\t\t\tfloat4 texcoord1 : TEXCOORD1;\n" +
 		"\t\t\tfloat4 texcoord2 : TEXCOORD2;\n" +
 		"\t\t\tfloat4 texcoord3 : TEXCOORD3;\n" +
-		"\t\t\tfixed4 color : COLOR;\n" +
+		"\t\t\tfloat4 color : COLOR;\n" +
 		"\t\t\tUNITY_VERTEX_INPUT_INSTANCE_ID\n";
 		
 		public readonly static string IncludeFormat = "#include \"{0}\"";
@@ -320,6 +374,7 @@ namespace AmplifyShaderEditor
 		public static float NodeButtonDeltaX = 5;
 		public static float NodeButtonDeltaY = 11;
 
+		public readonly static string SafeNormalizeInfoStr = "With Safe Normalize division by 0 is prevented over the normalize operation at the expense of additional instructions on shader.";
 		public readonly static string ReservedPropertyNameStr = "Property name '{0}' is reserved and cannot be used";
 		public readonly static string NumericPropertyNameStr = "Property name '{0}' is numeric thus cannot be used";
 		public readonly static string DeprecatedMessageStr = "Node '{0}' is deprecated. Use node '{1}' instead.";
@@ -356,12 +411,8 @@ namespace AmplifyShaderEditor
 		public readonly static string UnityPBSLightingLib = "UnityPBSLighting.cginc";
 		public readonly static string UnityDeferredLightLib = "UnityDeferredLibrary.cginc";
 		public readonly static string ATSharedLibGUID = "ba242738c4be3324aa88d126f7cc19f9";
-#if UNITY_5_6_OR_NEWER
 		public readonly static string CameraDepthTextureValue = "UNITY_DECLARE_DEPTH_TEXTURE( _CameraDepthTexture );";
 
-#else
-		public readonly static string CameraDepthTextureValue = "uniform sampler2D _CameraDepthTexture;";
-#endif
 		//public readonly static string CameraDepthTextureSRPVar = "TEXTURE2D(_CameraDepthTexture);";
 		//public readonly static string CameraDepthTextureSRPSampler = "SAMPLER(sampler_CameraDepthTexture);";
 		public readonly static string CameraDepthTextureLWEnabler = "REQUIRE_DEPTH_TEXTURE 1";
@@ -449,8 +500,10 @@ namespace AmplifyShaderEditor
 		public readonly static string SubTitleConstFormatStr = "Const( {0} )";
 		public readonly static string SubTitleVarNameFormatStr = "Var( {0} )";
 		public readonly static string SubTitleRefNameFormatStr = "Ref( {0} )";
+		public readonly static string SubTitleCurrentFormatStr = "Current( {0} )";
 
 		public readonly static string CodeWrapper = "( {0} )";
+		public readonly static string InlineCodeWrapper = "{{\n{0}\n}}";
 
 		public readonly static string NodesDumpFormat = "{0}:,{1},{2}\n";
 		public readonly static string TagFormat = " \"{0}\" = \"{1}\"";
@@ -527,10 +580,11 @@ namespace AmplifyShaderEditor
 		public readonly static string NoStringValue = "None";
 		public readonly static string EmptyPortValue = "  ";
 
-		public readonly static string[] OverallInvalidChars = { "\r", "\n", "\\", " ", ".", ">", ",", "<", "\'", "\"", ";", ":", "[", "{", "]", "}", "=", "+", "`", "~", "/", "?", "!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "-" };
+		public readonly static string[] OverallInvalidChars = { "\r", "\n", "\\", " ", ".", ">", ",", "<", "\'", "\"", ";", ":", "[", "{", "]", "}","|", "=", "+", "`", "~", "/", "?", "!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "-" };
 		public readonly static string[] ShaderInvalidChars = { "\r", "\n", "\\", "\'", "\"", };
 		public readonly static string[] EnumInvalidChars = { "\r", "\n", "\\", ".", ">", ",", "<", "\'", "\"", ";", ":", "[", "{", "]", "}", "=", "+", "`", "~", "/", "?", "!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "-" };
 		public readonly static string[] AttrInvalidChars = { "\r", "\n", "\\", ">", "<", "\'", "\"", ";", ":", "[", "{", "]", "}", "=", "+", "`", "~", "/", "?", "!", "@", "#", "$", "%", "^", "&", "*" };
+		public readonly static string[] HeaderInvalidChars = { "\r", "\n", "\\", ">", ",", "<", "\'", "\"", ";", ":", "[", "{", "]", "}", "=", "+", "`", "~", "/", "?", "!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "-" };
 
 		public readonly static string[] WikiInvalidChars = { "#", "<", ">", "[", "]", "|", "{", "}", "%", "+", "?", "\\", "/", ",", ";", "." };
 
@@ -590,7 +644,6 @@ namespace AmplifyShaderEditor
 
 		public readonly static Color LockedPortColor = new Color( 0.3f, 0.3f, 0.3f, 0.5f );
 
-#if UNITY_2018_2_OR_NEWER
 		public readonly static int[] AvailableUVChannels = { 0, 1, 2, 3, 4, 5, 6, 7 };
 		public readonly static string[] AvailableUVChannelsStr = { "0", "1", "2", "3", "4", "5", "6", "7"};
 		public readonly static string AvailableUVChannelLabel = "UV Channel";
@@ -598,15 +651,6 @@ namespace AmplifyShaderEditor
 		public readonly static int[] AvailableUVSets = { 0, 1, 2, 3, 4, 5, 6, 7 };
 		public readonly static string[] AvailableUVSetsStr = { "1", "2", "3", "4","5", "6", "7", "8" };
 		public readonly static string AvailableUVSetsLabel = "UV Set";
-#else
-		public readonly static int[] AvailableUVChannels = { 0, 1, 2, 3 };
-		public readonly static string[] AvailableUVChannelsStr = { "0", "1", "2", "3" };
-		public readonly static string AvailableUVChannelLabel = "UV Channel";
-
-		public readonly static int[] AvailableUVSets = { 0, 1, 2, 3 };
-		public readonly static string[] AvailableUVSetsStr = { "1", "2", "3", "4" };
-		public readonly static string AvailableUVSetsLabel = "UV Set";
-#endif
 
 		public readonly static int[] AvailableUVSizes = { 2, 3, 4 };
 		public readonly static string[] AvailableUVSizesStr = { "Float 2", "Float 3", "Float 4" };

@@ -70,35 +70,49 @@ namespace AmplifyShaderEditor
 		TemplateShaderModelData m_globalShaderModel = new TemplateShaderModelData();
 
 		private Dictionary<string, TemplateUniquePassData> m_passUniqueIdData = new Dictionary<string, TemplateUniquePassData>();
-
+		
+		[NonSerialized]
+		private List<TemplateShaderPropertyData> m_allShaderProperties;
 
 		public TemplateMultiPass()
 		{
 			m_templateType = TemplateDataType.MultiPass;
 		}
 
-		public TemplateMultiPass( string name, string guid, bool isCommunity )
+		public TemplateMultiPass( string name, string guid, string path, bool isCommunity )
 		{
 			m_templateType = TemplateDataType.MultiPass;
-			Init( name, guid, isCommunity );
+			Init( name, guid, path, isCommunity );
 		}
 
-		public override void Init( string name, string guid, bool isCommunity )
+		public override void Init( string name, string guid, string path, bool isCommunity )
 		{
-			base.Init( name, guid, isCommunity );
+			base.Init( name, guid, path, isCommunity );
 			TemplatesManager.CurrTemplateGUIDLoaded = guid;
-			LoadTemplateBody( guid );
+			LoadTemplateBody( guid, path );
 			Name = string.IsNullOrEmpty( name ) ? m_defaultShaderName : name;
 		}
 
-		void LoadTemplateBody( string guid )
+		/////////////////////////////////////////////////////////////////////////////////////
+		// SRP Conditionals
+		/////////////////////////////////////////////////////////////////////////////////////
+
+		void LoadTemplateBody( string guid, string path )
 		{
 			m_passUniqueIdData.Clear();
-			m_guid = guid;
-			string datapath = AssetDatabase.GUIDToAssetPath( guid );
-			string shaderBody = string.Empty;
-			shaderBody = IOUtils.LoadTextFileFromDisk( datapath );
-			shaderBody = shaderBody.Replace( "\r\n", "\n" );
+			m_guid = guid;			
+
+			string shaderBody = IOUtils.LoadTextFileFromDisk( path );
+			if ( string.IsNullOrEmpty( shaderBody ) )
+			{
+				m_isValid = false;
+				return;
+			}
+
+			shaderBody = UIUtils.ForceLFLineEnding( shaderBody );
+
+			// @diogo: Process SRP Conditionals => high priority
+			shaderBody  = TemplateHelperFunctions.ProcessSRPConditionals( shaderBody );
 
 			// Insert Before Tag
 			MatchCollection col = Regex.Matches( shaderBody, TemplateHelperFunctions.BeforePragmaPattern, RegexOptions.Singleline );
@@ -214,7 +228,7 @@ namespace AmplifyShaderEditor
 			m_templateIdManager.RegisterId( m_shaderData.PropertyStartIdx, TemplatesManager.TemplatePropertyTag, TemplatesManager.TemplatePropertyTag );
 			m_templateProperties.AddId( shaderBody, TemplatesManager.TemplatePropertyTag, true );
 			Dictionary<string, TemplateShaderPropertyData> duplicatesHelper = new Dictionary<string, TemplateShaderPropertyData>();
-			TemplateHelperFunctions.CreateShaderPropertiesList( m_shaderData.Properties, ref m_availableShaderProperties, ref duplicatesHelper );
+			TemplateHelperFunctions.CreateShaderPropertiesList( m_shaderData.Properties, ref m_availableShaderProperties, ref duplicatesHelper,-1,-1 );
 			for( int i = 0; i < m_availableShaderProperties.Count; i++ )
 			{
 				m_templateIdManager.RegisterId( m_availableShaderProperties[ i ].Index, m_availableShaderProperties[ i ].FullValue, m_availableShaderProperties[ i ].FullValue );
@@ -328,6 +342,11 @@ namespace AmplifyShaderEditor
 
 			m_availableShaderProperties.Clear();
 			m_availableShaderProperties = null;
+			if( m_allShaderProperties != null )
+			{
+				m_allShaderProperties.Clear();
+				m_allShaderProperties = null;
+			}
 
 			int subShaderCount = m_subShaders.Count;
 			for( int i = 0; i < subShaderCount; i++ )
@@ -509,8 +528,11 @@ namespace AmplifyShaderEditor
 				case TemplateModuleDataType.ModuleInputFrag:
 				{
 					m_templateIdManager.SetReplacementText( prefix + m_subShaders[ subShaderId ].Modules.InputsFragTag.Id, text );
-				}
-				break;
+				}break;
+				case TemplateModuleDataType.ModuleRenderPlatforms:
+				{
+					m_templateIdManager.SetReplacementText( prefix + m_subShaders[ subShaderId ].Modules.RenderPlatformHelper.ID , text );
+				}break;
 			}
 		}
 
@@ -908,6 +930,12 @@ namespace AmplifyShaderEditor
 					m_templateIdManager.SetReplacementText( prefix + TemplatesManager.TemplateAllModulesTag, text );
 				}
 				break;
+				case TemplateModuleDataType.ModuleRenderPlatforms:
+				{
+					prefix = m_subShaders[ subShaderId ].Passes[ passId ].Modules.UniquePrefix;
+					m_templateIdManager.SetReplacementText( prefix + m_subShaders[ subShaderId ].Passes[ passId ].Modules.RenderPlatformHelper.ID , text );
+				}
+				break;
 				case TemplateModuleDataType.ModuleShaderModel:
 				{
 					prefix = m_subShaders[ subShaderId ].Passes[ passId ].Modules.UniquePrefix;
@@ -1122,8 +1150,7 @@ namespace AmplifyShaderEditor
 				{
 					prefix = m_subShaders[ subShaderId ].Passes[ passId ].UniquePrefix;
 					m_templateIdManager.SetReplacementText( prefix + m_subShaders[ subShaderId ].Passes[ passId ].TessDomainData.Id, text );
-				}
-				break;
+				}break;
 			}
 		}
 
@@ -1370,7 +1397,7 @@ namespace AmplifyShaderEditor
 			m_templateProperties.Reset();
 
 			string oldName = m_defaultShaderName;
-			LoadTemplateBody( m_guid );
+			LoadTemplateBody( m_guid, AssetDatabase.GUIDToAssetPath( m_guid ) );
 
 			if( m_communityTemplate )
 				Name = m_defaultShaderName;
@@ -1422,6 +1449,40 @@ namespace AmplifyShaderEditor
 		//public bool SRPIsPBRHD { get { return m_subShaders[0].Modules.SRPIsPBRHD ; } }
 		public List<TemplateSubShader> SubShaders { get { return m_subShaders; } }
 		public List<TemplateShaderPropertyData> AvailableShaderProperties { get { return m_availableShaderProperties; } }
+		public List<TemplateShaderPropertyData> AllShaderProperties
+		{ 
+			get
+			{
+				if( m_allShaderProperties == null )
+				{
+					m_allShaderProperties = new List<TemplateShaderPropertyData>();
+					if( AvailableShaderProperties.Count > 0 )
+					{
+						m_allShaderProperties.AddRange( AvailableShaderProperties );
+					}
+
+					for( int subShaderIdx = 0; subShaderIdx < SubShaders.Count; subShaderIdx++ )
+					{
+						if( SubShaders[ subShaderIdx ].AvailableShaderGlobals.Count > 0 )
+						{
+							m_allShaderProperties.AddRange( SubShaders[ subShaderIdx ].AvailableShaderGlobals );
+						}
+
+						for( int passIdx = 0; passIdx < SubShaders[ subShaderIdx ].Passes.Count; passIdx++ )
+						{
+							if( SubShaders[ subShaderIdx ].Passes[ passIdx ].AvailableShaderGlobals.Count > 0 )
+							{
+								m_allShaderProperties.AddRange( SubShaders[ subShaderIdx ].Passes[ passIdx ].AvailableShaderGlobals );
+							}
+						}
+					}
+				}
+				
+				
+				return m_allShaderProperties; 
+			}
+		}
+
 		public TemplateTagData PropertyTag { get { return m_propertyTag; } }
 		public TemplateIdManager IdManager { get { return m_templateIdManager; } }
 		public TemplatePropertyContainer TemplateProperties { get { return m_templateProperties; } }

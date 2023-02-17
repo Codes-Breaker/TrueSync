@@ -47,7 +47,10 @@ namespace AmplifyShaderEditor
 		SV_PrimitiveID,
 		SV_InstanceID,
 		INTERNALTESSPOS,
-		INSTANCEID_SEMANTIC
+		INSTANCEID_SEMANTIC,
+		BLENDWEIGHTS,
+		BLENDINDICES
+
 	}
 
 	public enum TemplateInfoOnSematics
@@ -78,7 +81,9 @@ namespace AmplifyShaderEditor
 		OTHER,
 		VFACE,
 		SHADOWCOORDS,
-		VERTEXID
+		VERTEXID,
+		BLENDWEIGHTS,
+		BLENDINDICES
 	}
 
 	public enum TemplateShaderPropertiesIdx
@@ -553,6 +558,7 @@ namespace AmplifyShaderEditor
 			{WirePortDataType.COLOR,4 },
 			{WirePortDataType.INT,1 },
 			{WirePortDataType.UINT,1 },
+			{WirePortDataType.UINT4,4 },
 			{WirePortDataType.SAMPLER1D,0 },
 			{WirePortDataType.SAMPLER2D,0 },
 			{WirePortDataType.SAMPLER3D,0 },
@@ -578,6 +584,7 @@ namespace AmplifyShaderEditor
 			{TemplateSemantics.TANGENT			,"ase_tangent"},
 			{TemplateSemantics.VFACE			,"ase_vface"},
 			{TemplateSemantics.SV_VertexID		,"ase_vertexId"},
+			{TemplateSemantics.SV_InstanceID    ,"ase_instanceId"},
 			{TemplateSemantics.SV_PrimitiveID   ,"ase_primitiveId"},
 			{TemplateSemantics.INTERNALTESSPOS  ,"ase_internalTessPos"},
 			{TemplateSemantics.TEXCOORD0		,"ase_tex_coord0"},
@@ -879,13 +886,12 @@ namespace AmplifyShaderEditor
 			{ "LightweightPipeline",TemplateSRPType.Lightweight },
 			{ "HDRenderPipeline",TemplateSRPType.HD }
 		};
-#if UNITY_2018_3_OR_NEWER
 		public static string CoreColorLib = "Packages/com.unity.render-pipelines.core/ShaderLibrary/Color.hlsl";
 		public static string CoreCommonLib = "Packages/com.unity.render-pipelines.core/ShaderLibrary/Common.hlsl";
-#else
-		public static string CoreCommonLib = "CoreRP/ShaderLibrary/Common.hlsl";
-		public static string CoreColorLib = "CoreRP/ShaderLibrary/Color.hlsl";
-#endif
+
+		public static string PragmaOnlyRendersPattern = @"#pragma\s+only_renderers\s+([\w .]*)";
+		public static string PragmaExcludeRendersPattern = @"#pragma\s+exclude_renderers\s+([\w .]*)";
+		public static string PragmaRendererElement = @"(\w+)";
 
 		public static string FetchSubShaderBody = @"(SubShader.*)\/\*ase_lod\*\/";
 		public static string TemplateCustomUI = @"\/\*CustomNodeUI:(\w*)\*\/";
@@ -922,6 +928,8 @@ namespace AmplifyShaderEditor
 
 		public static readonly string InlinePattern = @"\/\*ase_inline_begin\*\/(.*?)\/\*ase_inline_end\*\/";
 
+		public static readonly string SRPConditionPattern = @"\/\*ase_srp_cond_begin:([==|!=|>=|<=|>|<]*)(\d*)\*\/(?s)(.*?)\s\/\*ase_srp_cond_end\*\/";
+
 		public static readonly string SubShaderLODPattern = @"\sLOD\s+(\d+)";
 
 		public static readonly string PassNamePattern = "Name\\s+\\\"([\\w\\+\\-\\*\\/\\(\\) ]*)\\\"";
@@ -935,11 +943,12 @@ namespace AmplifyShaderEditor
 		public static readonly string InterpRangePattern = @"ase_interp\((\d\.{0,1}\w{0,4}),(\d*)\)";
 		//public static readonly string PropertiesPatternB = "(\\w*)\\s*\\(\\s*\"([\\w ]*)\"\\s*\\,\\s*(\\w*)\\s*.*\\)";
 		//public static readonly string PropertiesPatternC = "^\\s*(\\w*)\\s*\\(\\s*\"([\\w\\(\\)\\+\\-\\\\* ]*)\"\\s*\\,\\s*(\\w*)\\s*.*\\)";
-		//public static readonly string PropertiesPatternD = "(\\/\\/\\s*)*(\\w*)\\s*\\(\\s*\"([\\w\\(\\)\\+\\-\\\\* ]*)\"\\s*\\,\\s*(\\w*)\\s*.*\\)";
+		//public static readonly string PropertiesPatternD = "(\\/\\/\\s*)*(\\w*)\\s*\\(\\s*%\"([\\w\\(\\)\\+\\-\\\\* ]*)\"\\s*\\,\\s*(\\w*)\\s*.*\\)";
 		//public static readonly string PropertiesPatternE = "(\\/\\/\\s*)*(\\w*)\\s*\\(\\s*\"([\\w\\(\\)\\+\\-\\\\* ]*)\"\\s*\\,\\s*(\\w*)\\s*.*\\)\\s*=\\s*[\\w,()\" {}]*";
 		//public static readonly string PropertiesPatternF = "^(\\/\\/)*\\s*(\\[[\\[\\]\\w\\s\\(\\)\\_\\,]*\\])*\\s*(\\w*)\\s*\\(\\s*\"([\\w\\(\\)\\+\\-\\\\* ]*)\"\\s*\\,\\s*(\\w*)\\s*.*\\)\\s*=\\s*[\\w,()\" {}]*";
 		//public static readonly string PropertiesPatternG = "^(\\s*)(\\[[\\[\\]\\w\\s\\(\\)\\_\\,]*\\])*\\s*(\\w*)\\s*\\(\\s*\"([\\w\\(\\)\\+\\-\\\\* ]*)\"\\s*\\,\\s*(\\w*)\\s*.*\\)\\s*=\\s*[\\w,()\" {}]*";
-		public static readonly string PropertiesPatternG = "^(\\s*)(\\[[\\[\\]\\w\\s\\(\\)_,\\.]*\\])*[\\s\\/]*(\\w*)\\s*\\(\\s*\"([\\w\\(\\)\\+\\-\\\\* ]*)\"\\s*\\,\\s*(\\w*)\\s*.*\\)\\s*=\\s*[\\w,()\" {}\\.]*";
+		//public static readonly string PropertiesPatternH = @"^(\s*)(\[[\[\]\w\s\(\)_,\.]*\])*[\s\/]*(\w*)\s*\(\s*""([\w\(\)\+\-\\* ]*)""\s*\,\s*(\w*)\s*.*\)\s*=\s*[\w,()"" {}\.]*";
+		public static readonly string PropertiesPatternI = @"^(\s*)(\[[\[\]\w\s\(\)_,\.]*\])*[\s\/]*(\w*)\s*\(\s*""([\w\(\)\+\-\\* ]*)""\s*\,\s*(\w*)\s*.*\)\s*=\s*[\w,()"" {}\.]*";
 		public static readonly string CullModePattern = @"^\s*Cull\s+(\[*\w+\]*)";
 
 		public static readonly string ColorMaskPatternFirst = @"\bColorMask\s+([\d\w\[\]]+)(\s+0)*";
@@ -1100,14 +1109,14 @@ namespace AmplifyShaderEditor
 			}
 		}
 
-		public static void CreateShaderPropertiesList( string propertyData, ref List<TemplateShaderPropertyData> propertiesList, ref Dictionary<string, TemplateShaderPropertyData> duplicatesHelper )
+		public static void CreateShaderPropertiesList( string propertyData, ref List<TemplateShaderPropertyData> propertiesList, ref Dictionary<string, TemplateShaderPropertyData> duplicatesHelper, int subShaderId, int passId)
 		{
 			int identationIdx = (int)TemplateShaderPropertiesIdx.Identation;
 			int nameIdx = (int)TemplateShaderPropertiesIdx.Name;
 			int typeIdx = (int)TemplateShaderPropertiesIdx.Type;
 			int inspectorNameIdx = (int)TemplateShaderPropertiesIdx.InspectorName;
 
-			foreach( Match match in Regex.Matches( propertyData, PropertiesPatternG,RegexOptions.Multiline ) )
+			foreach( Match match in Regex.Matches( propertyData, PropertiesPatternI, RegexOptions.Multiline ) )
 			{
 				if( match.Groups.Count > 1 )
 				{
@@ -1119,7 +1128,9 @@ namespace AmplifyShaderEditor
 																								match.Groups[ inspectorNameIdx ].Value,
 																								match.Groups[ nameIdx ].Value,
 																								PropertyToWireType[ match.Groups[ typeIdx ].Value ],
-																								PropertyType.Property );
+																								PropertyType.Property,
+																								subShaderId,
+																								passId);
 						propertiesList.Add( newData );
 						duplicatesHelper.Add( newData.PropertyName, newData );
 					}	
@@ -1127,7 +1138,7 @@ namespace AmplifyShaderEditor
 			}
 		}
 		public const string DepthMacroDeclRegex = @"UNITY_DECLARE_DEPTH_TEXTURE\(\s*_CameraDepthTexture";
-		public static void CheckUnityBuiltinGlobalMacros( string propertyData, ref List<TemplateShaderPropertyData> propertiesList, ref Dictionary<string, TemplateShaderPropertyData> duplicatesHelper )
+		public static void CheckUnityBuiltinGlobalMacros( string propertyData, ref List<TemplateShaderPropertyData> propertiesList, ref Dictionary<string, TemplateShaderPropertyData> duplicatesHelper, int subShaderId, int passId )
 		{
 			Match match = Regex.Match( propertyData, DepthMacroDeclRegex );
 			if( match.Success )
@@ -1139,13 +1150,15 @@ namespace AmplifyShaderEditor
 																							Constants.CameraDepthTextureValue,
 																							WirePortDataType.SAMPLER2D,
 																							PropertyType.Global,
+																							subShaderId,
+																							passId,
 																							true );
 				duplicatesHelper.Add( newData.PropertyName, newData );
 				propertiesList.Add( newData );
 			}
 		}
 
-		public static void CreateShaderGlobalsList( string propertyData, ref List<TemplateShaderPropertyData> propertiesList, ref Dictionary<string, TemplateShaderPropertyData> duplicatesHelper )
+		public static void CreateShaderGlobalsList( string propertyData, ref List<TemplateShaderPropertyData> propertiesList, ref Dictionary<string, TemplateShaderPropertyData> duplicatesHelper,int subShaderId, int passId )
 		{
 			int typeIdx = (int)TemplateShaderGlobalsIdx.Type;
 			int nameIdx = (int)TemplateShaderGlobalsIdx.Name;
@@ -1166,7 +1179,9 @@ namespace AmplifyShaderEditor
 																								string.Empty,
 																								lineMatch.Groups[ nameIdx ].Value,
 																								CgToWirePortType[ lineMatch.Groups[ typeIdx ].Value ],
-																								PropertyType.Global );
+																								PropertyType.Global,
+																								subShaderId,
+																								passId);
 						duplicatesHelper.Add( newData.PropertyName, newData );
 						propertiesList.Add( newData );
 					}
@@ -1699,6 +1714,62 @@ namespace AmplifyShaderEditor
 				blendDataObj.ValidBlendOp = false;
 		}
 
+		struct SRPConditionalTag
+		{
+
+		}
+
+		public static string ProcessSRPConditionals( string body )
+		{
+			int srpVersion = ASEPackageManagerHelper.CurrentSRPVersion();
+			var processedSignatures = new HashSet<string>();
+
+			foreach ( Match match in Regex.Matches( body, SRPConditionPattern ) )
+			{
+				string signature;
+				if ( match.Success && match.Groups.Count == 4 && !processedSignatures.Contains( signature = match.Groups[ 0 ].Value ) )
+				{
+					string comparisonOp = match.Groups[ 1 ].Value;
+					bool validVersion = int.TryParse( match.Groups[ 2 ].Value, out int version );
+					string content = match.Groups[ 3 ].Value;
+
+					if ( validVersion && !string.IsNullOrEmpty( comparisonOp ) && version >= 100000 )
+					{
+						bool passed = false;
+						switch ( comparisonOp )
+						{
+							case "==": passed = ( srpVersion == version ); break;
+							case "!=": passed = ( srpVersion != version ); break;
+							case ">=": passed = ( srpVersion >= version ); break;
+							case "<=": passed = ( srpVersion <= version ); break;
+							case ">" : passed = ( srpVersion >  version ); break;
+							case "<" : passed = ( srpVersion <  version ); break;
+						}
+
+						if ( passed )
+						{
+							// @diogo: test passed? include conditional text
+							body = body.Replace( signature, content );
+						}
+						else
+						{
+							// @diogo: test failed? exclude conditional text
+							body = body.Replace( signature, string.Empty );
+						}
+					}
+					else
+					{
+						// @diogo: fell here? ignore SRP conditional
+						body = body.Replace( signature, string.Empty );
+					}
+
+					// @diogo: mark as processed to prevent duplicates
+					processedSignatures.Add( signature );
+				}
+			}
+			return body;			
+		}
+
 		public static void FetchLocalVars( string body, ref List<TemplateLocalVarData> localVarList, TemplateFunctionData vertexFunction, TemplateFunctionData fragFunction )
 		{
 			foreach( Match match in Regex.Matches( body, LocalVarPattern ) )
@@ -1759,7 +1830,7 @@ namespace AmplifyShaderEditor
 					idManager.RegisterTag( id, prop );
 				}
 			}
-		}
+		}		
 
 		public static TemplateSRPType CreateTags( ref TemplateTagsModuleData tagsObj, bool isSubShader )
 		{
@@ -1914,6 +1985,11 @@ namespace AmplifyShaderEditor
 
 			if( vertexData.Contains( Constants.InstanceIdMacro ) )
 			{
+				if( vertexDataList == null )
+				{
+					vertexDataList = new List<TemplateVertexData>();
+					vertexDataDict = new Dictionary<TemplateSemantics , TemplateVertexData>();
+				}
 				TemplateVertexData templateVertexData = new TemplateVertexData( TemplateSemantics.SV_InstanceID, WirePortDataType.UINT, Constants.InstanceIdVariable );
 				templateVertexData.DataInfo = TemplateInfoOnSematics.INSTANCE_ID;
 				templateVertexData.Available = true;
@@ -2164,13 +2240,8 @@ namespace AmplifyShaderEditor
 				inspectorContainer.Id = match.Groups[ 0 ].Value;
 				inspectorContainer.Data = match.Groups[ 1 ].Value;
 
-#if UNITY_2019_3_OR_NEWER
-				if( ASEPackageManagerHelper.CurrentHDVersion > ASESRPVersions.ASE_SRP_6_9_1 )
-				{
-					if( inspectorContainer.Data.Equals( "UnityEditor.Experimental.Rendering.HDPipeline.HDLitGUI" ) )
-						inspectorContainer.Data = "UnityEditor.Rendering.HighDefinition.HDLitGUI";
-				}
-#endif
+				if( inspectorContainer.Data.Equals( "UnityEditor.Experimental.Rendering.HDPipeline.HDLitGUI" ) )
+					inspectorContainer.Data = "UnityEditor.Rendering.HighDefinition.HDLitGUI";				
 			}
 			else
 			{
@@ -2403,11 +2474,8 @@ namespace AmplifyShaderEditor
 
 		public static readonly string FetchLWDepthFormat = "SHADERGRAPH_SAMPLE_SCENE_DEPTH( {0}.xy )";
 		public static readonly string FetchLWDepthFormatVertex = "SHADERGRAPH_SAMPLE_SCENE_DEPTH_LOD( {0}.xy )";
-#if UNITY_2018_3_OR_NEWER
 		public static readonly string FetchHDDepthFormat = "SampleCameraDepth( {0}.xy )";
-#else
-		public static readonly string FetchHDDepthFormat = "SAMPLE_TEXTURE2D( _CameraDepthTexture, s_point_clamp_sampler, {0}.xy ).r";
-#endif
+
 		public static string CreateDepthFetch( MasterNodeDataCollector dataCollector, string screenPos )
 		{
 			string screenDepthInstruction = string.Empty;
@@ -2476,6 +2544,59 @@ namespace AmplifyShaderEditor
 			}
 
 			return string.Empty;
+		}
+
+		public static void FillRenderingPlatform( TemplateRenderPlatformHelper renderPlatforms , string shaderBody )
+		{
+			int tagIndex = shaderBody.IndexOf( TemplatesManager.TemplateRenderPlatformsTag );
+			if(  tagIndex > -1 )
+			{
+				renderPlatforms.InitByTag( tagIndex );
+			}
+			else
+			{
+				//Excluded
+				Match excludePlatformsMatch = Regex.Match( shaderBody , PragmaExcludeRendersPattern );
+				if( excludePlatformsMatch.Success )
+				{
+					renderPlatforms.InitByExcludeRenders( excludePlatformsMatch.Index, excludePlatformsMatch.Value );
+					MatchCollection platformElements = Regex.Matches( excludePlatformsMatch.Groups[ 1 ].Value , PragmaRendererElement );
+					try
+					{
+						for( int i = 0 ; i < platformElements.Count ; i++ )
+						{
+							if( platformElements[ i ].Success )
+								renderPlatforms.SetupPlatform( platformElements[ i ].Groups[ 1 ].Value , false );
+						}
+					}
+					catch( Exception e )
+					{
+						Debug.LogException( e );
+					}
+				}
+				else //Only Renders
+				{
+					Match onlyRendersPlatformsMatch = Regex.Match( shaderBody , PragmaOnlyRendersPattern );
+					if( onlyRendersPlatformsMatch.Success )
+					{
+						renderPlatforms.InitByOnlyRenders( onlyRendersPlatformsMatch.Index, onlyRendersPlatformsMatch.Value );
+						MatchCollection platformElements = Regex.Matches( onlyRendersPlatformsMatch.Groups[ 1 ].Value , PragmaRendererElement );
+						try
+						{
+							for( int i = 0 ; i < platformElements.Count ; i++ )
+							{
+								if( platformElements[ i ].Success )
+									renderPlatforms.SetupPlatform( platformElements[ i ].Groups[ 1 ].Value, true );
+							}
+						}
+						catch( Exception e )
+						{
+							Debug.LogException( e );
+						}
+					}
+				}
+
+			}
 		}
 	}
 }
