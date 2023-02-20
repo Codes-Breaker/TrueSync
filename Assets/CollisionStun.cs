@@ -9,7 +9,8 @@ public class CollisionStun : MonoBehaviour
     public bool fall;
     public ConfigurableJoint body;
     public Vector3 velocityBeforeCollision = Vector3.zero;
-
+    public Vector3 positionBeforeCollision = Vector3.zero;
+    public GameObject stunEffect;
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.transform.gameObject.GetComponent<CollisionStun>() == null || collision.transform.gameObject.GetComponent<CollisionStun>() == this)
@@ -19,41 +20,51 @@ public class CollisionStun : MonoBehaviour
         Vector3 vel2 = collision.transform.gameObject.GetComponent<CollisionStun>().velocityBeforeCollision;
 
         Vector3 cPoint = collision.contacts[0].point;
-        Vector3 contactToMe = cPoint - body.GetComponent<Rigidbody>().position;
-        Vector3 contactToOther = cPoint - collision.rigidbody.position;
+        Vector3 contactToMe = cPoint - positionBeforeCollision;
+        Vector3 contactToOther = cPoint - collision.transform.gameObject.GetComponent<CollisionStun>().positionBeforeCollision;
 
-        var degree1 = Vector3.Angle(vel1, contactToMe) * Mathf.Deg2Rad;
-        var degree2 = Vector3.Angle(vel2, contactToOther) * Mathf.Deg2Rad;
+        var d1 = Vector3.Angle(vel1, contactToMe);
+        var d2 = Vector3.Angle(vel1, contactToOther);
+
+        var degree1 = d1 * Mathf.Deg2Rad;
+        var degree2 = d2 * Mathf.Deg2Rad;
 
         var m1 = (Mathf.Cos(degree1) * vel1).magnitude * body.GetComponent<Rigidbody>().mass;
         var m2 = (Mathf.Cos(degree2) * vel2).magnitude * collision.rigidbody.mass;
 
-        Debug.LogWarning($"{this.gameObject.name} m2 {m2} - {vel2} impulse {collision.impulse} vel {collision.relativeVelocity}");
 
-
-        if (m2 > 5)
-        {
-            fall = true;
-            fallTime = 0;
-            maxFallTime = 3;
-            body.targetRotation = Quaternion.Euler( body.transform.rotation.eulerAngles.x, body.transform.rotation.eulerAngles.y, body.transform.rotation.eulerAngles.z);
-            SetBalance(0, 0);
-        }
-        else if (m2 > 4)
-        {
-            fall = true;
-            fallTime = 0;
-            maxFallTime = 2;
-            body.targetRotation = Quaternion.Euler(body.transform.rotation.eulerAngles.x, body.transform.rotation.eulerAngles.y, body.transform.rotation.eulerAngles.z);
-            SetBalance(0, 0);
-        }
-        else if (m2 > 3)
+        if (m2 > 20)
         {
             fall = true;
             fallTime = 0;
             maxFallTime = 1;
+            body.targetRotation = Quaternion.Euler( body.transform.rotation.eulerAngles.x, body.transform.rotation.eulerAngles.y, body.transform.rotation.eulerAngles.z);
+            SetBalance(0, 0);
+            Debug.LogWarning($"{this.gameObject.name} 别人对我的力 {m2} 对方的角度 {d2}");
+
+
+        }
+        else if (m2 > 15)
+        {
+            fall = true;
+            fallTime = 0;
+            maxFallTime = 0.5f;
             body.targetRotation = Quaternion.Euler(body.transform.rotation.eulerAngles.x, body.transform.rotation.eulerAngles.y, body.transform.rotation.eulerAngles.z);
             SetBalance(0, 0);
+            Debug.LogWarning($"{this.gameObject.name} 别人对我的力 {m2} 对方的角度 {d2}");
+
+
+        }
+        else if (m2 > 10)
+        {
+            fall = true;
+            fallTime = 0;
+            maxFallTime = 0.25f;
+            body.targetRotation = Quaternion.Euler(body.transform.rotation.eulerAngles.x, body.transform.rotation.eulerAngles.y, body.transform.rotation.eulerAngles.z);
+            SetBalance(0, 0);
+            Debug.LogWarning($"{this.gameObject.name} 别人对我的力 {m2}  对方的角度 {d2}");
+
+
         }
     }
 
@@ -79,12 +90,14 @@ public class CollisionStun : MonoBehaviour
     {
         Vector3 vel1 = body.GetComponent<Rigidbody>().velocity;
         velocityBeforeCollision = vel1;
-
+        positionBeforeCollision = body.GetComponent<Rigidbody>().position;
         if (fall)
         {
+            stunEffect.gameObject.SetActive(true);
             fallTime += Time.fixedDeltaTime;
             if (fallTime >= maxFallTime)
             {
+                stunEffect.gameObject.SetActive(false);
                 fall = false;
                 fallTime = 0;
                 SetBalance(100, 300);
