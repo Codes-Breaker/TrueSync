@@ -5,10 +5,14 @@ using UnityEngine;
 public class WalkDetect : MonoBehaviour
 {
     public AnimalController controller;
+    public CharacterManager characterController;
     public Animator animator;
 
     public void Update()
     {
-        animator.SetBool("walk", controller.isWalk);
+        if(controller)
+            animator.SetBool("walk", controller.isWalk);
+        if (characterController)
+            animator.SetBool("walk", characterController.isWalk);
     }
 }
