@@ -6757,7 +6757,6 @@ GameObject:
   - component: {fileID: 718519375}
   - component: {fileID: 718519374}
   - component: {fileID: 718519382}
-  - component: {fileID: 718519376}
   m_Layer: 11
   m_Name: Body
   m_TagString: Untagged
@@ -6812,20 +6811,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerController: {fileID: 0}
   characterManager: {fileID: 0}
---- !u!136 &718519376
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 718519372}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.5
-  m_Height: 1
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!153 &718519377
 ConfigurableJoint:
   m_ObjectHideFlags: 0
@@ -16900,7 +16885,6 @@ GameObject:
   - component: {fileID: 1994617149}
   - component: {fileID: 1994617150}
   - component: {fileID: 1994617151}
-  - component: {fileID: 1994617148}
   m_Layer: 10
   m_Name: Body
   m_TagString: Untagged
@@ -17096,20 +17080,6 @@ ConfigurableJoint:
   m_EnablePreprocessing: 1
   m_MassScale: 1
   m_ConnectedMassScale: 1
---- !u!136 &1994617148
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1994617141}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.5
-  m_Height: 1
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &1994617149
 MonoBehaviour:
   m_ObjectHideFlags: 0
