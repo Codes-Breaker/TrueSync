@@ -103,7 +103,7 @@ public class CharacterManager : MonoBehaviour
 
     private void SetState()
     {
-        ridbody.mass = 1f + (currentGas / (maxActorGas * 1.0f)*4);
+        ridbody.mass = 5f + (currentGas / (maxActorGas * 1.0f)*4);
         ridbody.transform.localScale = new Vector3(currentGas * deltaScale + 1, currentGas * deltaScale + 1, currentGas * deltaScale + 1);
     }
     private void MoveWalk()
@@ -193,6 +193,7 @@ public class CharacterManager : MonoBehaviour
             if(currentGas > 0)
             {
                 var releaseDir = new Vector3(ridbody.transform.right.x, 0, ridbody.transform.right.z);
+                releaseDir = releaseDir.normalized;
                 if (currentGas < maxActorGas/20)
                 {
                     currentGas = 0;
@@ -208,7 +209,7 @@ public class CharacterManager : MonoBehaviour
                     }
                     else 
                     {
-                        ridbody.AddForce(releaseDir * releaseSpeed * 2.0f);
+                        ridbody.AddForce(releaseDir * releaseSpeed * 2f);
                     }
                     currentGas = currentGas - (currentGas) / releaseTime * Time.fixedDeltaTime;
                     neckPoint.targetRotation = Quaternion.Euler(0, 0, 0);
@@ -219,7 +220,7 @@ public class CharacterManager : MonoBehaviour
                 {
                     currentGas = currentGas - (currentGas) / releaseTime * Time.fixedDeltaTime;
                     neckPoint.targetRotation = Quaternion.Euler(0, 0, 0);
-                    ridbody.AddForce(releaseDir * releaseSpeed * 2.0f);
+                    ridbody.AddForce(releaseDir * releaseSpeed * 2f);
                 }
             }
         }

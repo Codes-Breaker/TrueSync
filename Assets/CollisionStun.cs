@@ -37,7 +37,7 @@ public class CollisionStun : MonoBehaviour
         {
             fall = true;
             fallTime = 0;
-            maxFallTime = 1;
+            maxFallTime = 2;
             body.targetRotation = Quaternion.Euler( body.transform.rotation.eulerAngles.x, body.transform.rotation.eulerAngles.y, body.transform.rotation.eulerAngles.z);
             SetBalance(0, 0);
 
@@ -48,7 +48,7 @@ public class CollisionStun : MonoBehaviour
         {
             fall = true;
             fallTime = 0;
-            maxFallTime = 0.5f;
+            maxFallTime = 1.5f;
             body.targetRotation = Quaternion.Euler(body.transform.rotation.eulerAngles.x, body.transform.rotation.eulerAngles.y, body.transform.rotation.eulerAngles.z);
             SetBalance(0, 0);
 
@@ -58,7 +58,7 @@ public class CollisionStun : MonoBehaviour
         {
             fall = true;
             fallTime = 0;
-            maxFallTime = 0.25f;
+            maxFallTime = 0.5f;
             body.targetRotation = Quaternion.Euler(body.transform.rotation.eulerAngles.x, body.transform.rotation.eulerAngles.y, body.transform.rotation.eulerAngles.z);
             SetBalance(0, 0);
 
