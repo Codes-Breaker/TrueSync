@@ -782,6 +782,10 @@
       <Project>{1B417520-4B00-1EB1-9A04-BFE488973FC4}</Project>
       <Name>StompyRobot.SRF</Name>
     </ProjectReference>
+    <ProjectReference Include="Unity.UniversalToonShader.Urp.Editor.csproj">
+      <Project>{86E90742-2DF9-7E78-119A-8F674FB2FB29}</Project>
+      <Name>Unity.UniversalToonShader.Urp.Editor</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />

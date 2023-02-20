@@ -124,6 +124,7 @@
     <Compile Include="Assets\TrueSync\Physics\Jitter\Collision\Shapes\CompoundShape.cs" />
     <Compile Include="Assets\TrueSync\Physics\Farseer\Common\Decomposition\Seidel\XNode.cs" />
     <Compile Include="Assets\TrueSync\Physics\Farseer\ConvertUnits.cs" />
+    <Compile Include="Assets\WalkDetect.cs" />
     <Compile Include="Assets\TrueSync\Unity\TSRigidBody.cs" />
     <Compile Include="Assets\Nappin\PhysicsBasedCharacterController\Scripts\Extensions\Ladder.cs" />
     <Compile Include="Assets\TrueSync\Physics\Farseer\Controllers\Controller.cs" />
@@ -324,7 +325,6 @@
     <Compile Include="Assets\TrueSync\Physics\Farseer\Common\Decomposition\CDT\TriangulationConstraint.cs" />
     <Compile Include="Assets\TrueSync\Unity\TSPolygonCollider2D.cs" />
     <Compile Include="Assets\TrueSync\Physics\Farseer\Dynamics\World.cs" />
-    <Compile Include="Assets\WalkDetect.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Suriyun\UnityChanShader\Shader\Unitychan_chara_fuku.shader" />
@@ -337,20 +337,26 @@
     <None Include="Assets\Suriyun\UnityChanShader\Shader\CharaOutline.cginc" />
     <None Include="Assets\Suriyun\UnityChanShader\Shader\Unitychan_chara_hair_ds.shader" />
     <None Include="Assets\Suriyun\UnityChanShader\Shader\Unitychan_chara_hada.shader" />
+    <None Include="Assets\Suriyun\UnityChanToonShaderVer2_Project-urp-2.2.3\Runtime\Shaders\UniversalToonBodyDoubleShadeWithFeather.hlsl" />
     <None Include="Assets\TrueSync\Physics\Jitter\license.txt" />
     <None Include="Assets\Nappin\PhysicsBasedCharacterController\TextMesh Pro\Resources\Shaders\TMP_SDF-Surface-Mobile.shader" />
+    <None Include="Assets\Suriyun\UnityChanToonShaderVer2_Project-urp-2.2.3\Runtime\Shaders\UniversalToonBody.hlsl" />
+    <None Include="Assets\Suriyun\UnityChanToonShaderVer2_Project-urp-2.2.3\Runtime\Shaders\UniversalToon.shader" />
     <None Include="Assets\Suriyun\UnityChanShader\Shader\Unitychan_chara_fuku_ds.shader" />
     <None Include="Assets\Suriyun\UnityChanShader\Shader\Unitychan_chara_eyelash_blend.shader" />
     <None Include="Assets\TrueSync\link.xml" />
     <None Include="Assets\Nappin\PhysicsBasedCharacterController\TextMesh Pro\Resources\Shaders\TMP_SDF-Surface.shader" />
     <None Include="Assets\Nappin\PhysicsBasedCharacterController\TextMesh Pro\Sprites\EmojiOne Attribution.txt" />
     <None Include="Assets\Nappin\PhysicsBasedCharacterController\TextMesh Pro\Resources\Shaders\TMP_Bitmap-Custom-Atlas.shader" />
+    <None Include="Assets\Suriyun\UnityChanToonShaderVer2_Project-urp-2.2.3\Runtime\Shaders\UniversalToonHead.hlsl" />
     <None Include="Assets\Nappin\PhysicsBasedCharacterController\TextMesh Pro\Resources\Shaders\TMP_SDF.shader" />
     <None Include="Assets\Nappin\PhysicsBasedCharacterController\TextMesh Pro\Resources\LineBreaking Leading Characters.txt" />
     <None Include="Assets\Nappin\PhysicsBasedCharacterController\TextMesh Pro\Resources\Shaders\TMPro_Properties.cginc" />
+    <None Include="Assets\Suriyun\UnityChanToonShaderVer2_Project-urp-2.2.3\Runtime\Shaders\UniversalToonOutline.hlsl" />
     <None Include="Assets\Prefabs\BaloonPBR.shader" />
     <None Include="Assets\Suriyun\UnityChanShader\Shader\CharaMain.cginc" />
     <None Include="Assets\Nappin\PhysicsBasedCharacterController\TextMesh Pro\Resources\Shaders\TMPro_Surface.cginc" />
+    <None Include="Assets\Suriyun\UnityChanToonShaderVer2_Project-urp-2.2.3\Runtime\Shaders\UniversalToonBodyShadingGradeMap.hlsl" />
     <None Include="Assets\Suriyun\UnityChanShader\Shader\Unitychan_chara_hada_blend.shader" />
     <None Include="Assets\TrueSync\Physics\Farseer\license.txt" />
     <None Include="Assets\Suriyun\UnityChanShader\Shader\readme.txt" />
@@ -1043,6 +1049,10 @@
     <ProjectReference Include="StompyRobot.SRF.csproj">
       <Project>{1B417520-4B00-1EB1-9A04-BFE488973FC4}</Project>
       <Name>StompyRobot.SRF</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.UniversalToonShader.Urp.Editor.csproj">
+      <Project>{86E90742-2DF9-7E78-119A-8F674FB2FB29}</Project>
+      <Name>Unity.UniversalToonShader.Urp.Editor</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
