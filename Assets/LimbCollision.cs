@@ -15,7 +15,7 @@ public class LimbCollision : MonoBehaviour
     {
         if(playerController)
             playerController.isGrounded = true;
-        if (characterManager)
-            characterManager.isGrounded = true;
+        //if (characterManager)
+        //    characterManager.isGrounded = true;
     }
 }
