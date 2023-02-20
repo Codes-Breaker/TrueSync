@@ -62,6 +62,15 @@ public partial class @PlayerOneMovementActions : IInputActionCollection2, IDispo
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Pull"",
+                    ""type"": ""Button"",
+                    ""id"": ""9f92bee8-6f7d-49b7-973f-78720af614e7"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -207,6 +216,17 @@ public partial class @PlayerOneMovementActions : IInputActionCollection2, IDispo
                     ""action"": ""Camera"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6e9c499d-5d7b-4ac9-b5d1-e42deecddde2"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pull"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -253,6 +273,7 @@ public partial class @PlayerOneMovementActions : IInputActionCollection2, IDispo
         m_Gameplay_Jump = m_Gameplay.FindAction("Jump", throwIfNotFound: true);
         m_Gameplay_Charge = m_Gameplay.FindAction("Charge", throwIfNotFound: true);
         m_Gameplay_Camera = m_Gameplay.FindAction("Camera", throwIfNotFound: true);
+        m_Gameplay_Pull = m_Gameplay.FindAction("Pull", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -316,6 +337,7 @@ public partial class @PlayerOneMovementActions : IInputActionCollection2, IDispo
     private readonly InputAction m_Gameplay_Jump;
     private readonly InputAction m_Gameplay_Charge;
     private readonly InputAction m_Gameplay_Camera;
+    private readonly InputAction m_Gameplay_Pull;
     public struct GameplayActions
     {
         private @PlayerOneMovementActions m_Wrapper;
@@ -324,6 +346,7 @@ public partial class @PlayerOneMovementActions : IInputActionCollection2, IDispo
         public InputAction @Jump => m_Wrapper.m_Gameplay_Jump;
         public InputAction @Charge => m_Wrapper.m_Gameplay_Charge;
         public InputAction @Camera => m_Wrapper.m_Gameplay_Camera;
+        public InputAction @Pull => m_Wrapper.m_Gameplay_Pull;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -345,6 +368,9 @@ public partial class @PlayerOneMovementActions : IInputActionCollection2, IDispo
                 @Camera.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnCamera;
                 @Camera.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnCamera;
                 @Camera.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnCamera;
+                @Pull.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPull;
+                @Pull.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPull;
+                @Pull.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPull;
             }
             m_Wrapper.m_GameplayActionsCallbackInterface = instance;
             if (instance != null)
@@ -361,6 +387,9 @@ public partial class @PlayerOneMovementActions : IInputActionCollection2, IDispo
                 @Camera.started += instance.OnCamera;
                 @Camera.performed += instance.OnCamera;
                 @Camera.canceled += instance.OnCamera;
+                @Pull.started += instance.OnPull;
+                @Pull.performed += instance.OnPull;
+                @Pull.canceled += instance.OnPull;
             }
         }
     }
@@ -398,5 +427,6 @@ public partial class @PlayerOneMovementActions : IInputActionCollection2, IDispo
         void OnJump(InputAction.CallbackContext context);
         void OnCharge(InputAction.CallbackContext context);
         void OnCamera(InputAction.CallbackContext context);
+        void OnPull(InputAction.CallbackContext context);
     }
 }

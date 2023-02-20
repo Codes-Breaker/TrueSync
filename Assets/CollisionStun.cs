@@ -44,7 +44,7 @@ public class CollisionStun : MonoBehaviour
 
 
         }
-        else if (m2 > 15)
+        else if (m2 > 18)
         {
             fall = true;
             fallTime = 0;
@@ -54,7 +54,7 @@ public class CollisionStun : MonoBehaviour
 
 
         }
-        else if (m2 > 5)
+        else if (m2 > 15)
         {
             fall = true;
             fallTime = 0;

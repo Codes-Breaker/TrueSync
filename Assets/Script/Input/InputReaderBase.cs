@@ -29,6 +29,8 @@ public class InputReaderBase : MonoBehaviour
     public float zoom;
     [HideInInspector]
     public bool charge;
+    [HideInInspector]
+    public bool pull;
 
 
     public bool hasJumped = false;

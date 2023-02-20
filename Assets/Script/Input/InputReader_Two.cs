@@ -30,6 +30,9 @@ public class InputReader_Two : InputReaderBase
 
         movementActions.Gameplay.Charge.performed += ctx => OnCharge(ctx);
         movementActions.Gameplay.Charge.canceled += ctx => ChargeEnded(ctx);
+
+        movementActions.Gameplay.Pull.performed += ctx => OnPull(ctx);
+        movementActions.Gameplay.Pull.canceled += ctx => PullEnd(ctx);
     }
 
 
@@ -150,6 +153,15 @@ public class InputReader_Two : InputReaderBase
         charge = false;
     }
 
+    public void OnPull(InputAction.CallbackContext ctx)
+    {
+        pull = true;
+    }
+
+    public void PullEnd(InputAction.CallbackContext ctx)
+    {
+        pull = false;
+    }
 
     #endregion
 

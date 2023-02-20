@@ -62,6 +62,15 @@ public partial class @PlayerTwoMovementActions : IInputActionCollection2, IDispo
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Pull"",
+                    ""type"": ""Button"",
+                    ""id"": ""70faad1b-f42b-49a8-a3b3-c6c82788ead7"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -284,6 +293,17 @@ public partial class @PlayerTwoMovementActions : IInputActionCollection2, IDispo
                     ""action"": ""Charge"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""45dad8eb-4482-4ab1-94f4-2fdd28678da0"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""GamePad"",
+                    ""action"": ""Pull"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -330,6 +350,7 @@ public partial class @PlayerTwoMovementActions : IInputActionCollection2, IDispo
         m_Gameplay_Jump = m_Gameplay.FindAction("Jump", throwIfNotFound: true);
         m_Gameplay_Camera = m_Gameplay.FindAction("Camera", throwIfNotFound: true);
         m_Gameplay_Charge = m_Gameplay.FindAction("Charge", throwIfNotFound: true);
+        m_Gameplay_Pull = m_Gameplay.FindAction("Pull", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -393,6 +414,7 @@ public partial class @PlayerTwoMovementActions : IInputActionCollection2, IDispo
     private readonly InputAction m_Gameplay_Jump;
     private readonly InputAction m_Gameplay_Camera;
     private readonly InputAction m_Gameplay_Charge;
+    private readonly InputAction m_Gameplay_Pull;
     public struct GameplayActions
     {
         private @PlayerTwoMovementActions m_Wrapper;
@@ -401,6 +423,7 @@ public partial class @PlayerTwoMovementActions : IInputActionCollection2, IDispo
         public InputAction @Jump => m_Wrapper.m_Gameplay_Jump;
         public InputAction @Camera => m_Wrapper.m_Gameplay_Camera;
         public InputAction @Charge => m_Wrapper.m_Gameplay_Charge;
+        public InputAction @Pull => m_Wrapper.m_Gameplay_Pull;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -422,6 +445,9 @@ public partial class @PlayerTwoMovementActions : IInputActionCollection2, IDispo
                 @Charge.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnCharge;
                 @Charge.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnCharge;
                 @Charge.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnCharge;
+                @Pull.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPull;
+                @Pull.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPull;
+                @Pull.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPull;
             }
             m_Wrapper.m_GameplayActionsCallbackInterface = instance;
             if (instance != null)
@@ -438,6 +464,9 @@ public partial class @PlayerTwoMovementActions : IInputActionCollection2, IDispo
                 @Charge.started += instance.OnCharge;
                 @Charge.performed += instance.OnCharge;
                 @Charge.canceled += instance.OnCharge;
+                @Pull.started += instance.OnPull;
+                @Pull.performed += instance.OnPull;
+                @Pull.canceled += instance.OnPull;
             }
         }
     }
@@ -475,5 +504,6 @@ public partial class @PlayerTwoMovementActions : IInputActionCollection2, IDispo
         void OnJump(InputAction.CallbackContext context);
         void OnCamera(InputAction.CallbackContext context);
         void OnCharge(InputAction.CallbackContext context);
+        void OnPull(InputAction.CallbackContext context);
     }
 }
