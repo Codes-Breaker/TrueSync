@@ -99,6 +99,7 @@ public class CharacterManager : MonoBehaviour
 
     private void SetState()
     {
+        ridbody.mass = 1f + (currentGas / (maxActorGas * 1.0f));
         ridbody.transform.localScale = new Vector3(currentGas * deltaScale + 1, currentGas * deltaScale + 1, currentGas * deltaScale + 1);
     }
     private void MoveWalk()
@@ -183,7 +184,8 @@ public class CharacterManager : MonoBehaviour
             //}
             if(currentGas > 0)
             {
-                if(currentGas < maxActorGas/20)
+                var releaseDir = new Vector3(ridbody.transform.right.x, 0, ridbody.transform.right.z);
+                if (currentGas < maxActorGas/20)
                 {
                     currentGas = 0;
                     releasing = false;
@@ -193,11 +195,12 @@ public class CharacterManager : MonoBehaviour
                 {
                     if (!releasing)
                     {
-                        ridbody.AddForce(ridbody.transform.right * releaseSpeed * 50.0f);
+                        var addSpeed = (ridbody.transform.localScale.x / (maxScale * 1f)) * 120f;
+                        ridbody.AddForce(releaseDir * releaseSpeed * addSpeed);
                     }
                     else 
                     {
-                        ridbody.AddForce(ridbody.transform.right * releaseSpeed * 2.0f);
+                        ridbody.AddForce(releaseDir * releaseSpeed * 2.0f);
                     }
                     currentGas = currentGas - (currentGas) / releaseTime * Time.fixedDeltaTime;
                     neckPoint.targetRotation = Quaternion.Euler(0, 0, 0);
@@ -208,7 +211,7 @@ public class CharacterManager : MonoBehaviour
                 {
                     currentGas = currentGas - (currentGas) / releaseTime * Time.fixedDeltaTime;
                     neckPoint.targetRotation = Quaternion.Euler(0, 0, 0);
-                    ridbody.AddForce(ridbody.transform.right * releaseSpeed * 2.0f);
+                    ridbody.AddForce(releaseDir * releaseSpeed * 2.0f);
                 }
             }
         }

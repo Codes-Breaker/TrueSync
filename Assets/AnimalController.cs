@@ -27,6 +27,10 @@ public class AnimalController : MonoBehaviour
         cameraFollowPoint.transform.position = Vector3.Lerp(cameraFollowPoint.transform.position, point, 0.1f);
     }
 
+    public float Cal(float x)
+    {
+        return -(Mathf.Cos(Mathf.PI * x) - 1) / 2;
+    }
 
     private void FixedUpdate()
     {
@@ -89,6 +93,7 @@ public class AnimalController : MonoBehaviour
         }
         else
         {
+            var releaseDir = new Vector3(body.transform.right.x, 0, body.transform.right.z);
             if (body.transform.localScale.x > 1.0f)
             {
                 if (body.transform.localScale.x - 1.0f < 0.02f)
@@ -101,11 +106,12 @@ public class AnimalController : MonoBehaviour
                 {
                     if (!releasing)
                     {
-                        body.AddForce(body.transform.right * speed * 50.0f);
+                        var addSpeed = (body.transform.localScale.x / (maxScale * 1f)) * 120f;
+                        body.AddForce(releaseDir * speed * addSpeed);
                     }
                     else
                     {
-                        body.AddForce(body.transform.right * speed * 2.0f);
+                        body.AddForce(releaseDir * speed * 2.0f);
                     }
                     body.transform.localScale = Vector3.Lerp(body.transform.localScale, new Vector3(1.0f, 1.0f, 1.0f), 0.01f);
                     neckPoint.targetRotation = Quaternion.Euler(0, 0, 0);
@@ -116,7 +122,7 @@ public class AnimalController : MonoBehaviour
                 {
                     body.transform.localScale = Vector3.Lerp(body.transform.localScale, new Vector3(1.0f, 1.0f, 1.0f), 0.01f);
                     neckPoint.targetRotation = Quaternion.Euler(0, 0, 0);
-                    body.AddForce(body.transform.right * speed * 2.0f);
+                    body.AddForce(releaseDir * speed * 2.0f);
                 }
             }
 

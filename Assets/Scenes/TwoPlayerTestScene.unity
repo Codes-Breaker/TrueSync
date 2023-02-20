@@ -2033,6 +2033,7 @@ MonoBehaviour:
   maxFallTime: 3
   fall: 0
   body: {fileID: 0}
+  velocityBeforeCollision: {x: 0, y: 0, z: 0}
 --- !u!135 &238427468
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -6271,6 +6272,7 @@ MonoBehaviour:
   maxFallTime: 3
   fall: 0
   body: {fileID: 718519377}
+  velocityBeforeCollision: {x: 0, y: 0, z: 0}
 --- !u!114 &718519375
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6473,7 +6475,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inputReader: {fileID: 1580522773}
   movementSpeed: 100
-  jumpForce: 100
+  jumpForce: 50
   releaseSpeed: 100
   maxScale: 1.3
   chargeTime: 1
@@ -8246,6 +8248,7 @@ MonoBehaviour:
   maxFallTime: 3
   fall: 0
   body: {fileID: 0}
+  velocityBeforeCollision: {x: 0, y: 0, z: 0}
 --- !u!135 &960751701
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -12952,6 +12955,7 @@ MonoBehaviour:
   maxFallTime: 3
   fall: 0
   body: {fileID: 1713391390}
+  velocityBeforeCollision: {x: 0, y: 0, z: 0}
 --- !u!153 &1713391390
 ConfigurableJoint:
   m_ObjectHideFlags: 0
@@ -15653,6 +15657,7 @@ MonoBehaviour:
   maxFallTime: 3
   fall: 0
   body: {fileID: 1994617147}
+  velocityBeforeCollision: {x: 0, y: 0, z: 0}
 --- !u!114 &1994617151
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15667,11 +15672,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inputReader: {fileID: 1806350486}
   movementSpeed: 100
-  jumpForce: 100
+  jumpForce: 50
   releaseSpeed: 100
   maxScale: 1.35
   chargeTime: 1
-  releaseTime: 3
+  releaseTime: 2
   neckPoint: {fileID: 1209619605}
   characterCamera: {fileID: 1601807966}
   cameraFollowPoint: {fileID: 1110716526}
