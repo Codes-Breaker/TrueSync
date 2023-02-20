@@ -5,6 +5,7 @@ using UnityEngine;
 public class LimbCollision : MonoBehaviour
 {
     public AnimalController playerController;
+    public CharacterManager characterManager;
     private void Start()
     {
 
@@ -12,6 +13,9 @@ public class LimbCollision : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        playerController.isGrounded = true;
+        if(playerController)
+            playerController.isGrounded = true;
+        if (characterManager)
+            characterManager.isGrounded = true;
     }
 }
