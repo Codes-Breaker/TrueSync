@@ -14,13 +14,17 @@ public class CharacterManager : MonoBehaviour
     public float jumpForce;
     public float releaseSpeed;
     public float maxScale;
+    [Tooltip("Lerp计算参数")]
+    public float chargeTime; 
+    [Tooltip("Lerp计算参数")]
+    public float releaseTime;
 
     //控制器相关
     private Vector2 axisInput;
     private float cameraInputX;
     private bool jump;
-    private bool jumpHold;
     private bool charge;
+
     //摇杆输入值最小值
     private float movementThrashold = 0.01f;
     [Space(10)]
@@ -50,6 +54,8 @@ public class CharacterManager : MonoBehaviour
     [HideInInspector]
     public bool releasing = false;
 
+    private float deltaScale;
+
     private Rigidbody ridbody;
 
 
@@ -57,6 +63,7 @@ public class CharacterManager : MonoBehaviour
     {
         ridbody = GetComponent<Rigidbody>();
         currentHPValue = maxHPValue;
+        deltaScale = (maxScale - 1) / maxActorGas;
     }
 
     private void Update()
@@ -64,7 +71,6 @@ public class CharacterManager : MonoBehaviour
         //input
         axisInput = inputReader.axisInput;
         jump = inputReader.jump;
-        jumpHold = inputReader.jumpHold;
         charge = inputReader.charge;
         cameraInputX = inputReader.cameraInput.x;
         MoveCamera();
@@ -83,12 +89,18 @@ public class CharacterManager : MonoBehaviour
 
         MoveCharge();
         MoveRelease();
+        SetState();
         MoveWalk();
         MoveJump();
     }
 
 
     #region Move
+
+    private void SetState()
+    {
+        ridbody.transform.localScale = new Vector3(currentGas * deltaScale + 1, currentGas * deltaScale + 1, currentGas * deltaScale + 1);
+    }
     private void MoveWalk()
     {
         if (axisInput.magnitude > movementThrashold)
@@ -119,9 +131,16 @@ public class CharacterManager : MonoBehaviour
     {
         if(charge)
         {
-            if (ridbody.transform.localScale.x < maxScale && !releasing)
+            //if (ridbody.transform.localScale.x < maxScale && !releasing)
+            //{
+            //    ridbody.transform.localScale = Vector3.Lerp(ridbody.transform.localScale, new Vector3(maxScale, maxScale, maxScale), 0.1f);
+            //    neckPoint.targetRotation = Quaternion.Euler(0, 0, -45);
+            //    releasing = false;
+            //}
+
+            if(currentGas < maxActorGas && !releasing)
             {
-                ridbody.transform.localScale = Vector3.Lerp(ridbody.transform.localScale, new Vector3(maxScale, maxScale, maxScale), 0.1f);
+                currentGas = currentGas + (maxActorGas - currentGas) / chargeTime * Time.fixedDeltaTime;
                 neckPoint.targetRotation = Quaternion.Euler(0, 0, -45);
                 releasing = false;
             }
@@ -132,32 +151,62 @@ public class CharacterManager : MonoBehaviour
     {
         if(!charge)
         {
-            if (ridbody.transform.localScale.x > 1.0f)
+            //if (ridbody.transform.localScale.x > 1.0f)
+            //{
+            //    if (ridbody.transform.localScale.x - 1.0f < 0.02f)
+            //    {
+            //        ridbody.transform.localScale = new Vector3(1, 1, 1);
+            //        releasing = false;
+            //        releaseEffect.gameObject.SetActive(false);
+            //    }
+            //    else if (ridbody.transform.localScale.x > 1f)
+            //    {
+            //        if (!releasing)
+            //        {
+            //            ridbody.AddForce(ridbody.transform.right * releaseSpeed * 50.0f);
+            //        }
+            //        else
+            //        {
+            //            ridbody.AddForce(ridbody.transform.right * releaseSpeed * 2.0f);
+            //        }
+            //        ridbody.transform.localScale = Vector3.Lerp(ridbody.transform.localScale, new Vector3(1.0f, 1.0f, 1.0f), 0.01f);
+            //        neckPoint.targetRotation = Quaternion.Euler(0, 0, 0);
+            //        releaseEffect.gameObject.SetActive(true);
+            //        releasing = true;
+            //    }
+            //    else
+            //    {
+            //        ridbody.transform.localScale = Vector3.Lerp(ridbody.transform.localScale, new Vector3(1.0f, 1.0f, 1.0f), 0.01f);
+            //        neckPoint.targetRotation = Quaternion.Euler(0, 0, 0);
+            //        ridbody.AddForce(ridbody.transform.right * releaseSpeed * 2.0f);
+            //    }
+            //}
+            if(currentGas > 0)
             {
-                if (ridbody.transform.localScale.x - 1.0f < 0.02f)
+                if(currentGas < maxActorGas/20)
                 {
-                    ridbody.transform.localScale = new Vector3(1, 1, 1);
+                    currentGas = 0;
                     releasing = false;
                     releaseEffect.gameObject.SetActive(false);
                 }
-                else if (ridbody.transform.localScale.x > 1f)
+                else if(currentGas > 0)
                 {
                     if (!releasing)
                     {
                         ridbody.AddForce(ridbody.transform.right * releaseSpeed * 50.0f);
                     }
-                    else
+                    else 
                     {
                         ridbody.AddForce(ridbody.transform.right * releaseSpeed * 2.0f);
                     }
-                    ridbody.transform.localScale = Vector3.Lerp(ridbody.transform.localScale, new Vector3(1.0f, 1.0f, 1.0f), 0.01f);
+                    currentGas = currentGas - (currentGas) / releaseTime * Time.fixedDeltaTime;
                     neckPoint.targetRotation = Quaternion.Euler(0, 0, 0);
                     releaseEffect.gameObject.SetActive(true);
                     releasing = true;
                 }
                 else
                 {
-                    ridbody.transform.localScale = Vector3.Lerp(ridbody.transform.localScale, new Vector3(1.0f, 1.0f, 1.0f), 0.01f);
+                    currentGas = currentGas - (currentGas) / releaseTime * Time.fixedDeltaTime;
                     neckPoint.targetRotation = Quaternion.Euler(0, 0, 0);
                     ridbody.AddForce(ridbody.transform.right * releaseSpeed * 2.0f);
                 }

@@ -135,6 +135,7 @@ GameObject:
   - component: {fileID: 2989923}
   - component: {fileID: 2989922}
   - component: {fileID: 2989921}
+  - component: {fileID: 2989925}
   m_Layer: 6
   m_Name: Plane
   m_TagString: Untagged
@@ -219,6 +220,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2989925
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2989920}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 570fb757fd802a44abd4d8120eb1365f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7748868
 GameObject:
   m_ObjectHideFlags: 0
@@ -1535,7 +1548,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e9a244f77d47594fa094d52f2573a42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  controller: {fileID: 718519376}
+  controller: {fileID: 0}
   characterController: {fileID: 718519382}
   animator: {fileID: 186362738}
 --- !u!95 &186362738
@@ -2516,7 +2529,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8027bbeee77cb64e9c805fac8c404b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerController: {fileID: 718519376}
+  playerController: {fileID: 0}
   characterManager: {fileID: 718519382}
 --- !u!153 &277345614
 ConfigurableJoint:
@@ -2916,7 +2929,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8027bbeee77cb64e9c805fac8c404b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerController: {fileID: 1994617148}
+  playerController: {fileID: 0}
   characterManager: {fileID: 1994617151}
 --- !u!1 &359743167
 GameObject:
@@ -5946,7 +5959,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8027bbeee77cb64e9c805fac8c404b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerController: {fileID: 718519376}
+  playerController: {fileID: 0}
   characterManager: {fileID: 718519382}
 --- !u!153 &712808907
 ConfigurableJoint:
@@ -6137,7 +6150,6 @@ GameObject:
   - component: {fileID: 718519379}
   - component: {fileID: 718519378}
   - component: {fileID: 718519377}
-  - component: {fileID: 718519376}
   - component: {fileID: 718519375}
   - component: {fileID: 718519374}
   - component: {fileID: 718519382}
@@ -6191,30 +6203,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8027bbeee77cb64e9c805fac8c404b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerController: {fileID: 718519376}
+  playerController: {fileID: 0}
   characterManager: {fileID: 0}
---- !u!114 &718519376
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 718519372}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7bd9663e15a5f384c93467033f690648, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 100
-  jumpForce: 3000
-  isWalk: 0
-  body: {fileID: 718519378}
-  isGrounded: 0
-  releasing: 0
-  maxScale: 1.35
-  releaseEffect: {fileID: 1643401257}
-  neckPoint: {fileID: 1933385570}
-  cameraFollowPoint: {fileID: 1199948503}
 --- !u!153 &718519377
 ConfigurableJoint:
   m_ObjectHideFlags: 0
@@ -6406,6 +6396,8 @@ MonoBehaviour:
   jumpForce: 100
   releaseSpeed: 100
   maxScale: 1.3
+  chargeTime: 1
+  releaseTime: 3
   neckPoint: {fileID: 1933385570}
   characterCamera: {fileID: 1292948834}
   cameraFollowPoint: {fileID: 1199948503}
@@ -7620,7 +7612,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8027bbeee77cb64e9c805fac8c404b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerController: {fileID: 1994617148}
+  playerController: {fileID: 0}
   characterManager: {fileID: 1994617151}
 --- !u!153 &871075901
 ConfigurableJoint:
@@ -8603,7 +8595,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8027bbeee77cb64e9c805fac8c404b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerController: {fileID: 1994617148}
+  playerController: {fileID: 0}
   characterManager: {fileID: 1994617151}
 --- !u!153 &1084973466
 ConfigurableJoint:
@@ -8828,7 +8820,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8027bbeee77cb64e9c805fac8c404b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerController: {fileID: 1994617148}
+  playerController: {fileID: 0}
   characterManager: {fileID: 1994617151}
 --- !u!153 &1098009369
 ConfigurableJoint:
@@ -12215,7 +12207,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8027bbeee77cb64e9c805fac8c404b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerController: {fileID: 718519376}
+  playerController: {fileID: 0}
   characterManager: {fileID: 718519382}
 --- !u!153 &1596406634
 ConfigurableJoint:
@@ -13540,7 +13532,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8027bbeee77cb64e9c805fac8c404b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerController: {fileID: 718519376}
+  playerController: {fileID: 0}
   characterManager: {fileID: 718519382}
 --- !u!153 &1804799679
 ConfigurableJoint:
@@ -15298,7 +15290,6 @@ GameObject:
   - component: {fileID: 1994617143}
   - component: {fileID: 1994617146}
   - component: {fileID: 1994617147}
-  - component: {fileID: 1994617148}
   - component: {fileID: 1994617149}
   - component: {fileID: 1994617150}
   - component: {fileID: 1994617151}
@@ -15498,28 +15489,6 @@ ConfigurableJoint:
   m_EnablePreprocessing: 1
   m_MassScale: 1
   m_ConnectedMassScale: 1
---- !u!114 &1994617148
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1994617141}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7bd9663e15a5f384c93467033f690648, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 100
-  jumpForce: 3000
-  isWalk: 0
-  body: {fileID: 1994617146}
-  isGrounded: 0
-  releasing: 0
-  maxScale: 1.35
-  releaseEffect: {fileID: 3944414126065384034}
-  neckPoint: {fileID: 1209619605}
-  cameraFollowPoint: {fileID: 1110716526}
 --- !u!114 &1994617149
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15532,7 +15501,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8027bbeee77cb64e9c805fac8c404b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerController: {fileID: 1994617148}
+  playerController: {fileID: 0}
   characterManager: {fileID: 0}
 --- !u!114 &1994617150
 MonoBehaviour:
@@ -15567,6 +15536,8 @@ MonoBehaviour:
   jumpForce: 100
   releaseSpeed: 100
   maxScale: 1.35
+  chargeTime: 1
+  releaseTime: 3
   neckPoint: {fileID: 1209619605}
   characterCamera: {fileID: 1601807966}
   cameraFollowPoint: {fileID: 1110716526}
@@ -15971,7 +15942,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e9a244f77d47594fa094d52f2573a42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  controller: {fileID: 1994617148}
+  controller: {fileID: 0}
   characterController: {fileID: 1994617151}
   animator: {fileID: 517360525}
 --- !u!4 &3944414126065384034 stripped
