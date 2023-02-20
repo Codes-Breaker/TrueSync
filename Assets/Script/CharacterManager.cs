@@ -104,11 +104,13 @@ public class CharacterManager : MonoBehaviour
 
     private void SetState()
     {
-        ridbody.mass = 1f + (currentGas / (maxActorGas * 1.0f));
+        ridbody.mass = 1f + (currentGas / (maxActorGas * 1.0f)*4);
         ridbody.transform.localScale = new Vector3(currentGas * deltaScale + 1, currentGas * deltaScale + 1, currentGas * deltaScale + 1);
     }
     private void MoveWalk()
     {
+        if (this.GetComponent<CollisionStun>().fall)
+            return;
         if (axisInput.magnitude > movementThrashold)
         {
             targetAngle = Mathf.Atan2(axisInput.x, axisInput.y) * Mathf.Rad2Deg + characterCamera.transform.eulerAngles.y;
@@ -126,6 +128,8 @@ public class CharacterManager : MonoBehaviour
 
     private void MoveJump()
     {
+        if (this.GetComponent<CollisionStun>().fall)
+            return;
         if (jump && isGrounded)
         {
             ridbody.AddForce(Vector3.up * jumpForce,ForceMode.Impulse);
@@ -200,7 +204,7 @@ public class CharacterManager : MonoBehaviour
                 {
                     if (!releasing)
                     {
-                        var addSpeed = (ridbody.transform.localScale.x / (maxScale * 1f)) * 120f;
+                        var addSpeed = (currentGas / (maxActorGas)) * 120f;
                         ridbody.AddForce(releaseDir * releaseSpeed * addSpeed);
                     }
                     else 
