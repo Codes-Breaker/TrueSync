@@ -31,10 +31,14 @@ public class CharacterManager : MonoBehaviour
     [Header("相关需要关联组件")]
     public ConfigurableJoint neckPoint;
     public GameObject characterCamera;
+    public GameObject otherCharacterCamera;
     public Transform cameraFollowPoint;
     public Slider hpSlider;
     public Slider gpSlider;
     public Canvas canvas;
+    public Slider otherHpSlider;
+    public Slider otherGpSlider;
+    public Canvas otherCanvas;
     public Transform releaseEffect;
 
 
@@ -245,5 +249,12 @@ public class CharacterManager : MonoBehaviour
         gpSlider.transform.position = transform.position;
         hpSlider.transform.localPosition = hpSlider.transform.localPosition + new Vector3(0, 1.4f + (transform.localScale.x - 1) * 1.2f, 0);
         gpSlider.transform.localPosition = gpSlider.transform.localPosition + new Vector3(0, 1f + (transform.localScale.x - 1) * 1.2f, 0);
+        otherHpSlider.value = (float)(currentHPValue / maxHPValue);
+        otherGpSlider.value = (float)(currentGas / maxActorGas);
+        otherCanvas.transform.forward = otherCharacterCamera.transform.forward;
+        otherHpSlider.transform.position = transform.position;
+        otherGpSlider.transform.position = transform.position;
+        otherHpSlider.transform.localPosition = otherHpSlider.transform.localPosition + new Vector3(0, 1.4f + (transform.localScale.x - 1) * 1.2f, 0);
+        otherGpSlider.transform.localPosition = otherGpSlider.transform.localPosition + new Vector3(0, 1f + (transform.localScale.x - 1) * 1.2f, 0);
     }
 }

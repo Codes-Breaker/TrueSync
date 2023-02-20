@@ -20,7 +20,7 @@ public class PlaneContorl : MonoBehaviour
         timer += Time.deltaTime;
         if (timer >= delayTime)
         {
-            transform.localScale =Vector3.Lerp(transform.localScale, new Vector3(transform.localScale.x - scale, transform.localScale.y, transform.localScale.z - scale),0.1f);
+            transform.localScale =Vector3.Lerp(transform.localScale, new Vector3(transform.localScale.x - scale, transform.localScale.y, transform.localScale.z),0.1f);
             timer = 0;
         }
     }

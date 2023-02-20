@@ -31,7 +31,7 @@ public class CollisionStun : MonoBehaviour
 
         var m1 = (Mathf.Cos(degree1) * vel1).magnitude * body.GetComponent<Rigidbody>().mass;
         var m2 = (Mathf.Cos(degree2) * vel2).magnitude * collision.rigidbody.mass;
-
+        Debug.LogWarning($"{this.gameObject.name} 别人对我的力 {m2} 对方的角度 {d2} impulse {collision.impulse}");
 
         if (m2 > 20)
         {
@@ -40,7 +40,7 @@ public class CollisionStun : MonoBehaviour
             maxFallTime = 1;
             body.targetRotation = Quaternion.Euler( body.transform.rotation.eulerAngles.x, body.transform.rotation.eulerAngles.y, body.transform.rotation.eulerAngles.z);
             SetBalance(0, 0);
-            Debug.LogWarning($"{this.gameObject.name} 别人对我的力 {m2} 对方的角度 {d2}");
+
 
 
         }
@@ -51,18 +51,16 @@ public class CollisionStun : MonoBehaviour
             maxFallTime = 0.5f;
             body.targetRotation = Quaternion.Euler(body.transform.rotation.eulerAngles.x, body.transform.rotation.eulerAngles.y, body.transform.rotation.eulerAngles.z);
             SetBalance(0, 0);
-            Debug.LogWarning($"{this.gameObject.name} 别人对我的力 {m2} 对方的角度 {d2}");
 
 
         }
-        else if (m2 > 10)
+        else if (m2 > 5)
         {
             fall = true;
             fallTime = 0;
             maxFallTime = 0.25f;
             body.targetRotation = Quaternion.Euler(body.transform.rotation.eulerAngles.x, body.transform.rotation.eulerAngles.y, body.transform.rotation.eulerAngles.z);
             SetBalance(0, 0);
-            Debug.LogWarning($"{this.gameObject.name} 别人对我的力 {m2}  对方的角度 {d2}");
 
 
         }
