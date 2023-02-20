@@ -46,7 +46,7 @@ public class CharacterManager : MonoBehaviour
     [HideInInspector]
     public bool isWalk;
     [HideInInspector]
-    public bool isGrounded;
+    public bool isGrounded ;
     [HideInInspector]
     public float targetAngle;
     private float maxHPValue = 100;
@@ -68,6 +68,7 @@ public class CharacterManager : MonoBehaviour
         ridbody = GetComponent<Rigidbody>();
         currentHPValue = maxHPValue;
         deltaScale = (maxScale - 1) / maxActorGas;
+        isGrounded = true;
     }
 
     private void Update()
