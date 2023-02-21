@@ -14,6 +14,8 @@ public class CharacterManager : MonoBehaviour
     public float jumpForce;
     public float releaseSpeed;
     public float maxScale;
+    [Tooltip("地面的Layers")]
+    [SerializeField] LayerMask groundMask;
     [Tooltip("Lerp计算参数")]
     public float chargeTime; 
     [Tooltip("Lerp计算参数")]
@@ -46,7 +48,7 @@ public class CharacterManager : MonoBehaviour
     [HideInInspector]
     public bool isWalk;
     [HideInInspector]
-    public bool isGrounded;
+    public bool isGrounded ;
     [HideInInspector]
     public float targetAngle;
     private float maxHPValue = 100;
@@ -68,6 +70,7 @@ public class CharacterManager : MonoBehaviour
         ridbody = GetComponent<Rigidbody>();
         currentHPValue = maxHPValue;
         deltaScale = (maxScale - 1) / maxActorGas;
+        isGrounded = true;
     }
 
     private void Update()
@@ -132,7 +135,7 @@ public class CharacterManager : MonoBehaviour
         if (jump && isGrounded)
         {
             ridbody.AddForce(Vector3.up * jumpForce,ForceMode.Impulse);
-            isGrounded = false;
+            //isGrounded = false;
         }
     }
 
@@ -236,7 +239,7 @@ public class CharacterManager : MonoBehaviour
 
     private void CheckIsGrounded()
     {
-        
+        isGrounded = Physics.CheckSphere(transform.position - new Vector3(0, gameObject.GetComponent<SphereCollider>().radius, 0), 0.05f, groundMask);
     }
 
     #endregion
