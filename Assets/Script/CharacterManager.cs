@@ -20,6 +20,7 @@ public class CharacterManager : MonoBehaviour
     public float chargeTime; 
     [Tooltip("Lerp计算参数")]
     public float releaseTime;
+    public float cureTime;
 
     //控制器相关
     private Vector2 axisInput;
@@ -60,6 +61,9 @@ public class CharacterManager : MonoBehaviour
     public float currentGas;
     [HideInInspector]
     public bool releasing = false;
+    [HideInInspector]
+    public CollisionStun collisionStun;
+    public bool isSwimmy = false;
 
     private float deltaScale;
 
@@ -71,6 +75,7 @@ public class CharacterManager : MonoBehaviour
         ridbody = GetComponent<Rigidbody>();
         currentHPValue = maxHPValue;
         deltaScale = (maxScale - 1) / maxActorGas;
+        collisionStun = GetComponent<CollisionStun>();
         isGrounded = true;
     }
 
@@ -94,12 +99,14 @@ public class CharacterManager : MonoBehaviour
     private void FixedUpdate()
     {
         CheckIsGrounded();
-
-        MoveCharge();
-        MoveRelease();
+        if(CheckHP())
+        { 
+            MoveCharge();
+            MoveRelease();
+            MoveWalk();
+            MoveJump();
+        }
         SetState();
-        MoveWalk();
-        MoveJump();
     }
 
 
@@ -144,13 +151,6 @@ public class CharacterManager : MonoBehaviour
     {
         if(charge && grab.weapon == null)
         {
-            //if (ridbody.transform.localScale.x < maxScale && !releasing)
-            //{
-            //    ridbody.transform.localScale = Vector3.Lerp(ridbody.transform.localScale, new Vector3(maxScale, maxScale, maxScale), 0.1f);
-            //    neckPoint.targetRotation = Quaternion.Euler(0, 0, -45);
-            //    releasing = false;
-            //}
-
             if(currentGas < maxActorGas && !releasing)
             {
                 currentGas = currentGas + (maxActorGas - currentGas) / chargeTime * Time.fixedDeltaTime;
@@ -167,38 +167,8 @@ public class CharacterManager : MonoBehaviour
 
     private void MoveRelease()
     {
-        if(!charge)
+        if(!charge || releasing)
         {
-            //if (ridbody.transform.localScale.x > 1.0f)
-            //{
-            //    if (ridbody.transform.localScale.x - 1.0f < 0.02f)
-            //    {
-            //        ridbody.transform.localScale = new Vector3(1, 1, 1);
-            //        releasing = false;
-            //        releaseEffect.gameObject.SetActive(false);
-            //    }
-            //    else if (ridbody.transform.localScale.x > 1f)
-            //    {
-            //        if (!releasing)
-            //        {
-            //            ridbody.AddForce(ridbody.transform.right * releaseSpeed * 50.0f);
-            //        }
-            //        else
-            //        {
-            //            ridbody.AddForce(ridbody.transform.right * releaseSpeed * 2.0f);
-            //        }
-            //        ridbody.transform.localScale = Vector3.Lerp(ridbody.transform.localScale, new Vector3(1.0f, 1.0f, 1.0f), 0.01f);
-            //        neckPoint.targetRotation = Quaternion.Euler(0, 0, 0);
-            //        releaseEffect.gameObject.SetActive(true);
-            //        releasing = true;
-            //    }
-            //    else
-            //    {
-            //        ridbody.transform.localScale = Vector3.Lerp(ridbody.transform.localScale, new Vector3(1.0f, 1.0f, 1.0f), 0.01f);
-            //        neckPoint.targetRotation = Quaternion.Euler(0, 0, 0);
-            //        ridbody.AddForce(ridbody.transform.right * releaseSpeed * 2.0f);
-            //    }
-            //}
             if(currentGas > 0)
             {
                 var releaseDir = new Vector3(ridbody.transform.right.x, Mathf.Clamp(ridbody.transform.right.y, -0.1f, 0.1f), ridbody.transform.right.z);
@@ -247,6 +217,29 @@ public class CharacterManager : MonoBehaviour
     {
         isGrounded = true;
         //isGrounded = Physics.CheckSphere(transform.position - new Vector3(0, gameObject.GetComponent<SphereCollider>().radius, 0), 0.05f, groundMask);
+    }
+
+    private bool CheckHP()
+    {
+        if(isSwimmy)
+        {
+            currentHPValue = currentHPValue + maxHPValue / cureTime * Time.fixedDeltaTime;
+            currentHPValue = Mathf.Min(currentHPValue, maxHPValue);
+            if(currentHPValue == maxHPValue)
+            {
+                isSwimmy = false;
+            }
+            return false;
+        }
+
+        if(currentHPValue <= 0)
+        {
+            GetComponent<CollisionStun>().maxFallTime = cureTime;
+            currentHPValue = 0;
+            isSwimmy = true;
+            return false;
+        }
+        return true;
     }
 
     #endregion

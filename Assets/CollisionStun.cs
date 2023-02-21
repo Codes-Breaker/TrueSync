@@ -40,9 +40,6 @@ public class CollisionStun : MonoBehaviour
             maxFallTime = 2;
             body.targetRotation = Quaternion.Euler( body.transform.rotation.eulerAngles.x, body.transform.rotation.eulerAngles.y, body.transform.rotation.eulerAngles.z);
             SetBalance(0, 0);
-
-
-
         }
         else if (m2 > 18)
         {
@@ -51,8 +48,6 @@ public class CollisionStun : MonoBehaviour
             maxFallTime = 1.5f;
             body.targetRotation = Quaternion.Euler(body.transform.rotation.eulerAngles.x, body.transform.rotation.eulerAngles.y, body.transform.rotation.eulerAngles.z);
             SetBalance(0, 0);
-
-
         }
         else if (m2 > 15)
         {
@@ -61,8 +56,27 @@ public class CollisionStun : MonoBehaviour
             maxFallTime = 0.5f;
             body.targetRotation = Quaternion.Euler(body.transform.rotation.eulerAngles.x, body.transform.rotation.eulerAngles.y, body.transform.rotation.eulerAngles.z);
             SetBalance(0, 0);
+        }
 
 
+        //伤害计算用impulse算分段函数
+        if (GetComponent<CharacterManager>().isSwimmy)
+            return;
+        if (m2 > 70)
+        {
+           GetComponent<CharacterManager>().currentHPValue = GetComponent<CharacterManager>().currentHPValue - 100;
+        }
+        else if(m2 > 50) 
+        {
+            GetComponent<CharacterManager>().currentHPValue = GetComponent<CharacterManager>().currentHPValue - 80;
+        }
+        else if(m2 > 30)
+        {
+            GetComponent<CharacterManager>().currentHPValue = GetComponent<CharacterManager>().currentHPValue - 60;
+        }
+        else if(m2 >15)
+        {
+            GetComponent<CharacterManager>().currentHPValue = GetComponent<CharacterManager>().currentHPValue - 40;
         }
     }
 
