@@ -42,6 +42,7 @@ public class CharacterManager : MonoBehaviour
     public Slider otherGpSlider;
     public Canvas otherCanvas;
     public Transform releaseEffect;
+    public Grab grab;
 
 
     // Òþ²Ø²ÎÊý
@@ -141,7 +142,7 @@ public class CharacterManager : MonoBehaviour
 
     private void MoveCharge()
     {
-        if(charge)
+        if(charge && grab.weapon == null)
         {
             //if (ridbody.transform.localScale.x < maxScale && !releasing)
             //{
@@ -156,6 +157,11 @@ public class CharacterManager : MonoBehaviour
                 neckPoint.targetRotation = Quaternion.Euler(0, 0, -45);
                 releasing = false;
             }
+        }
+
+        if (charge && grab.weapon)
+        {
+            grab.weapon.Fire();
         }
     }
 
@@ -195,7 +201,7 @@ public class CharacterManager : MonoBehaviour
             //}
             if(currentGas > 0)
             {
-                var releaseDir = new Vector3(ridbody.transform.right.x, 0, ridbody.transform.right.z);
+                var releaseDir = new Vector3(ridbody.transform.right.x, Mathf.Clamp(ridbody.transform.right.y, -0.1f, 0.1f), ridbody.transform.right.z);
                 releaseDir = releaseDir.normalized;
                 if (currentGas < maxActorGas/20)
                 {
@@ -239,7 +245,8 @@ public class CharacterManager : MonoBehaviour
 
     private void CheckIsGrounded()
     {
-        isGrounded = Physics.CheckSphere(transform.position - new Vector3(0, gameObject.GetComponent<SphereCollider>().radius, 0), 0.05f, groundMask);
+        isGrounded = true;
+        //isGrounded = Physics.CheckSphere(transform.position - new Vector3(0, gameObject.GetComponent<SphereCollider>().radius, 0), 0.05f, groundMask);
     }
 
     #endregion

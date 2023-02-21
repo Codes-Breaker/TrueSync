@@ -6,6 +6,7 @@ public class WalkDetect : MonoBehaviour
 {
     public AnimalController controller;
     public CharacterManager characterController;
+    public Grab grab;
     public Animator animator;
 
     public void Update()
@@ -14,5 +15,7 @@ public class WalkDetect : MonoBehaviour
             animator.SetBool("walk", controller.isWalk);
         if (characterController)
             animator.SetBool("walk", characterController.isWalk);
+        if (grab)
+            animator.SetBool("eat", grab.eat);
     }
 }

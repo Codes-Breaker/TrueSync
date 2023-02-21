@@ -19,7 +19,7 @@ namespace PhysicsBasedCharacterController
 
         private void Awake()
         {
-            originalTimer = timer;
+            originalTimer = 0;
         }
 
 
