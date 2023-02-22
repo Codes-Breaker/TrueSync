@@ -9,7 +9,7 @@ public class BatHit : MonoBehaviour
         var rb = other.gameObject.GetComponent<Rigidbody>();
         if (rb)
         {
-            rb.AddForce(-this.transform.forward * 20f * Mathf.Max(rb.mass, 2), ForceMode.Impulse);
+            rb.AddForce(-this.transform.forward * 30f * Mathf.Max(rb.mass, 2), ForceMode.Impulse);
         }
 
     }

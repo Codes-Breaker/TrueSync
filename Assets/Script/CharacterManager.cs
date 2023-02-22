@@ -75,7 +75,8 @@ public class CharacterManager : MonoBehaviour
 
     [HideInInspector]
     public bool swinging = false;
-
+    [HideInInspector]
+    public bool readyswing = false;
 
     private void Awake()
     {

@@ -44,6 +44,7 @@ public class Bat : Weapon
         base.OnUnEquipped();
         hit.gameObject.SetActive(false);
         controller.swinging = false;
+        controller.readyswing = false;
         var rigid = this.gameObject.AddComponent<Rigidbody>();
         rigid.mass = 5;
         //this.gameObject.layer = 0;
@@ -53,6 +54,7 @@ public class Bat : Weapon
     {
         base.OnEquipped();
         var rigidBody = this.gameObject.GetComponent<Rigidbody>();
+        controller.readyswing = true;
         Destroy(rigidBody);
         this.transform.localPosition = this.transform.localPosition + new Vector3(1f, 0, 0);
         this.transform.localRotation = Quaternion.Euler(new Vector3(0, 180, 0));

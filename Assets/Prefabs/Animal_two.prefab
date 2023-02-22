@@ -545,6 +545,7 @@ MonoBehaviour:
   isSwimmy: 0
   isGrabWall: 0
   swinging: 0
+  readyswing: 0
 --- !u!1 &2942890468719779206
 GameObject:
   m_ObjectHideFlags: 0
@@ -642,7 +643,7 @@ SphereCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2942890468719779206}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: b4a705d56c8ef4d4189f99fd8fab1030, type: 2}
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
