@@ -64,19 +64,19 @@ public class CollisionStun : MonoBehaviour
             return;
         if (m2 > 70)
         {
-           GetComponent<CharacterManager>().currentHPValue = GetComponent<CharacterManager>().currentHPValue - 100;
+           GetComponent<CharacterManager>().currentHPValue = GetComponent<CharacterManager>().currentHPValue - 10;
         }
         else if(m2 > 50) 
         {
-            GetComponent<CharacterManager>().currentHPValue = GetComponent<CharacterManager>().currentHPValue - 80;
+            GetComponent<CharacterManager>().currentHPValue = GetComponent<CharacterManager>().currentHPValue - 8;
         }
         else if(m2 > 30)
         {
-            GetComponent<CharacterManager>().currentHPValue = GetComponent<CharacterManager>().currentHPValue - 60;
+            GetComponent<CharacterManager>().currentHPValue = GetComponent<CharacterManager>().currentHPValue - 6;
         }
         else if(m2 >15)
         {
-            GetComponent<CharacterManager>().currentHPValue = GetComponent<CharacterManager>().currentHPValue - 40;
+            GetComponent<CharacterManager>().currentHPValue = GetComponent<CharacterManager>().currentHPValue - 4;
         }
     }
 

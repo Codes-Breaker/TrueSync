@@ -73,6 +73,9 @@ public class CharacterManager : MonoBehaviour
 
     private Rigidbody ridbody;
 
+    [HideInInspector]
+    public bool swinging = false;
+
 
     private void Awake()
     {
@@ -167,6 +170,11 @@ public class CharacterManager : MonoBehaviour
         if (charge && grab.weapon)
         {
             grab.weapon.Fire();
+        }
+
+        else if (grab.weapon)
+        {
+            grab.weapon.StopFire();
         }
     }
 

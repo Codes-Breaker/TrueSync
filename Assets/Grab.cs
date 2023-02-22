@@ -13,64 +13,98 @@ public class Grab : MonoBehaviour
     public string Tag;
     public string WeaponTag;
     public InputReaderBase inputReader;
+    public CharacterManager characterController;
     public Weapon weapon;
     public CollisionStun stun;
+    public Transform bindPoint;
     FixedJoint fj;
     void Start()
     {
         rb = GetComponent<Rigidbody>();
     }
 
+    public void Drop()
+    {
+        if (grabbedObj != null)
+        {
+            grabbedObj = null;
+
+        }
+        if (fj != null)
+        {
+            Destroy(fj);
+            fj = null;
+        }
+        if (weapon != null && weapon.controller == characterController)
+        {
+            weapon.OnUnEquipped();
+            weapon.controller = null;
+            weapon.transform.parent = null;
+        }
+        eat = false;
+        weapon = null;
+        alreadyGrabbing = false;
+    }
+
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         if (stun.fall)
         {
-            if (grabbedObj != null)
-            {
-                Destroy(fj);
-                grabbedObj = null;
-                weapon = null;
-                fj = null;
-                alreadyGrabbing = false;
-            }
+            Drop();
         }
         else
         {
             if (inputReader.pull)
             {
-                eat = true;
-                if (grabbedObj != null && fj == null)
+                if (grabbedObj != null && !alreadyGrabbing)
                 {
-                    fj = grabbedObj.AddComponent<FixedJoint>();
-                    fj.connectedBody = rb;
-                    fj.breakForce = 1000;
-                    alreadyGrabbing = true;
+                    bool ownWeapon = false;
+                    eat = true;
                     if (grabbedObj.gameObject.CompareTag(WeaponTag))
                     {
                         weapon = grabbedObj.GetComponent<Weapon>();
+                        if (weapon.controller == null)
+                        {
+                            weapon.controller = characterController;
+                            weapon.transform.parent = bindPoint;
+                            if (bindPoint && weapon.canGrabInMouth)
+                            {
+                                grabbedObj.transform.position = bindPoint.transform.position;
+                            }
+                            weapon.OnEquipped();
+                            ownWeapon = true;
+                        }
+
+                        if (!weapon.canGrabInMouth)
+                        {
+                            fj = grabbedObj.AddComponent<FixedJoint>();
+                            fj.connectedBody = rb;
+                            fj.breakForce = 1000;
+                        }
+                    }
+                    else
+                    {
+                        fj = grabbedObj.AddComponent<FixedJoint>();
+                        fj.connectedBody = rb;
+                        fj.breakForce = 1000;
+                    }
+
+                    alreadyGrabbing = true;
+                    if (ownWeapon)
+                    {
+                        weapon = grabbedObj.GetComponent<Weapon>();
+                        //weapon.fixJoint = fj;
                     }
                 }
                 else
                 {
-                    //eat = false;
+                    eat = false;
                 }
             }
             else
             {
-                if (grabbedObj != null)
-                {
-                    grabbedObj = null;
-
-                }
-                if (fj != null)
-                {
-                    Destroy(fj);
-                    fj = null;
-                }
-                eat = false;
-                weapon = null;
-                alreadyGrabbing = false;
+                Drop();
             }
         }
 

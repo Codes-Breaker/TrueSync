@@ -77,6 +77,7 @@
     <Compile Include="Assets\Nappin\PhysicsBasedCharacterController\Scripts\Extensions\PlatformSensor.cs" />
     <Compile Include="Assets\Nappin\PhysicsBasedCharacterController\Scripts\Extensions\SelfDestruct.cs" />
     <Compile Include="Assets\TrueSync\Physics\Farseer\Common\Path.cs" />
+    <Compile Include="Assets\Script\Input\PlayerTwoMovementActions.cs" />
     <Compile Include="Assets\Prefabs\005\JSMovement3D.cs" />
     <Compile Include="Assets\TrueSync\Physics\Farseer\Settings.cs" />
     <Compile Include="Assets\TrueSync\Physics\Farseer\Common\Decomposition\CDT\Polygon\Polygon.cs" />
@@ -95,6 +96,7 @@
     <Compile Include="Assets\TrueSync\Physics\Farseer\Common\HashSet.cs" />
     <Compile Include="Assets\TrueSync\Physics\Jitter\Dynamics\Constraints\TSRigidBodyConstraints.cs" />
     <Compile Include="Assets\TrueSync\Physics\Farseer\Dynamics\Joints\GearJoint.cs" />
+    <Compile Include="Assets\Script\Input\InputReaderBase.cs" />
     <Compile Include="Assets\TrueSync\Engine\Math\Fix64AcosLut.cs" />
     <Compile Include="Assets\TrueSync\Unity\TSCollider2D.cs" />
     <Compile Include="Assets\Nappin\PhysicsBasedCharacterController\Scripts\CharacterManager.cs" />
@@ -112,10 +114,12 @@
     <Compile Include="Assets\TrueSync\Physics\Farseer\Common\Decomposition\Seidel\YNode.cs" />
     <Compile Include="Assets\TrueSync\Physics\Farseer\Controllers\VelocityLimitController.cs" />
     <Compile Include="Assets\TrueSync\Physics\Jitter\Extra\Clones\WorldClone.cs" />
+    <Compile Include="Assets\Script\PlaneContorl.cs" />
     <Compile Include="Assets\Nappin\PhysicsBasedCharacterController\Scripts\Extensions\TrampolineSensor.cs" />
     <Compile Include="Assets\TrueSync\Unity\TSRigidBody2D.cs" />
     <Compile Include="Assets\TrueSync\Physics\Jitter\Collision\GJKCollide.cs" />
     <Compile Include="Assets\TrueSync\Physics\Jitter\Dynamics\Joints\Joint3D.cs" />
+    <Compile Include="Assets\Script\CharacterManager.cs" />
     <Compile Include="Assets\TrueSync\Physics\Farseer\Collision\Shapes\PolygonShape.cs" />
     <Compile Include="Assets\Suriyun\Addon-PetZoo\_Example\_FramerateGrapher\FramerateGrapher.cs" />
     <Compile Include="Assets\TrueSync\Physics\Jitter\Dynamics\Constraints\PointOnLine.cs" />
@@ -140,6 +144,7 @@
     <Compile Include="Assets\TrueSync\Physics\Farseer\Common\Decomposition\CDT\Util\FixedArray3.cs" />
     <Compile Include="Assets\TrueSync\Unity\TSRaycastHit.cs" />
     <Compile Include="Assets\TrueSync\Unity\Physics2DWorldManager.cs" />
+    <Compile Include="Assets\Bat.cs" />
     <Compile Include="Assets\Nappin\PhysicsBasedCharacterController\Scripts\Extensions\GravityArea.cs" />
     <Compile Include="Assets\TrueSync\Physics\Jitter\Collision\Shapes\CapsuleShape.cs" />
     <Compile Include="Assets\TrueSync\Physics\Farseer\Common\PolygonManipulation\YuPengClipper.cs" />
@@ -152,7 +157,9 @@
     <Compile Include="Assets\TrueSync\Physics\Farseer\Common\Decomposition\CDT\Delaunay\Sweep\DTSweepConstraint.cs" />
     <Compile Include="Assets\TrueSync\Physics\Jitter\Collision\CollisionSystemBrute.cs" />
     <Compile Include="Assets\TrueSync\Physics\Jitter\Collision\Shapes\TerrainShape.cs" />
+    <Compile Include="Assets\Script\Input\InputReader.cs" />
     <Compile Include="Assets\TrueSync\Physics\Farseer\Common\Decomposition\CDT\TriangulationPoint.cs" />
+    <Compile Include="Assets\WinPlaneControl.cs" />
     <Compile Include="Assets\TrueSync\Unity\TSRaycastHit2D.cs" />
     <Compile Include="Assets\CopyMotion.cs" />
     <Compile Include="Assets\TrueSync\Physics\Farseer\Collision\IBroadPhase.cs" />
@@ -193,6 +200,7 @@
     <Compile Include="Assets\TrueSync\Unity\PhysicsManagerFactory.cs" />
     <Compile Include="Assets\Suriyun\Addon-PetZoo\_Example\Code\Promoter.cs" />
     <Compile Include="Assets\TrueSync\Physics\Farseer\Common\Decomposition\Seidel\Sink.cs" />
+    <Compile Include="Assets\Gun.cs" />
     <Compile Include="Assets\TrueSync\Physics\Farseer\Dynamics\BreakableBody.cs" />
     <Compile Include="Assets\TrueSync\Physics\Farseer\Common\PhysicsLogic\RealExplosion.cs" />
     <Compile Include="Assets\TrueSync\Unity\TSCircleCollider2D.cs" />
@@ -222,6 +230,7 @@
     <Compile Include="Assets\TrueSync\Physics\Farseer\Common\Decomposition\CDT\TriangulationContext.cs" />
     <Compile Include="Assets\TrueSync\Physics\Farseer\Common\Decomposition\Seidel\MonotoneMountain.cs" />
     <Compile Include="Assets\TrueSync\Physics\Farseer\Extra\Clones\WorldClone2D.cs" />
+    <Compile Include="Assets\Script\Input\InputReader_Two.cs" />
     <Compile Include="Assets\TrueSync\Physics\Farseer\Controllers\GravityController.cs" />
     <Compile Include="Assets\TrueSync\Physics\Farseer\Common\Decomposition\CDT\Delaunay\DelaunayTriangle.cs" />
     <Compile Include="Assets\TrueSync\Physics\Farseer\Dynamics\Joints\WheelJoint.cs" />
@@ -247,6 +256,7 @@
     <Compile Include="Assets\Controller2.cs" />
     <Compile Include="Assets\TrueSync\Physics\Farseer\Common\Decomposition\CDT\Util\FixedBitArray3.cs" />
     <Compile Include="Assets\TrueSync\Physics\Jitter\Dynamics\Contact.cs" />
+    <Compile Include="Assets\BatHit.cs" />
     <Compile Include="Assets\TrueSync\Physics\Farseer\Common\ConvexHull\GiftWrap.cs" />
     <Compile Include="Assets\TrueSync\Unity\TrueSyncConfig.cs" />
     <Compile Include="Assets\TrueSync\Physics\Farseer\Common\TextureTools\MarchingSquares.cs" />
@@ -261,6 +271,7 @@
     <Compile Include="Assets\TrueSync\Unity\TSCollision2D.cs" />
     <Compile Include="Assets\TrueSync\Physics\Farseer\Factories\BodyFactory.cs" />
     <Compile Include="Assets\TrueSync\Engine\Math\Fix64.cs" />
+    <Compile Include="Assets\Weapon.cs" />
     <Compile Include="Assets\TrueSync\Engine\Math\TSVector.cs" />
     <Compile Include="Assets\TrueSync\Physics\Jitter\Dynamics\SoftBody.cs" />
     <Compile Include="Assets\TrueSync\Physics\Jitter\IDebugDraw.cs" />
@@ -297,6 +308,7 @@
     <Compile Include="Assets\Nappin\PhysicsBasedCharacterController\Scripts\Extensions\ToggleController.cs" />
     <Compile Include="Assets\TrueSync\Physics\Farseer\Dynamics\Joints\RevoluteJoint.cs" />
     <Compile Include="Assets\TrueSync\Physics\Jitter\Dynamics\Joints\PrismaticJoint3D.cs" />
+    <Compile Include="Assets\Grab.cs" />
     <Compile Include="Assets\Suriyun\Addon-PetZoo\_Example\Code\InputManager.cs" />
     <Compile Include="Assets\TrueSync\Unity\UnityUtils.cs" />
     <Compile Include="Assets\TrueSync\Physics\Jitter\Collision\Shapes\SphereShape.cs" />
@@ -308,9 +320,11 @@
     <Compile Include="Assets\CubeMovment3D.cs" />
     <Compile Include="Assets\TrueSync\Unity\TSRay.cs" />
     <Compile Include="Assets\TrueSync\Physics\Farseer\Extra\Clones\DynamicTreeClone2D.cs" />
+    <Compile Include="Assets\Script\CameraFollow\CameraFollow.cs" />
     <Compile Include="Assets\TrueSync\Unity\TSTransform2D.cs" />
     <Compile Include="Assets\TrueSync\Physics\Jitter\World.cs" />
     <Compile Include="Assets\TrueSync\Physics\Farseer\Collision\TimeOfImpact.cs" />
+    <Compile Include="Assets\Script\Input\PlayerOneMovementActions.cs" />
     <Compile Include="Assets\TrueSync\Physics\Farseer\Common\Decomposition\CDT\TriangulationUtil.cs" />
     <Compile Include="Assets\TrueSync\Physics\Farseer\Common\Curve.cs" />
     <Compile Include="Assets\TrueSync\Physics\Jitter\Extra\Clones\RigidBodyClone.cs" />
@@ -325,16 +339,8 @@
     <Compile Include="Assets\TrueSync\Physics\Farseer\Common\Decomposition\CDT\TriangulationConstraint.cs" />
     <Compile Include="Assets\TrueSync\Unity\TSPolygonCollider2D.cs" />
     <Compile Include="Assets\TrueSync\Physics\Farseer\Dynamics\World.cs" />
-    <Compile Include="Assets\WinPlaneControl.cs" />
-    <Compile Include="Assets\Script\CameraFollow\CameraFollow.cs" />
-    <Compile Include="Assets\Script\Input\InputReader_Two.cs" />
-    <Compile Include="Assets\Script\Input\PlayerOneMovementActions.cs" />
-    <Compile Include="Assets\Script\CharacterManager.cs" />
-    <Compile Include="Assets\Script\Input\InputReaderBase.cs" />
-    <Compile Include="Assets\Script\Input\PlayerTwoMovementActions.cs" />
-    <Compile Include="Assets\Script\Input\InputReader.cs" />
-    <Compile Include="Assets\Script\PlaneContorl.cs" />
-    <Compile Include="Assets\Grab.cs" />
+    <Compile Include="Assets\HeadGun.cs" />
+    <Compile Include="Assets\Bullet.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Suriyun\UnityChanShader\Shader\Unitychan_chara_fuku.shader" />
@@ -364,6 +370,7 @@
     <None Include="Assets\Nappin\PhysicsBasedCharacterController\TextMesh Pro\Resources\Shaders\TMPro_Properties.cginc" />
     <None Include="Assets\Suriyun\UnityChanToonShaderVer2_Project-urp-2.2.3\Runtime\Shaders\UniversalToonOutline.hlsl" />
     <None Include="Assets\Prefabs\BaloonPBR.shader" />
+    <None Include="Assets\SimpleSky\ReadMe.txt" />
     <None Include="Assets\Suriyun\UnityChanShader\Shader\CharaMain.cginc" />
     <None Include="Assets\Nappin\PhysicsBasedCharacterController\TextMesh Pro\Resources\Shaders\TMPro_Surface.cginc" />
     <None Include="Assets\Suriyun\UnityChanToonShaderVer2_Project-urp-2.2.3\Runtime\Shaders\UniversalToonBodyShadingGradeMap.hlsl" />
@@ -983,6 +990,9 @@
     <Reference Include="Unity.Searcher.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.Searcher.Editor.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.2D.Sprite.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.2D.Sprite.Editor.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.RenderPipelines.Core.Runtime">
       <HintPath>Library\ScriptAssemblies\Unity.RenderPipelines.Core.Runtime.dll</HintPath>
     </Reference>
@@ -1034,9 +1044,6 @@
     <Reference Include="Unity.RenderPipelines.Core.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.RenderPipelines.Core.Editor.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.2D.Sprite.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.2D.Sprite.Editor.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="Assembly-CSharp-firstpass.csproj">
@@ -1059,13 +1066,13 @@
       <Project>{1A1A6058-DB5F-2391-1D4D-CB3E0682DA86}</Project>
       <Name>StompyRobot.SRDebugger.Editor</Name>
     </ProjectReference>
-    <ProjectReference Include="StompyRobot.SRF.csproj">
-      <Project>{1B417520-4B00-1EB1-9A04-BFE488973FC4}</Project>
-      <Name>StompyRobot.SRF</Name>
-    </ProjectReference>
     <ProjectReference Include="Unity.UniversalToonShader.Urp.Editor.csproj">
       <Project>{86E90742-2DF9-7E78-119A-8F674FB2FB29}</Project>
       <Name>Unity.UniversalToonShader.Urp.Editor</Name>
+    </ProjectReference>
+    <ProjectReference Include="StompyRobot.SRF.csproj">
+      <Project>{1B417520-4B00-1EB1-9A04-BFE488973FC4}</Project>
+      <Name>StompyRobot.SRF</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

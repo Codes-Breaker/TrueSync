@@ -14,7 +14,10 @@ public class WalkDetect : MonoBehaviour
         if(controller)
             animator.SetBool("walk", controller.isWalk);
         if (characterController)
+        {
             animator.SetBool("walk", characterController.isWalk);
+            animator.SetBool("swing", characterController.swinging);
+        }
         if (grab)
             animator.SetBool("eat", grab.eat);
     }
