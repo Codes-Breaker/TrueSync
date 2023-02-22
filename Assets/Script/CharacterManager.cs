@@ -69,6 +69,9 @@ public class CharacterManager : MonoBehaviour
 
     private Rigidbody ridbody;
 
+    [HideInInspector]
+    public bool swinging = false;
+
 
     private void Awake()
     {

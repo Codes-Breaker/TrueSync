@@ -13,8 +13,10 @@ public class Grab : MonoBehaviour
     public string Tag;
     public string WeaponTag;
     public InputReaderBase inputReader;
+    public CharacterManager characterController;
     public Weapon weapon;
     public CollisionStun stun;
+    public Transform bindPoint;
     FixedJoint fj;
     void Start()
     {
@@ -30,6 +32,12 @@ public class Grab : MonoBehaviour
             {
                 Destroy(fj);
                 grabbedObj = null;
+                if (weapon != null && weapon.controller == characterController)
+                {
+                    weapon.OnUnEquipped();
+                    weapon.controller = null;
+                    weapon.transform.parent = null;
+                }
                 weapon = null;
                 fj = null;
                 alreadyGrabbing = false;
@@ -39,21 +47,39 @@ public class Grab : MonoBehaviour
         {
             if (inputReader.pull)
             {
-                eat = true;
                 if (grabbedObj != null && fj == null)
                 {
+                    bool ownWeapon = false;
+                    eat = true;
+                    if (grabbedObj.gameObject.CompareTag(WeaponTag))
+                    {
+                        weapon = grabbedObj.GetComponent<Weapon>();
+                        if (weapon.controller == null)
+                        {
+                            weapon.controller = characterController;
+                            weapon.transform.parent = bindPoint;
+                            weapon.OnEquipped();
+                            ownWeapon = true;
+                        }
+                        if (bindPoint)
+                        {
+                            grabbedObj.transform.position = bindPoint.transform.position;
+                        }
+                    }
                     fj = grabbedObj.AddComponent<FixedJoint>();
                     fj.connectedBody = rb;
                     fj.breakForce = 1000;
                     alreadyGrabbing = true;
-                    if (grabbedObj.gameObject.CompareTag(WeaponTag))
+                    if (ownWeapon)
                     {
                         weapon = grabbedObj.GetComponent<Weapon>();
+                        weapon.fixJoint = fj;
+
                     }
                 }
                 else
                 {
-                    //eat = false;
+                    eat = false;
                 }
             }
             else
@@ -67,6 +93,12 @@ public class Grab : MonoBehaviour
                 {
                     Destroy(fj);
                     fj = null;
+                }
+                if (weapon != null && weapon.controller == characterController)
+                {
+                    weapon.OnUnEquipped();
+                    weapon.controller = null;
+                    weapon.transform.parent = null;
                 }
                 eat = false;
                 weapon = null;

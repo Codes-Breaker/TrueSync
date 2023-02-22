@@ -4,7 +4,32 @@ using UnityEngine;
 
 public class Weapon : MonoBehaviour
 {
+    public CharacterManager controller;
+    public FixedJoint fixJoint;
+
+    protected Rigidbody body;
+
+    private void Awake()
+    {
+        body = this.GetComponent<Rigidbody>();
+    }
+
+    public virtual void OnEquipped()
+    {
+
+    }
+
+    public virtual void OnUnEquipped()
+    {
+
+    }
+
     public virtual void Fire()
+    {
+
+    }
+
+    public virtual void StopFire()
     {
 
     }
