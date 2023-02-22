@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class WinPlaneControl : MonoBehaviour
@@ -21,9 +22,13 @@ public class WinPlaneControl : MonoBehaviour
     }
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
         if (isEnd)
             return;
-        if(characterManagerOne.transform.position.y < -5)
+        if(characterManagerOne.transform.position.y < -0.5f)
         {
             characterManagerOne.characterCamera.gameObject.SetActive(false);
             characterManagerTwo.characterCamera.gameObject.SetActive(false);
@@ -31,7 +36,7 @@ public class WinPlaneControl : MonoBehaviour
             two.text = "WIN";
             isEnd = true;
         }
-        if (characterManagerTwo.transform.position.y < -5)
+        if (characterManagerTwo.transform.position.y < -0.5f)
         {
             characterManagerTwo.characterCamera.gameObject.SetActive(false);
             characterManagerOne.characterCamera.gameObject.SetActive(false);
