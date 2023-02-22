@@ -6,7 +6,7 @@ public class Grab : MonoBehaviour
 {
     // Start is called before the first frame update
 
-    GameObject grabbedObj;
+    public GameObject grabbedObj;
     public Rigidbody rb;
     public bool alreadyGrabbing = false;
     public bool eat = false;

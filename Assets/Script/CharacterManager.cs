@@ -63,7 +63,11 @@ public class CharacterManager : MonoBehaviour
     public bool releasing = false;
     [HideInInspector]
     public CollisionStun collisionStun;
+    [HideInInspector]
     public bool isSwimmy = false;
+    [HideInInspector]
+    public bool isGrabWall = false;
+
 
     private float deltaScale;
 
@@ -102,7 +106,8 @@ public class CharacterManager : MonoBehaviour
     private void FixedUpdate()
     {
         CheckIsGrounded();
-        if(CheckHP())
+        CheckIsGrabWall();
+        if (CheckHP())
         { 
             MoveCharge();
             MoveRelease();
@@ -143,7 +148,7 @@ public class CharacterManager : MonoBehaviour
     {
         if (this.GetComponent<CollisionStun>().fall)
             return;
-        if (jump && isGrounded)
+        if (jump && (isGrounded || isGrabWall))
         {
             ridbody.AddForce(Vector3.up * jumpForce,ForceMode.Impulse);
             //isGrounded = false;
@@ -218,8 +223,15 @@ public class CharacterManager : MonoBehaviour
 
     private void CheckIsGrounded()
     {
-        isGrounded = true;
-        //isGrounded = Physics.CheckSphere(transform.position - new Vector3(0, gameObject.GetComponent<SphereCollider>().radius, 0), 0.05f, groundMask);
+        isGrounded = Physics.CheckSphere(transform.position - new Vector3(0, gameObject.GetComponent<SphereCollider>().radius * transform.localScale.x, 0), 0.05f, groundMask);
+    }
+
+    private void CheckIsGrabWall()
+    {
+        if (grab.grabbedObj)
+            isGrabWall = grab.grabbedObj.layer == LayerMask.NameToLayer("Column");
+        else
+            isGrabWall = false;
     }
 
     private bool CheckHP()
