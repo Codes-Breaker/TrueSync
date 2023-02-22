@@ -23,31 +23,41 @@ public class Grab : MonoBehaviour
         rb = GetComponent<Rigidbody>();
     }
 
+    public void Drop()
+    {
+        if (grabbedObj != null)
+        {
+            grabbedObj = null;
+
+        }
+        if (fj != null)
+        {
+            Destroy(fj);
+            fj = null;
+        }
+        if (weapon != null && weapon.controller == characterController)
+        {
+            weapon.OnUnEquipped();
+            weapon.controller = null;
+            weapon.transform.parent = null;
+        }
+        eat = false;
+        weapon = null;
+        alreadyGrabbing = false;
+    }
+
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         if (stun.fall)
         {
-            if (grabbedObj != null)
-            {
-                Destroy(fj);
-                grabbedObj = null;
-                if (weapon != null && weapon.controller == characterController)
-                {
-                    weapon.OnUnEquipped();
-                    weapon.controller = null;
-                    weapon.transform.parent = null;
-                }
-                weapon = null;
-                fj = null;
-                alreadyGrabbing = false;
-            }
+            Drop();
         }
         else
         {
             if (inputReader.pull)
             {
-                if (grabbedObj != null && fj == null)
+                if (grabbedObj != null && !alreadyGrabbing)
                 {
                     bool ownWeapon = false;
                     eat = true;
@@ -58,23 +68,33 @@ public class Grab : MonoBehaviour
                         {
                             weapon.controller = characterController;
                             weapon.transform.parent = bindPoint;
+                            if (bindPoint && weapon.canGrabInMouth)
+                            {
+                                grabbedObj.transform.position = bindPoint.transform.position;
+                            }
                             weapon.OnEquipped();
                             ownWeapon = true;
                         }
-                        if (bindPoint)
+
+                        if (!weapon.canGrabInMouth)
                         {
-                            grabbedObj.transform.position = bindPoint.transform.position;
+                            fj = grabbedObj.AddComponent<FixedJoint>();
+                            fj.connectedBody = rb;
+                            fj.breakForce = 1000;
                         }
                     }
-                    fj = grabbedObj.AddComponent<FixedJoint>();
-                    fj.connectedBody = rb;
-                    fj.breakForce = 1000;
+                    else
+                    {
+                        fj = grabbedObj.AddComponent<FixedJoint>();
+                        fj.connectedBody = rb;
+                        fj.breakForce = 1000;
+                    }
+
                     alreadyGrabbing = true;
                     if (ownWeapon)
                     {
                         weapon = grabbedObj.GetComponent<Weapon>();
-                        weapon.fixJoint = fj;
-
+                        //weapon.fixJoint = fj;
                     }
                 }
                 else
@@ -84,25 +104,7 @@ public class Grab : MonoBehaviour
             }
             else
             {
-                if (grabbedObj != null)
-                {
-                    grabbedObj = null;
-
-                }
-                if (fj != null)
-                {
-                    Destroy(fj);
-                    fj = null;
-                }
-                if (weapon != null && weapon.controller == characterController)
-                {
-                    weapon.OnUnEquipped();
-                    weapon.controller = null;
-                    weapon.transform.parent = null;
-                }
-                eat = false;
-                weapon = null;
-                alreadyGrabbing = false;
+                Drop();
             }
         }
 

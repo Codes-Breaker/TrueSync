@@ -171,6 +171,11 @@ public class CharacterManager : MonoBehaviour
         {
             grab.weapon.Fire();
         }
+
+        else if (grab.weapon)
+        {
+            grab.weapon.StopFire();
+        }
     }
 
     private void MoveRelease()

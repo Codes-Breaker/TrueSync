@@ -6,7 +6,7 @@ public class Weapon : MonoBehaviour
 {
     public CharacterManager controller;
     public FixedJoint fixJoint;
-
+    public bool canGrabInMouth = false; //ÄÜ±»×ìµð×Å
     protected Rigidbody body;
 
     private void Awake()
