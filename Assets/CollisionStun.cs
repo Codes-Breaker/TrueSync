@@ -8,20 +8,23 @@ public class CollisionStun : MonoBehaviour
     public float maxFallTime = 2;
     public bool fall;
     public ConfigurableJoint body;
-    public Vector3 velocityBeforeCollision = Vector3.zero;
-    public Vector3 positionBeforeCollision = Vector3.zero;
+    public Rigidbody rigidbody;
+    public VelocityRecorder velRecorder;
+    public Vector3 velocityBeforeCollision => velRecorder.velocityBeforeCollision;
+    public Vector3 positionBeforeCollision => velRecorder.positionBeforeCollision;
     public GameObject stunEffect;
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.transform.gameObject.GetComponent<CollisionStun>() == null || collision.transform.gameObject.GetComponent<CollisionStun>() == this)
+        var otherCollision = collision.transform.gameObject.GetComponent<VelocityRecorder>();
+        if (otherCollision == null)
             return;
 
         Vector3 vel1 = velocityBeforeCollision;
-        Vector3 vel2 = collision.transform.gameObject.GetComponent<CollisionStun>().velocityBeforeCollision;
+        Vector3 vel2 = otherCollision.velocityBeforeCollision;
 
         Vector3 cPoint = collision.contacts[0].point;
         Vector3 contactToMe = cPoint - positionBeforeCollision;
-        Vector3 contactToOther = cPoint - collision.transform.gameObject.GetComponent<CollisionStun>().positionBeforeCollision;
+        Vector3 contactToOther = cPoint - otherCollision.positionBeforeCollision;
 
         var d1 = Vector3.Angle(vel1, contactToMe);
         var d2 = Vector3.Angle(vel1, contactToOther);
@@ -29,8 +32,8 @@ public class CollisionStun : MonoBehaviour
         var degree1 = d1 * Mathf.Deg2Rad;
         var degree2 = d2 * Mathf.Deg2Rad;
 
-        var m1 = (Mathf.Cos(degree1) * vel1).magnitude * body.GetComponent<Rigidbody>().mass;
-        var m2 = (Mathf.Cos(degree2) * vel2).magnitude * collision.rigidbody.mass;
+        var m1 = (Mathf.Cos(degree1) * vel1).magnitude * rigidbody.mass;
+        var m2 = (Mathf.Cos(degree2) * vel2).magnitude * otherCollision.rigidbody.mass;
         Debug.LogWarning($"{this.gameObject.name} 别人对我的力 {m2} 对方的角度 {d2} impulse {collision.impulse}");
 
         if (m2 > 20)
@@ -100,9 +103,6 @@ public class CollisionStun : MonoBehaviour
 
     private void FixedUpdate()
     {
-        Vector3 vel1 = body.GetComponent<Rigidbody>().velocity;
-        velocityBeforeCollision = vel1;
-        positionBeforeCollision = body.GetComponent<Rigidbody>().position;
         if (fall)
         {
             stunEffect.gameObject.SetActive(true);
