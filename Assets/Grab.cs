@@ -10,8 +10,9 @@ public class Grab : MonoBehaviour
     public Rigidbody rb;
     public bool alreadyGrabbing = false;
     public bool eat = false;
-    public string Tag;
     public string WeaponTag;
+    [SerializeField]
+    public string[] tags;
     public InputReaderBase inputReader;
     public CharacterManager characterController;
     public Weapon weapon;
@@ -112,25 +113,23 @@ public class Grab : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag(Tag))
+        foreach(var item in tags)
         {
-            grabbedObj = other.gameObject;
-        }
-        else if (other.gameObject.CompareTag(WeaponTag))
-        {
-            grabbedObj = other.gameObject;
+            if (other.gameObject.CompareTag(item))
+            {
+                grabbedObj = other.gameObject;
+            }
         }
     }
 
     private void OnTriggerStay(Collider other)
     {
-        if (other.gameObject.CompareTag(Tag))
+        foreach (var item in tags)
         {
-            grabbedObj = other.gameObject;
-        }
-        else if (other.gameObject.CompareTag(WeaponTag))
-        {
-            grabbedObj = other.gameObject;
+            if (other.gameObject.CompareTag(item))
+            {
+                grabbedObj = other.gameObject;
+            }
         }
     }
 
