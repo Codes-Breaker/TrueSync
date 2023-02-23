@@ -12,6 +12,7 @@ public class ExplosiveRobot : Weapon
     public float chargeTime;
     private bool releasing;
     private bool isGrounded;
+    private bool canExplode = false;
     [Tooltip("µØÃæµÄLayers")]
     [SerializeField] LayerMask groundMask;
 
@@ -30,8 +31,9 @@ public class ExplosiveRobot : Weapon
 
     public override void StopFire()
     {
-        if (currentGas <= 30)
+        if (currentGas <= 50)
             return;
+        canExplode = true;
         // Jump, gas reaches 0, explode the motherfucker.
         releasing = true;
         this.controller.grab.Drop();
@@ -41,6 +43,10 @@ public class ExplosiveRobot : Weapon
     public override void OnUnEquipped()
     {
         base.OnUnEquipped();
+        if (currentGas <= 50)
+            return;
+        canExplode = true;
+        // Jump, gas reaches 0, explode the motherfucker.
         releasing = true;
     }
 
@@ -75,7 +81,12 @@ public class ExplosiveRobot : Weapon
         if (currentGas <= 0 && releasing)
         {
             releasing = false;
-            Explode();
+            if (canExplode)
+            {
+                Explode();
+                canExplode = false;
+            }
+
         }
     }
 
@@ -110,7 +121,7 @@ public class ExplosiveRobot : Weapon
     {
         if (currentGas > 0 && releasing)
         {
-            this.robotBody.AddForce(this.transform.forward * 2f, ForceMode.Impulse);
+            this.robotBody.AddForce(this.transform.forward * 10f, ForceMode.Impulse);
         }
     }
 
@@ -118,7 +129,7 @@ public class ExplosiveRobot : Weapon
     {
         if (currentGas > 0 && releasing && (isGrounded))
         {
-            this.robotBody.AddForce(Vector3.up * 100f, ForceMode.Impulse);
+            //this.robotBody.AddForce(Vector3.up * 200f, ForceMode.Impulse);
             //isGrounded = false;
         }
     }
