@@ -229,7 +229,7 @@ public class CharacterManager : MonoBehaviour
 
     private void CheckIsGrounded()
     {
-        isGrounded = Physics.CheckSphere(transform.position - new Vector3(0, gameObject.GetComponent<SphereCollider>().radius * transform.localScale.x, 0), 0.05f, groundMask);
+        isGrounded = Physics.CheckSphere(transform.position - new Vector3(0, gameObject.GetComponent<SphereCollider>().radius * transform.localScale.x, 0), 0.05f, groundMask)|| Physics.CheckSphere(transform.position - new Vector3(0, gameObject.GetComponent<SphereCollider>().radius * transform.localScale.x, 0), 0.05f,LayerMask.GetMask("Column"));
     }
 
     private void CheckIsGrabWall()
