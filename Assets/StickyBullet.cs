@@ -18,7 +18,7 @@ public class StickyBullet : MonoBehaviour
         {
             fj = collision.rigidbody.gameObject.AddComponent<FixedJoint>();
             fj.connectedBody = rb;
-            fj.breakForce = 20000;
+            fj.breakForce = 2000;
             this.transform.localScale = new Vector3(2, 2, 2);
             hasStick = true;
         }   
@@ -28,7 +28,7 @@ public class StickyBullet : MonoBehaviour
     {
         if (hasStick)
         {
-            rb.AddForce(Vector3.up * 0.5f, ForceMode.Impulse);
+            rb.AddForce(Vector3.up * 2f, ForceMode.Impulse);
         }
     }
 

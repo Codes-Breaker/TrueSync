@@ -29,6 +29,8 @@ public class Bullet : Weapon
     }
     private void OnCollisionEnter(Collision collision)
     {
+        if (body == null)
+            return;
         if (collision.transform.gameObject.GetComponent<CollisionStun>())
         {
             Vector3 vel1 = velocityBeforeCollision;
@@ -60,8 +62,12 @@ public class Bullet : Weapon
 
     private void FixedUpdate()
     {
-        Vector3 vel1 = body.GetComponent<Rigidbody>().velocity;
-        velocityBeforeCollision = vel1;
-        positionBeforeCollision = body.GetComponent<Rigidbody>().position;
+        if (body != null)
+        {
+            Vector3 vel1 = body.velocity;
+            velocityBeforeCollision = vel1;
+            positionBeforeCollision = body.position;
+        }
+
     }
 }

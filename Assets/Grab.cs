@@ -65,6 +65,8 @@ public class Grab : MonoBehaviour
                     if (grabbedObj.gameObject.CompareTag(WeaponTag))
                     {
                         weapon = grabbedObj.GetComponent<Weapon>();
+                        if (weapon == null)
+                            return;
                         if (weapon.controller == null)
                         {
                             weapon.controller = characterController;

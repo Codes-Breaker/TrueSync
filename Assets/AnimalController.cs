@@ -11,6 +11,7 @@ public class AnimalController : MonoBehaviour
     public Rigidbody body;
     public bool isGrounded;
     public bool releasing = false;
+    public float minScale;
     public float maxScale;
     public Transform releaseEffect;
     public ConfigurableJoint neckPoint;
@@ -24,7 +25,6 @@ public class AnimalController : MonoBehaviour
     private void Update()
     {
         var point = new Vector3(body.transform.position.x, body.transform.position.y, body.transform.position.z);
-        cameraFollowPoint.transform.position = Vector3.Lerp(cameraFollowPoint.transform.position, point, 0.1f);
     }
 
     public float Cal(float x)
@@ -87,20 +87,20 @@ public class AnimalController : MonoBehaviour
             if (body.transform.localScale.x < maxScale && !releasing)
             {
                 body.transform.localScale = Vector3.Lerp(body.transform.localScale, new Vector3(maxScale, maxScale, maxScale), 0.1f);
-                neckPoint.targetRotation = Quaternion.Euler(0, 0, -45);
+                //neckPoint.targetRotation = Quaternion.Euler(0, 0, -45);
                 releasing = false;
             }
         }
         else
         {
             var releaseDir = new Vector3(body.transform.right.x, 0, body.transform.right.z);
-            if (body.transform.localScale.x > 1.0f)
+            if (body.transform.localScale.x > minScale)
             {
-                if (body.transform.localScale.x - 1.0f < 0.02f)
+                if (body.transform.localScale.x - minScale < 0.02f)
                 {
-                    body.transform.localScale = new Vector3(1, 1, 1);
+                    body.transform.localScale = new Vector3(minScale, minScale, minScale);
                     releasing = false;
-                    releaseEffect.gameObject.SetActive(false);
+                    //releaseEffect.gameObject.SetActive(false);
                 }
                 else if (body.transform.localScale.x > 1f)
                 {
@@ -113,15 +113,15 @@ public class AnimalController : MonoBehaviour
                     {
                         body.AddForce(releaseDir * speed * 2.0f);
                     }
-                    body.transform.localScale = Vector3.Lerp(body.transform.localScale, new Vector3(1.0f, 1.0f, 1.0f), 0.01f);
-                    neckPoint.targetRotation = Quaternion.Euler(0, 0, 0);
-                    releaseEffect.gameObject.SetActive(true);
+                    body.transform.localScale = Vector3.Lerp(body.transform.localScale, new Vector3(minScale, minScale, minScale), 0.01f);
+                    //neckPoint.targetRotation = Quaternion.Euler(0, 0, 0);
+                    //releaseEffect.gameObject.SetActive(true);
                     releasing = true;
                 }
                 else
                 {
-                    body.transform.localScale = Vector3.Lerp(body.transform.localScale, new Vector3(1.0f, 1.0f, 1.0f), 0.01f);
-                    neckPoint.targetRotation = Quaternion.Euler(0, 0, 0);
+                    body.transform.localScale = Vector3.Lerp(body.transform.localScale, new Vector3(minScale, minScale, minScale), 0.01f);
+                    //neckPoint.targetRotation = Quaternion.Euler(0, 0, 0);
                     body.AddForce(releaseDir * speed * 2.0f);
                 }
             }
