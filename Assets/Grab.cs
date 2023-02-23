@@ -68,9 +68,9 @@ public class Grab : MonoBehaviour
                         if (weapon.controller == null)
                         {
                             weapon.controller = characterController;
-                            weapon.transform.parent = bindPoint;
                             if (bindPoint && weapon.canGrabInMouth)
                             {
+                                weapon.transform.parent = bindPoint;
                                 grabbedObj.transform.position = bindPoint.transform.position;
                             }
                             weapon.OnEquipped();

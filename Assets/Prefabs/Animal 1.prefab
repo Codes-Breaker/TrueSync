@@ -4253,6 +4253,7 @@ GameObject:
   - component: {fileID: 1223261126699608635}
   - component: {fileID: 1223261126699608632}
   - component: {fileID: 1223261126699608633}
+  - component: {fileID: 1375913528}
   m_Layer: 10
   m_Name: Body
   m_TagString: Player
@@ -4478,8 +4479,8 @@ MonoBehaviour:
   maxFallTime: 3
   fall: 0
   body: {fileID: 1223261126699608637}
-  velocityBeforeCollision: {x: 0, y: 0, z: 0}
-  positionBeforeCollision: {x: 0, y: 0, z: 0}
+  rigidbody: {fileID: 1223261126699608636}
+  velRecorder: {fileID: 1375913528}
   stunEffect: {fileID: 1224137777377671294}
 --- !u!114 &1223261126699608633
 MonoBehaviour:
@@ -4527,6 +4528,21 @@ MonoBehaviour:
   isGrabWall: 0
   swinging: 0
   readyswing: 0
+--- !u!114 &1375913528
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1223261126699608627}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dea558a7b0ca7fb45a80ed359c3b4a4b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  velocityBeforeCollision: {x: 0, y: 0, z: 0}
+  positionBeforeCollision: {x: 0, y: 0, z: 0}
+  rigidbody: {fileID: 1223261126699608636}
 --- !u!1 &1223261126730634274
 GameObject:
   m_ObjectHideFlags: 0

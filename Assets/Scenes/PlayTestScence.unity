@@ -12528,33 +12528,6 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: 9f8077f61d6245e40afb0f499de5e044, type: 3}
---- !u!1 &534920236 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2942890468653615348, guid: e56b81af1d2aa4744987d48e6e497917,
-    type: 3}
-  m_PrefabInstance: {fileID: 1363710872}
-  m_PrefabAsset: {fileID: 0}
---- !u!54 &534920240 stripped
-Rigidbody:
-  m_CorrespondingSourceObject: {fileID: 2942890468653615338, guid: e56b81af1d2aa4744987d48e6e497917,
-    type: 3}
-  m_PrefabInstance: {fileID: 1363710872}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &534920245
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 534920236}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dea558a7b0ca7fb45a80ed359c3b4a4b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  velocityBeforeCollision: {x: 0, y: 0, z: 0}
-  positionBeforeCollision: {x: 0, y: 0, z: 0}
-  rigidbody: {fileID: 534920240}
 --- !u!1 &535238851 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 114568, guid: 18b31605899bfef4f860b2fb50054cf1,
@@ -19244,7 +19217,7 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 1918756010}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1375913519}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 60bd6766f03efe84f9aeb1f6d015b013, type: 3}
@@ -19707,7 +19680,7 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 1363710872}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 534920236}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 60bd6766f03efe84f9aeb1f6d015b013, type: 3}
@@ -30726,7 +30699,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400010, guid: d0223f77114284b47a0e8b317e71e4dc, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 24.857843
+      value: -43
       objectReference: {fileID: 0}
     - target: {fileID: 400010, guid: d0223f77114284b47a0e8b317e71e4dc, type: 3}
       propertyPath: m_LocalPosition.z
@@ -31583,21 +31556,6 @@ PrefabInstance:
       propertyPath: otherCharacterCamera
       value: 
       objectReference: {fileID: 1181390787}
-    - target: {fileID: 2942890468653615350, guid: e56b81af1d2aa4744987d48e6e497917,
-        type: 3}
-      propertyPath: rigidbody
-      value: 
-      objectReference: {fileID: 534920240}
-    - target: {fileID: 2942890468653615350, guid: e56b81af1d2aa4744987d48e6e497917,
-        type: 3}
-      propertyPath: velRecorder
-      value: 
-      objectReference: {fileID: 534920245}
-    - target: {fileID: 2942890468719779323, guid: e56b81af1d2aa4744987d48e6e497917,
-        type: 3}
-      propertyPath: m_IsTrigger
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 2942890468719779326, guid: e56b81af1d2aa4744987d48e6e497917,
         type: 3}
       propertyPath: inputReader
@@ -32060,33 +32018,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1375690582}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1375913519 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1223261126699608627, guid: 94184ca13d15218438f97313b8dce721,
-    type: 3}
-  m_PrefabInstance: {fileID: 1918756010}
-  m_PrefabAsset: {fileID: 0}
---- !u!54 &1375913524 stripped
-Rigidbody:
-  m_CorrespondingSourceObject: {fileID: 1223261126699608636, guid: 94184ca13d15218438f97313b8dce721,
-    type: 3}
-  m_PrefabInstance: {fileID: 1918756010}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1375913528
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1375913519}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dea558a7b0ca7fb45a80ed359c3b4a4b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  velocityBeforeCollision: {x: 0, y: 0, z: 0}
-  positionBeforeCollision: {x: 0, y: 0, z: 0}
-  rigidbody: {fileID: 1375913524}
 --- !u!1001 &1376231449
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -43993,11 +43924,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1223261125060223074, guid: 94184ca13d15218438f97313b8dce721,
-        type: 3}
-      propertyPath: m_IsTrigger
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 1223261125060223084, guid: 94184ca13d15218438f97313b8dce721,
         type: 3}
       propertyPath: inputReader
@@ -44073,16 +43999,6 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 2070465570}
-    - target: {fileID: 1223261126699608632, guid: 94184ca13d15218438f97313b8dce721,
-        type: 3}
-      propertyPath: rigidbody
-      value: 
-      objectReference: {fileID: 1375913524}
-    - target: {fileID: 1223261126699608632, guid: 94184ca13d15218438f97313b8dce721,
-        type: 3}
-      propertyPath: velRecorder
-      value: 
-      objectReference: {fileID: 1375913528}
     - target: {fileID: 1223261126699608633, guid: 94184ca13d15218438f97313b8dce721,
         type: 3}
       propertyPath: inputReader
