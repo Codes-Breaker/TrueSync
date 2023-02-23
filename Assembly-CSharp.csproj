@@ -343,16 +343,36 @@
     <Compile Include="Assets\Bullet.cs" />
     <Compile Include="Assets\ItemCreator.cs" />
     <Compile Include="Assets\StickyBullet.cs" />
-    <Compile Include="Assets\HeadCollision.cs" />
     <Compile Include="Assets\VelocityRecorder.cs" />
+    <Compile Include="Assets\ExplosiveRobot.cs" />
+    <Compile Include="Assets\JointScaler.cs" />
+    <Compile Include="Assets\ThirdParty\EffectCore\packs\WebDemoAssets\scripts\Projectile.cs" />
+    <Compile Include="Assets\ThirdParty\EffectCore\packs\StylizedExplosionPack2\WebBuildStylizedExplosionPack2\scripts\SpawnEffectOnMouse.cs" />
+    <Compile Include="Assets\ThirdParty\EffectCore\packs\StylizedExplosionPack2\WebBuildStylizedExplosionPack2\scripts\projectileActorExplosion2.cs" />
+    <Compile Include="Assets\ThirdParty\EffectCore\packs\WebDemoAssets\scripts\CameraShake.cs" />
+    <Compile Include="Assets\ThirdParty\EffectCore\packs\WebDemoAssets\scripts\CameraShakeProjectile.cs" />
+    <Compile Include="Assets\ThirdParty\EffectCore\packs\WebDemoAssets\scripts\CameraShakeCaller.cs" />
+    <Compile Include="Assets\ThirdParty\EffectCore\packs\StylizedMeleeCombatPack1\WebBuild\scripts\slashEffectDemoMeleeCombat.cs" />
+    <Compile Include="Assets\ThirdParty\EffectCore\packs\StylizedMeleeCombatPack1\WebBuild\scripts\characterCallerMeleeCombat.cs" />
+    <Compile Include="Assets\ThirdParty\EffectCore\scripts\destroyMe.cs" />
+    <Compile Include="Assets\ThirdParty\EffectCore\scripts\particleColorChangerMaster.cs" />
+    <Compile Include="Assets\ThirdParty\EffectCore\packs\StylizedMeleeCombatPack1\WebBuild\scripts\TimeController.cs" />
+    <Compile Include="Assets\ThirdParty\EffectCore\packs\StylizedMeleeCombatPack1\WebBuild\scripts\instantiateEffectCallerMeleeCombat.cs" />
+    <Compile Include="Assets\ThirdParty\EffectCore\packs\StylizedExplosionPack2\WebBuildStylizedExplosionPack2\scripts\ExplodingProjectileExplosion2.cs" />
+    <Compile Include="Assets\ThirdParty\EffectCore\packs\WebDemoAssets\scripts\ExplodingProjectile.cs" />
+    <Compile Include="Assets\ThirdParty\EffectCore\packs\WebDemoAssets\scripts\projectileActor.cs" />
+    <Compile Include="Assets\ThirdParty\EffectCore\packs\WebDemoAssets\scripts\EffectActor.cs" />
+    <Compile Include="Assets\ThirdParty\EffectCore\packs\StylizedMeleeCombatPack1\WebBuild\scripts\nextEffectMeleeCombat.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Suriyun\UnityChanShader\Shader\Unitychan_chara_fuku.shader" />
     <None Include="Assets\Nappin\PhysicsBasedCharacterController\TextMesh Pro\Resources\Shaders\TMPro.cginc" />
+    <None Include="Assets\ThirdParty\EffectCore\packs\StylizedExplosionPack2\Tips &amp; Documentations StylizedExplosionPack#2.txt" />
     <None Include="Assets\Nappin\PhysicsBasedCharacterController\TextMesh Pro\Resources\Shaders\TMP_SDF-Mobile Overlay.shader" />
     <None Include="Assets\Suriyun\README - Mega PetZoo.txt" />
     <None Include="Assets\Suriyun\Addon-PetZoo\readme_petzoo.txt" />
     <None Include="Assets\Suriyun\UnityChanShader\Shader\Unitychan_chara_akarami_blend.shader" />
+    <None Include="Assets\ThirdParty\EffectCore\packs\StylizedMeleeCombatPack1\Tips &amp; Documentations Stylized Melee Pack 1.txt" />
     <None Include="Assets\Nappin\PhysicsBasedCharacterController\TextMesh Pro\Resources\Shaders\TMP_Bitmap.shader" />
     <None Include="Assets\Suriyun\UnityChanShader\Shader\CharaOutline.cginc" />
     <None Include="Assets\Suriyun\UnityChanShader\Shader\Unitychan_chara_hair_ds.shader" />

@@ -46,7 +46,7 @@ public class Bat : Weapon
         controller.swinging = false;
         controller.readyswing = false;
         var rigid = this.gameObject.AddComponent<Rigidbody>();
-        rigid.mass = 5;
+        rigid.mass = weight;
         //this.gameObject.layer = 0;
     }
 

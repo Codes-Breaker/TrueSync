@@ -33,7 +33,7 @@ public class HeadGun : Weapon
     {
         base.OnUnEquipped();
         var rigid = this.gameObject.AddComponent<Rigidbody>();
-        rigid.mass = 1;
+        rigid.mass = weight;
     }
 
     public override void OnEquipped()
