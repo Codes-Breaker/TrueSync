@@ -11,6 +11,8 @@ public class BatHit : MonoBehaviour
         {
             var dir = (other.gameObject.transform.position - this.gameObject.transform.position).normalized;
             rb.AddForce(dir * 30f * Mathf.Max(rb.mass, 2), ForceMode.Impulse);
+            if(other.GetComponent<CharacterManager>())
+                other.GetComponent<CharacterManager>().currentHPValue = other.GetComponent<CharacterManager>().currentHPValue - 12;
         }
 
     }

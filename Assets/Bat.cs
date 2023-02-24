@@ -47,7 +47,7 @@ public class Bat : Weapon
         controller.readyswing = false;
         var rigid = this.gameObject.AddComponent<Rigidbody>();
         rigid.mass = weight;
-        //this.gameObject.layer = 0;
+        this.gameObject.layer = 0;
     }
 
     public override void OnEquipped()
@@ -58,7 +58,7 @@ public class Bat : Weapon
         Destroy(rigidBody);
         this.transform.localPosition = this.transform.localPosition + new Vector3(1f, 0, 0);
         this.transform.localRotation = Quaternion.Euler(new Vector3(0, 180, 0));
-        //this.gameObject.layer = this.controller.gameObject.layer;
+        this.gameObject.layer = this.controller.gameObject.layer;
     }
 
 }

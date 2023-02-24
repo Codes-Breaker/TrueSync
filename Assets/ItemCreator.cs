@@ -21,7 +21,7 @@ public class ItemCreator : MonoBehaviour
         if (Time <= 0)
         {
             Time = originalTimer;
-            GameObject instantiatedProjectile = GameObject.Instantiate(itemList[Random.Range(0, itemList.Count - 1)], transform.position, transform.rotation);
+            GameObject instantiatedProjectile = GameObject.Instantiate(itemList[Random.Range(0, itemList.Count)], transform.position, transform.rotation);
         }
     }
 

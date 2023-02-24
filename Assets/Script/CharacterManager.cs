@@ -56,6 +56,7 @@ public class CharacterManager : MonoBehaviour
     private float maxHPValue = 100;
     [HideInInspector]
     public float currentHPValue;
+    private float lastHPValue;
     private float maxActorGas = 100;
     [HideInInspector]
     public float currentGas;
@@ -67,6 +68,8 @@ public class CharacterManager : MonoBehaviour
     public bool isSwimmy = false;
     [HideInInspector]
     public bool isGrabWall = false;
+    [HideInInspector]
+    public float HPtimer;
 
 
     private float deltaScale;
@@ -158,7 +161,9 @@ public class CharacterManager : MonoBehaviour
 
     private void MoveCharge()
     {
-        if(charge && grab.weapon == null)
+        if (this.GetComponent<CollisionStun>().fall)
+            return;
+        if (charge && grab.weapon == null)
         {
             if(currentGas < maxActorGas && !releasing)
             {
@@ -179,13 +184,20 @@ public class CharacterManager : MonoBehaviour
         }
     }
 
+    private float EaseOutCirc(float number)
+    {
+        return Mathf.Sqrt(1 - Mathf.Pow(number - 1, 2));
+    }
+
     private void MoveRelease()
     {
-        if(!charge || releasing)
+        if (this.GetComponent<CollisionStun>().fall)
+            return;
+        if (!charge || releasing)
         {
             if(currentGas > 0)
             {
-                var releaseDir = new Vector3(ridbody.transform.right.x, Mathf.Clamp(ridbody.transform.right.y, -0.1f, 0.1f), ridbody.transform.right.z);
+                var releaseDir = new Vector3(ridbody.transform.right.x, 0, ridbody.transform.right.z);
                 releaseDir = releaseDir.normalized;
                 if (currentGas < maxActorGas/20)
                 {
@@ -197,12 +209,13 @@ public class CharacterManager : MonoBehaviour
                 {
                     if (!releasing)
                     {
-                        var addSpeed = (currentGas / (maxActorGas)) * 120f;
+                        var addSpeed = EaseOutCirc(currentGas / (maxActorGas)) * 100f;
                         ridbody.AddForce(releaseDir * releaseSpeed * addSpeed);
                     }
                     else 
                     {
-                        ridbody.AddForce(releaseDir * releaseSpeed * 2f);
+                        var addSpeed = EaseOutCirc(currentGas / (maxActorGas)) * 2;
+                        ridbody.AddForce(releaseDir * releaseSpeed * addSpeed);
                     }
                     currentGas = currentGas - (currentGas) / releaseTime * Time.fixedDeltaTime;
                     neckPoint.targetRotation = Quaternion.Euler(0, 0, 0);
@@ -211,9 +224,10 @@ public class CharacterManager : MonoBehaviour
                 }
                 else
                 {
+                    var addSpeed = EaseOutCirc(currentGas / (maxActorGas)) * 2;
                     currentGas = currentGas - (currentGas) / releaseTime * Time.fixedDeltaTime;
                     neckPoint.targetRotation = Quaternion.Euler(0, 0, 0);
-                    ridbody.AddForce(releaseDir * releaseSpeed * 2f);
+                    ridbody.AddForce(releaseDir * releaseSpeed * addSpeed);
                 }
             }
         }
@@ -242,7 +256,25 @@ public class CharacterManager : MonoBehaviour
 
     private bool CheckHP()
     {
-        if(isSwimmy)
+
+        if (currentHPValue == lastHPValue)
+            HPtimer += Time.fixedDeltaTime;
+        else
+            HPtimer = 0;
+
+        if(HPtimer > 15)
+        {
+            currentHPValue = currentHPValue + maxHPValue / cureTime * Time.fixedDeltaTime;
+            currentHPValue = Mathf.Min(currentHPValue, maxHPValue);
+            lastHPValue = currentHPValue;
+        }
+        else
+        {
+            lastHPValue = currentHPValue;
+        }
+
+
+        if (isSwimmy)
         {
             currentHPValue = currentHPValue + maxHPValue / cureTime * Time.fixedDeltaTime;
             currentHPValue = Mathf.Min(currentHPValue, maxHPValue);

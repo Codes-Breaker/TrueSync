@@ -7,11 +7,14 @@ public class Weapon : MonoBehaviour
     public CharacterManager controller;
     public FixedJoint fixJoint;
     public bool canGrabInMouth = false; //ÄÜ±»×ìµð×Å
-    protected Rigidbody body;
+    public Rigidbody body;
     public float weight = 1;
     private void Awake()
     {
-        body = this.GetComponent<Rigidbody>();
+        if (body == null)
+        {
+            this.GetComponent<Rigidbody>();
+        }
     }
 
     public virtual void OnEquipped()

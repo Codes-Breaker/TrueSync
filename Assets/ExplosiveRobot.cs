@@ -15,9 +15,9 @@ public class ExplosiveRobot : Weapon
     private bool canExplode = false;
     [Tooltip("µØÃæµÄLayers")]
     [SerializeField] LayerMask groundMask;
-
+    public TriggerList triggerList;
     public GameObject explodeEffect;
-    public List<Rigidbody> affectingBodies;
+
 
     public override void Fire()
     {
@@ -36,7 +36,8 @@ public class ExplosiveRobot : Weapon
         canExplode = true;
         // Jump, gas reaches 0, explode the motherfucker.
         releasing = true;
-        this.controller.grab.Drop();
+        if (this.controller)
+            this.controller.grab.Drop();
 
     }
 
@@ -53,7 +54,6 @@ public class ExplosiveRobot : Weapon
     private void Awake()
     {
         deltaScale = (maxScale - 1) / maxActorGas;
-        affectingBodies = new List<Rigidbody>();
     }
 
     private void FixedUpdate()
@@ -90,30 +90,18 @@ public class ExplosiveRobot : Weapon
         }
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.attachedRigidbody != null)
-        {
-            this.affectingBodies.Add(other.attachedRigidbody);
-        }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.attachedRigidbody != null)
-        {
-            this.affectingBodies.Remove(other.attachedRigidbody);
-        }
-    }
 
     private void Explode()
     {
         var obj = GameObject.Instantiate(this.explodeEffect, new Vector3(this.transform.position.x, this.transform.position.y - 1, this.transform.position.z), Quaternion.identity);
         obj.SetActive(true);
-        foreach(var body in affectingBodies)
+        foreach(var body in triggerList.affectingBodies)
         {
-            var explodeDir = (body.position - this.robotBody.position).normalized;
-            body.AddForce(explodeDir * 20f, ForceMode.Impulse);
+            if (body != null)
+            {
+                var explodeDir = (body.position - this.robotBody.position).normalized;
+                body.AddForce(explodeDir * 20f, ForceMode.Impulse);
+            }
         }
     }
 

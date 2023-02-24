@@ -14,11 +14,11 @@ public class StickyBullet : MonoBehaviour
     }
     private void OnCollisionEnter(Collision collision)
     {
-        if (!hasStick && collision.rigidbody && collision.gameObject.GetComponent<CollisionStun>() != null)
+        if (collision.rigidbody && collision.gameObject.GetComponent<Rigidbody>() != null && (collision.gameObject.CompareTag("Player")))
         {
             fj = collision.rigidbody.gameObject.AddComponent<FixedJoint>();
             fj.connectedBody = rb;
-            fj.breakForce = 2000;
+            fj.breakForce = 5000;
             this.transform.localScale = new Vector3(2, 2, 2);
             hasStick = true;
         }   

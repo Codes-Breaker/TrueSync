@@ -13,6 +13,8 @@ public class CollisionStun : MonoBehaviour
     public Vector3 velocityBeforeCollision => velRecorder.velocityBeforeCollision;
     public Vector3 positionBeforeCollision => velRecorder.positionBeforeCollision;
     public GameObject stunEffect;
+    public ConfigurableJoint[] cjs;
+
     private void OnCollisionEnter(Collision collision)
     {
         var otherCollision = collision.transform.gameObject.GetComponent<VelocityRecorder>();
@@ -32,11 +34,13 @@ public class CollisionStun : MonoBehaviour
         var degree1 = d1 * Mathf.Deg2Rad;
         var degree2 = d2 * Mathf.Deg2Rad;
 
+        Vector3 impactVelocity = collision.relativeVelocity;
+
         var m1 = (Mathf.Cos(degree1) * vel1).magnitude * rigidbody.mass;
         var m2 = (Mathf.Cos(degree2) * vel2).magnitude * otherCollision.rigidbody.mass;
-        Debug.LogWarning($"{this.gameObject.name} 别人对我的力 {m2} 对方的角度 {d2} impulse {collision.impulse}");
+        Debug.LogWarning($"{this.gameObject.name} 别人对我的力 {m2} 对方的角度 {d2} impulse {collision.impulse} impulse force sum {collision.impactForceSum}");
 
-        if (m2 > 20)
+        if (m2 > 80)
         {
             fall = true;
             fallTime = 0;
@@ -44,7 +48,7 @@ public class CollisionStun : MonoBehaviour
             body.targetRotation = Quaternion.Euler( body.transform.rotation.eulerAngles.x, body.transform.rotation.eulerAngles.y, body.transform.rotation.eulerAngles.z);
             SetBalance(0, 0);
         }
-        else if (m2 > 18)
+        else if (m2 > 60)
         {
             fall = true;
             fallTime = 0;
@@ -52,7 +56,7 @@ public class CollisionStun : MonoBehaviour
             body.targetRotation = Quaternion.Euler(body.transform.rotation.eulerAngles.x, body.transform.rotation.eulerAngles.y, body.transform.rotation.eulerAngles.z);
             SetBalance(0, 0);
         }
-        else if (m2 > 15)
+        else if (m2 > 40)
         {
             fall = true;
             fallTime = 0;
@@ -67,19 +71,19 @@ public class CollisionStun : MonoBehaviour
             return;
         if (m2 > 70)
         {
-           GetComponent<CharacterManager>().currentHPValue = GetComponent<CharacterManager>().currentHPValue - 10;
+           GetComponent<CharacterManager>().currentHPValue = GetComponent<CharacterManager>().currentHPValue - 20;
         }
         else if(m2 > 50) 
         {
-            GetComponent<CharacterManager>().currentHPValue = GetComponent<CharacterManager>().currentHPValue - 8;
+            GetComponent<CharacterManager>().currentHPValue = GetComponent<CharacterManager>().currentHPValue - 16;
         }
         else if(m2 > 30)
         {
-            GetComponent<CharacterManager>().currentHPValue = GetComponent<CharacterManager>().currentHPValue - 6;
+            GetComponent<CharacterManager>().currentHPValue = GetComponent<CharacterManager>().currentHPValue - 12;
         }
         else if(m2 >15)
         {
-            GetComponent<CharacterManager>().currentHPValue = GetComponent<CharacterManager>().currentHPValue - 4;
+            GetComponent<CharacterManager>().currentHPValue = GetComponent<CharacterManager>().currentHPValue - 8;
         }
     }
 
@@ -119,7 +123,6 @@ public class CollisionStun : MonoBehaviour
 
     private void SetBalance(float x, float yz)
     {
-        var cjs = this.transform.GetComponentsInChildren<ConfigurableJoint>();
         foreach(var cj in cjs)
         {
             var jointDriveX = new JointDrive()
