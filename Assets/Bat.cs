@@ -18,6 +18,7 @@ public class Bat : Weapon
     {
         if (originalTimer < 0)
         {
+            hit.ignoreRb = controller.GetComponent<Rigidbody>();
             hit.gameObject.SetActive(true);
             controller.swinging = true;
             base.Fire();

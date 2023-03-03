@@ -32,7 +32,6 @@ public class CharacterManager : MonoBehaviour
     private float movementThrashold = 0.01f;
     [Space(10)]
     [Header("相关需要关联组件")]
-    public ConfigurableJoint neckPoint;
     public GameObject characterCamera;
     public GameObject otherCharacterCamera;
     public Transform cameraFollowPoint;
@@ -44,7 +43,10 @@ public class CharacterManager : MonoBehaviour
     public Canvas otherCanvas;
     public Transform releaseEffect;
     public Grab grab;
-
+    public CollisionStun collisionStun;
+    public Rigidbody ridbody;
+    public ConfigurableJoint cj;
+    public Collider bodyCollider;
 
     // 隐藏参数
     [HideInInspector]
@@ -63,8 +65,6 @@ public class CharacterManager : MonoBehaviour
     [HideInInspector]
     public bool releasing = false;
     [HideInInspector]
-    public CollisionStun collisionStun;
-    [HideInInspector]
     public bool isSwimmy = false;
     [HideInInspector]
     public bool isGrabWall = false;
@@ -74,19 +74,14 @@ public class CharacterManager : MonoBehaviour
 
     private float deltaScale;
 
-    private Rigidbody ridbody;
 
-    [HideInInspector]
     public bool swinging = false;
-    [HideInInspector]
     public bool readyswing = false;
 
     private void Awake()
     {
-        ridbody = GetComponent<Rigidbody>();
         currentHPValue = maxHPValue;
         deltaScale = (maxScale - 1) / maxActorGas;
-        collisionStun = GetComponent<CollisionStun>();
         isGrounded = true;
     }
 
@@ -131,7 +126,7 @@ public class CharacterManager : MonoBehaviour
     }
     private void MoveWalk()
     {
-        if (this.GetComponent<CollisionStun>().fall)
+        if (collisionStun.fall)
             return;
         if (axisInput.magnitude > movementThrashold)
         {
@@ -150,7 +145,7 @@ public class CharacterManager : MonoBehaviour
 
     private void MoveJump()
     {
-        if (this.GetComponent<CollisionStun>().fall)
+        if (collisionStun.fall)
             return;
         if (jump && (isGrounded || isGrabWall))
         {
@@ -161,14 +156,13 @@ public class CharacterManager : MonoBehaviour
 
     private void MoveCharge()
     {
-        if (this.GetComponent<CollisionStun>().fall)
+        if (collisionStun.fall)
             return;
         if (charge && grab.weapon == null)
         {
             if(currentGas < maxActorGas && !releasing)
             {
                 currentGas = currentGas + (maxActorGas - currentGas) / chargeTime * Time.fixedDeltaTime;
-                neckPoint.targetRotation = Quaternion.Euler(0, 0, -45);
                 releasing = false;
             }
         }
@@ -191,13 +185,13 @@ public class CharacterManager : MonoBehaviour
 
     private void MoveRelease()
     {
-        if (this.GetComponent<CollisionStun>().fall)
+        if (collisionStun.fall)
             return;
         if (!charge || releasing)
         {
             if(currentGas > 0)
             {
-                var releaseDir = new Vector3(ridbody.transform.right.x, 0, ridbody.transform.right.z);
+                var releaseDir = new Vector3(ridbody.transform.forward.x, 0, ridbody.transform.forward.z);
                 releaseDir = releaseDir.normalized;
                 if (currentGas < maxActorGas/20)
                 {
@@ -218,7 +212,6 @@ public class CharacterManager : MonoBehaviour
                         ridbody.AddForce(releaseDir * releaseSpeed * addSpeed);
                     }
                     currentGas = currentGas - (currentGas) / releaseTime * Time.fixedDeltaTime;
-                    neckPoint.targetRotation = Quaternion.Euler(0, 0, 0);
                     releaseEffect.gameObject.SetActive(true);
                     releasing = true;
                 }
@@ -226,7 +219,6 @@ public class CharacterManager : MonoBehaviour
                 {
                     var addSpeed = EaseOutCirc(currentGas / (maxActorGas)) * 2;
                     currentGas = currentGas - (currentGas) / releaseTime * Time.fixedDeltaTime;
-                    neckPoint.targetRotation = Quaternion.Euler(0, 0, 0);
                     ridbody.AddForce(releaseDir * releaseSpeed * addSpeed);
                 }
             }
@@ -243,12 +235,12 @@ public class CharacterManager : MonoBehaviour
 
     private void CheckIsGrounded()
     {
-        isGrounded = Physics.CheckSphere(transform.position - new Vector3(0, gameObject.GetComponent<SphereCollider>().radius * transform.localScale.x, 0), 0.05f, groundMask)|| Physics.CheckSphere(transform.position - new Vector3(0, gameObject.GetComponent<SphereCollider>().radius * transform.localScale.x, 0), 0.05f,LayerMask.GetMask("Column"));
+        isGrounded = Physics.CheckSphere(transform.position - new Vector3(0, (bodyCollider as SphereCollider).radius * transform.localScale.x, 0), 0.05f, groundMask)|| Physics.CheckSphere(transform.position - new Vector3(0, (bodyCollider as SphereCollider).radius * transform.localScale.x, 0), 0.05f,LayerMask.GetMask("Column"));
     }
 
     private void CheckIsGrabWall()
     {
-        if (grab.grabbedObj)
+        if (grab && grab.grabbedObj)
             isGrabWall = grab.grabbedObj.layer == LayerMask.NameToLayer("Column");
         else
             isGrabWall = false;
@@ -287,7 +279,7 @@ public class CharacterManager : MonoBehaviour
 
         if(currentHPValue <= 0)
         {
-            GetComponent<CollisionStun>().maxFallTime = cureTime;
+            collisionStun.maxFallTime = cureTime;
             currentHPValue = 0;
             isSwimmy = true;
             return false;

@@ -5,7 +5,7 @@ using UnityEngine.Events;
 namespace PhysicsBasedCharacterController
 {
     //[RequireComponent(typeof(CapsuleCollider))]
-    [RequireComponent(typeof(Rigidbody))]
+    //[RequireComponent(typeof(Rigidbody))]
     public class CharacterManager : MonoBehaviour
     {
         [Header("Movement specifics")]

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(ConfigurableJoint))]
 public class CollisionStun : MonoBehaviour
 {
     public float fallTime = 0;
@@ -14,6 +15,18 @@ public class CollisionStun : MonoBehaviour
     public Vector3 positionBeforeCollision => velRecorder.positionBeforeCollision;
     public GameObject stunEffect;
     public ConfigurableJoint[] cjs;
+    public float originalDriveX;
+    public float originalDriveY;
+    public CharacterManager characterManager;
+    public float minDriveX = 0;
+    public float minDriveY = 0;
+
+    private void Awake()
+    {
+        var cj = GetComponent<ConfigurableJoint>();
+        originalDriveX = cj.angularXDrive.positionSpring;
+        originalDriveY = cj.angularYZDrive.positionSpring;
+    }
 
     private void OnCollisionEnter(Collision collision)
     {
@@ -46,7 +59,7 @@ public class CollisionStun : MonoBehaviour
             fallTime = 0;
             maxFallTime = 2;
             body.targetRotation = Quaternion.Euler( body.transform.rotation.eulerAngles.x, body.transform.rotation.eulerAngles.y, body.transform.rotation.eulerAngles.z);
-            SetBalance(0, 0);
+            SetBalance(minDriveX, minDriveY);
         }
         else if (m2 > 60)
         {
@@ -54,7 +67,7 @@ public class CollisionStun : MonoBehaviour
             fallTime = 0;
             maxFallTime = 1.5f;
             body.targetRotation = Quaternion.Euler(body.transform.rotation.eulerAngles.x, body.transform.rotation.eulerAngles.y, body.transform.rotation.eulerAngles.z);
-            SetBalance(0, 0);
+            SetBalance(minDriveX, minDriveY);
         }
         else if (m2 > 40)
         {
@@ -62,28 +75,28 @@ public class CollisionStun : MonoBehaviour
             fallTime = 0;
             maxFallTime = 0.5f;
             body.targetRotation = Quaternion.Euler(body.transform.rotation.eulerAngles.x, body.transform.rotation.eulerAngles.y, body.transform.rotation.eulerAngles.z);
-            SetBalance(0, 0);
+            SetBalance(minDriveX, minDriveY);
         }
 
 
         //伤害计算用impulse算分段函数
-        if (GetComponent<CharacterManager>().isSwimmy)
+        if (characterManager.isSwimmy)
             return;
         if (m2 > 70)
         {
-           GetComponent<CharacterManager>().currentHPValue = GetComponent<CharacterManager>().currentHPValue - 20;
+            characterManager.currentHPValue = characterManager.currentHPValue - 20;
         }
         else if(m2 > 50) 
         {
-            GetComponent<CharacterManager>().currentHPValue = GetComponent<CharacterManager>().currentHPValue - 16;
+            characterManager.currentHPValue = characterManager.currentHPValue - 16;
         }
         else if(m2 > 30)
         {
-            GetComponent<CharacterManager>().currentHPValue = GetComponent<CharacterManager>().currentHPValue - 12;
+            characterManager.currentHPValue = characterManager.currentHPValue - 12;
         }
         else if(m2 >15)
         {
-            GetComponent<CharacterManager>().currentHPValue = GetComponent<CharacterManager>().currentHPValue - 8;
+            characterManager.currentHPValue = characterManager.currentHPValue - 8;
         }
     }
 
@@ -116,7 +129,7 @@ public class CollisionStun : MonoBehaviour
                 stunEffect.gameObject.SetActive(false);
                 fall = false;
                 fallTime = 0;
-                SetBalance(100, 300);
+                SetBalance(originalDriveX, originalDriveY);
             }
         }
     }
