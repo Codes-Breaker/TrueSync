@@ -28,7 +28,7 @@ public class WinPlaneControl : MonoBehaviour
         }
         if (isEnd)
             return;
-        if(characterManagerOne.transform.position.y < -0.5f)
+        if(characterManagerOne.bodyCollider.transform.position.y < -0.5f)
         {
             characterManagerOne.characterCamera.gameObject.SetActive(false);
             characterManagerTwo.characterCamera.gameObject.SetActive(false);
@@ -36,7 +36,7 @@ public class WinPlaneControl : MonoBehaviour
             two.text = "WIN";
             isEnd = true;
         }
-        if (characterManagerTwo.transform.position.y < -0.5f)
+        if (characterManagerTwo.bodyCollider.transform.position.y < -0.5f)
         {
             characterManagerTwo.characterCamera.gameObject.SetActive(false);
             characterManagerOne.characterCamera.gameObject.SetActive(false);

@@ -33,6 +33,9 @@ public class InputReader_Two : InputReaderBase
 
         movementActions.Gameplay.Pull.performed += ctx => OnPull(ctx);
         movementActions.Gameplay.Pull.canceled += ctx => PullEnd(ctx);
+
+        movementActions.Gameplay.InteractWeapon.performed += ctx => OnInteract(ctx);
+        movementActions.Gameplay.InteractWeapon.canceled += ctx => InteractEnd(ctx);
     }
 
 
@@ -161,6 +164,16 @@ public class InputReader_Two : InputReaderBase
     public void PullEnd(InputAction.CallbackContext ctx)
     {
         pull = false;
+    }
+
+    public void OnInteract(InputAction.CallbackContext ctx)
+    {
+        interact = true;
+    }
+
+    public void InteractEnd(InputAction.CallbackContext ctx)
+    {
+        interact = false;
     }
 
     #endregion

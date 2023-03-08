@@ -71,6 +71,15 @@ public partial class @PlayerTwoMovementActions : IInputActionCollection2, IDispo
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""InteractWeapon"",
+                    ""type"": ""Button"",
+                    ""id"": ""f39284ff-b5d1-479f-b57d-b192d1fcfa7d"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -304,6 +313,17 @@ public partial class @PlayerTwoMovementActions : IInputActionCollection2, IDispo
                     ""action"": ""Pull"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0e19d2ef-431e-4cd6-8fca-bbaccd7b3923"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""GamePad"",
+                    ""action"": ""InteractWeapon"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -351,6 +371,7 @@ public partial class @PlayerTwoMovementActions : IInputActionCollection2, IDispo
         m_Gameplay_Camera = m_Gameplay.FindAction("Camera", throwIfNotFound: true);
         m_Gameplay_Charge = m_Gameplay.FindAction("Charge", throwIfNotFound: true);
         m_Gameplay_Pull = m_Gameplay.FindAction("Pull", throwIfNotFound: true);
+        m_Gameplay_InteractWeapon = m_Gameplay.FindAction("InteractWeapon", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -415,6 +436,7 @@ public partial class @PlayerTwoMovementActions : IInputActionCollection2, IDispo
     private readonly InputAction m_Gameplay_Camera;
     private readonly InputAction m_Gameplay_Charge;
     private readonly InputAction m_Gameplay_Pull;
+    private readonly InputAction m_Gameplay_InteractWeapon;
     public struct GameplayActions
     {
         private @PlayerTwoMovementActions m_Wrapper;
@@ -424,6 +446,7 @@ public partial class @PlayerTwoMovementActions : IInputActionCollection2, IDispo
         public InputAction @Camera => m_Wrapper.m_Gameplay_Camera;
         public InputAction @Charge => m_Wrapper.m_Gameplay_Charge;
         public InputAction @Pull => m_Wrapper.m_Gameplay_Pull;
+        public InputAction @InteractWeapon => m_Wrapper.m_Gameplay_InteractWeapon;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -448,6 +471,9 @@ public partial class @PlayerTwoMovementActions : IInputActionCollection2, IDispo
                 @Pull.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPull;
                 @Pull.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPull;
                 @Pull.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPull;
+                @InteractWeapon.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnInteractWeapon;
+                @InteractWeapon.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnInteractWeapon;
+                @InteractWeapon.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnInteractWeapon;
             }
             m_Wrapper.m_GameplayActionsCallbackInterface = instance;
             if (instance != null)
@@ -467,6 +493,9 @@ public partial class @PlayerTwoMovementActions : IInputActionCollection2, IDispo
                 @Pull.started += instance.OnPull;
                 @Pull.performed += instance.OnPull;
                 @Pull.canceled += instance.OnPull;
+                @InteractWeapon.started += instance.OnInteractWeapon;
+                @InteractWeapon.performed += instance.OnInteractWeapon;
+                @InteractWeapon.canceled += instance.OnInteractWeapon;
             }
         }
     }
@@ -505,5 +534,6 @@ public partial class @PlayerTwoMovementActions : IInputActionCollection2, IDispo
         void OnCamera(InputAction.CallbackContext context);
         void OnCharge(InputAction.CallbackContext context);
         void OnPull(InputAction.CallbackContext context);
+        void OnInteractWeapon(InputAction.CallbackContext context);
     }
 }

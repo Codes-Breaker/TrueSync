@@ -9,7 +9,7 @@ public class Bullet : Weapon
     public Vector3 positionBeforeCollision = Vector3.zero;
     public override void Fire()
     {
-        controller.grab.Drop();
+        //controller.grab.Drop();
         this.GetComponent<Rigidbody>().velocity = transform.TransformDirection(new Vector3(0, 0, speed));
     }
 

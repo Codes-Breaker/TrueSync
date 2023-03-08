@@ -36,8 +36,8 @@ public class ExplosiveRobot : Weapon
         canExplode = true;
         // Jump, gas reaches 0, explode the motherfucker.
         releasing = true;
-        if (this.controller)
-            this.controller.grab.Drop();
+        //if (this.controller)
+        //    this.controller.grab.Drop();
 
     }
 

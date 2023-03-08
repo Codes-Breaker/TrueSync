@@ -31,6 +31,8 @@ public class InputReaderBase : MonoBehaviour
     public bool charge;
     [HideInInspector]
     public bool pull;
+    [HideInInspector]
+    public bool interact;
 
 
     public bool hasJumped = false;

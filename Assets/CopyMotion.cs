@@ -6,19 +6,17 @@ public class CopyMotion : MonoBehaviour
 {
     public Transform targetLimb;
     ConfigurableJoint cj;
-    public bool mirror;
+    Vector3 startRot;
     // Start is called before the first frame update
     void Start()
     {
         cj = GetComponent<ConfigurableJoint>();
+        startRot = targetLimb.localEulerAngles;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (!mirror)
-            cj.targetRotation = targetLimb.rotation;
-        else
-            cj.targetRotation = Quaternion.Inverse(targetLimb.rotation);
+        cj.targetRotation =  Quaternion.Euler(startRot - targetLimb.localEulerAngles);
     }
 }
