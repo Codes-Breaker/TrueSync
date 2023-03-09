@@ -139,8 +139,17 @@ public class CharacterManager : MonoBehaviour
             UseWeapon();
         }
         SetState();
+        if (!isGrounded)
+        {
+            SetGravity();
+        }
     }
 
+    private void SetGravity()
+    {
+        ridbody.AddForce(Physics.gravity - Vector3.one, ForceMode.Acceleration);
+    }
+    
 
     #region Move
 

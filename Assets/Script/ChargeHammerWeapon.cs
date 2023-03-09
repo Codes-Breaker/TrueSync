@@ -42,18 +42,21 @@ public class ChargeHammerWeapon : MeleeWeapon
     {
         if (controller != null)
         {
+            var rb = this.controller.ridbody;
             var canFly = Physics.CheckSphere(controller.bodyCollider.transform.position - new Vector3(0, (controller.bodyCollider as SphereCollider).radius / 2, 0), maxHeight, controller.groundMask);
             if (canFly)
             {
-                var rb = this.controller.ridbody;
-                var m_fanForce = 200f * (gas / maxGas);
-                var m_damping = 0;
-                Vector3 velocity = rb.velocity;
-                velocity += Vector3.up * m_fanForce * Time.deltaTime; // dir = fan direction, ie. transform.up or whatever setup you have there
-                velocity -= velocity * m_damping * Time.deltaTime; // add dampening so that velocity doesn't get out of hand
-                rb.velocity = velocity;
-            }
 
+                //var Ray = new Ray(controller.bodyCollider.transform.position - new Vector3(0, (controller.bodyCollider as SphereCollider).radius / 2, 0), Vector3.down);
+                //var hit = Physics.Raycast(Ray, out var info);
+                //var m_fanForce = 40f * (gas / maxGas) * (info.distance);
+                //Vector3 velocity = rb.velocity;
+                //velocity += Vector3.up * m_fanForce * Time.deltaTime; 
+                //rb.velocity = velocity;
+
+
+            }
+            rb.AddForce(-Physics.gravity, ForceMode.Acceleration);
         }
 
         //if (release)
