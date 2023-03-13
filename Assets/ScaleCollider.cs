@@ -17,14 +17,14 @@ public class ScaleCollider : MonoBehaviour
     private Vector3 originalPosition;
     private float originalRadius;
 
-    public CharacterJoint leftJoint;
-    public CharacterJoint rightJoint;
+    public CharacterJoint leftHand;
+    public CharacterJoint rightHand;
 
-    private Vector3 originalLeftJointAxis;
-    private Vector3 originalRightJointAxis;
+    private Vector3 originalLeftPos;
+    private Vector3 originalRightPos;
 
-    public Vector3 targetLeftJointAxis;
-    public Vector3 targetRightJointAxis;
+    public Vector3 targetLeftPos;
+    public Vector3 targetRightPos;
 
 
     // Start is called before the first frame update
@@ -33,8 +33,8 @@ public class ScaleCollider : MonoBehaviour
         originalPosition = scollider.center;
         originalRadius = scollider.radius;
 
-        originalLeftJointAxis = leftJoint.connectedAnchor;
-        originalRightJointAxis = rightJoint.connectedAnchor;
+        originalLeftPos = leftHand.anchor;
+        originalRightPos = rightHand.anchor;
     }
 
     // Update is called once per frame
@@ -43,8 +43,8 @@ public class ScaleCollider : MonoBehaviour
         scollider.center = Vector3.Lerp(originalPosition, targetPosition, scale);
         scollider.radius = Mathf.Lerp(originalRadius, targetRadius, scale);
 
-        leftJoint.connectedAnchor = Vector3.Lerp(originalLeftJointAxis, targetLeftJointAxis, scale);
-        rightJoint.connectedAnchor = Vector3.Lerp(originalRightJointAxis, targetRightJointAxis, scale);
+        leftHand.anchor = Vector3.Lerp(originalLeftPos, targetLeftPos, scale);
+        rightHand.anchor = Vector3.Lerp(originalRightPos, targetRightPos, scale);
 
         renderer.SetBlendShapeWeight(0, scale*100);
 

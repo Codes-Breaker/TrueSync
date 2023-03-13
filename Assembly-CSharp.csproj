@@ -82,6 +82,7 @@
     <Compile Include="Assets\Prefabs\005\JSMovement3D.cs" />
     <Compile Include="Assets\TrueSync\Physics\Farseer\Settings.cs" />
     <Compile Include="Assets\ThirdParty\EffectCore\packs\WebDemoAssets\scripts\CameraShake.cs" />
+    <Compile Include="Assets\ScaleCollider.cs" />
     <Compile Include="Assets\TrueSync\Physics\Farseer\Common\Decomposition\CDT\Polygon\Polygon.cs" />
     <Compile Include="Assets\TrueSync\Physics\Farseer\Common\Decomposition\CDT\Util\PolygonGenerator.cs" />
     <Compile Include="Assets\TrueSync\Physics\Farseer\Dynamics\Joints\DistanceJoint.cs" />
@@ -101,6 +102,7 @@
     <Compile Include="Assets\TrueSync\Physics\Farseer\Dynamics\Joints\GearJoint.cs" />
     <Compile Include="Assets\Script\Input\InputReaderBase.cs" />
     <Compile Include="Assets\TrueSync\Engine\Math\Fix64AcosLut.cs" />
+    <Compile Include="Assets\cyclebig.cs" />
     <Compile Include="Assets\TrueSync\Unity\TSCollider2D.cs" />
     <Compile Include="Assets\StickyBullet.cs" />
     <Compile Include="Assets\Nappin\PhysicsBasedCharacterController\Scripts\CharacterManager.cs" />
@@ -295,11 +297,13 @@
     <Compile Include="Assets\TrueSync\Engine\Math\Fix64.cs" />
     <Compile Include="Assets\Weapon.cs" />
     <Compile Include="Assets\TrueSync\Engine\Math\TSVector.cs" />
+    <Compile Include="Assets\AnimationControl.cs" />
     <Compile Include="Assets\TrueSync\Physics\Jitter\Dynamics\SoftBody.cs" />
     <Compile Include="Assets\TrueSync\Physics\Jitter\IDebugDraw.cs" />
     <Compile Include="Assets\TrueSync\Engine\Math\Fix64TanLut.cs" />
     <Compile Include="Assets\TrueSync\Physics\Farseer\Common\Decomposition\CDT\TriangulationMode.cs" />
     <Compile Include="Assets\TrueSync\Physics\Farseer\Dynamics\WorldCallbacks.cs" />
+    <Compile Include="Assets\Script\ChargeHammerWeapon.cs" />
     <Compile Include="Assets\TrueSync\Physics\Jitter\Dynamics\Constraints\PointPointDistance.cs" />
     <Compile Include="Assets\ThirdParty\EffectCore\packs\StylizedExplosionPack2\WebBuildStylizedExplosionPack2\scripts\projectileActorExplosion2.cs" />
     <Compile Include="Assets\TrueSync\Physics\Farseer\Extra\Clones\IslandClone2D.cs" />
@@ -366,11 +370,7 @@
     <Compile Include="Assets\TrueSync\Unity\TSPolygonCollider2D.cs" />
     <Compile Include="Assets\TrueSync\Physics\Farseer\Dynamics\World.cs" />
     <Compile Include="Assets\ThirdParty\EffectCore\packs\StylizedMeleeCombatPack1\WebBuild\scripts\nextEffectMeleeCombat.cs" />
-    <Compile Include="Assets\cyclebig.cs" />
     <Compile Include="Assets\Script\MeleeWeapon.cs" />
-    <Compile Include="Assets\AnimationControl.cs" />
-    <Compile Include="Assets\Script\ChargeHammerWeapon.cs" />
-    <Compile Include="Assets\ScaleCollider.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Suriyun\UnityChanShader\Shader\Unitychan_chara_fuku.shader" />
