@@ -18,7 +18,8 @@ ModelImporter:
     resampleCurves: 1
     optimizeGameObjects: 0
     motionNodeName: 
-    rigImportErrors: 
+    rigImportErrors: "Invalid Avatar Rig Configuration. Missing or invalid transform:\n\tRequired
+      human bone 'Head' not found\n"
     rigImportWarnings: 
     animationImportErrors: 
     animationImportWarnings: 
@@ -26,7 +27,7 @@ ModelImporter:
     animationDoRetargetingWarnings: 0
     importAnimatedCustomProperties: 0
     importConstraints: 0
-    animationCompression: 1
+    animationCompression: 3
     animationRotationError: 0.5
     animationPositionError: 0.5
     animationScaleError: 0.5
@@ -109,7 +110,87 @@ ModelImporter:
   humanDescription:
     serializedVersion: 3
     human: []
-    skeleton: []
+    skeleton:
+    - name: standtest2(Clone)
+      parentName: 
+      position: {x: 0, y: 0, z: 0}
+      rotation: {x: 0, y: 0, z: 0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: "\u7ACB\u65B9\u4F53"
+      parentName: standtest2(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
+      scale: {x: 1, y: 1, z: 1}
+    - name: "\u9AA8\u67B6"
+      parentName: standtest2(Clone)
+      position: {x: 0, y: 1.5372478, z: -0.920683}
+      rotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Bone
+      parentName: "\u9AA8\u67B6"
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
+      scale: {x: 1, y: 0.9999999, z: 0.9999999}
+    - name: Bone_end
+      parentName: Bone
+      position: {x: -0, y: 1.000013, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Bone_L.Offset
+      parentName: "\u9AA8\u67B6"
+      position: {x: -1.672444, y: -0.9206831, z: 0}
+      rotation: {x: 0.43908498, y: -0.19477296, z: 0.6289831, w: 0.6112676}
+      scale: {x: 1.0000002, y: 1, z: 0.99999994}
+    - name: Bone_L
+      parentName: Bone_L.Offset
+      position: {x: -0.007123699, y: -0.09973521, z: 0.0015111582}
+      rotation: {x: -0.31214574, y: 0.023797633, z: 0.6516114, w: 0.6909424}
+      scale: {x: 1, y: 0.99999976, z: 1}
+    - name: Bone_L.001
+      parentName: Bone_L
+      position: {x: 0.0000000047683715, y: 0.39722118, z: -0.000000019073486}
+      rotation: {x: -0.1046527, y: -0.04348437, z: 0.1661167, w: 0.9795724}
+      scale: {x: 1.0000004, y: 1.0000004, z: 1}
+    - name: Bone_L.002
+      parentName: Bone_L.001
+      position: {x: -0.0000001335144, y: 0.9651075, z: 0.000000019073486}
+      rotation: {x: -0.6808348, y: -0.053644378, z: -0.35326692, w: -0.639366}
+      scale: {x: 1.0000001, y: 1.0000001, z: 0.9999999}
+    - name: Bone_L.002_end
+      parentName: Bone_L.002
+      position: {x: -0, y: 0.69449025, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Bone_R.Offset
+      parentName: "\u9AA8\u67B6"
+      position: {x: 1.672444, y: -0.9206831, z: 0}
+      rotation: {x: -0.43908498, y: -0.19477296, z: 0.6289831, w: -0.6112676}
+      scale: {x: 1.0000002, y: 1, z: 0.99999994}
+    - name: Bone_R
+      parentName: Bone_R.Offset
+      position: {x: 0.007123699, y: -0.09973521, z: 0.0015111582}
+      rotation: {x: -0.31214574, y: -0.023797633, z: -0.6516114, w: 0.6909424}
+      scale: {x: 1, y: 0.99999976, z: 1}
+    - name: Bone_R.001
+      parentName: Bone_R
+      position: {x: -0.0000000047683715, y: 0.39722118, z: -0.000000019073486}
+      rotation: {x: -0.1046527, y: 0.04348437, z: -0.1661167, w: 0.9795724}
+      scale: {x: 1.0000004, y: 1.0000004, z: 1}
+    - name: Bone_R.002
+      parentName: Bone_R.001
+      position: {x: 0.0000001335144, y: 0.9651075, z: 0.000000019073486}
+      rotation: {x: 0.6808348, y: -0.053644378, z: -0.35326692, w: 0.639366}
+      scale: {x: 1.0000001, y: 1.0000001, z: 0.9999999}
+    - name: Bone_R.002_end
+      parentName: Bone_R.002
+      position: {x: -0, y: 0.69449025, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: "\u5907\u4EFD"
+      parentName: standtest2(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
+      scale: {x: 1, y: 1, z: 1}
     armTwist: 0.5
     foreArmTwist: 0.5
     upperLegTwist: 0.5
@@ -118,15 +199,15 @@ ModelImporter:
     legStretch: 0.05
     feetSpacing: 0
     globalScale: 1
-    rootMotionBoneName: 
+    rootMotionBoneName: Bone
     hasTranslationDoF: 0
-    hasExtraRoot: 0
+    hasExtraRoot: 1
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
   autoGenerateAvatarMappingIfUnspecified: 1
   animationType: 2
   humanoidOversampling: 1
-  avatarSetup: 0
+  avatarSetup: 1
   addHumanoidExtraRootOnlyWhenUsingAvatar: 1
   additionalBone: 0
   userData: 

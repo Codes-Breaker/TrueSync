@@ -46,6 +46,7 @@ public class CharacterManager : MonoBehaviour
     public Slider otherGpSlider;
     public Canvas otherCanvas;
     public Transform releaseEffect;
+    public ScaleCollider scaleCollider;
     //public Grab grab;
     public CollisionStun collisionStun;
     public Rigidbody ridbody;
@@ -88,10 +89,10 @@ public class CharacterManager : MonoBehaviour
 
     private float deltaScale;
 
-    public MeleeWeapon weapon;
-    public MeleeWeapon holdingWeapon;
-    public ConfigurableJoint leftHand;
-    public ConfigurableJoint rightHand;
+    //public MeleeWeapon weapon;
+    //public MeleeWeapon holdingWeapon;
+    //public ConfigurableJoint leftHand;
+    //public ConfigurableJoint rightHand;
 
     public bool swinging = false;
     public bool readyswing = false;
@@ -115,7 +116,7 @@ public class CharacterManager : MonoBehaviour
         pickup = inputReader.pull;
         useWeapon = inputReader.interact;
         MoveCamera();
-        AdjustHand();
+        //AdjustHand();
     }
 
     private void LateUpdate()
@@ -135,8 +136,8 @@ public class CharacterManager : MonoBehaviour
             MoveRelease();
             MoveWalk();
             MoveJump();
-            PickUpWeapon();
-            UseWeapon();
+            //PickUpWeapon();
+            //UseWeapon();
         }
         SetState();
         if (!isGrounded)
@@ -157,8 +158,10 @@ public class CharacterManager : MonoBehaviour
     {
         //ridbody.mass = 5f + (currentGas / (maxActorGas * 1.0f)*4);
         var gasScale = (currentGas / (maxActorGas * 1.0f));
-        skinnedMeshRenderer.SetBlendShapeWeight(0, gasScale * 100f);
-        (bodyCollider as SphereCollider).center = Vector3.Lerp(originalCenter, targetCenter, gasScale);
+        // skinnedMeshRenderer.SetBlendShapeWeight(0, gasScale * 100f);
+        if(scaleCollider)
+            scaleCollider.SetScale(gasScale);
+        //(bodyCollider as SphereCollider).center = Vector3.Lerp(originalCenter, targetCenter, gasScale);
         (bodyCollider as SphereCollider).radius = Mathf.Lerp(originalRadius, targetRadius, gasScale);
         //ridbody.transform.localScale = new Vector3(currentGas * deltaScale + 1, currentGas * deltaScale + 1, currentGas * deltaScale + 1);
     }
@@ -171,67 +174,70 @@ public class CharacterManager : MonoBehaviour
             targetAngle = Mathf.Atan2(axisInput.x, axisInput.y) * Mathf.Rad2Deg + characterCamera.transform.eulerAngles.y;
             Vector3 forceForward = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
             Vector3 rotasionForward = new Vector3(-axisInput.x, 0,axisInput.y);
-            ridbody.gameObject.GetComponent<ConfigurableJoint>().targetRotation = Quaternion.Slerp(ridbody.gameObject.GetComponent<ConfigurableJoint>().targetRotation, Quaternion.Euler(0,-targetAngle,0), 0.2f);
-            ridbody.AddForce(forceForward * movementSpeed);
+            //ridbody.gameObject.GetComponent<ConfigurableJoint>().targetRotation = Quaternion.Slerp(ridbody.gameObject.GetComponent<ConfigurableJoint>().targetRotation, Quaternion.Euler(0,-targetAngle,0), 0.1f);
+            //ridbody.gameObject.GetComponent<ConfigurableJoint>().targetRotation = Quaternion.Euler(0,-targetAngle,0);
+            if(isGrounded)
+                ridbody.AddForce(forceForward * movementSpeed);
             isWalk = true;
         }
         else
         {
             isWalk = false;
         }
+        ridbody.gameObject.GetComponent<ConfigurableJoint>().targetRotation = Quaternion.Slerp(ridbody.gameObject.GetComponent<ConfigurableJoint>().targetRotation , Quaternion.Euler(0,-targetAngle,0), 0.1f);
     }
 
-    private void UseWeapon()
-    {
-        if (holdingWeapon && useWeapon)
-        {
-            holdingWeapon.OnCharge();
-            chargingWeapon = true;
-        }
-        else if (!useWeapon && chargingWeapon)
-        {
-            holdingWeapon.OnRelease();
-            chargingWeapon = false;
-            //DropWeapon();
-        }
-    }
+    //private void UseWeapon()
+    //{
+    //    if (holdingWeapon && useWeapon)
+    //    {
+    //        holdingWeapon.OnCharge();
+    //        chargingWeapon = true;
+    //    }
+    //    else if (!useWeapon && chargingWeapon)
+    //    {
+    //        holdingWeapon.OnRelease();
+    //        chargingWeapon = false;
+    //        //DropWeapon();
+    //    }
+    //}
 
-    private void PickUpWeapon()
-    {
-        if (collisionStun.fall)
-        {
-            DropWeapon();
-        }
-        else
-        {
-            if (pickup)
-            {
-                if (holdingWeapon == null && weapon != null && weapon.controller == null)
-                {
-                    holdingWeapon = weapon;
+    //private void PickUpWeapon()
+    //{
+    //    if (collisionStun.fall)
+    //    {
+    //        DropWeapon();
+    //    }
+    //    else
+    //    {
+    //        if (pickup)
+    //        {
+    //            if (holdingWeapon == null && weapon != null && weapon.controller == null)
+    //            {
+    //                holdingWeapon = weapon;
 
-                    weapon.transform.parent = this.weaponPoint;
-                    weapon.transform.localPosition = weapon.offsetPosition;
-                    weapon.transform.localRotation = Quaternion.Euler(weapon.offsetRotation);
+    //                weapon.transform.parent = this.weaponPoint;
+    //                weapon.transform.localPosition = weapon.offsetPosition;
+    //                weapon.transform.localRotation = Quaternion.Euler(weapon.offsetRotation);
 
-                    leftHand.targetRotation = Quaternion.Euler(holdingWeapon.targetRotationL);
-                    rightHand.targetRotation = Quaternion.Euler(holdingWeapon.targetRotationR);
+    //                leftHand.targetRotation = Quaternion.Euler(holdingWeapon.targetRotationL);
+    //                rightHand.targetRotation = Quaternion.Euler(holdingWeapon.targetRotationR);
 
-                    weapon.OnEquipped(this);
+    //                weapon.OnEquipped(this);
 
-                }
-            }
-        }
-    }
+    //            }
+    //        }
+    //    }
+    //}
 
-    public void DropWeapon()
-    {
-        if (holdingWeapon != null)
-        {
-            holdingWeapon.OnUnEquipped();
-            holdingWeapon = null;
-        }
-    }
+    //public void DropWeapon()
+    //{
+    //    if (holdingWeapon != null)
+    //    {
+    //        holdingWeapon.OnUnEquipped();
+    //        holdingWeapon = null;
+    //    }
+    //}
 
     private void MoveJump()
     {
@@ -315,21 +321,21 @@ public class CharacterManager : MonoBehaviour
         }
     }
 
-    private void AdjustHand()
-    {
-        if (leftHand == null || rightHand == null)
-            return;
-        if (holdingWeapon)
-        {
-            leftHand.targetRotation = Quaternion.Euler(Vector3.Lerp(leftHand.targetRotation.eulerAngles, holdingWeapon.targetRotationL, 0.1f));
-            rightHand.targetRotation = Quaternion.Euler(Vector3.Lerp(rightHand.targetRotation.eulerAngles, holdingWeapon.targetRotationR, 0.1f));
-        }
-        else
-        {
-            leftHand.targetRotation = Quaternion.Euler(Vector3.Lerp(leftHand.targetRotation.eulerAngles, Vector3.zero, 0.1f));
-            rightHand.targetRotation = Quaternion.Euler(Vector3.Lerp(rightHand.targetRotation.eulerAngles, Vector3.zero, 0.1f));
-        }
-    }
+    //private void AdjustHand()
+    //{
+    //    if (leftHand == null || rightHand == null)
+    //        return;
+    //    if (holdingWeapon)
+    //    {
+    //        leftHand.targetRotation = Quaternion.Euler(Vector3.Lerp(leftHand.targetRotation.eulerAngles, holdingWeapon.targetRotationL, 0.1f));
+    //        rightHand.targetRotation = Quaternion.Euler(Vector3.Lerp(rightHand.targetRotation.eulerAngles, holdingWeapon.targetRotationR, 0.1f));
+    //    }
+    //    else
+    //    {
+    //        leftHand.targetRotation = Quaternion.Euler(Vector3.Lerp(leftHand.targetRotation.eulerAngles, Vector3.zero, 0.1f));
+    //        rightHand.targetRotation = Quaternion.Euler(Vector3.Lerp(rightHand.targetRotation.eulerAngles, Vector3.zero, 0.1f));
+    //    }
+    //}
 
     private void MoveCamera()
     {
@@ -403,32 +409,32 @@ public class CharacterManager : MonoBehaviour
         canvas.transform.forward = characterCamera.transform.forward;
         hpSlider.transform.position = bodyCollider.transform.position;
         gpSlider.transform.position = bodyCollider.transform.position;
-        hpSlider.transform.localPosition = hpSlider.transform.localPosition + new Vector3(0, 1.4f + (bodyCollider.transform.localScale.x - 1) * 1.2f, 0);
-        gpSlider.transform.localPosition = gpSlider.transform.localPosition + new Vector3(0, 1f + (bodyCollider.transform.localScale.x - 1) * 1.2f, 0);
+        hpSlider.transform.localPosition = hpSlider.transform.localPosition + new Vector3(0, 2.4f + (bodyCollider.transform.localScale.x - 1) * 1.2f, 0);
+        gpSlider.transform.localPosition = gpSlider.transform.localPosition + new Vector3(0, 2f + (bodyCollider.transform.localScale.x - 1) * 1.2f, 0);
         otherHpSlider.value = (float)(currentHPValue / maxHPValue);
         otherGpSlider.value = (float)(currentGas / maxActorGas);
         otherCanvas.transform.forward = otherCharacterCamera.transform.forward;
         otherHpSlider.transform.position = bodyCollider.transform.position;
         otherGpSlider.transform.position = bodyCollider.transform.position;
-        otherHpSlider.transform.localPosition = otherHpSlider.transform.localPosition + new Vector3(0, 1.4f + (bodyCollider.transform.localScale.x - 1) * 1.2f, 0);
-        otherGpSlider.transform.localPosition = otherGpSlider.transform.localPosition + new Vector3(0, 1f + (bodyCollider.transform.localScale.x - 1) * 1.2f, 0);
+        otherHpSlider.transform.localPosition = otherHpSlider.transform.localPosition + new Vector3(0, 2.4f + (bodyCollider.transform.localScale.x - 1) * 1.2f, 0);
+        otherGpSlider.transform.localPosition = otherGpSlider.transform.localPosition + new Vector3(0, 2f + (bodyCollider.transform.localScale.x - 1) * 1.2f, 0);
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        foreach (var item in tags)
-        {
-            if (other.gameObject.CompareTag(item))
-            {
-                if (other.gameObject.GetComponent<MeleeWeapon>())
-                    weapon = other.gameObject.GetComponent<MeleeWeapon>();
-            }
-        }
-    }
+    //private void OnTriggerEnter(Collider other)
+    //{
+    //    foreach (var item in tags)
+    //    {
+    //        if (other.gameObject.CompareTag(item))
+    //        {
+    //            if (other.gameObject.GetComponent<MeleeWeapon>())
+    //                weapon = other.gameObject.GetComponent<MeleeWeapon>();
+    //        }
+    //    }
+    //}
 
 
-    private void OnTriggerExit(Collider other)
-    {
-        weapon = null;
-    }
+    //private void OnTriggerExit(Collider other)
+    //{
+    //    weapon = null;
+    //}
 }

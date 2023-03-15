@@ -5,6 +5,7 @@ using UnityEngine;
 public class ScaleCollider : MonoBehaviour
 {
     public SkinnedMeshRenderer renderer;
+    public SkinnedMeshRenderer otherRenderer;
 
     public SphereCollider scollider;
 
@@ -37,7 +38,11 @@ public class ScaleCollider : MonoBehaviour
         originalRightPos = rightHand.anchor;
     }
 
-    // Update is called once per frame
+    public void SetScale(float gasScale)
+    {
+        scale = gasScale;
+    }
+        
     void Update()
     {
         scollider.center = Vector3.Lerp(originalPosition, targetPosition, scale);
@@ -47,6 +52,8 @@ public class ScaleCollider : MonoBehaviour
         rightHand.anchor = Vector3.Lerp(originalRightPos, targetRightPos, scale);
 
         renderer.SetBlendShapeWeight(0, scale*100);
+        if(otherRenderer)
+            otherRenderer.SetBlendShapeWeight(0, scale * 100);
 
 
     }

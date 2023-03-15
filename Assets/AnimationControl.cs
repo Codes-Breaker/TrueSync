@@ -14,8 +14,8 @@ public class AnimationControl : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
-    {
-        animator.SetBool("hold", controller.holdingWeapon != null);
-    }
+    //void Update()
+    //{
+    //    animator.SetBool("hold", controller.holdingWeapon != null);
+    //}
 }
