@@ -176,8 +176,9 @@ public class CharacterManager : MonoBehaviour
             Vector3 rotasionForward = new Vector3(-axisInput.x, 0,axisInput.y);
             //ridbody.gameObject.GetComponent<ConfigurableJoint>().targetRotation = Quaternion.Slerp(ridbody.gameObject.GetComponent<ConfigurableJoint>().targetRotation, Quaternion.Euler(0,-targetAngle,0), 0.1f);
             //ridbody.gameObject.GetComponent<ConfigurableJoint>().targetRotation = Quaternion.Euler(0,-targetAngle,0);
-            if(isGrounded)
-                ridbody.AddForce(forceForward * movementSpeed);
+            if (isGrounded)
+                ridbody.velocity =new Vector3(forceForward.x * movementSpeed ,ridbody.velocity.y ,forceForward.z * movementSpeed);
+                //ridbody.AddForce(forceForward * movementSpeed);
             isWalk = true;
         }
         else
