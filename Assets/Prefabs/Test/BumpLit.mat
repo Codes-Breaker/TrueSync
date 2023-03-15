@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: BumpLit
+  m_Shader: {fileID: -6465566751694194690, guid: 5f7946a1e361ebd4c9512e4031bd99b9,
+    type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _Texture2DAsset_9509768b6ed8456e88eb369721672bae_Out_0:
+        m_Texture: {fileID: 2800000, guid: 8a957bfa4d6169f40969f1514d44e108, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_Lightmaps:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_LightmapsInd:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_ShadowMasks:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - Vector1_8b653c8c56984b349b2a5c21e251d2a9: 0
+    m_Colors:
+    - Vector3_803ab025249a46a49c76024206df01f6: {r: 0, g: 0, b: 0, a: 0}
+    - Vector3_8f2eac1e020d4d12b27a9efe9e4961b6: {r: 0, g: 0, b: 0, a: 0}
+  m_BuildTextureStacks: []
