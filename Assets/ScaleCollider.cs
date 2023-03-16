@@ -5,7 +5,7 @@ using UnityEngine;
 public class ScaleCollider : MonoBehaviour
 {
     public SkinnedMeshRenderer renderer;
-    public SkinnedMeshRenderer otherRenderer;
+    public List<SkinnedMeshRenderer> otherRenderers;
 
     public SphereCollider scollider;
 
@@ -52,8 +52,14 @@ public class ScaleCollider : MonoBehaviour
         rightHand.anchor = Vector3.Lerp(originalRightPos, targetRightPos, scale);
 
         renderer.SetBlendShapeWeight(0, scale*100);
-        if(otherRenderer)
-            otherRenderer.SetBlendShapeWeight(0, scale * 100);
+        if (otherRenderers.Count != 0)
+        {
+            foreach (var item in otherRenderers)
+            {
+                if (item.gameObject.activeSelf)
+                    item.SetBlendShapeWeight(0, scale * 100);
+            }
+        }
 
 
     }
