@@ -56,25 +56,25 @@
     <Analyzer Include="C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\VolumetricFog2\Editor\VolumetricFogProfileEditor.cs" />
     <Compile Include="Assets\VolumetricFog2\Editor\FogPointLightEditor.cs" />
-    <Compile Include="Assets\TrueSync\Unity\Editor\TrueSyncConfigEditor.cs" />
     <Compile Include="Assets\TrueSync\Unity\Editor\TSRigidBodyEditor.cs" />
+    <Compile Include="Assets\VolumetricFog2\Editor\VolumetricFogEditor.FoW.cs" />
+    <Compile Include="Assets\Suriyun\Addon-PetZoo\Editor\PetZooEditor.cs" />
+    <Compile Include="Assets\VolumetricFog2\Editor\FogVoidEditor.cs" />
+    <Compile Include="Assets\VolumetricFog2\Editor\Managers\PointLightManagerEditor.cs" />
+    <Compile Include="Assets\VolumetricFog2\Editor\VolumetricFogProfileEditor.cs" />
+    <Compile Include="Assets\TrueSync\Unity\Editor\TrueSyncConfigEditor.cs" />
     <Compile Include="Assets\TrueSync\Unity\Editor\MenuContext.cs" />
     <Compile Include="Assets\TrueSync\Unity\Editor\TSVectorDrawer.cs" />
-    <Compile Include="Assets\VolumetricFog2\Editor\VolumetricFogEditor.FoW.cs" />
     <Compile Include="Assets\VolumetricFog2\Editor\VolumetricFogManagerEditor.cs" />
     <Compile Include="Assets\TrueSync\Unity\Editor\TSVector2Drawer.cs" />
     <Compile Include="Assets\TrueSync\Unity\Editor\TSFPDrawer.cs" />
-    <Compile Include="Assets\Suriyun\Addon-PetZoo\Editor\PetZooEditor.cs" />
     <Compile Include="Assets\VolumetricFog2\Editor\NoiseGenerator.cs" />
     <Compile Include="Assets\VolumetricFog2\Editor\NoiseTools.cs" />
     <Compile Include="Assets\VolumetricFog2\Editor\VolumetricFogShaderOptions.cs" />
     <Compile Include="Assets\VolumetricFog2\Editor\VolumetricFogSubVolumeEditor.cs" />
     <Compile Include="Assets\VolumetricFog2\Editor\MenuIntegration.cs" />
     <Compile Include="Assets\VolumetricFog2\Editor\VolumetricFogEditor.cs" />
-    <Compile Include="Assets\VolumetricFog2\Editor\FogVoidEditor.cs" />
-    <Compile Include="Assets\VolumetricFog2\Editor\Managers\PointLightManagerEditor.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Editor\New Amplify Shader.shader" />
@@ -887,6 +887,10 @@
       <Project>{1A1A6058-DB5F-2391-1D4D-CB3E0682DA86}</Project>
       <Name>StompyRobot.SRDebugger.Editor</Name>
     </ProjectReference>
+    <ProjectReference Include="AmplifyShaderEditor.csproj">
+      <Project>{04DD196D-0417-BA6B-852D-703B8ABEEF50}</Project>
+      <Name>AmplifyShaderEditor</Name>
+    </ProjectReference>
     <ProjectReference Include="Unity.RenderPipelines.Universal.Runtime.csproj">
       <Project>{C59ABA6F-A832-3EBC-B3B5-EFD316689002}</Project>
       <Name>Unity.RenderPipelines.Universal.Runtime</Name>
@@ -902,10 +906,6 @@
     <ProjectReference Include="StompyRobot.SRF.csproj">
       <Project>{1B417520-4B00-1EB1-9A04-BFE488973FC4}</Project>
       <Name>StompyRobot.SRF</Name>
-    </ProjectReference>
-    <ProjectReference Include="AmplifyShaderEditor.csproj">
-      <Project>{04DD196D-0417-BA6B-852D-703B8ABEEF50}</Project>
-      <Name>AmplifyShaderEditor</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
