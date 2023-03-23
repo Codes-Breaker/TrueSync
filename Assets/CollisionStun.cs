@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(ConfigurableJoint))]
+//[RequireComponent(typeof(ConfigurableJoint))]
 public class CollisionStun : MonoBehaviour
 {
     public float fallTime = 0;
@@ -17,13 +17,14 @@ public class CollisionStun : MonoBehaviour
     public ConfigurableJoint[] cjs;
     public float originalDriveX;
     public float originalDriveY;
-    public CharacterManager characterManager;
+    public CharacterContorl characterManager;
+    public ConfigurableJoint cj;
     public float minDriveX = 0;
     public float minDriveY = 0;
+    public float froceArgument;
 
     private void Awake()
     {
-        var cj = GetComponent<ConfigurableJoint>();
         originalDriveX = cj.angularXDrive.positionSpring;
         originalDriveY = cj.angularYZDrive.positionSpring;
     }
@@ -51,50 +52,63 @@ public class CollisionStun : MonoBehaviour
 
         var m1 = (Mathf.Cos(degree1) * vel1).magnitude * rigidbody.mass;
         var m2 = (Mathf.Cos(degree2) * vel2).magnitude * otherCollision.rigidbody.mass;
-        Debug.LogWarning($"{this.gameObject.name} 别人对我的力 {m2} 对方的角度 {d2} impulse {collision.impulse} impulse force sum {collision.impactForceSum}");
+        Debug.Log($"{this.gameObject.name} 别人对我的力 {m2} 对方的角度 {d2} impulse {collision.impulse} impulse force sum {collision.impactForceSum}");
+        
 
-        if (m2 > 80)
+        if (m2 > 7)
         {
             fall = true;
             fallTime = 0;
-            maxFallTime = 2;
+            maxFallTime = m2/2;
             body.targetRotation = Quaternion.Euler( body.transform.rotation.eulerAngles.x, body.transform.rotation.eulerAngles.y, body.transform.rotation.eulerAngles.z);
+
             SetBalance(minDriveX, minDriveY);
+           // rigidbody.AddExplosionForce(froceToOtherArgument * m2, collision.contacts[0].point, 4);
+
         }
-        else if (m2 > 60)
+        else if (m2 > 4)
         {
             fall = true;
             fallTime = 0;
-            maxFallTime = 1.5f;
+            maxFallTime = m2 / 2;
             body.targetRotation = Quaternion.Euler(body.transform.rotation.eulerAngles.x, body.transform.rotation.eulerAngles.y, body.transform.rotation.eulerAngles.z);
             SetBalance(minDriveX, minDriveY);
+           // rigidbody.AddExplosionForce(froceToOtherArgument * m2, collision.contacts[0].point, 4);
+
         }
-        else if (m2 > 40)
+        else if (m2 > 2)
         {
             fall = true;
             fallTime = 0;
-            maxFallTime = 0.5f;
+            maxFallTime = m2 / 2;
             body.targetRotation = Quaternion.Euler(body.transform.rotation.eulerAngles.x, body.transform.rotation.eulerAngles.y, body.transform.rotation.eulerAngles.z);
             SetBalance(minDriveX, minDriveY);
+           // rigidbody.AddExplosionForce(froceToOtherArgument * m2, collision.contacts[0].point, 4);
+
+        }
+        if(m2 > m1)
+        {
+            rigidbody.AddExplosionForce(froceArgument * m2, collision.contacts[0].point, 4);
+            collision.collider.gameObject.GetComponent<Rigidbody>().AddExplosionForce(froceArgument * m2, collision.contacts[0].point, 4);
         }
 
 
         //伤害计算用impulse算分段函数
         if (characterManager.isSwimmy)
             return;
-        if (m2 > 70)
+        if (m2 > 8)
         {
             characterManager.currentHPValue = characterManager.currentHPValue - 20;
         }
-        else if(m2 > 50) 
+        else if(m2 > 6) 
         {
             characterManager.currentHPValue = characterManager.currentHPValue - 16;
         }
-        else if(m2 > 30)
+        else if(m2 > 4)
         {
             characterManager.currentHPValue = characterManager.currentHPValue - 12;
         }
-        else if(m2 >15)
+        else if(m2 > 2)
         {
             characterManager.currentHPValue = characterManager.currentHPValue - 8;
         }
@@ -130,6 +144,7 @@ public class CollisionStun : MonoBehaviour
                 fall = false;
                 fallTime = 0;
                 SetBalance(originalDriveX, originalDriveY);
+           //     SetCharacterJointBalance(3, 3);
             }
         }
     }
@@ -156,6 +171,5 @@ public class CollisionStun : MonoBehaviour
             cj.angularYZDrive = jointDriveYZ;
         }
     }
-
 
 }
