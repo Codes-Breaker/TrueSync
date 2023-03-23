@@ -51,7 +51,7 @@ public class CollisionStun : MonoBehaviour
 
         var m1 = (Mathf.Cos(degree1) * vel1).magnitude * rigidbody.mass;
         var m2 = (Mathf.Cos(degree2) * vel2).magnitude * otherCollision.rigidbody.mass;
-        Debug.LogWarning($"{this.gameObject.name} ±ðÈË¶ÔÎÒµÄÁ¦ {m2} ¶Ô·½µÄ½Ç¶È {d2} impulse {collision.impulse} impulse force sum {collision.impactForceSum}");
+        Debug.LogWarning($"{this.gameObject.name} ï¿½ï¿½ï¿½Ë¶ï¿½ï¿½Òµï¿½ï¿½ï¿½ {m2} ï¿½Ô·ï¿½ï¿½Ä½Ç¶ï¿½ {d2} impulse {collision.impulse} impulse force sum {collision.relativeVelocity}");
 
         if (m2 > 80)
         {
@@ -79,7 +79,7 @@ public class CollisionStun : MonoBehaviour
         }
 
 
-        //ÉËº¦¼ÆËãÓÃimpulseËã·Ö¶Îº¯Êý
+        //ï¿½Ëºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½impulseï¿½ï¿½Ö¶Îºï¿½ï¿½ï¿½
         if (characterManager.isSwimmy)
             return;
         if (m2 > 70)
