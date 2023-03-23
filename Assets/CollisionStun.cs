@@ -22,6 +22,7 @@ public class CollisionStun : MonoBehaviour
     public float minDriveX = 0;
     public float minDriveY = 0;
     public float froceArgument;
+    private Quaternion configurableJointRotasion;
 
     private void Awake()
     {
@@ -61,7 +62,7 @@ public class CollisionStun : MonoBehaviour
             fallTime = 0;
             maxFallTime = m2/2;
             body.targetRotation = Quaternion.Euler( body.transform.rotation.eulerAngles.x, body.transform.rotation.eulerAngles.y, body.transform.rotation.eulerAngles.z);
-
+            configurableJointRotasion = cj.targetRotation;
             SetBalance(minDriveX, minDriveY);
            // rigidbody.AddExplosionForce(froceToOtherArgument * m2, collision.contacts[0].point, 4);
 
@@ -72,6 +73,7 @@ public class CollisionStun : MonoBehaviour
             fallTime = 0;
             maxFallTime = m2 / 2;
             body.targetRotation = Quaternion.Euler(body.transform.rotation.eulerAngles.x, body.transform.rotation.eulerAngles.y, body.transform.rotation.eulerAngles.z);
+            configurableJointRotasion = cj.targetRotation;
             SetBalance(minDriveX, minDriveY);
            // rigidbody.AddExplosionForce(froceToOtherArgument * m2, collision.contacts[0].point, 4);
 
@@ -82,6 +84,7 @@ public class CollisionStun : MonoBehaviour
             fallTime = 0;
             maxFallTime = m2 / 2;
             body.targetRotation = Quaternion.Euler(body.transform.rotation.eulerAngles.x, body.transform.rotation.eulerAngles.y, body.transform.rotation.eulerAngles.z);
+            configurableJointRotasion = cj.targetRotation;
             SetBalance(minDriveX, minDriveY);
            // rigidbody.AddExplosionForce(froceToOtherArgument * m2, collision.contacts[0].point, 4);
 
@@ -138,6 +141,7 @@ public class CollisionStun : MonoBehaviour
         {
             stunEffect.gameObject.SetActive(true);
             fallTime += Time.fixedDeltaTime;
+            cj.targetRotation =  Quaternion.Euler(-configurableJointRotasion.eulerAngles);
             if (fallTime >= maxFallTime)
             {
                 stunEffect.gameObject.SetActive(false);
