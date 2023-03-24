@@ -34,15 +34,15 @@ public class CharacterContorl : MonoBehaviour
     public Slider hpSlider;
     public Slider gpSlider;
     public Canvas canvas;
-    public CollisionStun collisionStun;
     public Rigidbody ridbody;
     public Collider bodyCollider;
     public SkinnedMeshRenderer skinnedMeshRenderer;
-    public ConfigurableJoint mainConfigurableJoint;
     public float originalRadius;
     public float targetRadius;
     public Vector3 targetCenter;
     public Vector3 originalCenter;
+
+    private Vector3 initialRotation;
 
     // Òþ²Ø²ÎÊý
     [HideInInspector]
@@ -66,17 +66,29 @@ public class CharacterContorl : MonoBehaviour
     public bool isGrabWall = false;
     [HideInInspector]
     public float HPtimer;
-
+    
+    public float froceArgument;
 
     public bool swinging = false;
     public bool readyswing = false;
 
+    int speedUpGas = 0;
+    public const int maxSpeedUpGas = 5;
+
+    public Vector3 velocityBeforeCollision = Vector3.zero;
+    public Vector3 positionBeforeCollision = Vector3.zero;
+
+    public float maxReleaseVelocity;
+
     private void Awake()
     {
+        speedUpGas = maxSpeedUpGas;
         currentHPValue = maxHPValue;
         isGrounded = true;
         originalRadius = (bodyCollider as SphereCollider).radius;
         originalCenter = (bodyCollider as SphereCollider).center;
+
+        initialRotation = ridbody.transform.rotation.eulerAngles;
     }
 
     private void Update()
@@ -94,8 +106,12 @@ public class CharacterContorl : MonoBehaviour
         SetSlider();
     }
 
+
+
     private void FixedUpdate()
     {
+        velocityBeforeCollision = GetComponent<Rigidbody>().velocity;
+        positionBeforeCollision = GetComponent<Rigidbody>().position;
         CheckIsGrounded();
         if (CheckHP())
         {
@@ -107,7 +123,7 @@ public class CharacterContorl : MonoBehaviour
         SetState();
         if (!isGrounded)
         {
-            SetGravity();
+            //SetGravity();
         }
     }
 
@@ -127,45 +143,25 @@ public class CharacterContorl : MonoBehaviour
     }
     private void MoveWalk()
     {
-        if (collisionStun.fall)
-            return;
         if (axisInput.magnitude > movementThrashold && !releasing)
         {
             targetAngle = Mathf.Atan2(axisInput.x, axisInput.y) * Mathf.Rad2Deg + Camera.main.transform.eulerAngles.y;
-            //Vector3 forceForward = Quaternion.Euler(-targetAngle, 0f, 0f) * Vector3.forward;
-            //Vector3 rotasionForward = new Vector3(-axisInput.x, 0, axisInput.y);
-            //if (releasing)
-            //    ridbody.AddForce(new Vector3(forceForward.y, forceForward.x, forceForward.z) * brakeSpeedArgument);
-            //else if (isGrounded)
-            //{
-            //    //   ridbody.AddForce(new Vector3(forceForward.y * movementSpeed, 0, forceForward.z * movementSpeed));
-            //    ridbody.AddForce(new Vector3(forceForward.y * movementSpeed, 0, forceForward.z * movementSpeed), ForceMode.Impulse);
-            //}
             isWalk = true;
         }
         else
         {
             isWalk = false;
         }
-        mainConfigurableJoint.targetRotation = Quaternion.Slerp(mainConfigurableJoint.targetRotation, Quaternion.Euler(-targetAngle, 0, 0), 0.1f);
+        this.ridbody.transform.rotation = Quaternion.Slerp(this.ridbody.rotation, Quaternion.Euler(new Vector3(0, targetAngle, 0) + initialRotation), 0.1f);
     }
 
 
     private void MoveJump()
     {
-        if (collisionStun.fall)
-            return;
-        //if (jump && (isGrounded || isGrabWall))
-        //{
-        //    ridbody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-        //    //isGrounded = false;
-        //}
     }
 
     private void MoveCharge()
     {
-        if (collisionStun.fall)
-            return;
         if (charge)
         {
             if (currentGas < maxActorGas && !releasing)
@@ -183,34 +179,46 @@ public class CharacterContorl : MonoBehaviour
         return Mathf.Sqrt(1 - Mathf.Pow(number - 1, 2));
     }
 
+
+
     private void MoveRelease()
     {
-        if (collisionStun.fall)
-            return;
         if (!charge || releasing)
         {
             if (currentGas > 0)
             {
-                var releaseDir = new Vector3(-ridbody.transform.forward.z, 0, ridbody.transform.forward.x);
+                var releaseDir = ridbody.transform.forward;
                 releaseDir = releaseDir.normalized;
                 if (currentGas < maxActorGas / 20)
                 {
                     currentGas = 0;
                     releasing = false;
+                    speedUpGas = maxSpeedUpGas;
                 }
                 else
                 {
-                    if (!releasing)
+
+                    Vector3 vel1 = velocityBeforeCollision;
+
+                    var d1 = Vector3.Angle(vel1, releaseDir);
+
+                    var degree1 = d1 * Mathf.Deg2Rad;
+                    var m1 = (Mathf.Cos(degree1) * vel1).magnitude;
+
+                    if (speedUpGas >= 0)
                     {
                         var addSpeed = EaseOutCirc(currentGas / (maxActorGas)) * releaseSpeedAtFirstArgument;
-                        ridbody.AddForce(releaseDir * addSpeed,ForceMode.Impulse);
+                        if (m1 < maxReleaseVelocity)
+                            ridbody.AddForce(releaseDir * addSpeed, ForceMode.Impulse);
+                        speedUpGas--;
                     }
                     else
                     {
                         var addSpeed = EaseOutCirc(currentGas / (maxActorGas)) * releaseSpeedLinearArgument;
-                        ridbody.AddForce(releaseDir * addSpeed, ForceMode.Impulse);
+                        if (m1 < maxReleaseVelocity)
+                            ridbody.AddForce(releaseDir * addSpeed, ForceMode.Impulse);
                     }
-                   // currentGas = currentGas - (currentGas) / releaseTime * Time.fixedDeltaTime;
+                    // currentGas = currentGas - (currentGas) / releaseTime * Time.fixedDeltaTime;
                     currentGas = currentGas - (maxActorGas) / releaseTime * Time.fixedDeltaTime;
                     currentGas = Mathf.Max(0, currentGas);
                     releasing = true;
@@ -262,7 +270,6 @@ public class CharacterContorl : MonoBehaviour
 
         if (currentHPValue <= 0)
         {
-            collisionStun.maxFallTime = cureTime;
             currentHPValue = 0;
             isSwimmy = true;
             return false;
@@ -274,13 +281,48 @@ public class CharacterContorl : MonoBehaviour
 
     private void SetSlider()
     {
-        hpSlider.value = (float)(currentHPValue / maxHPValue);
-        gpSlider.value = (float)(currentGas / maxActorGas);
-        canvas.transform.forward = Camera.main.transform.forward;
-        hpSlider.transform.position = bodyCollider.transform.position;
-        gpSlider.transform.position = bodyCollider.transform.position;
-        hpSlider.transform.localPosition = hpSlider.transform.localPosition + new Vector3(0, 1.7f + (bodyCollider.transform.localScale.x - 1) * 1.2f, 0);
-        gpSlider.transform.localPosition = gpSlider.transform.localPosition + new Vector3(0, 1.3f + (bodyCollider.transform.localScale.x - 1) * 1.2f, 0);
+        if (hpSlider != null)
+        {
+            hpSlider.value = (float)(currentHPValue / maxHPValue);
+            gpSlider.value = (float)(currentGas / maxActorGas);
+            canvas.transform.forward = Camera.main.transform.forward;
+            hpSlider.transform.position = bodyCollider.transform.position;
+            gpSlider.transform.position = bodyCollider.transform.position;
+            hpSlider.transform.localPosition = hpSlider.transform.localPosition + new Vector3(0, 1.7f + (bodyCollider.transform.localScale.x - 1) * 1.2f, 0);
+            gpSlider.transform.localPosition = gpSlider.transform.localPosition + new Vector3(0, 1.3f + (bodyCollider.transform.localScale.x - 1) * 1.2f, 0);
+        }
+
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.GetComponent<CharacterContorl>())
+        {
+            var otherCollision = collision.gameObject.GetComponent<CharacterContorl>();
+
+            Vector3 vel1 = velocityBeforeCollision;
+            Vector3 vel2 = otherCollision.velocityBeforeCollision;
+
+            Vector3 cPoint = collision.contacts[0].point;
+            Vector3 contactToMe = cPoint - positionBeforeCollision;
+            Vector3 contactToOther = cPoint - otherCollision.positionBeforeCollision;
+
+            var d1 = Vector3.Angle(vel1, contactToMe);
+            var d2 = Vector3.Angle(vel1, contactToOther);
+
+            var degree1 = d1 * Mathf.Deg2Rad;
+            var degree2 = d2 * Mathf.Deg2Rad;
+
+            Vector3 impactVelocity = collision.relativeVelocity;
+
+            var m1 = (Mathf.Cos(degree1) * vel1).magnitude;
+            var m2 = (Mathf.Cos(degree2) * vel2).magnitude;
+
+            Debug.LogError($"====>{froceArgument * m2} - {froceArgument} - {m2} ---> vel1 {vel1} vel2 {vel2}");
+            ridbody.AddExplosionForce(froceArgument * m2, collision.contacts[0].point, 4);
+            collision.collider.gameObject.GetComponent<Rigidbody>().AddExplosionForce(froceArgument * m2, collision.contacts[0].point, 4);
+            
+        }
     }
 
 }
