@@ -102,6 +102,7 @@
     <Compile Include="Assets\TrueSync\Physics\Jitter\Dynamics\Constraints\PointOnLine.cs" />
     <Compile Include="Assets\Nappin\PhysicsBasedCharacterController\Scripts\Extensions\Shooter.cs" />
     <Compile Include="Assets\TrueSync\Physics\Jitter\Collision\Shapes\CompoundShape.cs" />
+    <Compile Include="Assets\JumpZone.cs" />
     <Compile Include="Assets\TrueSync\Physics\Farseer\Common\Decomposition\Seidel\XNode.cs" />
     <Compile Include="Assets\ThirdParty\EffectCore\packs\WebDemoAssets\scripts\Projectile.cs" />
     <Compile Include="Assets\Print.cs" />
@@ -132,6 +133,8 @@
     <Compile Include="Assets\TrueSync\Physics\Farseer\Common\Decomposition\CDT\Sets\PointSet.cs" />
     <Compile Include="Assets\TrueSync\Physics\Farseer\Dynamics\ContactManager.cs" />
     <Compile Include="Assets\TrueSync\Physics\Farseer\Factories\LinkFactory.cs" />
+    <Compile Include="Assets\CubeManager.cs" />
+    <Compile Include="Assets\DeadZone.cs" />
     <Compile Include="Assets\TrueSync\Unity\TSTransform.cs" />
     <Compile Include="Assets\TrueSync\Engine\Math\TSMatrix.cs" />
     <Compile Include="Assets\TrueSync\Unity\TSCollision.cs" />
@@ -381,7 +384,6 @@
     <Compile Include="Assets\TrueSync\Physics\Jitter\Dynamics\Arbiter.cs" />
     <Compile Include="Assets\TrueSync\Physics\Farseer\Common\Decomposition\CDT\TriangulationConstraint.cs" />
     <Compile Include="Assets\ThirdParty\EffectCore\packs\StylizedMeleeCombatPack1\WebBuild\scripts\nextEffectMeleeCombat.cs" />
-    <Compile Include="Assets\CubeManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Suriyun\UnityChanShader\Shader\Unitychan_chara_fuku.shader" />

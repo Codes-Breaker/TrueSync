@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -80,6 +81,19 @@ public class CharacterContorl : MonoBehaviour
 
     public float maxReleaseVelocity;
 
+    //碰撞受击累积值
+    public int vulnerbility = 0;
+    //是否正在返回
+    public bool returning = false;
+    //是否正在跳跃
+    public bool jumpingBack = false;
+    //游泳目的地
+    public Vector3 swimTarget = Vector3.zero;
+    //跳跃目的地
+    public Vector3 jumpTarget = Vector3.zero;
+    //游泳速度
+    public float swimSpeed = 1;
+
     private void Awake()
     {
         speedUpGas = maxSpeedUpGas;
@@ -106,6 +120,13 @@ public class CharacterContorl : MonoBehaviour
         SetSlider();
     }
 
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawLine(this.ridbody.position, swimTarget);
+        Gizmos.color = Color.blue;
+        Gizmos.DrawLine(this.ridbody.position, jumpTarget);
+    }
 
 
     private void FixedUpdate()
@@ -115,16 +136,83 @@ public class CharacterContorl : MonoBehaviour
         CheckIsGrounded();
         if (CheckHP())
         {
-            MoveCharge();
-            MoveRelease();
-            MoveWalk();
-            MoveJump();
+            if (returning)
+            {
+                ReturnToPlace();
+            }
+            else if (jumpingBack)
+            {
+                JumpToPlace();
+            }
+            else
+            {
+                MoveCharge();
+                MoveRelease();
+                MoveWalk();
+                MoveJump();
+            }
+
         }
         SetState();
         if (!isGrounded)
         {
             //SetGravity();
         }
+    }
+
+    private void SetKinematics(bool set)
+    {
+        var childrens = this.transform.GetComponentsInChildren<Rigidbody>();
+        foreach(var child in childrens)
+        {
+            child.isKinematic = set;
+            child.gameObject.GetComponent<Collider>().enabled = !set;
+        }
+        this.ridbody.isKinematic = set;
+        this.ridbody.gameObject.GetComponent<Collider>().enabled = !set;
+    }
+
+    public void SetUpJump()
+    {
+        startPos = ridbody.transform.position;
+        HDist = (jumpTarget - new Vector3(ridbody.transform.position.x, jumpTarget.y, ridbody.transform.position.z)).magnitude;
+        HDist *= 1.2f;
+        curTime = 0;
+        SetKinematics(true);
+    }
+
+    private float HDist = 0;
+    private float curTime = 0;
+    private float maxTime = 1f;
+    private Vector3 startPos;
+    private float maxHeight = 5;
+    private void JumpToPlace()
+    {
+        if (!jumpingBack)
+            return;
+        curTime += Time.fixedDeltaTime;
+        var hDelta = jumpTarget - startPos;
+        hDelta.y = 0;
+        var hPos = Mathf.Lerp(0, HDist, curTime/ maxTime) * hDelta.normalized;
+        Debug.LogError($"！！！！！！！！！！！！  {curTime / maxTime} {HDist} {Mathf.Lerp(0, HDist, curTime / maxTime)} {jumpTarget} {startPos} {hDelta} {hDelta.normalized}");
+        var v = Mathf.Lerp(0, maxHeight, Mathf.Sin(Mathf.Lerp(0, (3f / 4f) * Mathf.PI, curTime / maxTime)));
+        
+        Vector3 currentPos = startPos + new Vector3(hPos.x, v, hPos.z);
+        ridbody.transform.position = currentPos;
+
+        if (curTime >= maxTime)
+        {
+            jumpingBack = false;
+            SetKinematics(false);
+        }
+    }
+
+    private void ReturnToPlace()
+    {
+        targetAngle = Mathf.Atan2(swimTarget.x, swimTarget.z) * Mathf.Rad2Deg + Camera.main.transform.eulerAngles.y;
+        this.ridbody.transform.rotation = Quaternion.Slerp(this.ridbody.rotation, Quaternion.Euler(new Vector3(0, targetAngle, 0) + initialRotation), 0.1f);
+        var dir = (swimTarget - ridbody.transform.position).normalized;
+        ridbody.transform.position = ridbody.transform.position + (dir * swimSpeed * Time.fixedDeltaTime);
     }
 
     private void SetGravity()
@@ -283,7 +371,7 @@ public class CharacterContorl : MonoBehaviour
     {
         if (hpSlider != null)
         {
-            hpSlider.value = (float)(currentHPValue / maxHPValue);
+            hpSlider.value = (float)(vulnerbility / maxHPValue);
             gpSlider.value = (float)(currentGas / maxActorGas);
             canvas.transform.forward = Camera.main.transform.forward;
             hpSlider.transform.position = bodyCollider.transform.position;
@@ -318,9 +406,11 @@ public class CharacterContorl : MonoBehaviour
             var m1 = (Mathf.Cos(degree1) * vel1).magnitude;
             var m2 = (Mathf.Cos(degree2) * vel2).magnitude;
 
+            vulnerbility += Convert.ToInt32(m2);
+
             Debug.LogError($"====>{froceArgument * m2} - {froceArgument} - {m2} ---> vel1 {vel1} vel2 {vel2}");
-            ridbody.AddExplosionForce(froceArgument * m2, collision.contacts[0].point, 4);
-            collision.collider.gameObject.GetComponent<Rigidbody>().AddExplosionForce(froceArgument * m2, collision.contacts[0].point, 4);
+            ridbody.AddExplosionForce((froceArgument + vulnerbility) * m2, collision.contacts[0].point, 4);
+            collision.collider.gameObject.GetComponent<Rigidbody>().AddExplosionForce((froceArgument + otherCollision.vulnerbility)* m2, collision.contacts[0].point, 4);
             
         }
     }
