@@ -172,6 +172,7 @@ public class CharacterContorl : MonoBehaviour
         this.ridbody.gameObject.GetComponent<Collider>().enabled = !set;
     }
 
+
     public void SetUpJump()
     {
         startPos = ridbody.transform.position;
