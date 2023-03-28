@@ -478,7 +478,7 @@ public class CharacterContorl : MonoBehaviour
             canvas.transform.forward = Camera.main.transform.forward;
             hpSlider.transform.position = bodyCollider.transform.position;
             gpSlider.transform.position = bodyCollider.transform.position;
-            hpSlider.transform.localPosition = hpSlider.transform.localPosition + new Vector3(0, 1.7f + (bodyCollider.transform.localScale.x - 1) * 1.2f, 0);
+            hpSlider.transform.localPosition = hpSlider.transform.localPosition + new Vector3(0, 1.6f + (bodyCollider.transform.localScale.x - 1) * 1.2f, 0);
             gpSlider.transform.localPosition = gpSlider.transform.localPosition + new Vector3(0, 1.3f + (bodyCollider.transform.localScale.x - 1) * 1.2f, 0);
             drownImage.transform.position = bodyCollider.transform.position;
             drownImage.transform.localPosition = drownImage.transform.localPosition + new Vector3(-1, 1.5f + (bodyCollider.transform.localScale.x - 1) * 1.2f, 0);
