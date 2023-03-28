@@ -34,6 +34,7 @@ public class CharacterContorl : MonoBehaviour
     [Header("相关需要关联组件")]
     public Slider hpSlider;
     public Slider gpSlider;
+    public Image drownImage;
     public Canvas canvas;
     public Rigidbody ridbody;
     public Collider bodyCollider;
@@ -81,6 +82,14 @@ public class CharacterContorl : MonoBehaviour
 
     public float maxReleaseVelocity;
 
+    public float drowningSpeed = 1;
+    public float maxDrowning = 1000;
+    public float currentDrown = 0;
+
+    public float invulernableTime = 0;
+    public float maxInvulnerableTime = 5;
+    //是否处于无敌
+    public bool invulernable = false;
     //碰撞受击累积值
     public int vulnerbility = 0;
     //是否正在返回
@@ -94,6 +103,10 @@ public class CharacterContorl : MonoBehaviour
     //游泳速度
     public float swimSpeed = 1;
 
+    private bool isDead = false;
+
+    private int defaultLayer = 0;
+
     private void Awake()
     {
         speedUpGas = maxSpeedUpGas;
@@ -101,7 +114,7 @@ public class CharacterContorl : MonoBehaviour
         isGrounded = true;
         originalRadius = (bodyCollider as SphereCollider).radius;
         originalCenter = (bodyCollider as SphereCollider).center;
-
+        defaultLayer = this.gameObject.layer;
         initialRotation = ridbody.transform.rotation.eulerAngles;
     }
 
@@ -133,8 +146,9 @@ public class CharacterContorl : MonoBehaviour
     {
         velocityBeforeCollision = GetComponent<Rigidbody>().velocity;
         positionBeforeCollision = GetComponent<Rigidbody>().position;
+        CheckInVulernable();
         CheckIsGrounded();
-        if (CheckHP())
+        if (!isDead)
         {
             if (returning)
             {
@@ -160,6 +174,57 @@ public class CharacterContorl : MonoBehaviour
         }
     }
 
+    private void CheckInVulernable()
+    {
+        if (invulernable && invulernableTime > 0)
+        {
+            invulernableTime -= Time.fixedDeltaTime;
+            if (invulernableTime <= 0)
+            {
+                invulernable = false;
+                SetCollider(true);
+                SetFlashMeshRendererBlock(false);
+            }
+        }
+    }
+
+    private void SetGameLayerRecursive(GameObject _go, int _layer)
+    {
+        _go.layer = _layer;
+        foreach (Transform child in _go.transform)
+        {
+            child.gameObject.layer = _layer;
+
+            Transform _HasChildren = child.GetComponentInChildren<Transform>();
+            if (_HasChildren != null)
+                SetGameLayerRecursive(child.gameObject, _layer);
+
+        }
+    }
+
+    private void SetCollider(bool set)
+    {
+        if (set)
+        {
+            this.gameObject.layer = defaultLayer;
+            //SetGameLayerRecursive(this.gameObject, defaultLayer);
+            foreach (Transform child in transform)
+            {
+                SetGameLayerRecursive(child.gameObject, 17);
+            }
+        }
+        else
+        {
+            this.gameObject.layer = 17;
+            //SetGameLayerRecursive(this.gameObject, 17);
+            foreach (Transform child in transform)
+            {
+                SetGameLayerRecursive(child.gameObject, 17);
+            }
+        }
+
+    }
+
     private void SetKinematics(bool set)
     {
         var childrens = this.transform.GetComponentsInChildren<Rigidbody>();
@@ -179,6 +244,10 @@ public class CharacterContorl : MonoBehaviour
         HDist = (jumpTarget - new Vector3(ridbody.transform.position.x, jumpTarget.y, ridbody.transform.position.z)).magnitude;
         HDist *= 1.2f;
         curTime = 0;
+        currentGas = 0;
+        vulnerbility = 0;
+        releasing = false;
+        drowningSpeed++;
         SetKinematics(true);
     }
 
@@ -195,17 +264,39 @@ public class CharacterContorl : MonoBehaviour
         var hDelta = jumpTarget - startPos;
         hDelta.y = 0;
         var hPos = Mathf.Lerp(0, HDist, curTime/ maxTime) * hDelta.normalized;
-        Debug.LogError($"！！！！！！！！！！！！  {curTime / maxTime} {HDist} {Mathf.Lerp(0, HDist, curTime / maxTime)} {jumpTarget} {startPos} {hDelta} {hDelta.normalized}");
         var v = Mathf.Lerp(0, maxHeight, Mathf.Sin(Mathf.Lerp(0, (3f / 4f) * Mathf.PI, curTime / maxTime)));
         
         Vector3 currentPos = startPos + new Vector3(hPos.x, v, hPos.z);
         ridbody.transform.position = currentPos;
-
         if (curTime >= maxTime)
         {
             jumpingBack = false;
             SetKinematics(false);
+            SetCollider(false);
+            invulernable = true;
+            invulernableTime = maxInvulnerableTime;
+            SetFlashMeshRendererBlock(true);
         }
+        currentDrown = 0;
+    }
+
+    // 无敌特效示意
+    private void SetFlashMeshRendererBlock(bool value)
+    {
+        var rendererBlock = new MaterialPropertyBlock();
+        skinnedMeshRenderer.GetPropertyBlock(rendererBlock, 0);
+        rendererBlock.SetFloat("_PlayHurt", value ? 1f : 0f);
+        skinnedMeshRenderer.SetPropertyBlock(rendererBlock, 0);
+
+        var rendererBlock1 = new MaterialPropertyBlock();
+        skinnedMeshRenderer.GetPropertyBlock(rendererBlock1, 1);
+        rendererBlock1.SetFloat("_PlayHurt", value ? 1f : 0f);
+        skinnedMeshRenderer.SetPropertyBlock(rendererBlock1, 1);
+
+        var rendererBlock2 = new MaterialPropertyBlock();
+        skinnedMeshRenderer.GetPropertyBlock(rendererBlock2, 2);
+        rendererBlock2.SetFloat("_PlayHurt", value ? 1f : 0f);
+        skinnedMeshRenderer.SetPropertyBlock(rendererBlock2, 2);
     }
 
     private void ReturnToPlace()
@@ -214,6 +305,16 @@ public class CharacterContorl : MonoBehaviour
         this.ridbody.transform.rotation = Quaternion.Slerp(this.ridbody.rotation, Quaternion.Euler(new Vector3(0, targetAngle, 0) + initialRotation), 0.1f);
         var dir = (swimTarget - ridbody.transform.position).normalized;
         ridbody.transform.position = ridbody.transform.position + (dir * swimSpeed * Time.fixedDeltaTime);
+        AccumulateDrown();
+    }
+
+    private void AccumulateDrown()
+    {
+        currentDrown += drowningSpeed;
+        if (currentDrown >= maxDrowning)
+        {
+            isDead = true;
+        }
     }
 
     private void SetGravity()
@@ -379,6 +480,9 @@ public class CharacterContorl : MonoBehaviour
             gpSlider.transform.position = bodyCollider.transform.position;
             hpSlider.transform.localPosition = hpSlider.transform.localPosition + new Vector3(0, 1.7f + (bodyCollider.transform.localScale.x - 1) * 1.2f, 0);
             gpSlider.transform.localPosition = gpSlider.transform.localPosition + new Vector3(0, 1.3f + (bodyCollider.transform.localScale.x - 1) * 1.2f, 0);
+            drownImage.transform.position = bodyCollider.transform.position;
+            drownImage.transform.localPosition = drownImage.transform.localPosition + new Vector3(-1, 1.5f + (bodyCollider.transform.localScale.x - 1) * 1.2f, 0);
+            drownImage.fillAmount = currentDrown / maxDrowning;
         }
 
     }
@@ -407,10 +511,9 @@ public class CharacterContorl : MonoBehaviour
             var m1 = (Mathf.Cos(degree1) * vel1).magnitude;
             var m2 = (Mathf.Cos(degree2) * vel2).magnitude;
 
-            vulnerbility += Convert.ToInt32(m2);
+            vulnerbility += Convert.ToInt32(m2 * 2);
 
-            Debug.LogError($"====>{froceArgument * m2} - {froceArgument} - {m2} ---> vel1 {vel1} vel2 {vel2}");
-            ridbody.AddExplosionForce((froceArgument + vulnerbility) * m2, collision.contacts[0].point, 4);
+            ridbody.AddExplosionForce((froceArgument + vulnerbility * 1.5f) * m2, collision.contacts[0].point, 4);
             collision.collider.gameObject.GetComponent<Rigidbody>().AddExplosionForce((froceArgument + otherCollision.vulnerbility)* m2, collision.contacts[0].point, 4);
             
         }
