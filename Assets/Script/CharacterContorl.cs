@@ -487,6 +487,35 @@ public class CharacterContorl : MonoBehaviour
 
     }
 
+    private void OnCollisionStay(Collision collision)
+    {
+        if (collision.gameObject.GetComponent<CharacterContorl>())
+        {
+            var otherCollision = collision.gameObject.GetComponent<CharacterContorl>();
+
+            Vector3 vel1 = velocityBeforeCollision;
+            Vector3 vel2 = otherCollision.velocityBeforeCollision;
+
+            Vector3 cPoint = collision.contacts[0].point;
+            Vector3 contactToMe = cPoint - positionBeforeCollision;
+            Vector3 contactToOther = cPoint - otherCollision.positionBeforeCollision;
+
+            var d1 = Vector3.Angle(vel1, contactToMe);
+            var d2 = Vector3.Angle(vel1, contactToOther);
+
+            var degree1 = d1 * Mathf.Deg2Rad;
+            var degree2 = d2 * Mathf.Deg2Rad;
+
+            Vector3 impactVelocity = collision.relativeVelocity;
+
+            var m1 = (Mathf.Cos(degree1) * vel1).magnitude;
+            var m2 = (Mathf.Cos(degree2) * vel2).magnitude;
+
+            ridbody.AddExplosionForce((froceArgument + vulnerbility) * m2 * (0.2f), collision.contacts[0].point, 4);
+            collision.collider.gameObject.GetComponent<Rigidbody>().AddExplosionForce((froceArgument + otherCollision.vulnerbility) * m2 * (0.2f), collision.contacts[0].point, 4);
+        }
+    }
+
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.GetComponent<CharacterContorl>())
@@ -513,7 +542,7 @@ public class CharacterContorl : MonoBehaviour
 
             vulnerbility += Convert.ToInt32(m2 * 2);
 
-            ridbody.AddExplosionForce((froceArgument + vulnerbility * 1.5f) * m2, collision.contacts[0].point, 4);
+            ridbody.AddExplosionForce((froceArgument + vulnerbility) * m2, collision.contacts[0].point, 4);
             collision.collider.gameObject.GetComponent<Rigidbody>().AddExplosionForce((froceArgument + otherCollision.vulnerbility)* m2, collision.contacts[0].point, 4);
             
         }
