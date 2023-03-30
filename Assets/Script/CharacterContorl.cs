@@ -533,8 +533,10 @@ public class CharacterContorl : MonoBehaviour
             var m1 = (Mathf.Cos(degree1) * vel1).magnitude; //我针对对方的力
             var m2 = (Mathf.Cos(degree2) * vel2).magnitude; //对方针对我的力
 
-            ridbody.AddExplosionForce((forceArgument + vulnerbility) * m2 * 0.2f, collision.contacts[0].point, 4);
-            collision.collider.gameObject.GetComponent<Rigidbody>().AddExplosionForce((otherCollision.receivedForceArgument + otherCollision.vulnerbility) * m1 * 0.2f, collision.contacts[0].point, 4);
+            var m = m1 + m2;
+
+            ridbody.AddExplosionForce((forceArgument + vulnerbility) * m * 0.2f, collision.contacts[0].point, 4);
+            collision.collider.gameObject.GetComponent<Rigidbody>().AddExplosionForce((otherCollision.receivedForceArgument + otherCollision.vulnerbility) * m * 0.2f, collision.contacts[0].point, 4);
         }
     }
 
@@ -564,8 +566,12 @@ public class CharacterContorl : MonoBehaviour
 
             vulnerbility += Convert.ToInt32(m2 * 2);
 
-            ridbody.AddExplosionForce((forceArgument + vulnerbility) * m2, collision.contacts[0].point, 4);
-            collision.collider.gameObject.GetComponent<Rigidbody>().AddExplosionForce((otherCollision.receivedForceArgument + otherCollision.vulnerbility)* m1, collision.contacts[0].point, 4);
+            var m = m1 + m2;
+
+            Debug.LogError($"====》{this.gameObject.name} 受力增加 {(forceArgument + vulnerbility) * m} 力, 对方动量=>{m2} : 我方动量=>{m1}");
+            Debug.LogError($"====》{collision.collider.gameObject.name} 受力增加 {(otherCollision.receivedForceArgument + otherCollision.vulnerbility) * m} 力, 对方动量=>{m1} : 我方动量=>{m2}");
+            ridbody.AddExplosionForce((forceArgument + vulnerbility) * m, collision.contacts[0].point, 4);
+            collision.collider.gameObject.GetComponent<Rigidbody>().AddExplosionForce((otherCollision.receivedForceArgument + otherCollision.vulnerbility)* m, collision.contacts[0].point, 4);
             
         }
     }

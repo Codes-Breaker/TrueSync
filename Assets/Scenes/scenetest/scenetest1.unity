@@ -270,7 +270,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 67670406}
   m_LocalRotation: {x: 0, y: -0.9265482, z: 0.37617624, w: 0}
-  m_LocalPosition: {x: -0.049999747, y: 8.785211, z: 6.3382874}
+  m_LocalPosition: {x: -0.04999991, y: 8.785211, z: 6.3382874}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -7082,7 +7082,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1179497702}
   m_LocalRotation: {x: -0, y: -0.9265482, z: 0.37617624, w: 0}
-  m_LocalPosition: {x: 0.0000002644956, y: 6.0652103, z: 6.2382874}
+  m_LocalPosition: {x: 0.00000010058284, y: 6.0652103, z: 6.2382874}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -7328,7 +7328,7 @@ PrefabInstance:
     - target: {fileID: 4802314996796519834, guid: 8a6286ca74594ce4c992e9b0838cc753,
         type: 3}
       propertyPath: m_Name
-      value: seal2
+      value: "\u767D\u718A"
       objectReference: {fileID: 0}
     - target: {fileID: 4802314996796519834, guid: 8a6286ca74594ce4c992e9b0838cc753,
         type: 3}
@@ -7340,6 +7340,12 @@ PrefabInstance:
       propertyPath: m_Radius
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4802314996796519836, guid: 8a6286ca74594ce4c992e9b0838cc753,
+        type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 13400000, guid: d972c990e1fecab478000ab20f7e5085,
+        type: 2}
     - target: {fileID: 4802314996796519837, guid: 8a6286ca74594ce4c992e9b0838cc753,
         type: 3}
       propertyPath: canvas
@@ -7383,7 +7389,7 @@ PrefabInstance:
     - target: {fileID: 4802314996796519837, guid: 8a6286ca74594ce4c992e9b0838cc753,
         type: 3}
       propertyPath: forceArgument
-      value: 60
+      value: 70
       objectReference: {fileID: 0}
     - target: {fileID: 4802314996796519837, guid: 8a6286ca74594ce4c992e9b0838cc753,
         type: 3}
@@ -7398,7 +7404,7 @@ PrefabInstance:
     - target: {fileID: 4802314996796519837, guid: 8a6286ca74594ce4c992e9b0838cc753,
         type: 3}
       propertyPath: receivedForceArgument
-      value: 40
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 4802314996796519837, guid: 8a6286ca74594ce4c992e9b0838cc753,
         type: 3}
@@ -15823,7 +15829,7 @@ GameObject:
   - component: {fileID: 4802314996781297614}
   - component: {fileID: 537054506}
   m_Layer: 10
-  m_Name: seal
+  m_Name: "\u6D77\u8C79"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
