@@ -69,7 +69,8 @@ public class CharacterContorl : MonoBehaviour
     [HideInInspector]
     public float HPtimer;
     
-    public float froceArgument;
+    public float forceArgument;
+    public float receivedForceArgument;
 
     public bool swinging = false;
     public bool readyswing = false;
@@ -529,11 +530,11 @@ public class CharacterContorl : MonoBehaviour
 
             Vector3 impactVelocity = collision.relativeVelocity;
 
-            var m1 = (Mathf.Cos(degree1) * vel1).magnitude;
-            var m2 = (Mathf.Cos(degree2) * vel2).magnitude;
+            var m1 = (Mathf.Cos(degree1) * vel1).magnitude; //我针对对方的力
+            var m2 = (Mathf.Cos(degree2) * vel2).magnitude; //对方针对我的力
 
-            ridbody.AddExplosionForce((froceArgument + vulnerbility) * m2 * (0.2f), collision.contacts[0].point, 4);
-            collision.collider.gameObject.GetComponent<Rigidbody>().AddExplosionForce((froceArgument + otherCollision.vulnerbility) * m2 * (0.2f), collision.contacts[0].point, 4);
+            ridbody.AddExplosionForce((forceArgument + vulnerbility) * m2 * 0.2f, collision.contacts[0].point, 4);
+            collision.collider.gameObject.GetComponent<Rigidbody>().AddExplosionForce((otherCollision.receivedForceArgument + otherCollision.vulnerbility) * m1 * 0.2f, collision.contacts[0].point, 4);
         }
     }
 
@@ -563,8 +564,8 @@ public class CharacterContorl : MonoBehaviour
 
             vulnerbility += Convert.ToInt32(m2 * 2);
 
-            ridbody.AddExplosionForce((froceArgument + vulnerbility) * m2, collision.contacts[0].point, 4);
-            collision.collider.gameObject.GetComponent<Rigidbody>().AddExplosionForce((froceArgument + otherCollision.vulnerbility)* m2, collision.contacts[0].point, 4);
+            ridbody.AddExplosionForce((forceArgument + vulnerbility) * m2, collision.contacts[0].point, 4);
+            collision.collider.gameObject.GetComponent<Rigidbody>().AddExplosionForce((otherCollision.receivedForceArgument + otherCollision.vulnerbility)* m1, collision.contacts[0].point, 4);
             
         }
     }
