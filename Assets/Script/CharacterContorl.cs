@@ -107,6 +107,17 @@ public class CharacterContorl : MonoBehaviour
 
     private int defaultLayer = 0;
 
+
+    public delegate void MoveAciotn(Vector2 axisInput);
+    public delegate void ChargeAction(bool isChange);
+    public delegate void JumpAction(bool isJump);
+    public delegate void ReleaseAciton(bool isChage);
+
+    public MoveAciotn moveAciotn;
+    public ChargeAction chargeAction;
+    public JumpAction jumpAction;
+    public ReleaseAciton releaseAciton;
+
     private void Awake()
     {
         speedUpGas = maxSpeedUpGas;
@@ -118,14 +129,16 @@ public class CharacterContorl : MonoBehaviour
         initialRotation = ridbody.transform.rotation.eulerAngles;
     }
 
+    private void Start()
+    {
+        SetControlSelf();
+    }
+
     private void Update()
     {
-        //input
         axisInput = inputReader.axisInput;
         jump = inputReader.jump;
         charge = inputReader.charge;
-        //cameraInputX = inputReader.cameraInput.x;
-        //MoveCamera();
     }
 
     private void LateUpdate()
@@ -139,6 +152,14 @@ public class CharacterContorl : MonoBehaviour
         Gizmos.DrawLine(this.ridbody.position, swimTarget);
         Gizmos.color = Color.blue;
         Gizmos.DrawLine(this.ridbody.position, jumpTarget);
+    }
+
+    public void SetControlSelf()
+    {
+        moveAciotn = MoveWalk;
+        chargeAction = MoveCharge;
+        jumpAction = MoveJump;
+        releaseAciton = MoveRelease;
     }
 
 
@@ -160,10 +181,10 @@ public class CharacterContorl : MonoBehaviour
             }
             else
             {
-                MoveCharge();
-                MoveRelease();
-                MoveWalk();
-                MoveJump();
+                moveAciotn(axisInput);
+                chargeAction(charge);
+                releaseAciton(charge);
+                jumpAction(jump);
             }
 
         }
@@ -225,7 +246,7 @@ public class CharacterContorl : MonoBehaviour
 
     }
 
-    private void SetKinematics(bool set)
+    public void SetKinematics(bool set)
     {
         var childrens = this.transform.GetComponentsInChildren<Rigidbody>();
         foreach(var child in childrens)
@@ -331,7 +352,7 @@ public class CharacterContorl : MonoBehaviour
         //skinnedMeshRenderer.SetBlendShapeWeight(0, gasScale * 100f);
         //(bodyCollider as SphereCollider).radius = Mathf.Lerp(originalRadius, targetRadius, gasScale);
     }
-    private void MoveWalk()
+    private void MoveWalk(Vector2 axisInput)
     {
         if (axisInput.magnitude > movementThrashold && !releasing)
         {
@@ -346,11 +367,11 @@ public class CharacterContorl : MonoBehaviour
     }
 
 
-    private void MoveJump()
+    private void MoveJump(bool jump)
     {
     }
 
-    private void MoveCharge()
+    private void MoveCharge(bool charge)
     {
         if (charge)
         {
@@ -371,7 +392,7 @@ public class CharacterContorl : MonoBehaviour
 
 
 
-    private void MoveRelease()
+    private void MoveRelease(bool charge)
     {
         if (!charge || releasing)
         {
