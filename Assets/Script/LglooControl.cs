@@ -10,8 +10,10 @@ public class LglooControl : MonoBehaviour,IRandomEventsObject
     public float enterDistance;
     private float targetAngle;
     public float froceArgument;
-
+    public float showDuration;
+    public float endDuration;
     private CharacterContorl user;
+    private float userY;
   
     public void Init()
     {
@@ -44,7 +46,7 @@ public class LglooControl : MonoBehaviour,IRandomEventsObject
 
     public void OnExit()
     {
-        transform.DOLocalMoveY(0f, 10f).OnComplete(() => {
+        transform.DOLocalMoveY(0f, endDuration).OnComplete(() => {
             this.gameObject.SetActive(false);
         });
     }
@@ -55,7 +57,7 @@ public class LglooControl : MonoBehaviour,IRandomEventsObject
         transform.position = position;
         transform.position = new Vector3(transform.position.x, 0f, transform.position.z);
         this.gameObject.SetActive(true);
-        transform.DOLocalMoveY(1.5f,10f).OnComplete(()=>{
+        transform.DOLocalMoveY(1.5f, showDuration).OnComplete(()=>{
             canEnter = true;
         });
     }
@@ -74,7 +76,10 @@ public class LglooControl : MonoBehaviour,IRandomEventsObject
 
                 user.SetKinematics(true);
 
+                userY = user.transform.position.y; 
+
                 user.transform.position = transform.position;
+
             }
 
         }
@@ -108,12 +113,12 @@ public class LglooControl : MonoBehaviour,IRandomEventsObject
         if(charge)
         {
             user.transform.position = transform.position + transform.forward * transform.localScale.x;
-            user.transform.position = new Vector3(user.transform.position.x,2.5f, user.transform.position.z);
+            user.transform.position = new Vector3(user.transform.position.x, userY, user.transform.position.z);
             user.SetKinematics(false);
             var ridbody = user.GetComponent<Rigidbody>();
             user.targetAngle = targetAngle;
             ridbody.transform.rotation = Quaternion.Euler(new Vector3(0, targetAngle, 0));
-            ridbody.velocity = transform.forward * froceArgument;
+            ridbody.AddForce(transform.forward * froceArgument,ForceMode.Impulse);
             user.SetControlSelf();
             user = null;
 

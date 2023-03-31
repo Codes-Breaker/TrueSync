@@ -31,8 +31,41 @@ public class RandomEventsControl : MonoBehaviour
 
         randomEvents.Add(new RandomEvent
         {
+            startPosition = new Vector3(3f, 0, 3f),
+            startTime = 120,
+            randomEventsObject = submarineObjct,
+        });
+
+        randomEvents.Add(new RandomEvent
+        {
+            startPosition = new Vector3(-3f, 0, 5f),
+            startTime = 180,
+            randomEventsObject = submarineObjct,
+        });
+
+        randomEvents.Add(new RandomEvent
+        {
             startPosition = new Vector3(-0.53f, 0, -3.36f),
-            startTime = 10,
+            startTime = 60,
+            randomEventsObject = lglooObject,
+        });
+        randomEvents.Add(new RandomEvent
+        {
+            startPosition = new Vector3(-0.53f, 0, -3.36f),
+            startTime = 150,
+            randomEventsObject = lglooObject,
+        });
+        randomEvents.Add(new RandomEvent
+        {
+            startPosition = new Vector3(5.5f, 0, -3.36f),
+            startTime = 90,
+            randomEventsObject = lglooObject,
+        });
+
+        randomEvents.Add(new RandomEvent
+        {
+            startPosition = new Vector3(5.5f, 0, -3.36f),
+            startTime = 210,
             randomEventsObject = lglooObject,
         });
     }

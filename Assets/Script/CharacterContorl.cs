@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class CharacterContorl : MonoBehaviour
 {
@@ -15,6 +16,7 @@ public class CharacterContorl : MonoBehaviour
     public float jumpForce;
     public float releaseSpeedAtFirstArgument;
     public float releaseSpeedLinearArgument;
+    public float minLinearReleaseSpeedArgument;
     [Tooltip("地面的Layers")]
     [SerializeField] public LayerMask groundMask;
     [Tooltip("Lerp计算参数")]
@@ -32,7 +34,7 @@ public class CharacterContorl : MonoBehaviour
     private float movementThrashold = 0.01f;
     [Space(10)]
     [Header("相关需要关联组件")]
-    public Slider hpSlider;
+    public TMP_Text vulnerbilityText;
     public Slider gpSlider;
     public Image drownImage;
     public Canvas canvas;
@@ -68,15 +70,17 @@ public class CharacterContorl : MonoBehaviour
     public bool isGrabWall = false;
     [HideInInspector]
     public float HPtimer;
-    
+    //攻击力
     public float forceArgument;
-    public float receivedForceArgument;
+    //防御力系数
+    [Range(0, 2)]
+    public float receivedForceRate = 1;
 
     public bool swinging = false;
     public bool readyswing = false;
 
     int speedUpGas = 0;
-    public const int maxSpeedUpGas = 5;
+    public int maxSpeedUpGas = 5;
 
     public Vector3 velocityBeforeCollision = Vector3.zero;
     public Vector3 positionBeforeCollision = Vector3.zero;
@@ -87,12 +91,21 @@ public class CharacterContorl : MonoBehaviour
     public float maxDrowning = 1000;
     public float currentDrown = 0;
 
+    [Range(0, 1)]
+    public float continueReceivedForceRate = 0.2f; 
+
     public float invulernableTime = 0;
     public float maxInvulnerableTime = 5;
     //是否处于无敌
     public bool invulernable = false;
     //碰撞受击累积值
-    public int vulnerbility = 0;
+    public float vulnerbility = 0f;
+    //易伤最大值
+    public float maxVulnerbility = 50.0f;
+
+    [Range(0, 1)]
+    //易伤系数
+    public float vulerbilityReactRate = 1;
     //是否正在返回
     public bool returning = false;
     //是否正在跳跃
@@ -108,6 +121,20 @@ public class CharacterContorl : MonoBehaviour
 
     private int defaultLayer = 0;
 
+    //记录值
+    public float receivedForceSum = 0;
+    //能否放气转向
+    public bool canReleaseTurn = false;
+    //眩晕槽
+    public float stunTime = 0;
+    //眩晕时间
+    public float maxStunTime = 0;
+    //是否眩晕
+    private bool isStun = false;
+    //特效资源
+    public GameObject stunEffect;
+    //眩晕阈值
+    public float stunThreshold;
 
     public delegate void MoveAciotn(Vector2 axisInput);
     public delegate void ChargeAction(bool isChange);
@@ -163,6 +190,24 @@ public class CharacterContorl : MonoBehaviour
         releaseAciton = MoveRelease;
     }
 
+    private void SetStun()
+    {
+        stunTime += Time.fixedDeltaTime;
+        if (stunTime >= maxStunTime)
+        {
+            isStun = false;
+            stunTime = 0;
+            stunEffect.gameObject.SetActive(false);
+        }
+    }
+
+    private void Stun(float time)
+    {
+        maxStunTime = time;
+        isStun = true;
+        stunEffect.gameObject.SetActive(true);
+    }
+
 
     private void FixedUpdate()
     {
@@ -172,6 +217,11 @@ public class CharacterContorl : MonoBehaviour
         CheckIsGrounded();
         if (!isDead)
         {
+            if (isStun)
+            {
+                SetStun();
+            }
+
             if (returning)
             {
                 ReturnToPlace();
@@ -180,12 +230,17 @@ public class CharacterContorl : MonoBehaviour
             {
                 JumpToPlace();
             }
+
             else
             {
-                moveAciotn(axisInput);
-                chargeAction(charge);
-                releaseAciton(charge);
-                jumpAction(jump);
+                if (!isStun)
+                {
+                    moveAciotn(axisInput);
+                    chargeAction(charge);
+                    releaseAciton(charge);
+                    jumpAction(jump);
+                }
+
             }
 
         }
@@ -336,7 +391,14 @@ public class CharacterContorl : MonoBehaviour
         if (currentDrown >= maxDrowning)
         {
             isDead = true;
+            Dead();
         }
+    }
+
+    private void Dead()
+    {
+        GameObject.Destroy(this.gameObject);
+        GameObject.Destroy(this.canvas);
     }
 
     private void SetGravity()
@@ -355,7 +417,7 @@ public class CharacterContorl : MonoBehaviour
     }
     private void MoveWalk(Vector2 axisInput)
     {
-        if (axisInput.magnitude > movementThrashold && !releasing)
+        if (axisInput.magnitude > movementThrashold && (!releasing || canReleaseTurn))
         {
             targetAngle = Mathf.Atan2(axisInput.x, axisInput.y) * Mathf.Rad2Deg + Camera.main.transform.eulerAngles.y;
             isWalk = true;
@@ -392,49 +454,62 @@ public class CharacterContorl : MonoBehaviour
     }
 
 
-
+    private float releaseGasGauge = 0;
     private void MoveRelease(bool charge)
     {
         if (!charge || releasing)
         {
-            if (currentGas > 0)
+            if (currentGas == 0)
+            {
+                currentGas = 0;
+                releasing = false;
+                speedUpGas = maxSpeedUpGas;
+            }
+            else if (currentGas > 0)
             {
                 var releaseDir = ridbody.transform.forward;
                 releaseDir = releaseDir.normalized;
-                if (currentGas < maxActorGas / 20)
+
+
+                Vector3 vel1 = velocityBeforeCollision;
+
+                var d1 = Vector3.Angle(vel1, releaseDir);
+
+                var degree1 = d1 * Mathf.Deg2Rad;
+                var m1 = (Mathf.Cos(degree1) * vel1).magnitude;
+                //if (m1 <= maxReleaseVelocity/4.0f)
+                //{
+                //    var addSpeed = EaseOutCirc(currentGas / (maxActorGas)) * releaseSpeedAtFirstArgument;
+                //    ridbody.AddForce(releaseDir * addSpeed, ForceMode.Impulse);
+                //}
+
+                if (speedUpGas >= 0)
                 {
-                    currentGas = 0;
-                    releasing = false;
-                    speedUpGas = maxSpeedUpGas;
+                    var addSpeed = EaseOutCirc(currentGas / (maxActorGas)) * releaseSpeedAtFirstArgument;
+                    if (m1 < maxReleaseVelocity)
+                        ridbody.AddForce(releaseDir * addSpeed, ForceMode.Impulse);
+                    speedUpGas--;
                 }
                 else
                 {
-
-                    Vector3 vel1 = velocityBeforeCollision;
-
-                    var d1 = Vector3.Angle(vel1, releaseDir);
-
-                    var degree1 = d1 * Mathf.Deg2Rad;
-                    var m1 = (Mathf.Cos(degree1) * vel1).magnitude;
-
-                    if (speedUpGas >= 0)
+                    var addSpeed = EaseOutCirc(currentGas / maxActorGas) * releaseSpeedLinearArgument;
+                    addSpeed = Mathf.Max(minLinearReleaseSpeedArgument, addSpeed);
+                    if (m1 < maxReleaseVelocity)
                     {
-                        var addSpeed = EaseOutCirc(currentGas / (maxActorGas)) * releaseSpeedAtFirstArgument;
-                        if (m1 < maxReleaseVelocity)
-                            ridbody.AddForce(releaseDir * addSpeed, ForceMode.Impulse);
-                        speedUpGas--;
+                        Debug.LogError($"{this.gameObject.name} ======> {addSpeed}");
+                        ridbody.AddForce(releaseDir * addSpeed, ForceMode.Impulse);
                     }
-                    else
-                    {
-                        var addSpeed = EaseOutCirc(currentGas / (maxActorGas)) * releaseSpeedLinearArgument;
-                        if (m1 < maxReleaseVelocity)
-                            ridbody.AddForce(releaseDir * addSpeed, ForceMode.Impulse);
-                    }
-                    // currentGas = currentGas - (currentGas) / releaseTime * Time.fixedDeltaTime;
-                    currentGas = currentGas - (maxActorGas) / releaseTime * Time.fixedDeltaTime;
-                    currentGas = Mathf.Max(0, currentGas);
-                    releasing = true;
+
                 }
+                
+
+                // currentGas = currentGas - (currentGas) / releaseTime * Time.fixedDeltaTime;
+                currentGas = currentGas - (maxActorGas) / releaseTime * Time.fixedDeltaTime;
+                currentGas = Mathf.Max(0, currentGas);
+
+
+                releasing = true;
+                
             }
         }
     }
@@ -493,14 +568,22 @@ public class CharacterContorl : MonoBehaviour
 
     private void SetSlider()
     {
-        if (hpSlider != null)
+        if (vulnerbilityText != null)
         {
-            hpSlider.value = (float)(vulnerbility / maxHPValue);
+            vulnerbilityText.text = $"{vulnerbility}%";
+            if (vulnerbility > maxVulnerbility)
+            {
+                vulnerbilityText.color = Color.red;
+            }
+            else
+            {
+                vulnerbilityText.color = Color.white;
+            }
             gpSlider.value = (float)(currentGas / maxActorGas);
             canvas.transform.forward = Camera.main.transform.forward;
-            hpSlider.transform.position = bodyCollider.transform.position;
+            vulnerbilityText.transform.position = bodyCollider.transform.position;
             gpSlider.transform.position = bodyCollider.transform.position;
-            hpSlider.transform.localPosition = hpSlider.transform.localPosition + new Vector3(0, 1.6f + (bodyCollider.transform.localScale.x - 1) * 1.2f, 0);
+            vulnerbilityText.transform.localPosition = vulnerbilityText.transform.localPosition + new Vector3(0.2f, 1.3f + (bodyCollider.transform.localScale.x - 1) * 1.2f, 0);
             gpSlider.transform.localPosition = gpSlider.transform.localPosition + new Vector3(0, 1.3f + (bodyCollider.transform.localScale.x - 1) * 1.2f, 0);
             drownImage.transform.position = bodyCollider.transform.position;
             drownImage.transform.localPosition = drownImage.transform.localPosition + new Vector3(-1, 1.5f + (bodyCollider.transform.localScale.x - 1) * 1.2f, 0);
@@ -535,8 +618,10 @@ public class CharacterContorl : MonoBehaviour
 
             var m = m1 + m2;
 
-            ridbody.AddExplosionForce((forceArgument + vulnerbility) * m * 0.2f, collision.contacts[0].point, 4);
-            collision.collider.gameObject.GetComponent<Rigidbody>().AddExplosionForce((otherCollision.receivedForceArgument + otherCollision.vulnerbility) * m * 0.2f, collision.contacts[0].point, 4);
+            ridbody.AddExplosionForce((otherCollision.forceArgument + m2) * (1 + (vulnerbility/maxVulnerbility)) * continueReceivedForceRate + 200, collision.contacts[0].point, 4);
+            collision.collider.gameObject.GetComponent<Rigidbody>().AddExplosionForce((forceArgument + m1) * (1 + (otherCollision.vulnerbility / otherCollision.maxVulnerbility)) * otherCollision.continueReceivedForceRate + 50, collision.contacts[0].point, 4);
+
+            receivedForceSum += (forceArgument + vulnerbility) * m * 0.2f;
         }
     }
 
@@ -564,15 +649,16 @@ public class CharacterContorl : MonoBehaviour
             var m1 = (Mathf.Cos(degree1) * vel1).magnitude;
             var m2 = (Mathf.Cos(degree2) * vel2).magnitude;
 
-            vulnerbility += Convert.ToInt32(m2 * 2);
+            vulnerbility += Convert.ToInt32(receivedForceRate * m2 * 2);
 
-            var m = m1 + m2;
+            if (m2 >= stunThreshold)
+            {
+                Stun(2);
+            }
 
-            Debug.LogError($"====》{this.gameObject.name} 受力增加 {(forceArgument + vulnerbility) * m} 力, 对方动量=>{m2} : 我方动量=>{m1}");
-            Debug.LogError($"====》{collision.collider.gameObject.name} 受力增加 {(otherCollision.receivedForceArgument + otherCollision.vulnerbility) * m} 力, 对方动量=>{m1} : 我方动量=>{m2}");
-            ridbody.AddExplosionForce((forceArgument + vulnerbility) * m, collision.contacts[0].point, 4);
-            collision.collider.gameObject.GetComponent<Rigidbody>().AddExplosionForce((otherCollision.receivedForceArgument + otherCollision.vulnerbility)* m, collision.contacts[0].point, 4);
-            
+
+            ridbody.AddExplosionForce((otherCollision.forceArgument + m2) * (1 + (vulnerbility / maxVulnerbility)) + 200, collision.contacts[0].point, 4);
+            collision.collider.gameObject.GetComponent<Rigidbody>().AddExplosionForce((forceArgument + m1) * (1 + (otherCollision.vulnerbility / otherCollision.maxVulnerbility)) + 50, collision.contacts[0].point, 4);
         }
     }
 
