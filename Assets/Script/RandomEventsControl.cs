@@ -13,6 +13,7 @@ public class RandomEventsControl : MonoBehaviour
 {
     public GameObject lglooObject;
     public GameObject submarineObjct;
+    public GameObject windFarmObject;
 
     private float currrentTime;
 
@@ -35,6 +36,14 @@ public class RandomEventsControl : MonoBehaviour
             startTime = 10,
             randomEventsObject = lglooObject,
         });
+        
+        randomEvents.Add(new RandomEvent
+        {
+            startPosition = new Vector3(0, 0, 0),
+            startTime = 10,
+            randomEventsObject = windFarmObject,
+        });
+
     }
 
     // Update is called once per frame
