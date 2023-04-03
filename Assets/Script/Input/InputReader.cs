@@ -97,7 +97,6 @@ public class InputReader : InputReaderBase
     public void OnMove(InputAction.CallbackContext ctx)
     {
         axisInput = ctx.ReadValue<Vector2>();
-        Debug.LogError($"axisinput: {axisInput}");
         GetDeviceNew(ctx);
     }
 

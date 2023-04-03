@@ -25,47 +25,47 @@ public class RandomEventsControl : MonoBehaviour
 
         randomEvents.Add(new RandomEvent
         {
-            startPosition = new Vector3(0.08f, 0, 2.07f),
+            startPosition = new Vector3(0.08f, 0, 0.75f),
             startTime = 0,
             randomEventsObject = lglooObject,
         }) ;
 
         randomEvents.Add(new RandomEvent
         {
-            startPosition = new Vector3(3f, 0, 3f),
+            startPosition = new Vector3(0.08f, 0, 0.75f),
             startTime = 120,
             randomEventsObject = lglooObject,
         });
 
         randomEvents.Add(new RandomEvent
         {
-            startPosition = new Vector3(-3f, 0, 5f),
+            startPosition = new Vector3(0.08f, 0, 0.75f),
             startTime = 180,
             randomEventsObject = lglooObject,
         });
 
         randomEvents.Add(new RandomEvent
         {
-            startPosition = new Vector3(-0.53f, 0, -3.36f),
+            startPosition = new Vector3(0.08f, 0, 0.75f),
             startTime = 60,
             randomEventsObject = lglooObject,
         });
         randomEvents.Add(new RandomEvent
         {
-            startPosition = new Vector3(-0.53f, 0, -3.36f),
+            startPosition = new Vector3(0.08f, 0, 0.75f),
             startTime = 150,
             randomEventsObject = lglooObject,
         });
         randomEvents.Add(new RandomEvent
         {
-            startPosition = new Vector3(5.5f, 0, -3.36f),
+            startPosition = new Vector3(0.08f, 0, 0.75f),
             startTime = 90,
             randomEventsObject = lglooObject,
         });
 
         randomEvents.Add(new RandomEvent
         {
-            startPosition = new Vector3(5.5f, 0, -3.36f),
+            startPosition = new Vector3(0.08f, 0, 0.75f),
             startTime = 210,
             randomEventsObject = lglooObject,
         });
@@ -77,6 +77,47 @@ public class RandomEventsControl : MonoBehaviour
             randomEventsObject = windFarmObject,
         });
 
+        randomEvents.Add(new RandomEvent
+        {
+            startPosition = new Vector3(0, 0, 0),
+            startTime = 40,
+            randomEventsObject = windFarmObject,
+        });
+
+        randomEvents.Add(new RandomEvent
+        {
+            startPosition = new Vector3(0, 0, 0),
+            startTime = 20,
+            randomEventsObject = submarineObjct,
+        });
+
+        randomEvents.Add(new RandomEvent
+        {
+            startPosition = new Vector3(0, 0, 0),
+            startTime = 80,
+            randomEventsObject = submarineObjct,
+        });
+
+        randomEvents.Add(new RandomEvent
+        {
+            startPosition = new Vector3(0, 0, 0),
+            startTime = 90,
+            randomEventsObject = windFarmObject,
+        });
+
+        randomEvents.Add(new RandomEvent
+        {
+            startPosition = new Vector3(0, 0, 0),
+            startTime = 150,
+            randomEventsObject = windFarmObject,
+        });
+
+        randomEvents.Add(new RandomEvent
+        {
+            startPosition = new Vector3(0, 0, 0),
+            startTime = 200,
+            randomEventsObject = windFarmObject,
+        });
     }
 
     // Update is called once per frame

@@ -87,9 +87,10 @@ public class CharacterContorl : MonoBehaviour
 
     public float maxReleaseVelocity;
 
-    public float drowningSpeed = 1;
     public float maxDrowning = 1000;
     public float currentDrown = 0;
+    private float totalDrown = 0;
+    private const int minDrown = 20;
 
     [Range(0, 1)]
     public float continueReceivedForceRate = 0.2f; 
@@ -158,6 +159,7 @@ public class CharacterContorl : MonoBehaviour
         defaultLayer = this.gameObject.layer;
         initialRotation = ridbody.transform.rotation.eulerAngles;
         initialRot = ridbody.transform.rotation;
+        currentDrown = maxDrowning;
     }
 
     private void Start()
@@ -328,6 +330,7 @@ public class CharacterContorl : MonoBehaviour
 
     public void SetUpReturn()
     {
+        currentDrown = maxDrowning;
         foreach(var buff in buffs)
         {
             buff.Finish();
@@ -344,8 +347,17 @@ public class CharacterContorl : MonoBehaviour
         currentGas = 0;
         vulnerbility = 0;
         releasing = false;
-        drowningSpeed++;
         SetKinematics(true);
+
+        maxDrowning -= Mathf.Max(totalDrown, minDrown);
+        maxDrowning = Mathf.Max(0, maxDrowning);
+        currentDrown = maxDrowning;
+        totalDrown = 0;
+
+        if (maxDrowning <= 0)
+        {
+            Dead();
+        }
     }
 
     private float HDist = 0;
@@ -374,7 +386,6 @@ public class CharacterContorl : MonoBehaviour
             invulernableTime = maxInvulnerableTime;
             SetFlashMeshRendererBlock(true);
         }
-        currentDrown = 0;
     }
 
     // 无敌特效示意
@@ -407,8 +418,10 @@ public class CharacterContorl : MonoBehaviour
 
     private void AccumulateDrown()
     {
-        currentDrown += drowningSpeed;
-        if (currentDrown >= maxDrowning)
+        currentDrown -= 1;
+        totalDrown += 1;
+
+        if (currentDrown <= 0)
         {
             isDead = true;
             Dead();
@@ -434,6 +447,18 @@ public class CharacterContorl : MonoBehaviour
         var gasScale = (currentGas / (maxActorGas * 1.0f));
         //skinnedMeshRenderer.SetBlendShapeWeight(0, gasScale * 100f);
         //(bodyCollider as SphereCollider).radius = Mathf.Lerp(originalRadius, targetRadius, gasScale);
+    }
+
+    private bool hasLglooStun()
+    {
+        foreach (var buff in buffs)
+        {
+            if (buff is LglooBuff)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     private bool isBuffStun()
@@ -621,7 +646,7 @@ public class CharacterContorl : MonoBehaviour
             gpSlider.transform.localPosition = gpSlider.transform.localPosition + new Vector3(0, 1.3f + (bodyCollider.transform.localScale.x - 1) * 1.2f, 0);
             drownImage.transform.position = bodyCollider.transform.position;
             drownImage.transform.localPosition = drownImage.transform.localPosition + new Vector3(-1, 1.5f + (bodyCollider.transform.localScale.x - 1) * 1.2f, 0);
-            drownImage.fillAmount = currentDrown / maxDrowning;
+            drownImage.fillAmount = (maxDrowning - currentDrown) / maxDrowning;
         }
 
     }
@@ -652,7 +677,13 @@ public class CharacterContorl : MonoBehaviour
 
             var m = m1 + m2;
 
-            ridbody.AddExplosionForce((otherCollision.forceArgument + m2) * (1 + (vulnerbility/maxVulnerbility)) * continueReceivedForceRate + 200, collision.contacts[0].point, 4);
+            var lglooNerfRate = 1f;
+            if (hasLglooStun())
+            {
+                lglooNerfRate = 0.5f;
+            }
+
+            ridbody.AddExplosionForce((otherCollision.forceArgument + m2) * (1 + (vulnerbility/maxVulnerbility)) * continueReceivedForceRate + 200 * lglooNerfRate, collision.contacts[0].point, 4);
             collision.collider.gameObject.GetComponent<Rigidbody>().AddExplosionForce((forceArgument + m1) * (1 + (otherCollision.vulnerbility / otherCollision.maxVulnerbility)) * otherCollision.continueReceivedForceRate + 50, collision.contacts[0].point, 4);
 
             receivedForceSum += (forceArgument + vulnerbility) * m * 0.2f;
@@ -690,7 +721,12 @@ public class CharacterContorl : MonoBehaviour
 
             vulnerbility += Convert.ToInt32(receivedForceRate * m2 * 2);
 
-            ridbody.AddExplosionForce((otherCollision.forceArgument + m2) * (1 + (vulnerbility / maxVulnerbility)) + 200, collision.contacts[0].point, 4);
+            var lglooNerfRate = 1f;
+            if (hasLglooStun())
+            {
+                lglooNerfRate = 0.5f;
+            }
+            ridbody.AddExplosionForce((otherCollision.forceArgument + m2) * (1 + (vulnerbility / maxVulnerbility)) + 200 * lglooNerfRate, collision.contacts[0].point, 4);
             collision.collider.gameObject.GetComponent<Rigidbody>().AddExplosionForce((forceArgument + m1) * (1 + (otherCollision.vulnerbility / otherCollision.maxVulnerbility)) + 50, collision.contacts[0].point, 4);
         }
     }

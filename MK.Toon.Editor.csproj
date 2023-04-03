@@ -56,33 +56,33 @@
     <Analyzer Include="C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\_MK\MKToon\Editor\Helper\MaterialPropertyDrawer.cs" />
-    <Compile Include="Assets\_MK\MKToon\Editor\Helper\MKToonFloatABSDrawer.cs" />
-    <Compile Include="Assets\_MK\MKToon\Editor\InstallWizard.cs" />
-    <Compile Include="Assets\_MK\MKToon\Editor\Helper\MKToonIntVector3Drawer.cs" />
-    <Compile Include="Assets\_MK\MKToon\Editor\GlobalShaderFeature.cs" />
-    <Compile Include="Assets\_MK\MKToon\Editor\Base\FeatureComponents\OutlineComponent.cs" />
-    <Compile Include="Assets\_MK\MKToon\Editor\Helper\EditorHelper.cs" />
-    <Compile Include="Assets\_MK\MKToon\Editor\MaterialUpgrader.cs" />
-    <Compile Include="Assets\_MK\MKToon\Editor\Base\FeatureComponents\ParticlesComponent.cs" />
-    <Compile Include="Assets\_MK\MKToon\Editor\Base\UnlitEditorBase.cs" />
-    <Compile Include="Assets\_MK\MKToon\Editor\Base\FeatureComponents\RefractionComponent.cs" />
-    <Compile Include="Assets\_MK\MKToon\Editor\Common.cs" />
-    <Compile Include="Assets\_MK\MKToon\Editor\Base\SimpleEditorBase.cs" />
-    <Compile Include="Assets\_MK\MKToon\Editor\Helper\MKToonColorRGBDrawer.cs" />
-    <Compile Include="Assets\_MK\MKToon\Editor\Configuration.cs" />
-    <Compile Include="Assets\_MK\MKToon\Editor\Base\PhysicallyBasedEditorBase.cs" />
-    <Compile Include="Assets\_MK\MKToon\Editor\Helper\EditorHelper.EditorStyles.cs" />
-    <Compile Include="Assets\_MK\MKToon\Editor\UI.cs" />
     <Compile Include="Assets\_MK\MKToon\Editor\Properties.cs" />
-    <Compile Include="Assets\_MK\MKToon\Editor\Helper\MKToonIntSliderDrawer.cs" />
-    <Compile Include="Assets\_MK\MKToon\Editor\Helper\MKToonColorHDRRGBDrawer.cs" />
+    <Compile Include="Assets\_MK\MKToon\Editor\UI.cs" />
+    <Compile Include="Assets\_MK\MKToon\Editor\Helper\MKToonIntVector3Drawer.cs" />
+    <Compile Include="Assets\_MK\MKToon\Editor\Helper\EditorHelper.cs" />
+    <Compile Include="Assets\_MK\MKToon\Editor\Base\FeatureComponents\OutlineComponent.cs" />
+    <Compile Include="Assets\_MK\MKToon\Editor\InstallWizard.cs" />
+    <Compile Include="Assets\_MK\MKToon\Editor\Base\SimpleEditorBase.cs" />
     <Compile Include="Assets\_MK\MKToon\Editor\URP\Standard\StandardUnlitEditor.cs" />
-    <Compile Include="Assets\_MK\MKToon\Editor\URP\Particles\ParticlesSimpleEditor.cs" />
     <Compile Include="Assets\_MK\MKToon\Editor\URP\Particles\ParticlesPBSEditor.cs" />
+    <Compile Include="Assets\_MK\MKToon\Editor\Helper\MKToonIntSliderDrawer.cs" />
     <Compile Include="Assets\_MK\MKToon\Editor\URP\Standard\StandardSimpleEditor.cs" />
-    <Compile Include="Assets\_MK\MKToon\Editor\URP\Particles\ParticlesUnlitEditor.cs" />
+    <Compile Include="Assets\_MK\MKToon\Editor\Common.cs" />
+    <Compile Include="Assets\_MK\MKToon\Editor\Helper\MKToonColorHDRRGBDrawer.cs" />
+    <Compile Include="Assets\_MK\MKToon\Editor\Helper\MaterialPropertyDrawer.cs" />
+    <Compile Include="Assets\_MK\MKToon\Editor\MaterialUpgrader.cs" />
+    <Compile Include="Assets\_MK\MKToon\Editor\Base\PhysicallyBasedEditorBase.cs" />
+    <Compile Include="Assets\_MK\MKToon\Editor\Helper\MKToonFloatABSDrawer.cs" />
+    <Compile Include="Assets\_MK\MKToon\Editor\URP\Particles\ParticlesSimpleEditor.cs" />
+    <Compile Include="Assets\_MK\MKToon\Editor\Base\UnlitEditorBase.cs" />
     <Compile Include="Assets\_MK\MKToon\Editor\URP\Standard\StandardPBSEditor.cs" />
+    <Compile Include="Assets\_MK\MKToon\Editor\Helper\EditorHelper.EditorStyles.cs" />
+    <Compile Include="Assets\_MK\MKToon\Editor\Configuration.cs" />
+    <Compile Include="Assets\_MK\MKToon\Editor\Helper\MKToonColorRGBDrawer.cs" />
+    <Compile Include="Assets\_MK\MKToon\Editor\Base\FeatureComponents\RefractionComponent.cs" />
+    <Compile Include="Assets\_MK\MKToon\Editor\GlobalShaderFeature.cs" />
+    <Compile Include="Assets\_MK\MKToon\Editor\URP\Particles\ParticlesUnlitEditor.cs" />
+    <Compile Include="Assets\_MK\MKToon\Editor\Base\FeatureComponents\ParticlesComponent.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\_MK\MKToon\Editor\MK.Toon.Editor.asmdef" />

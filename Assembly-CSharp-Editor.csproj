@@ -893,6 +893,10 @@
       <Project>{108B3AC2-7981-8289-26E1-B39907984B09}</Project>
       <Name>Crest</Name>
     </ProjectReference>
+    <ProjectReference Include="MK.Toon.Editor.csproj">
+      <Project>{1545D50E-3697-41C5-57D9-0CEC8D3105C9}</Project>
+      <Name>MK.Toon.Editor</Name>
+    </ProjectReference>
     <ProjectReference Include="StompyRobot.SRDebugger.Editor.csproj">
       <Project>{1A1A6058-DB5F-2391-1D4D-CB3E0682DA86}</Project>
       <Name>StompyRobot.SRDebugger.Editor</Name>
@@ -900,6 +904,14 @@
     <ProjectReference Include="Crest.Examples.csproj">
       <Project>{2CA930CE-CDAC-1A56-B21B-EAE7BB4B07C6}</Project>
       <Name>Crest.Examples</Name>
+    </ProjectReference>
+    <ProjectReference Include="MK.RampCreator.csproj">
+      <Project>{F110B1C7-70C9-899E-A2D9-7796D5C83A6E}</Project>
+      <Name>MK.RampCreator</Name>
+    </ProjectReference>
+    <ProjectReference Include="MK.Toon.csproj">
+      <Project>{9E72F575-A83D-BD68-FBB8-7AAE9CF503A3}</Project>
+      <Name>MK.Toon</Name>
     </ProjectReference>
     <ProjectReference Include="AmplifyShaderEditor.csproj">
       <Project>{04DD196D-0417-BA6B-852D-703B8ABEEF50}</Project>
@@ -909,9 +921,21 @@
       <Project>{C59ABA6F-A832-3EBC-B3B5-EFD316689002}</Project>
       <Name>Unity.RenderPipelines.Universal.Runtime</Name>
     </ProjectReference>
+    <ProjectReference Include="MK.MeshUtility.csproj">
+      <Project>{10F73D41-9EC3-A498-60E2-6445B1E24C8E}</Project>
+      <Name>MK.MeshUtility</Name>
+    </ProjectReference>
     <ProjectReference Include="StompyRobot.SRDebugger.csproj">
       <Project>{77DA55BD-029C-1ACE-31F4-2DC08AECA220}</Project>
       <Name>StompyRobot.SRDebugger</Name>
+    </ProjectReference>
+    <ProjectReference Include="MK.MKTextureChannelPacker.csproj">
+      <Project>{E5B1E2AF-35B2-C272-C964-ABB51898752C}</Project>
+      <Name>MK.MKTextureChannelPacker</Name>
+    </ProjectReference>
+    <ProjectReference Include="MK.Toon.Examples.csproj">
+      <Project>{B037EDF5-19BB-6A85-53E7-D12737E70A69}</Project>
+      <Name>MK.Toon.Examples</Name>
     </ProjectReference>
     <ProjectReference Include="Crest.Helpers.Editor.csproj">
       <Project>{1377DB0B-FCFC-7589-99EE-841D5BD8FA7C}</Project>
@@ -924,30 +948,6 @@
     <ProjectReference Include="StompyRobot.SRF.csproj">
       <Project>{1B417520-4B00-1EB1-9A04-BFE488973FC4}</Project>
       <Name>StompyRobot.SRF</Name>
-    </ProjectReference>
-    <ProjectReference Include="MK.MeshUtility.csproj">
-      <Project>{10F73D41-9EC3-A498-60E2-6445B1E24C8E}</Project>
-      <Name>MK.MeshUtility</Name>
-    </ProjectReference>
-    <ProjectReference Include="MK.MKTextureChannelPacker.csproj">
-      <Project>{E5B1E2AF-35B2-C272-C964-ABB51898752C}</Project>
-      <Name>MK.MKTextureChannelPacker</Name>
-    </ProjectReference>
-    <ProjectReference Include="MK.Toon.Editor.csproj">
-      <Project>{1545D50E-3697-41C5-57D9-0CEC8D3105C9}</Project>
-      <Name>MK.Toon.Editor</Name>
-    </ProjectReference>
-    <ProjectReference Include="MK.RampCreator.csproj">
-      <Project>{F110B1C7-70C9-899E-A2D9-7796D5C83A6E}</Project>
-      <Name>MK.RampCreator</Name>
-    </ProjectReference>
-    <ProjectReference Include="MK.Toon.csproj">
-      <Project>{9E72F575-A83D-BD68-FBB8-7AAE9CF503A3}</Project>
-      <Name>MK.Toon</Name>
-    </ProjectReference>
-    <ProjectReference Include="MK.Toon.Examples.csproj">
-      <Project>{B037EDF5-19BB-6A85-53E7-D12737E70A69}</Project>
-      <Name>MK.Toon.Examples</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

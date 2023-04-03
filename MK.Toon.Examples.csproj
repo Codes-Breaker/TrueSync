@@ -56,26 +56,26 @@
     <Analyzer Include="C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\_MK\MKToon\Examples\Scripts\MKObjectCollectionController.cs" />
+    <Compile Include="Assets\_MK\MKToon\Examples\Scripts\LevitateObject.cs" />
+    <Compile Include="Assets\_MK\MKToon\Examples\Scripts\UpdateRotationSlider.cs" />
+    <Compile Include="Assets\_MK\MKToon\Examples\Scripts\UIController.cs" />
+    <Compile Include="Assets\_MK\MKToon\Examples\Scripts\SpectateCamera.cs" />
+    <Compile Include="Assets\_MK\MKToon\Examples\Scripts\AnimateMaterialInt.cs" />
+    <Compile Include="Assets\_MK\MKToon\Examples\Scripts\FlyingIslesController.cs" />
     <Compile Include="Assets\_MK\MKToon\Examples\Scripts\AnimateMaterialProperty.cs" />
     <Compile Include="Assets\_MK\MKToon\Examples\Scripts\StencilHoleMovement.cs" />
-    <Compile Include="Assets\_MK\MKToon\Examples\Scripts\RotateObject.cs" />
-    <Compile Include="Assets\_MK\MKToon\Examples\Scripts\MaterialSet.cs" />
-    <Compile Include="Assets\_MK\MKToon\Examples\Scripts\MaterialCollectionController.cs" />
-    <Compile Include="Assets\_MK\MKToon\Examples\Scripts\MKObjectCollectionController.cs" />
-    <Compile Include="Assets\_MK\MKToon\Examples\Scripts\FlyingIslesController.cs" />
-    <Compile Include="Assets\_MK\MKToon\Examples\Scripts\UpdateRotationSlider.cs" />
     <Compile Include="Assets\_MK\MKToon\Examples\Scripts\MaterialCollection.cs" />
-    <Compile Include="Assets\_MK\MKToon\Examples\Scripts\AnimateMaterialFloat.cs" />
-    <Compile Include="Assets\_MK\MKToon\Examples\Scripts\UIController.cs" />
+    <Compile Include="Assets\_MK\MKToon\Examples\Scripts\MaterialSet.cs" />
     <Compile Include="Assets\_MK\MKToon\Examples\Scripts\MaterialSwitcher.cs" />
-    <Compile Include="Assets\_MK\MKToon\Examples\Scripts\AnimateMaterialInt.cs" />
+    <Compile Include="Assets\_MK\MKToon\Examples\Scripts\AnimateMaterialFloat.cs" />
+    <Compile Include="Assets\_MK\MKToon\Examples\Scripts\OrbitLight.cs" />
+    <Compile Include="Assets\_MK\MKToon\Examples\Scripts\MoveObject.cs" />
+    <Compile Include="Assets\_MK\MKToon\Examples\Scripts\RotateObject.cs" />
+    <Compile Include="Assets\_MK\MKToon\Examples\Scripts\AnimateMaterialTexture2D.cs" />
+    <Compile Include="Assets\_MK\MKToon\Examples\Scripts\MaterialCollectionController.cs" />
     <Compile Include="Assets\_MK\MKToon\Examples\Scripts\Spectate.cs" />
     <Compile Include="Assets\_MK\MKToon\Examples\Scripts\AnimateMaterialColor.cs" />
-    <Compile Include="Assets\_MK\MKToon\Examples\Scripts\LevitateObject.cs" />
-    <Compile Include="Assets\_MK\MKToon\Examples\Scripts\MoveObject.cs" />
-    <Compile Include="Assets\_MK\MKToon\Examples\Scripts\SpectateCamera.cs" />
-    <Compile Include="Assets\_MK\MKToon\Examples\Scripts\AnimateMaterialTexture2D.cs" />
-    <Compile Include="Assets\_MK\MKToon\Examples\Scripts\OrbitLight.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\_MK\MKToon\Examples\MK.Toon.Examples.asmdef" />
