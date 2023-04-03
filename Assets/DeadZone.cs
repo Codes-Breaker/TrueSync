@@ -22,6 +22,7 @@ public class DeadZone : MonoBehaviour
         var character = other.gameObject.GetComponent<CharacterContorl>();
         if (character != null && !character.returning)
         {
+            character.SetUpReturn();
             character.returning = true;
             character.jumpingBack = false;
             Vector3 pos = Physics.ClosestPoint(character.transform.position, platformCollider, platformCollider.transform.position, platformCollider.transform.rotation);

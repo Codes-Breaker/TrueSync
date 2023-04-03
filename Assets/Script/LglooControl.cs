@@ -120,8 +120,8 @@ public class LglooControl : MonoBehaviour,IRandomEventsObject
             ridbody.transform.rotation = Quaternion.Euler(new Vector3(0, targetAngle, 0));
             ridbody.AddForce(transform.forward * froceArgument,ForceMode.Impulse);
             user.SetControlSelf();
+            user.buffs.Add(new LglooBuff(user));
             user = null;
-
             OnExit();
         }
     }

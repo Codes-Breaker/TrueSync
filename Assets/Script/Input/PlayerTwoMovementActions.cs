@@ -163,7 +163,7 @@ public partial class @PlayerTwoMovementActions : IInputActionCollection2, IDispo
                 {
                     ""name"": ""LeftStick"",
                     ""id"": ""7c117083-350f-4721-b12f-ed62b6c13cf4"",
-                    ""path"": ""2DVector"",
+                    ""path"": ""2DVector(mode=2)"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",

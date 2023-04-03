@@ -26,22 +26,22 @@ public class RandomEventsControl : MonoBehaviour
         randomEvents.Add(new RandomEvent
         {
             startPosition = new Vector3(0.08f, 0, 2.07f),
-            startTime = 30,
-            randomEventsObject = submarineObjct,
+            startTime = 0,
+            randomEventsObject = lglooObject,
         }) ;
 
         randomEvents.Add(new RandomEvent
         {
             startPosition = new Vector3(3f, 0, 3f),
             startTime = 120,
-            randomEventsObject = submarineObjct,
+            randomEventsObject = lglooObject,
         });
 
         randomEvents.Add(new RandomEvent
         {
             startPosition = new Vector3(-3f, 0, 5f),
             startTime = 180,
-            randomEventsObject = submarineObjct,
+            randomEventsObject = lglooObject,
         });
 
         randomEvents.Add(new RandomEvent
@@ -73,7 +73,7 @@ public class RandomEventsControl : MonoBehaviour
         randomEvents.Add(new RandomEvent
         {
             startPosition = new Vector3(0, 0, 0),
-            startTime = 10,
+            startTime = 0,
             randomEventsObject = windFarmObject,
         });
 

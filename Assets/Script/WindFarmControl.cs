@@ -52,7 +52,7 @@ public class WindFarmControl : MonoBehaviour,IRandomEventsObject
         {
             foreach(var rigid in characterList)
             {
-                rigid.AddForce(forward * forceArgument, ForceMode.Force);
+                rigid.AddForce(forward * forceArgument, ForceMode.Acceleration);
             }
         }
     }

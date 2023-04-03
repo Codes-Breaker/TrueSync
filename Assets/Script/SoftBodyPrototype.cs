@@ -204,7 +204,7 @@ public class SoftBodyPrototype : MonoBehaviour
     // Places the soft body back where it started, and resets the simulation state
     private void Respawn()
     {
-        transform.position = TransformStartPosition;
+        //transform.position = TransformStartPosition;
         transform.localScale = TransformStartScale;
         InitializePointMassPositionsToBoundingBox();
         for (int i = 0; i < PointMassVelocities.Length; ++i)
@@ -213,70 +213,71 @@ public class SoftBodyPrototype : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        // the TriggerCollider just touched another collider
+    //private void OnTriggerEnter(Collider other)
+    //{
+    //    // the TriggerCollider just touched another collider
 
-        // track landing on a surface, for the jump behavior
-        if (other.gameObject.layer != PlayAreaTriggerLayer && 
-            other.transform.position.y < transform.position.y)
-        {
-            LandedTime = Time.time;
-            JumpWait = Random.Range(JumpWaitMin, JumpWaitMax);
-        }
-    }
+    //    // track landing on a surface, for the jump behavior
+    //    if (other.gameObject.layer != PlayAreaTriggerLayer && 
+    //        other.transform.position.y < transform.position.y)
+    //    {
+    //        LandedTime = Time.time;
+    //        JumpWait = Random.Range(JumpWaitMin, JumpWaitMax);
+    //    }
+    //}
 
-    private void OnTriggerStay(Collider other)
-    {
-        // overlapping with another collider, so make sure the point masses don't interpenetrate,
-        // and resolve their velocities for the collision
-        Vector3 depenetrationDir;
-        float depenetrationDist;
-        if (other.gameObject.layer != PlayAreaTriggerLayer &&
-            Physics.ComputePenetration(TriggerCollider, transform.position, transform.rotation,
-                                       other, other.transform.position, other.transform.rotation,
-                                       out depenetrationDir, out depenetrationDist))
-        {
-            //Debug.LogFormat("Collision normal {0}", depenetrationDir);
-            for (int i = 0; i < PointMassPositions.Length; ++i)
-            {
-                Vector3 p = PointMassPositions[i];
-                if (other.bounds.Contains(p))
-                {
-                    // clamp interpenetrating point mass to surface of other collider
-                    PointMassPositions[i] = 
-                        other.ClosestPoint(p + depenetrationDir * (depenetrationDist + 1.0f));
+    //private void OnCollisionEnter(Collision collision)
+    //{
+    //    var other = collision.collider;
+    //    // overlapping with another collider, so make sure the point masses don't interpenetrate,
+    //    // and resolve their velocities for the collision
+    //    Vector3 depenetrationDir;
+    //    float depenetrationDist;
+    //    if (other.gameObject.layer != PlayAreaTriggerLayer &&
+    //        Physics.ComputePenetration(TriggerCollider, transform.position, transform.rotation,
+    //                                   other, other.transform.position, other.transform.rotation,
+    //                                   out depenetrationDir, out depenetrationDist))
+    //    {
+    //        //Debug.LogFormat("Collision normal {0}", depenetrationDir);
+    //        for (int i = 0; i < PointMassPositions.Length; ++i)
+    //        {
+    //            Vector3 p = PointMassPositions[i];
+    //            if (other.bounds.Contains(p))
+    //            {
+    //                // clamp interpenetrating point mass to surface of other collider
+    //                PointMassPositions[i] = 
+    //                    other.ClosestPoint(p + depenetrationDir * (depenetrationDist + 1.0f));
 
-                    // reflect component of velocity along other collider normal
-                    // while maintaining the remainder of velocity, but reduce by
-                    // energy loss coefficient
-                    // (approximate average contact normals as depenetration direction)
-                    float speedAlongNormalSigned = Vector3.Dot(PointMassVelocities[i], depenetrationDir);
-                    float speedAlongNormalSign = Mathf.Sign(speedAlongNormalSigned);
-                    Vector3 velocityAlongNormal = speedAlongNormalSigned * depenetrationDir;
-                    Vector3 slideVelocity = PointMassVelocities[i] - velocityAlongNormal;
-                    velocityAlongNormal *= speedAlongNormalSign; // reflect if opposing
+    //                // reflect component of velocity along other collider normal
+    //                // while maintaining the remainder of velocity, but reduce by
+    //                // energy loss coefficient
+    //                // (approximate average contact normals as depenetration direction)
+    //                float speedAlongNormalSigned = Vector3.Dot(PointMassVelocities[i], depenetrationDir);
+    //                float speedAlongNormalSign = Mathf.Sign(speedAlongNormalSigned);
+    //                Vector3 velocityAlongNormal = speedAlongNormalSigned * depenetrationDir;
+    //                Vector3 slideVelocity = PointMassVelocities[i] - velocityAlongNormal;
+    //                velocityAlongNormal *= speedAlongNormalSign; // reflect if opposing
 
-                    // reduce velocityAlongNormal by bounce coefficient if reflecting
-                    float bounceCoefficient = (speedAlongNormalSign >= 0.0f ? 1.0f : BounceCoefficient);
-                    PointMassVelocities[i] = 
-                        bounceCoefficient * velocityAlongNormal + 
-                        slideVelocity * SlideCoefficient;                        
-                }
-            }
-        }
-    }
+    //                // reduce velocityAlongNormal by bounce coefficient if reflecting
+    //                float bounceCoefficient = (speedAlongNormalSign >= 0.0f ? 1.0f : BounceCoefficient);
+    //                PointMassVelocities[i] = 
+    //                    bounceCoefficient * velocityAlongNormal + 
+    //                    slideVelocity * SlideCoefficient;                        
+    //            }
+    //        }
+    //    }
+    //}
 
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.gameObject.layer == PlayAreaTriggerLayer)
-        {
-            Debug.LogWarningFormat("{0}>{1} left the play area, and will be respawned", 
-                                    transform.parent == null ? "(no parent)" : transform.parent.gameObject.name,                    
-                                    gameObject.name);
-            Respawn();
-        }
-    }
+    //private void OnCollisionExit(Collision other)
+    //{
+    //    if (other.gameObject.layer == PlayAreaTriggerLayer)
+    //    {
+    //        Debug.LogWarningFormat("{0}>{1} left the play area, and will be respawned", 
+    //                                transform.parent == null ? "(no parent)" : transform.parent.gameObject.name,                    
+    //                                gameObject.name);
+    //        Respawn();
+    //    }
+    //}
 
     // I've chosen fixed update to remove the variable of step size when investigating numeric
     // stability of the simulation.
@@ -286,7 +287,7 @@ public class SoftBodyPrototype : MonoBehaviour
         for (int i = 0; i < PointMassAccelerations.Length; ++i)
         {
             // simplify force to acceleration, as mass == 1
-            PointMassAccelerations[i] = Physics.gravity;
+            PointMassAccelerations[i] = this.GetComponent<Rigidbody>().velocity;
         }
 
         AccumulateSpringForces();
@@ -486,7 +487,7 @@ public class SoftBodyPrototype : MonoBehaviour
         }
         else
         {
-            transform.position = ptBounds.center;
+            //transform.position = ptBounds.center;
             transform.localScale = ptBounds.size;
         }
     }

@@ -97,7 +97,7 @@ public partial class @PlayerOneMovementActions : IInputActionCollection2, IDispo
                 {
                     ""name"": ""WASD"",
                     ""id"": ""e433ff48-5b56-434a-9d5f-aac3ec1979d2"",
-                    ""path"": ""2DVector"",
+                    ""path"": ""2DVector(mode=2)"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -151,8 +151,19 @@ public partial class @PlayerOneMovementActions : IInputActionCollection2, IDispo
                 },
                 {
                     ""name"": """",
+                    ""id"": ""3cae4744-df54-4f16-9bb8-8b390caedd7d"",
+                    ""path"": ""<Mouse>/delta"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Movement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""7127d6f5-dd11-482b-991f-89a44f33f107"",
-                    ""path"": ""<Keyboard>/shift"",
+                    ""path"": ""<Keyboard>/leftShift"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard"",

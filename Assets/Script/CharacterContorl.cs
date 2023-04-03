@@ -31,7 +31,7 @@ public class CharacterContorl : MonoBehaviour
     private bool charge;
 
     //摇杆输入值最小值
-    private float movementThrashold = 0.01f;
+    private float movementThrashold = 0.05f;
     [Space(10)]
     [Header("相关需要关联组件")]
     public TMP_Text vulnerbilityText;
@@ -45,9 +45,9 @@ public class CharacterContorl : MonoBehaviour
     public float targetRadius;
     public Vector3 targetCenter;
     public Vector3 originalCenter;
-
+    public float sensitivity = 0.5f;
     private Vector3 initialRotation;
-
+    private Quaternion initialRot;
     // 隐藏参数
     [HideInInspector]
     public bool isWalk;
@@ -146,6 +146,8 @@ public class CharacterContorl : MonoBehaviour
     public JumpAction jumpAction;
     public ReleaseAciton releaseAciton;
 
+    public List<Buff> buffs = new List<Buff>();
+
     private void Awake()
     {
         speedUpGas = maxSpeedUpGas;
@@ -155,6 +157,7 @@ public class CharacterContorl : MonoBehaviour
         originalCenter = (bodyCollider as SphereCollider).center;
         defaultLayer = this.gameObject.layer;
         initialRotation = ridbody.transform.rotation.eulerAngles;
+        initialRot = ridbody.transform.rotation;
     }
 
     private void Start()
@@ -208,6 +211,19 @@ public class CharacterContorl : MonoBehaviour
         stunEffect.gameObject.SetActive(true);
     }
 
+    private void UpdateBuff()
+    {
+        foreach(var buff in buffs.ToArray())
+        {
+            if (!buff.isEnd)
+                buff.OnBuffUpdate();
+            if (buff.isEnd)
+            {
+                buffs.Remove(buff);
+            }
+        }
+    }
+
 
     private void FixedUpdate()
     {
@@ -215,13 +231,9 @@ public class CharacterContorl : MonoBehaviour
         positionBeforeCollision = GetComponent<Rigidbody>().position;
         CheckInVulernable();
         CheckIsGrounded();
+        UpdateBuff();
         if (!isDead)
         {
-            if (isStun)
-            {
-                SetStun();
-            }
-
             if (returning)
             {
                 ReturnToPlace();
@@ -233,7 +245,7 @@ public class CharacterContorl : MonoBehaviour
 
             else
             {
-                if (!isStun)
+                if (!isBuffStun())
                 {
                     moveAciotn(axisInput);
                     chargeAction(charge);
@@ -312,6 +324,14 @@ public class CharacterContorl : MonoBehaviour
         }
         this.ridbody.isKinematic = set;
         this.ridbody.gameObject.GetComponent<Collider>().enabled = !set;
+    }
+
+    public void SetUpReturn()
+    {
+        foreach(var buff in buffs)
+        {
+            buff.Finish();
+        }
     }
 
 
@@ -415,6 +435,19 @@ public class CharacterContorl : MonoBehaviour
         //skinnedMeshRenderer.SetBlendShapeWeight(0, gasScale * 100f);
         //(bodyCollider as SphereCollider).radius = Mathf.Lerp(originalRadius, targetRadius, gasScale);
     }
+
+    private bool isBuffStun()
+    {
+        foreach(var buff in buffs)
+        {
+            if (buff is StunBuff)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private void MoveWalk(Vector2 axisInput)
     {
         if (axisInput.magnitude > movementThrashold && (!releasing || canReleaseTurn))
@@ -427,6 +460,7 @@ public class CharacterContorl : MonoBehaviour
             isWalk = false;
         }
         this.ridbody.transform.rotation = Quaternion.Slerp(this.ridbody.rotation, Quaternion.Euler(new Vector3(0, targetAngle, 0) + initialRotation), 0.1f);
+
     }
 
 
@@ -627,6 +661,11 @@ public class CharacterContorl : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        foreach(var buff in buffs)
+        {
+            buff.OnCollide(collision);
+        }
+
         if (collision.gameObject.GetComponent<CharacterContorl>())
         {
             var otherCollision = collision.gameObject.GetComponent<CharacterContorl>();
@@ -650,12 +689,6 @@ public class CharacterContorl : MonoBehaviour
             var m2 = (Mathf.Cos(degree2) * vel2).magnitude;
 
             vulnerbility += Convert.ToInt32(receivedForceRate * m2 * 2);
-
-            if (m2 >= stunThreshold)
-            {
-                Stun(2);
-            }
-
 
             ridbody.AddExplosionForce((otherCollision.forceArgument + m2) * (1 + (vulnerbility / maxVulnerbility)) + 200, collision.contacts[0].point, 4);
             collision.collider.gameObject.GetComponent<Rigidbody>().AddExplosionForce((forceArgument + m1) * (1 + (otherCollision.vulnerbility / otherCollision.maxVulnerbility)) + 50, collision.contacts[0].point, 4);
