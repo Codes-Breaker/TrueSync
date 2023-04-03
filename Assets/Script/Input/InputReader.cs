@@ -11,7 +11,7 @@ public class InputReader : InputReaderBase
 
     //DISABLE if using old input system
     private PlayerOneMovementActions movementActions;
-
+    
 
     /**/
 
@@ -69,7 +69,8 @@ public class InputReader : InputReaderBase
         if (ctx.control.device is Keyboard || ctx.control.device is Mouse) isMouseAndKeyboard = true;
         else isMouseAndKeyboard = false;
 
-        if (oldInput != isMouseAndKeyboard && isMouseAndKeyboard) changedInputToMouseAndKeyboard.Invoke();
+
+            if (oldInput != isMouseAndKeyboard && isMouseAndKeyboard) changedInputToMouseAndKeyboard.Invoke();
         else if (oldInput != isMouseAndKeyboard && !isMouseAndKeyboard) changedInputToGamepad.Invoke();
     }
 
@@ -96,8 +97,16 @@ public class InputReader : InputReaderBase
     //DISABLE if using old input system
     public void OnMove(InputAction.CallbackContext ctx)
     {
-        axisInput = ctx.ReadValue<Vector2>();
-        Debug.LogError($"axisinput: {axisInput}");
+        if (ctx.control.device is Mouse)
+        {
+            var t = ctx.ReadValue<Vector2>();
+            Vector3 screenPosition = Camera.main.WorldToScreenPoint(player.transform.position);
+            var detalPosition = ctx.ReadValue<Vector2>() - new Vector2(screenPosition.x, screenPosition.y);
+            axisInput = detalPosition.normalized;
+
+        }
+        else
+            axisInput = ctx.ReadValue<Vector2>().normalized;
         GetDeviceNew(ctx);
     }
 

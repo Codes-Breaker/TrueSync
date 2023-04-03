@@ -4,6 +4,6 @@ using UnityEngine;
 
 public interface IRandomEventsObject 
 {
-    public void OnShow(Vector3 vector3);
+    public void OnShow(Vector3 vector3,float stayTime);
     public void OnExit();
 }

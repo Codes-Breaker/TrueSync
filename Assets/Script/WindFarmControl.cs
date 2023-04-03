@@ -7,12 +7,13 @@ public class WindFarmControl : MonoBehaviour,IRandomEventsObject
     List<Rigidbody> characterList;
     public float forceArgument;
     public float angleArgument;
-    public float stayTime;
+    private float stayTime;
     private float currentTime;
     private bool isShow;
 
-    public void OnShow(Vector3 point)
+    public void OnShow(Vector3 point,float stayTime)
     {
+        this.stayTime = stayTime;
         characterList = new List<Rigidbody>();
         this.gameObject.SetActive(true);
         isShow = true;
@@ -26,6 +27,7 @@ public class WindFarmControl : MonoBehaviour,IRandomEventsObject
     public void OnExit()
     {
         isShow = false;
+        gameObject.SetActive(false);
     }
 
     private void Update()

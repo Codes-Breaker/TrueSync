@@ -151,11 +151,11 @@ public partial class @PlayerOneMovementActions : IInputActionCollection2, IDispo
                 },
                 {
                     ""name"": """",
-                    ""id"": ""3cae4744-df54-4f16-9bb8-8b390caedd7d"",
-                    ""path"": ""<Mouse>/delta"",
+                    ""id"": ""54f8b90b-dfae-4f39-9cb1-dac960fa9a6d"",
+                    ""path"": ""<Mouse>/position"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""Mouse"",
                     ""action"": ""Movement"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -167,6 +167,17 @@ public partial class @PlayerOneMovementActions : IInputActionCollection2, IDispo
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard"",
+                    ""action"": ""Charge"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1ae9372c-6005-42ba-a412-68f2bcd2d9ac"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
                     ""action"": ""Charge"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false

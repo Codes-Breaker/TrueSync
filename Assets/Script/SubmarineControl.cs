@@ -8,7 +8,7 @@ public class SubmarineControl : MonoBehaviour,IRandomEventsObject
     public float stayTime;
     private float currentTime;
     private bool isShow;
-    public float startTime;
+    private float startTime;
     public float endTime;
 
     private void Update()
@@ -25,12 +25,13 @@ public class SubmarineControl : MonoBehaviour,IRandomEventsObject
     public void OnExit()
     {
         transform.DOLocalMoveY(0f, endTime).OnComplete(() => {
-            this.gameObject.SetActive(false);
+            gameObject.SetActive(false);
         });
     }
 
-    public void OnShow(Vector3 position)
+    public void OnShow(Vector3 position,float stayTime)
     {
+        this.stayTime = stayTime;
         transform.position = position;
         transform.position = new Vector3(transform.position.x, 0f, transform.position.z);
         currentTime = 0;

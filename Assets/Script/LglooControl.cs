@@ -6,11 +6,14 @@ using DG.Tweening;
 public class LglooControl : MonoBehaviour,IRandomEventsObject
 {
     public bool canEnter;
+    private bool isShow;
     public float enterAngle;
     public float enterDistance;
     private float targetAngle;
     public float froceArgument;
     public float showDuration;
+    private float currentTime;
+    private float stayTime;
     public float endDuration;
     private CharacterContorl user;
     private float userY;
@@ -32,33 +35,39 @@ public class LglooControl : MonoBehaviour,IRandomEventsObject
         var players = FindObjectsOfType<CharacterContorl>();
         if (players.Length != 0)
         {
-            //foreach (var item in players)
-            //{
-            //    float angle = Vector3.Angle(transform.forward, item.transform.position - transform.position);
-            //    if ((item.transform.position - transform.position).magnitude < enterDistance && angle < enterAngle)
-            //    {
-            //        if(item.GetComponent<Rigidbody>())
-            //        item.GetComponent<Rigidbody>().AddForce((transform.position - item.transform.position).normalized * 0.7f, ForceMode.Impulse);
-            //    }
-            //}
+        }
+    }
+
+    private void Update()
+    {
+        if (!isShow)
+            return;
+        currentTime += Time.deltaTime;
+        if (currentTime > stayTime)
+        {
+            OnExit();
         }
     }
 
     public void OnExit()
     {
+        if (user)
+            Fire();
         transform.DOLocalMoveY(0f, endDuration).OnComplete(() => {
-            this.gameObject.SetActive(false);
+            gameObject.SetActive(false);
         });
     }
 
-    public void OnShow(Vector3 position)
+    public void OnShow(Vector3 position,float stayTime)
     {
+        this.stayTime = stayTime;
         canEnter = false;
         transform.position = position;
         transform.position = new Vector3(transform.position.x, 0f, transform.position.z);
         this.gameObject.SetActive(true);
         transform.DOLocalMoveY(1.5f, showDuration).OnComplete(()=>{
             canEnter = true;
+            isShow = true;
         });
     }
 
@@ -112,18 +121,24 @@ public class LglooControl : MonoBehaviour,IRandomEventsObject
     {
         if(charge)
         {
-            user.transform.position = transform.position + transform.forward * transform.localScale.x;
-            user.transform.position = new Vector3(user.transform.position.x, userY, user.transform.position.z);
-            user.SetKinematics(false);
-            var ridbody = user.GetComponent<Rigidbody>();
-            user.targetAngle = targetAngle;
-            ridbody.transform.rotation = Quaternion.Euler(new Vector3(0, targetAngle, 0));
-            ridbody.AddForce(transform.forward * froceArgument,ForceMode.Impulse);
-            user.SetControlSelf();
-            user.buffs.Add(new LglooBuff(user));
-            user = null;
+            Fire();
             OnExit();
         }
+    }
+
+    private void Fire()
+    {
+        transform.GetComponent<Collider>().enabled = false;
+        user.transform.position = transform.position ;
+        user.transform.position = new Vector3(user.transform.position.x, userY, user.transform.position.z);
+        user.SetKinematics(false);
+        var ridbody = user.GetComponent<Rigidbody>();
+        user.targetAngle = targetAngle;
+        ridbody.transform.rotation = Quaternion.Euler(new Vector3(0, targetAngle, 0));
+        ridbody.AddForce(transform.forward * froceArgument,ForceMode.Impulse);
+        user.SetControlSelf();
+        user.buffs.Add(new LglooBuff(user));
+        user = null;
     }
 
 

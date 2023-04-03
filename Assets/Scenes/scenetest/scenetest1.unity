@@ -335,7 +335,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 67670406}
   m_LocalRotation: {x: 0, y: -0.9265482, z: 0.37617624, w: 0}
-  m_LocalPosition: {x: -0.28999987, y: 11.288373, z: 8.912883}
+  m_LocalPosition: {x: -0.2899998, y: 11.288373, z: 8.912883}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -404,30 +404,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4256517013307287331, guid: 78262266b97f6ea42ada12794333ec27,
-        type: 3}
-      propertyPath: stayTime
-      value: 120
-      objectReference: {fileID: 0}
-    - target: {fileID: 4256517013307287331, guid: 78262266b97f6ea42ada12794333ec27,
-        type: 3}
-      propertyPath: angleArgument
-      value: 50
-      objectReference: {fileID: 0}
-    - target: {fileID: 4256517013307287331, guid: 78262266b97f6ea42ada12794333ec27,
-        type: 3}
-      propertyPath: forceArgument
-      value: 5
-      objectReference: {fileID: 0}
     - target: {fileID: 6296165963690065652, guid: 78262266b97f6ea42ada12794333ec27,
         type: 3}
       propertyPath: m_Name
       value: WindFarm
-      objectReference: {fileID: 0}
-    - target: {fileID: 6296165963690065652, guid: 78262266b97f6ea42ada12794333ec27,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 78262266b97f6ea42ada12794333ec27, type: 3}
@@ -24026,7 +24006,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1179497702}
   m_LocalRotation: {x: -0, y: -0.9265482, z: 0.37617624, w: 0}
-  m_LocalPosition: {x: 0.00000008940697, y: 8.568373, z: 8.812882}
+  m_LocalPosition: {x: 0.00000014901161, y: 8.568373, z: 8.812882}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -24063,7 +24043,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 2.2222223, y: 1}
+    m_SensorSize: {x: 1.7777778, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -37206,21 +37186,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Lgloo
       objectReference: {fileID: 0}
-    - target: {fileID: 2356291089037284146, guid: 22e835545a2aa434685d518bdf94d11f,
-        type: 3}
-      propertyPath: endDuration
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 2356291089037284146, guid: 22e835545a2aa434685d518bdf94d11f,
-        type: 3}
-      propertyPath: showDuration
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 2356291089037284146, guid: 22e835545a2aa434685d518bdf94d11f,
-        type: 3}
-      propertyPath: froceArgument
-      value: 80
-      objectReference: {fileID: 0}
     - target: {fileID: 2356291089037284150, guid: 22e835545a2aa434685d518bdf94d11f,
         type: 3}
       propertyPath: m_RootOrder
@@ -38251,16 +38216,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 7700766838508361497, guid: 314a1c0a469874f47a0cb71ecf061d79,
-        type: 3}
-      propertyPath: endTime
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 7700766838508361497, guid: 314a1c0a469874f47a0cb71ecf061d79,
-        type: 3}
-      propertyPath: startTime
-      value: 2
-      objectReference: {fileID: 0}
     - target: {fileID: 7700766838508361501, guid: 314a1c0a469874f47a0cb71ecf061d79,
         type: 3}
       propertyPath: m_RootOrder
