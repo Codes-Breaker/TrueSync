@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public struct RandomEvent
 {
@@ -12,9 +14,83 @@ public struct RandomEvent
 
 public class RandomEventsControl : MonoBehaviour
 {
-    string lglooPath = "Prefabs/Lgloo";
+    string lglooPath = "Prefabs/Lgloo1";
     string submarinePath = "Prefabs/Submarine";
     string winFarmPath = "Prefabs/WindFarm";
+
+    
+    public int lglooGenerateFrequency;
+    public int lglooStayTime;
+    [Range(0, 1)]
+    public float lglooRollRate;
+    public int lglooStartDelay;
+
+    public int submarineGenerateFrequency;
+    public int submarineStayTime;
+    [Range(0, 1)]
+    public float submarineRollRate;
+    public int submarineStartDelay;
+
+    public int winFarmGenerateFrequency;
+    public int winFarmStayTime;
+    [Range(0, 1)]
+    public float winFarmRollRate;
+    public int winFarmStartDelay;
+
+    private void RandomGenerate()
+    {
+        //5分钟时间随机
+        var totalTime = 5 * 60;
+        //雪屋随机生成算法
+        var lglooRolls = Convert.ToInt32(totalTime / lglooGenerateFrequency);
+        for (int i = 0; i <= lglooRolls; i++)
+        {
+            float weight = Random.Range(0f, 1f);
+            if (weight <= lglooRollRate)
+            {
+                randomEvents.Add(new RandomEvent
+                {
+                    startPosition = new Vector3(0.08f, 0, 0.75f),
+                    startTime = (i) * lglooGenerateFrequency + lglooStartDelay,
+                    randomEventsPath = lglooPath,
+                    stayTime = lglooStayTime,
+                });
+            }
+        }
+        //潜水艇随机生成算法
+        var submarineRolls = Convert.ToInt32(totalTime / submarineGenerateFrequency);
+        for (int i = 0; i <= submarineRolls; i++)
+        {
+            float weight = Random.Range(0f, 1f);
+            if (weight <= submarineRollRate)
+            {
+                randomEvents.Add(new RandomEvent
+                {
+                    startPosition = new Vector3(0.08f, 0, 0.75f),
+                    startTime = (i) * submarineGenerateFrequency + submarineStartDelay,
+                    randomEventsPath = submarinePath,
+                    stayTime = submarineStayTime,
+                });
+            }
+        }
+
+        //风场随机生成算法
+        var winFarmRolls = Convert.ToInt32(totalTime / winFarmGenerateFrequency);
+        for (int i = 0; i <= winFarmRolls; i++)
+        {
+            float weight = Random.Range(0f, 1f);
+            if (weight <= winFarmRolls)
+            {
+                randomEvents.Add(new RandomEvent
+                {
+                    startPosition = new Vector3(0.08f, 0, 0.75f),
+                    startTime = (i) * winFarmGenerateFrequency + winFarmStartDelay,
+                    randomEventsPath = winFarmPath,
+                    stayTime = winFarmStayTime,
+                });
+            }
+        }
+    }
 
     private float currrentTime;
 
@@ -23,119 +99,119 @@ public class RandomEventsControl : MonoBehaviour
     private void Start()
     {
         currrentTime = 0;
+        RandomGenerate();
+        //randomEvents.Add(new RandomEvent
+        //{
+        //    startPosition = new Vector3(0.08f, 0, 0.75f),
+        //    startTime = 0,
+        //    randomEventsPath = submarinePath,
+        //    stayTime = 20,
+        //}) ;
 
-        randomEvents.Add(new RandomEvent
-        {
-            startPosition = new Vector3(0.08f, 0, 0.75f),
-            startTime = 0,
-            randomEventsPath = submarinePath,
-            stayTime = 20,
-        }) ;
+        //randomEvents.Add(new RandomEvent
+        //{
+        //    startPosition = new Vector3(0.08f, 0, 0.75f),
+        //    startTime = 0,
+        //    randomEventsPath = lglooPath,
+        //    stayTime = 20,
+        //});
 
-        randomEvents.Add(new RandomEvent
-        {
-            startPosition = new Vector3(0.08f, 0, 0.75f),
-            startTime = 0,
-            randomEventsPath = lglooPath,
-            stayTime = 20,
-        });
+        //randomEvents.Add(new RandomEvent
+        //{
+        //    startPosition = new Vector3(0.08f, 0, 0.75f),
+        //    startTime = 120,
+        //    randomEventsPath = lglooPath,
+        //    stayTime = 20,
+        //});
 
-        randomEvents.Add(new RandomEvent
-        {
-            startPosition = new Vector3(0.08f, 0, 0.75f),
-            startTime = 120,
-            randomEventsPath = lglooPath,
-            stayTime = 20,
-        });
+        //randomEvents.Add(new RandomEvent
+        //{
+        //    startPosition = new Vector3(0.08f, 0, 0.75f),
+        //    startTime = 180,
+        //    randomEventsPath = lglooPath,
+        //    stayTime = 20,
+        //});
 
-        randomEvents.Add(new RandomEvent
-        {
-            startPosition = new Vector3(0.08f, 0, 0.75f),
-            startTime = 180,
-            randomEventsPath = lglooPath,
-            stayTime = 20,
-        });
+        //randomEvents.Add(new RandomEvent
+        //{
+        //    startPosition = new Vector3(0.08f, 0, 0.75f),
+        //    startTime = 60,
+        //    randomEventsPath = lglooPath,
+        //    stayTime = 20,
+        //});
+        //randomEvents.Add(new RandomEvent
+        //{
+        //    startPosition = new Vector3(0.08f, 0, 0.75f),
+        //    startTime = 150,
+        //    randomEventsPath = lglooPath,
+        //    stayTime = 20,
+        //});
+        //randomEvents.Add(new RandomEvent
+        //{
+        //    startPosition = new Vector3(0.08f, 0, 0.75f),
+        //    startTime = 90,
+        //    randomEventsPath = lglooPath,
+        //    stayTime = 20,
+        //});
 
-        randomEvents.Add(new RandomEvent
-        {
-            startPosition = new Vector3(0.08f, 0, 0.75f),
-            startTime = 60,
-            randomEventsPath = lglooPath,
-            stayTime = 20,
-        });
-        randomEvents.Add(new RandomEvent
-        {
-            startPosition = new Vector3(0.08f, 0, 0.75f),
-            startTime = 150,
-            randomEventsPath = lglooPath,
-            stayTime = 20,
-        });
-        randomEvents.Add(new RandomEvent
-        {
-            startPosition = new Vector3(0.08f, 0, 0.75f),
-            startTime = 90,
-            randomEventsPath = lglooPath,
-            stayTime = 20,
-        });
+        //randomEvents.Add(new RandomEvent
+        //{
+        //    startPosition = new Vector3(0.08f, 0, 0.75f),
+        //    startTime = 210,
+        //    randomEventsPath = lglooPath,
+        //    stayTime = 20,
+        //});
 
-        randomEvents.Add(new RandomEvent
-        {
-            startPosition = new Vector3(0.08f, 0, 0.75f),
-            startTime = 210,
-            randomEventsPath = lglooPath,
-            stayTime = 20,
-        });
-        
-        randomEvents.Add(new RandomEvent
-        {
-            startPosition = new Vector3(0, 0, 0),
-            startTime = 0,
-            randomEventsPath = winFarmPath,
-            stayTime = 20,
-        });
+        //randomEvents.Add(new RandomEvent
+        //{
+        //    startPosition = new Vector3(0, 0, 0),
+        //    startTime = 0,
+        //    randomEventsPath = winFarmPath,
+        //    stayTime = 20,
+        //});
 
-        randomEvents.Add(new RandomEvent
-        {
-            startPosition = new Vector3(0, 0, 0),
-            startTime = 40,
-            randomEventsPath = winFarmPath,
-            stayTime = 40,
-        });
+        //randomEvents.Add(new RandomEvent
+        //{
+        //    startPosition = new Vector3(0, 0, 0),
+        //    startTime = 40,
+        //    randomEventsPath = winFarmPath,
+        //    stayTime = 40,
+        //});
 
-        randomEvents.Add(new RandomEvent
-        {
-            startPosition = new Vector3(0, 0, 0),
-            startTime = 20,
-            randomEventsPath = submarinePath,
-        });
+        //randomEvents.Add(new RandomEvent
+        //{
+        //    startPosition = new Vector3(0, 0, 0),
+        //    startTime = 20,
+        //    randomEventsPath = submarinePath,
+        //});
 
-        randomEvents.Add(new RandomEvent
-        {
-            startPosition = new Vector3(0, 0, 0),
-            startTime = 80,
-            randomEventsPath = submarinePath,
-        });
+        //randomEvents.Add(new RandomEvent
+        //{
+        //    startPosition = new Vector3(0, 0, 0),
+        //    startTime = 80,
+        //    randomEventsPath = submarinePath,
+        //});
 
-        randomEvents.Add(new RandomEvent
-        {
-            startPosition = new Vector3(0, 0, 0),
-            startTime = 90,
-            randomEventsPath = winFarmPath,
-        });
+        //randomEvents.Add(new RandomEvent
+        //{
+        //    startPosition = new Vector3(0, 0, 0),
+        //    startTime = 90,
+        //    randomEventsPath = winFarmPath,
+        //});
 
-        randomEvents.Add(new RandomEvent
-        {
-            startPosition = new Vector3(0, 0, 0),
-            startTime = 150,
-            randomEventsPath = winFarmPath,
-        });
+        //randomEvents.Add(new RandomEvent
+        //{
+        //    startPosition = new Vector3(0, 0, 0),
+        //    startTime = 150,
+        //    randomEventsPath = winFarmPath,
+        //});
 
-        randomEvents.Add(new RandomEvent
-        {
-            startPosition = new Vector3(0, 0, 0),
-            startTime = 200,
-            randomEventsPath = winFarmPath,
-        });
+        //randomEvents.Add(new RandomEvent
+        //{
+        //    startPosition = new Vector3(0, 0, 0),
+        //    startTime = 200,
+        //    randomEventsPath = winFarmPath,
+        //});
     }
 
     // Update is called once per frame
