@@ -6,17 +6,17 @@ using System;
 using Random = UnityEngine.Random;
 using Object = UnityEngine.Object;
 
-public class WindFarmControl : MonoBehaviour,IRandomEventsObject
+public class WindFarmControl : MonoBehaviour, IRandomEventsObject
 {
     List<Rigidbody> characterList;
     public float forceArgument;
     public float angleArgument;
-    public float stayTime;
+    private float stayTime;
     private float currentTime;
     private bool isShow;
     public float prepareShowTime;
     private bool startPrepare;
-    public TMP_Text text;
+    private TMP_Text text;
     private List<int> randomAngle = new List<int>()
     {
         0,
@@ -26,21 +26,27 @@ public class WindFarmControl : MonoBehaviour,IRandomEventsObject
     };
     private List<float> strengths = new List<float>()
     {
-        45,
-        46,
-        47,
-        48,
+        20,
+        30,
+        35,
+        40,
     };
-    public void OnShow(Vector3 point)
+
+    private void Awake()
+    {
+        text = GameObject.Find("Canvas/WindText").GetComponent<TMP_Text>();
+    }
+    public void OnShow(Vector3 point, float stayTime)
     {
         angleArgument = randomAngle[Random.Range(0, 4)];
         forceArgument = strengths[Random.Range(0, 4)];
+        this.stayTime = stayTime;
         characterList = new List<Rigidbody>();
         this.gameObject.SetActive(true);
         isShow = false;
         startPrepare = true;
         var characterContorls = Object.FindObjectsOfType<CharacterContorl>();
-        foreach(var item in characterContorls)
+        foreach (var item in characterContorls)
         {
             characterList.Add(item.GetComponent<Rigidbody>());
         }
@@ -51,6 +57,7 @@ public class WindFarmControl : MonoBehaviour,IRandomEventsObject
         isShow = false;
         startPrepare = false;
         text.text = "";
+        gameObject.SetActive(false);
     }
 
     private void Update()
@@ -78,8 +85,8 @@ public class WindFarmControl : MonoBehaviour,IRandomEventsObject
         }
 
         float radians = angleArgument * Mathf.Deg2Rad;
-        float x = Mathf.Cos(radians) ;
-        float y = Mathf.Sin(radians) ;
+        float x = Mathf.Cos(radians);
+        float y = Mathf.Sin(radians);
         Vector3 forward = new Vector3(x, 0, y).normalized;
 
         if (isShow)
@@ -87,8 +94,18 @@ public class WindFarmControl : MonoBehaviour,IRandomEventsObject
             text.text = $"wind speed: {forceArgument} \nwind direction: {angleArgument}\n{(Convert.ToInt32(stayTime - currentTime))}s";
             foreach (var rigid in characterList)
             {
-                if (!rigid.GetComponent<CharacterContorl>().invulernable)
-                    rigid.AddForce(forward * forceArgument);
+                var character = rigid.GetComponent<CharacterContorl>();
+                if (!character.invulernable && !character.returning)
+                {
+                    var vel1 = character.velocityBeforeCollision;
+                    var d1 = Vector3.Angle(vel1, forward);
+
+                    var degree1 = d1 * Mathf.Deg2Rad;
+                    var m1 = (Mathf.Cos(degree1) * vel1).magnitude;
+                    if (m1 <= character.maxReleaseVelocity)
+                        rigid.AddForce(forward * forceArgument);
+                }
+
             }
         }
         else if (startPrepare)

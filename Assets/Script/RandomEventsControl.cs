@@ -4,16 +4,17 @@ using UnityEngine;
 
 public struct RandomEvent
 {
-    public GameObject randomEventsObject;
+    public string randomEventsPath;
     public float startTime;
     public Vector3 startPosition;
+    public float stayTime;
 }
 
 public class RandomEventsControl : MonoBehaviour
 {
-    public GameObject lglooObject;
-    public GameObject submarineObjct;
-    public GameObject windFarmObject;
+    string lglooPath = "Prefabs/Lgloo";
+    string submarinePath = "Prefabs/Submarine";
+    string winFarmPath = "Prefabs/WindFarm";
 
     private float currrentTime;
 
@@ -27,96 +28,113 @@ public class RandomEventsControl : MonoBehaviour
         {
             startPosition = new Vector3(0.08f, 0, 0.75f),
             startTime = 0,
-            randomEventsObject = lglooObject,
+            randomEventsPath = submarinePath,
+            stayTime = 20,
         }) ;
 
         randomEvents.Add(new RandomEvent
         {
             startPosition = new Vector3(0.08f, 0, 0.75f),
+            startTime = 0,
+            randomEventsPath = lglooPath,
+            stayTime = 20,
+        });
+
+        randomEvents.Add(new RandomEvent
+        {
+            startPosition = new Vector3(0.08f, 0, 0.75f),
             startTime = 120,
-            randomEventsObject = lglooObject,
+            randomEventsPath = lglooPath,
+            stayTime = 20,
         });
 
         randomEvents.Add(new RandomEvent
         {
             startPosition = new Vector3(0.08f, 0, 0.75f),
             startTime = 180,
-            randomEventsObject = lglooObject,
+            randomEventsPath = lglooPath,
+            stayTime = 20,
         });
 
         randomEvents.Add(new RandomEvent
         {
             startPosition = new Vector3(0.08f, 0, 0.75f),
             startTime = 60,
-            randomEventsObject = lglooObject,
+            randomEventsPath = lglooPath,
+            stayTime = 20,
         });
         randomEvents.Add(new RandomEvent
         {
             startPosition = new Vector3(0.08f, 0, 0.75f),
             startTime = 150,
-            randomEventsObject = lglooObject,
+            randomEventsPath = lglooPath,
+            stayTime = 20,
         });
         randomEvents.Add(new RandomEvent
         {
             startPosition = new Vector3(0.08f, 0, 0.75f),
             startTime = 90,
-            randomEventsObject = lglooObject,
+            randomEventsPath = lglooPath,
+            stayTime = 20,
         });
 
         randomEvents.Add(new RandomEvent
         {
             startPosition = new Vector3(0.08f, 0, 0.75f),
             startTime = 210,
-            randomEventsObject = lglooObject,
+            randomEventsPath = lglooPath,
+            stayTime = 20,
         });
         
         randomEvents.Add(new RandomEvent
         {
             startPosition = new Vector3(0, 0, 0),
             startTime = 0,
-            randomEventsObject = windFarmObject,
+            randomEventsPath = winFarmPath,
+            stayTime = 20,
         });
 
         randomEvents.Add(new RandomEvent
         {
             startPosition = new Vector3(0, 0, 0),
             startTime = 40,
-            randomEventsObject = windFarmObject,
+            randomEventsPath = winFarmPath,
+            stayTime = 40,
         });
 
         randomEvents.Add(new RandomEvent
         {
             startPosition = new Vector3(0, 0, 0),
             startTime = 20,
-            randomEventsObject = submarineObjct,
+            randomEventsPath = submarinePath,
         });
 
         randomEvents.Add(new RandomEvent
         {
             startPosition = new Vector3(0, 0, 0),
             startTime = 80,
-            randomEventsObject = submarineObjct,
+            randomEventsPath = submarinePath,
         });
 
         randomEvents.Add(new RandomEvent
         {
             startPosition = new Vector3(0, 0, 0),
             startTime = 90,
-            randomEventsObject = windFarmObject,
+            randomEventsPath = winFarmPath,
         });
 
         randomEvents.Add(new RandomEvent
         {
             startPosition = new Vector3(0, 0, 0),
             startTime = 150,
-            randomEventsObject = windFarmObject,
+            randomEventsPath = winFarmPath,
         });
 
         randomEvents.Add(new RandomEvent
         {
             startPosition = new Vector3(0, 0, 0),
             startTime = 200,
-            randomEventsObject = windFarmObject,
+            randomEventsPath = winFarmPath,
         });
     }
 
@@ -128,7 +146,9 @@ public class RandomEventsControl : MonoBehaviour
         {
             if(currrentTime > item.startTime)
             {
-                item.randomEventsObject.GetComponent<IRandomEventsObject>().OnShow(item.startPosition);
+                var eventObjectPrefab = Resources.Load<GameObject>(item.randomEventsPath);
+                var eventObjectGameObject = Instantiate(eventObjectPrefab,item.startPosition,Quaternion.Euler(new Vector3(0,0,0)));
+                eventObjectGameObject.GetComponent<IRandomEventsObject>().OnShow(item.startPosition,item.stayTime);
                 removeRandomEvents.Add(item);
             }
         }

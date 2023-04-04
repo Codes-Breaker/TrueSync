@@ -33,6 +33,9 @@ public class InputReaderBase : MonoBehaviour
     public bool pull;
     [HideInInspector]
     public bool interact;
+    [HideInInspector]
+    public CharacterContorl player;
+
 
 
     public bool hasJumped = false;

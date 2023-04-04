@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
-public class SubmarineControl : MonoBehaviour,IRandomEventsObject
+public class SubmarineControl : MonoBehaviour, IRandomEventsObject
 {
     public float stayTime;
     private float currentTime;
     private bool isShow;
-    public float startTime;
+    private float startTime;
     public float endTime;
     public float prepareShowTime;
     private bool startPrepare;
@@ -36,12 +36,13 @@ public class SubmarineControl : MonoBehaviour,IRandomEventsObject
             transform.position = new Vector3(transform.position.x, 0, transform.position.z);
             transform.gameObject.GetComponent<MeshRenderer>().material = mat1;
             GetComponent<Collider>().enabled = true;
-            transform.DOLocalMoveY(2.3f, startTime).OnComplete(() => {
+            transform.DOLocalMoveY(2.3f, 2).OnComplete(() =>
+            {
                 isShow = true;
             });
         }
         currentTime += Time.deltaTime;
-        if(currentTime > stayTime)
+        if (currentTime > stayTime)
         {
             OnExit();
         }
@@ -61,7 +62,8 @@ public class SubmarineControl : MonoBehaviour,IRandomEventsObject
 
     public void OnExit()
     {
-        transform.DOLocalMoveY(0f, endTime).OnComplete(() => {
+        transform.DOLocalMoveY(0f, 2).OnComplete(() =>
+        {
             this.gameObject.SetActive(false);
             isShow = false;
             startPrepare = false;
@@ -69,15 +71,16 @@ public class SubmarineControl : MonoBehaviour,IRandomEventsObject
         });
     }
 
-    public void OnShow(Vector3 position)
+    public void OnShow(Vector3 position, float stayTime)
     {
-        var random = randomPlaceAndRotation[Random.Range(0, randomPlaceAndRotation.Count)];
-        transform.position = random.Item1;
-        transform.rotation = Quaternion.Euler(random.Item2);
-        GetComponent<Collider>().enabled = false;
+        var rand = randomPlaceAndRotation[Random.Range(0, randomPlaceAndRotation.Count)];
+        position = rand.Item1;
+        transform.rotation = Quaternion.Euler(rand.Item2);
         startPrepare = true;
-        transform.position = new Vector3(transform.position.x, 2.3f, transform.position.z);
+        transform.position = position;
+        GetComponent<Collider>().enabled = false;
         transform.gameObject.GetComponent<MeshRenderer>().material = mat2;
+        transform.position = new Vector3(transform.position.x, 2.3f, transform.position.z);
         currentTime = 0;
         this.gameObject.SetActive(true);
 

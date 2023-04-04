@@ -31,7 +31,7 @@ public class CharacterContorl : MonoBehaviour
     private bool charge;
 
     //摇杆输入值最小值
-    private float movementThrashold = 0.05f;
+    private float movementThrashold = 0.35f;
     [Space(10)]
     [Header("相关需要关联组件")]
     public TMP_Text vulnerbilityText;
@@ -160,6 +160,7 @@ public class CharacterContorl : MonoBehaviour
         initialRotation = ridbody.transform.rotation.eulerAngles;
         initialRot = ridbody.transform.rotation;
         currentDrown = maxDrowning;
+        inputReader.player = this;
     }
 
     private void Start()
@@ -555,7 +556,7 @@ public class CharacterContorl : MonoBehaviour
                     addSpeed = Mathf.Max(minLinearReleaseSpeedArgument, addSpeed);
                     if (m1 < maxReleaseVelocity)
                     {
-                        Debug.LogError($"{this.gameObject.name} ======> {addSpeed}");
+                        //Debug.LogError($"{this.gameObject.name} ======> {addSpeed}");
                         ridbody.AddForce(releaseDir * addSpeed, ForceMode.Impulse);
                     }
 
