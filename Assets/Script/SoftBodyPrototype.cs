@@ -63,6 +63,8 @@ public class SoftBodyPrototype : MonoBehaviour
     [Tooltip("Max. seconds between land and jump")]
     public float JumpWaitMax = 4.0f;
 
+    public float CoolDown = 1f;
+    private float CurrentCoolDown = 0;
     private float JumpWait;
     private float LandedTime;
     #endregion
@@ -71,6 +73,8 @@ public class SoftBodyPrototype : MonoBehaviour
     private Vector3[] PointMassAccelerations;
     private Vector3[] PointMassVelocities;
     private Vector3[] PointMassPositions;
+
+    public float PositionThreshold;
 
     private Vector3[] FaceNormals;
     private float[] FaceAreas;
@@ -84,8 +88,6 @@ public class SoftBodyPrototype : MonoBehaviour
     private Vector3 TransformStartPosition;
     private Vector3 TransformStartScale;
 
-    private const int INVALID_LAYER = -1;
-    private static int PlayAreaTriggerLayer = INVALID_LAYER;
     #endregion
 
     // components to cache for use during updates
@@ -111,31 +113,31 @@ public class SoftBodyPrototype : MonoBehaviour
         FaceAreas = new float[numFaces];
 
         HullRestVolume = transform.localScale.x * transform.localScale.y * transform.localScale.z;
-        TransformStartPosition = transform.position;
+        TransformStartPosition = Vector3.zero;
         TransformStartScale = transform.localScale;
-        if (PlayAreaTriggerLayer == INVALID_LAYER)
-        {
-            // static, just initialize once
-            PlayAreaTriggerLayer = LayerMask.NameToLayer("Play Area"); 
-        }
     }
 
     private void InitializePointMassPositionsToBoundingBox()
     {
-        var x = TriggerCollider.size.x / 2f;
-        var y = TriggerCollider.size.y / 2f;
-        var z = TriggerCollider.size.z / 2f;
+        PointMassPositions[0] = new Vector3(.5f * TriggerCollider.size.x, .5f * TriggerCollider.size.y, .5f * TriggerCollider.size.z);
+        PointMassPositions[1] = new Vector3(.5f * TriggerCollider.size.x, .5f * TriggerCollider.size.y, -.5f * TriggerCollider.size.z);
+        PointMassPositions[2] = new Vector3(-.5f * TriggerCollider.size.x, .5f * TriggerCollider.size.y, -.5f * TriggerCollider.size.z);
+        PointMassPositions[3] = new Vector3(-.5f * TriggerCollider.size.x, .5f * TriggerCollider.size.y, .5f * TriggerCollider.size.z);
 
-        PointMassPositions[0] = transform.TransformPoint(new Vector3(x, y, z)) + TriggerCollider.center;
-        PointMassPositions[1] = transform.TransformPoint(new Vector3(x, y, -z)) + TriggerCollider.center;
-        PointMassPositions[2] = transform.TransformPoint(new Vector3(-x, y, -z)) + TriggerCollider.center;
-        PointMassPositions[3] = transform.TransformPoint(new Vector3(-x, y, z)) + TriggerCollider.center;
+        PointMassPositions[4] = new Vector3(.5f * TriggerCollider.size.x, -.5f * TriggerCollider.size.y, .5f * TriggerCollider.size.z);
+        PointMassPositions[5] = new Vector3(.5f * TriggerCollider.size.x, -.5f * TriggerCollider.size.y, -.5f * TriggerCollider.size.z);
+        PointMassPositions[6] = new Vector3(-.5f * TriggerCollider.size.x, -.5f * TriggerCollider.size.y, -.5f * TriggerCollider.size.z);
+        PointMassPositions[7] = new Vector3(-.5f * TriggerCollider.size.x, -.5f * TriggerCollider.size.y, .5f * TriggerCollider.size.z);
 
-        PointMassPositions[4] = transform.TransformPoint(new Vector3(x, -y, z)) + TriggerCollider.center;
-        PointMassPositions[5] = transform.TransformPoint(new Vector3(x, -y, -z)) + TriggerCollider.center;
-        PointMassPositions[6] = transform.TransformPoint(new Vector3(-x, -y, -z)) + TriggerCollider.center;
-        PointMassPositions[7] = transform.TransformPoint(new Vector3(-x, -y, z)) + TriggerCollider.center;
+        //PointMassPositions[0] = new Vector3(.5f, .5f, .5f) + TriggerCollider.center;
+        //PointMassPositions[1] = new Vector3(.5f, .5f, -.5f) + TriggerCollider.center;
+        //PointMassPositions[2] = new Vector3(-.5f, .5f, -.5f) + TriggerCollider.center;
+        //PointMassPositions[3] = new Vector3(-.5f, .5f, .5f) + TriggerCollider.center;
 
+        //PointMassPositions[4] = new Vector3(.5f, -.5f, .5f) + TriggerCollider.center;
+        //PointMassPositions[5] = new Vector3(.5f, -.5f, -.5f) + TriggerCollider.center;
+        //PointMassPositions[6] = new Vector3(-.5f, -.5f, -.5f) + TriggerCollider.center;
+        //PointMassPositions[7] = new Vector3(-.5f, -.5f, .5f) + TriggerCollider.center;
     }
 
     private void InitializePointMassIndexesForBoundingBox()
@@ -204,7 +206,9 @@ public class SoftBodyPrototype : MonoBehaviour
     // Places the soft body back where it started, and resets the simulation state
     private void Respawn()
     {
-        //transform.position = TransformStartPosition;
+        //transform.localPosition = TransformStartPosition;
+        Debug.LogError($"====¡· RESPAWN");
+        CurrentCoolDown = Time.time;
         transform.localScale = TransformStartScale;
         InitializePointMassPositionsToBoundingBox();
         for (int i = 0; i < PointMassVelocities.Length; ++i)
@@ -213,71 +217,68 @@ public class SoftBodyPrototype : MonoBehaviour
         }
     }
 
-    //private void OnTriggerEnter(Collider other)
-    //{
-    //    // the TriggerCollider just touched another collider
+    private void OnTriggerEnter(Collider other)
+    {
+        // the TriggerCollider just touched another collider
 
-    //    // track landing on a surface, for the jump behavior
-    //    if (other.gameObject.layer != PlayAreaTriggerLayer && 
-    //        other.transform.position.y < transform.position.y)
-    //    {
-    //        LandedTime = Time.time;
-    //        JumpWait = Random.Range(JumpWaitMin, JumpWaitMax);
-    //    }
-    //}
+        // track landing on a surface, for the jump behavior
+        //LandedTime = Time.time;
+        LandedTime = Time.time;
+        JumpWait = JumpWaitMax;
+    }
 
-    //private void OnCollisionEnter(Collision collision)
-    //{
-    //    var other = collision.collider;
-    //    // overlapping with another collider, so make sure the point masses don't interpenetrate,
-    //    // and resolve their velocities for the collision
-    //    Vector3 depenetrationDir;
-    //    float depenetrationDist;
-    //    if (other.gameObject.layer != PlayAreaTriggerLayer &&
-    //        Physics.ComputePenetration(TriggerCollider, transform.position, transform.rotation,
-    //                                   other, other.transform.position, other.transform.rotation,
-    //                                   out depenetrationDir, out depenetrationDist))
-    //    {
-    //        //Debug.LogFormat("Collision normal {0}", depenetrationDir);
-    //        for (int i = 0; i < PointMassPositions.Length; ++i)
-    //        {
-    //            Vector3 p = PointMassPositions[i];
-    //            if (other.bounds.Contains(p))
-    //            {
-    //                // clamp interpenetrating point mass to surface of other collider
-    //                PointMassPositions[i] = 
-    //                    other.ClosestPoint(p + depenetrationDir * (depenetrationDist + 1.0f));
 
-    //                // reflect component of velocity along other collider normal
-    //                // while maintaining the remainder of velocity, but reduce by
-    //                // energy loss coefficient
-    //                // (approximate average contact normals as depenetration direction)
-    //                float speedAlongNormalSigned = Vector3.Dot(PointMassVelocities[i], depenetrationDir);
-    //                float speedAlongNormalSign = Mathf.Sign(speedAlongNormalSigned);
-    //                Vector3 velocityAlongNormal = speedAlongNormalSigned * depenetrationDir;
-    //                Vector3 slideVelocity = PointMassVelocities[i] - velocityAlongNormal;
-    //                velocityAlongNormal *= speedAlongNormalSign; // reflect if opposing
 
-    //                // reduce velocityAlongNormal by bounce coefficient if reflecting
-    //                float bounceCoefficient = (speedAlongNormalSign >= 0.0f ? 1.0f : BounceCoefficient);
-    //                PointMassVelocities[i] = 
-    //                    bounceCoefficient * velocityAlongNormal + 
-    //                    slideVelocity * SlideCoefficient;                        
-    //            }
-    //        }
-    //    }
-    //}
+    private void OnTriggerStay(Collider other)
+    {
+        // overlapping with another collider, so make sure the point masses don't interpenetrate,
+        // and resolve their velocities for the collision
+        Vector3 depenetrationDir;
+        float depenetrationDist;
+        if (Physics.ComputePenetration(TriggerCollider, transform.position, transform.rotation,
+                                       other, other.transform.position, other.transform.rotation,
+                                       out depenetrationDir, out depenetrationDist))
+        {
+            //Debug.LogFormat("Collision normal {0}", depenetrationDir);
+            for (int i = 0; i < PointMassPositions.Length; ++i)
+            {
+                Vector3 p = PointMassPositions[i] + transform.position;
+                if (other.bounds.Contains(p))
+                {
+                    LandedTime = Time.time;
+                    // clamp interpenetrating point mass to surface of other collider
+                    var pos = other.ClosestPoint(p + depenetrationDir * (depenetrationDist + 1.0f)) - transform.position;
+                    if (pos.magnitude < PositionThreshold)
+                        PointMassPositions[i] = pos;
 
-    //private void OnCollisionExit(Collision other)
-    //{
-    //    if (other.gameObject.layer == PlayAreaTriggerLayer)
-    //    {
-    //        Debug.LogWarningFormat("{0}>{1} left the play area, and will be respawned", 
-    //                                transform.parent == null ? "(no parent)" : transform.parent.gameObject.name,                    
-    //                                gameObject.name);
-    //        Respawn();
-    //    }
-    //}
+
+                    // reflect component of velocity along other collider normal
+                    // while maintaining the remainder of velocity, but reduce by
+                    // energy loss coefficient
+                    // (approximate average contact normals as depenetration direction)
+                    float speedAlongNormalSigned = Vector3.Dot(PointMassVelocities[i], depenetrationDir);
+                    float speedAlongNormalSign = Mathf.Sign(speedAlongNormalSigned);
+                    Vector3 velocityAlongNormal = speedAlongNormalSigned * depenetrationDir;
+                    Vector3 slideVelocity = PointMassVelocities[i] - velocityAlongNormal;
+                    velocityAlongNormal *= speedAlongNormalSign; // reflect if opposing
+
+                    // reduce velocityAlongNormal by bounce coefficient if reflecting
+                    float bounceCoefficient = (speedAlongNormalSign >= 0.0f ? 1.0f : BounceCoefficient);
+                    PointMassVelocities[i] =
+                        bounceCoefficient * velocityAlongNormal +
+                        slideVelocity * SlideCoefficient;
+                    LandedTime = Time.time;
+                    JumpWait = JumpWaitMax;
+                }
+            }
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        LandedTime = Time.time;
+        JumpWait = JumpWaitMax;
+    }
 
     // I've chosen fixed update to remove the variable of step size when investigating numeric
     // stability of the simulation.
@@ -287,7 +288,7 @@ public class SoftBodyPrototype : MonoBehaviour
         for (int i = 0; i < PointMassAccelerations.Length; ++i)
         {
             // simplify force to acceleration, as mass == 1
-            PointMassAccelerations[i] = this.GetComponent<Rigidbody>().velocity;
+            PointMassAccelerations[i] = new Vector3(0.0f, 0.0f, 0.0f);
         }
 
         AccumulateSpringForces();
@@ -295,12 +296,18 @@ public class SoftBodyPrototype : MonoBehaviour
 
         // Jump every few seconds, to keep the simulation lively
         Vector3 jumpVelocity = new Vector3(0.0f, 0.0f, 0.0f);
-        if (LandedTime > 0.0f && Time.fixedTime - LandedTime >= JumpWait)
+
+        if (Time.time - CurrentCoolDown >= CoolDown)
         {
-            jumpVelocity = Vector3.up * JumpSpeed;
-            LandedTime = 0.0f;
+            SolveForVelocitiesAndPositions(Time.fixedDeltaTime, jumpVelocity);
+            if (LandedTime > 0.0f && Time.time - LandedTime >= JumpWait)
+            {
+                Respawn();
+                LandedTime = 0.0f;
+            }
         }
-        SolveForVelocitiesAndPositions(Time.fixedDeltaTime, jumpVelocity);
+
+
     }
 
     // Calculates the force on each spring and adds it to Accelerations 
@@ -375,8 +382,8 @@ public class SoftBodyPrototype : MonoBehaviour
     // an approximately fixed volume fluid (like water)
     private void AccumulatePressureForces()
     {
-            float volume =
-            transform.localScale.x * transform.localScale.y * transform.localScale.z;
+        float volume =
+        transform.localScale.x * transform.localScale.y * transform.localScale.z;
 
         float volumeRatio = volume / HullRestVolume;
         float surfaceArea = 0.0f;
@@ -461,8 +468,12 @@ public class SoftBodyPrototype : MonoBehaviour
         Bounds ptBounds = new Bounds();
         for (int i = 0; i < PointMassPositions.Length; ++i)
         {
-            PointMassVelocities[i] += PointMassAccelerations[i] * deltaTime + jumpVelocity;
-            PointMassPositions[i] += PointMassVelocities[i] * deltaTime;
+            PointMassVelocities[i] += PointMassAccelerations[i] * deltaTime;
+
+            if ((PointMassPositions[i] + PointMassVelocities[i] * deltaTime).magnitude < PositionThreshold)
+            {
+                PointMassPositions[i] += PointMassVelocities[i] * deltaTime;
+            }
             if (i == 0)
             {
                 // start the bounds around the first point mass position (instead of [0,0,0])
@@ -487,8 +498,9 @@ public class SoftBodyPrototype : MonoBehaviour
         }
         else
         {
-            //transform.position = ptBounds.center;
-            transform.localScale = ptBounds.size;
+            //transform.position =  ptBounds.center;
+            //transform.localScale = ptBounds.size;
+            transform.localScale = new Vector3(ptBounds.size.x / TriggerCollider.size.x, ptBounds.size.y / TriggerCollider.size.y, ptBounds.size.z / TriggerCollider.size.z);
         }
     }
     // Returns the cross product: (a - b) X (c - b)
@@ -510,7 +522,7 @@ public class SoftBodyPrototype : MonoBehaviour
     //
     // Adapted from http://joeyfladderak.com/lets-talk-physics-soft-body-dynamics/
     //
-    Vector3 CalcSpringForce(int pt0Index, int pt1Index, float restLength, float stiffness, 
+    Vector3 CalcSpringForce(int pt0Index, int pt1Index, float restLength, float stiffness,
                             float damping)
     {
         Vector3 pt0ToPt1 = PointMassPositions[pt1Index] - PointMassPositions[pt0Index];
@@ -546,24 +558,24 @@ public class SoftBodyPrototype : MonoBehaviour
         Gizmos.color = Color.red;
         for (int i = 0; i < 4; ++i)
         {
-            Gizmos.DrawSphere(PointMassPositions[i], .1f);
+            Gizmos.DrawSphere(PointMassPositions[i] + transform.position, .1f);
         }
 
         // draw the bottom point masses
         Gizmos.color = Color.blue;
         for (int i = 4; i < PointMassPositions.Length; ++i)
         {
-            Gizmos.DrawSphere(PointMassPositions[i], .1f);
+            Gizmos.DrawSphere(PointMassPositions[i] + transform.position, .1f);
         }
 
         // draw the springs used to form the faces of the point mass hull and draw
         // their normals
         for (int i = 0; i < FacePointMassIndexes.GetLength(0); ++i)
         {
-            Vector3 a = PointMassPositions[FacePointMassIndexes[i, 0]];
-            Vector3 b = PointMassPositions[FacePointMassIndexes[i, 1]];
-            Vector3 c = PointMassPositions[FacePointMassIndexes[i, 2]];
-            Vector3 d = PointMassPositions[FacePointMassIndexes[i, 3]];
+            Vector3 a = PointMassPositions[FacePointMassIndexes[i, 0]] + transform.position;
+            Vector3 b = PointMassPositions[FacePointMassIndexes[i, 1]] + transform.position;
+            Vector3 c = PointMassPositions[FacePointMassIndexes[i, 2]] + transform.position;
+            Vector3 d = PointMassPositions[FacePointMassIndexes[i, 3]] + transform.position;
 
             // face edges
             Gizmos.color = Color.white;
@@ -573,7 +585,7 @@ public class SoftBodyPrototype : MonoBehaviour
             Gizmos.DrawLine(d, a);
 
             // face normals
-            Gizmos.color = Color.blue;        
+            Gizmos.color = Color.blue;
             Vector3 faceNormal = CalcCross(a, b, c).normalized;
             Vector3 faceMidpoint = Vector3.Lerp(a, c, .5f);
             Gizmos.DrawLine(faceMidpoint, faceMidpoint + faceNormal);
@@ -585,7 +597,7 @@ public class SoftBodyPrototype : MonoBehaviour
         {
             int pt0Index = DiagonalSpringPointMassIndexes[i, 0];
             int pt1Index = DiagonalSpringPointMassIndexes[i, 1];
-            Gizmos.DrawLine(PointMassPositions[pt0Index], PointMassPositions[pt1Index]);
+            Gizmos.DrawLine(PointMassPositions[pt0Index] + transform.position, PointMassPositions[pt1Index] + transform.position);
         }
     }
 }

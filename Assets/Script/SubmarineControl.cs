@@ -73,6 +73,7 @@ public class SubmarineControl : MonoBehaviour, IRandomEventsObject
 
     public void OnShow(Vector3 position, float stayTime)
     {
+        this.stayTime = stayTime;
         var rand = randomPlaceAndRotation[Random.Range(0, randomPlaceAndRotation.Count)];
         position = rand.Item1;
         transform.rotation = Quaternion.Euler(rand.Item2);

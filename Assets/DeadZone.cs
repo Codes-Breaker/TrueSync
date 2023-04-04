@@ -27,7 +27,6 @@ public class DeadZone : MonoBehaviour
             character.jumpingBack = false;
             Vector3 pos = Physics.ClosestPoint(character.transform.position, platformCollider, platformCollider.transform.position, platformCollider.transform.rotation);
             pos = new Vector3(pos.x, character.transform.position.y, pos.z);
-            Debug.LogError($"=====>swim target: {pos}");
             character.swimTarget = pos;
         }
     }

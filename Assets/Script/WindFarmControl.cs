@@ -5,6 +5,7 @@ using TMPro;
 using System;
 using Random = UnityEngine.Random;
 using Object = UnityEngine.Object;
+using UnityEngine.UI;
 
 public class WindFarmControl : MonoBehaviour, IRandomEventsObject
 {
@@ -17,6 +18,8 @@ public class WindFarmControl : MonoBehaviour, IRandomEventsObject
     public float prepareShowTime;
     private bool startPrepare;
     private TMP_Text text;
+    private Image windImage;
+    GameController gameController;
     private List<int> randomAngle = new List<int>()
     {
         0,
@@ -34,7 +37,9 @@ public class WindFarmControl : MonoBehaviour, IRandomEventsObject
 
     private void Awake()
     {
-        text = GameObject.Find("Canvas/WindText").GetComponent<TMP_Text>();
+        gameController = GameObject.Find("GameManager").GetComponent<GameController>();
+        text = gameController.windText.GetComponent<TMP_Text>();
+        windImage = gameController.windIndicator.GetComponent<Image>();
     }
     public void OnShow(Vector3 point, float stayTime)
     {
@@ -58,6 +63,8 @@ public class WindFarmControl : MonoBehaviour, IRandomEventsObject
         startPrepare = false;
         text.text = "";
         gameObject.SetActive(false);
+        windImage.gameObject.SetActive(false);
+        text.gameObject.SetActive(false);
     }
 
     private void Update()
@@ -78,8 +85,9 @@ public class WindFarmControl : MonoBehaviour, IRandomEventsObject
         if (startPrepare)
         {
             prepareShowTime = prepareShowTime -= Time.fixedDeltaTime;
-            if (prepareShowTime <= 0)
+            if (prepareShowTime <= 0 && !isShow)
             {
+                windImage.gameObject.GetComponent<RectTransform>().Rotate(new Vector3(0, 0, angleArgument + 180));
                 isShow = true;
             }
         }
@@ -91,7 +99,9 @@ public class WindFarmControl : MonoBehaviour, IRandomEventsObject
 
         if (isShow)
         {
+            text.gameObject.SetActive(true);
             text.text = $"wind speed: {forceArgument} \nwind direction: {angleArgument}\n{(Convert.ToInt32(stayTime - currentTime))}s";
+            windImage.gameObject.SetActive(true);
             foreach (var rigid in characterList)
             {
                 var character = rigid.GetComponent<CharacterContorl>();
@@ -110,11 +120,14 @@ public class WindFarmControl : MonoBehaviour, IRandomEventsObject
         }
         else if (startPrepare)
         {
+            text.gameObject.SetActive(true);
             text.text = $"prepare wind {Convert.ToInt32(prepareShowTime)}s";
         }
         else
         {
+            text.gameObject.SetActive(false);
             text.text = "";
+            windImage.gameObject.SetActive(false);
         }
     }
 }

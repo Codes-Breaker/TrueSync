@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.EventSystems;
 
 public class CharacterContorl : MonoBehaviour
 {
@@ -118,7 +119,7 @@ public class CharacterContorl : MonoBehaviour
     //游泳速度
     public float swimSpeed = 1;
 
-    private bool isDead = false;
+    public bool isDead = false;
 
     private int defaultLayer = 0;
 
@@ -149,6 +150,10 @@ public class CharacterContorl : MonoBehaviour
 
     public List<Buff> buffs = new List<Buff>();
 
+    private GameController gameController;
+
+    public MaterialController meshController;
+
     private void Awake()
     {
         speedUpGas = maxSpeedUpGas;
@@ -161,6 +166,8 @@ public class CharacterContorl : MonoBehaviour
         initialRot = ridbody.transform.rotation;
         currentDrown = maxDrowning;
         inputReader.player = this;
+        gameController = GameObject.Find("GameManager").GetComponent<GameController>();
+        SetFlashMeshRendererBlock(false);
     }
 
     private void Start()
@@ -302,7 +309,8 @@ public class CharacterContorl : MonoBehaviour
             //SetGameLayerRecursive(this.gameObject, defaultLayer);
             foreach (Transform child in transform)
             {
-                SetGameLayerRecursive(child.gameObject, 17);
+                if (child.gameObject.layer != 18)
+                    SetGameLayerRecursive(child.gameObject, 17);
             }
         }
         else
@@ -311,7 +319,8 @@ public class CharacterContorl : MonoBehaviour
             //SetGameLayerRecursive(this.gameObject, 17);
             foreach (Transform child in transform)
             {
-                SetGameLayerRecursive(child.gameObject, 17);
+                if (child.gameObject.layer != 18)
+                    SetGameLayerRecursive(child.gameObject, 17);
             }
         }
 
@@ -319,12 +328,12 @@ public class CharacterContorl : MonoBehaviour
 
     public void SetKinematics(bool set)
     {
-        var childrens = this.transform.GetComponentsInChildren<Rigidbody>();
-        foreach(var child in childrens)
-        {
-            child.isKinematic = set;
-            child.gameObject.GetComponent<Collider>().enabled = !set;
-        }
+        //var childrens = this.transform.GetComponentsInChildren<Rigidbody>();
+        //foreach(var child in childrens)
+        //{
+        //    child.isKinematic = set;
+        //    child.gameObject.GetComponent<Collider>().enabled = !set;
+        //}
         this.ridbody.isKinematic = set;
         this.ridbody.gameObject.GetComponent<Collider>().enabled = !set;
     }
@@ -392,20 +401,7 @@ public class CharacterContorl : MonoBehaviour
     // 无敌特效示意
     private void SetFlashMeshRendererBlock(bool value)
     {
-        var rendererBlock = new MaterialPropertyBlock();
-        skinnedMeshRenderer.GetPropertyBlock(rendererBlock, 0);
-        rendererBlock.SetFloat("_PlayHurt", value ? 1f : 0f);
-        skinnedMeshRenderer.SetPropertyBlock(rendererBlock, 0);
-
-        var rendererBlock1 = new MaterialPropertyBlock();
-        skinnedMeshRenderer.GetPropertyBlock(rendererBlock1, 1);
-        rendererBlock1.SetFloat("_PlayHurt", value ? 1f : 0f);
-        skinnedMeshRenderer.SetPropertyBlock(rendererBlock1, 1);
-
-        var rendererBlock2 = new MaterialPropertyBlock();
-        skinnedMeshRenderer.GetPropertyBlock(rendererBlock2, 2);
-        rendererBlock2.SetFloat("_PlayHurt", value ? 1f : 0f);
-        skinnedMeshRenderer.SetPropertyBlock(rendererBlock2, 2);
+        meshController.SetFlashMeshRendererBlock(value);
     }
 
     private void ReturnToPlace()
@@ -431,8 +427,11 @@ public class CharacterContorl : MonoBehaviour
 
     private void Dead()
     {
-        GameObject.Destroy(this.gameObject);
-        GameObject.Destroy(this.canvas);
+        //GameObject.Destroy(this.gameObject);
+        //GameObject.Destroy(this.canvas);
+        this.gameObject.SetActive(false);
+        this.canvas.gameObject.SetActive(false);
+        gameController.CheckGameState();
     }
 
     private void SetGravity()
@@ -731,5 +730,6 @@ public class CharacterContorl : MonoBehaviour
             collision.collider.gameObject.GetComponent<Rigidbody>().AddExplosionForce((forceArgument + m1) * (1 + (otherCollision.vulnerbility / otherCollision.maxVulnerbility)) + 50, collision.contacts[0].point, 4);
         }
     }
+
 
 }
