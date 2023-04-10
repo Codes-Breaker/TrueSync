@@ -116,7 +116,7 @@ public class SoftBodyPrototype : MonoBehaviour
         TransformStartPosition = Vector3.zero;
         TransformStartScale = transform.localScale;
     }
-
+    
     private void InitializePointMassPositionsToBoundingBox()
     {
         PointMassPositions[0] = new Vector3(.5f * TriggerCollider.size.x, .5f * TriggerCollider.size.y, .5f * TriggerCollider.size.z);
@@ -128,6 +128,12 @@ public class SoftBodyPrototype : MonoBehaviour
         PointMassPositions[5] = new Vector3(.5f * TriggerCollider.size.x, -.5f * TriggerCollider.size.y, -.5f * TriggerCollider.size.z);
         PointMassPositions[6] = new Vector3(-.5f * TriggerCollider.size.x, -.5f * TriggerCollider.size.y, -.5f * TriggerCollider.size.z);
         PointMassPositions[7] = new Vector3(-.5f * TriggerCollider.size.x, -.5f * TriggerCollider.size.y, .5f * TriggerCollider.size.z);
+
+        //Quaternion rotationQuaternion = Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0);
+        //for (int i = 0; i < PointMassPositions.Length; i++)
+        //{
+        //    PointMassPositions[i] = rotationQuaternion * PointMassPositions[i];
+        //}
 
         //PointMassPositions[0] = new Vector3(.5f, .5f, .5f) + TriggerCollider.center;
         //PointMassPositions[1] = new Vector3(.5f, .5f, -.5f) + TriggerCollider.center;
@@ -290,10 +296,8 @@ public class SoftBodyPrototype : MonoBehaviour
             // simplify force to acceleration, as mass == 1
             PointMassAccelerations[i] = new Vector3(0.0f, 0.0f, 0.0f);
         }
-
         AccumulateSpringForces();
         AccumulatePressureForces();
-
         // Jump every few seconds, to keep the simulation lively
         Vector3 jumpVelocity = new Vector3(0.0f, 0.0f, 0.0f);
 
