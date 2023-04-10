@@ -87,6 +87,7 @@ public class WindFarmControl : MonoBehaviour, IRandomEventsObject
             prepareShowTime = prepareShowTime -= Time.fixedDeltaTime;
             if (prepareShowTime <= 0 && !isShow)
             {
+                windImage.gameObject.GetComponent<RectTransform>().localRotation = Quaternion.identity;
                 windImage.gameObject.GetComponent<RectTransform>().Rotate(new Vector3(0, 0, angleArgument + 180));
                 isShow = true;
             }
