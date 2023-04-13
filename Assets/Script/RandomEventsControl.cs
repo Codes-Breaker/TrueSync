@@ -11,14 +11,23 @@ public struct RandomEvent
     public Vector3 startPosition;
     public float stayTime;
 }
+public struct SkillItem
+{
+    public float startTime;
+    public Vector3 startPosition;
+    public string skillItemPath;
+
+}
 
 public class RandomEventsControl : MonoBehaviour
 {
     string lglooPath = "Prefabs/Lgloo1";
     string submarinePath = "Prefabs/Submarine";
     string winFarmPath = "Prefabs/WindFarm";
+    string missileBoomPath = "Prefabs/MissileBoomController";
 
-    
+
+
     public int lglooGenerateFrequency;
     public int lglooStayTime;
     [Range(0, 1)]
@@ -37,10 +46,38 @@ public class RandomEventsControl : MonoBehaviour
     public float winFarmRollRate;
     public int winFarmStartDelay;
 
+    public int missileBoomGenerateFrequency;
+    [Range(0, 1)]
+    public float missileBoomRollRate;
+
+    private float currrentTime;
+
+    List<RandomEvent> randomEvents = new List<RandomEvent>();
+    List<RandomEvent> removeRandomEvents = new List<RandomEvent>();
+
+    List<SkillItem> skillItems = new List<SkillItem>();
+    List<SkillItem> removeSkillItems = new List<SkillItem>();
     private void RandomGenerate()
     {
         //5分钟时间随机
         var totalTime = 5 * 60;
+
+        //导弹生成随机生成算法
+        var missileBooms = Convert.ToInt32(totalTime / missileBoomGenerateFrequency);
+        for (int i = 0; i <= missileBooms; i++)
+        {
+            float weight = Random.Range(0f, 1f);
+            if (weight <= missileBoomRollRate)
+            {
+                skillItems.Add(new SkillItem
+                {
+                    startPosition = new Vector3(0, 2, -5.44f),
+                    startTime = (i) * missileBoomGenerateFrequency ,
+                    skillItemPath = missileBoomPath
+                });
+            }
+        }
+
         //雪屋随机生成算法
         var lglooRolls = Convert.ToInt32(totalTime / lglooGenerateFrequency);
         for (int i = 0; i <= lglooRolls; i++)
@@ -92,126 +129,10 @@ public class RandomEventsControl : MonoBehaviour
         }
     }
 
-    private float currrentTime;
-
-    List<RandomEvent> randomEvents = new List<RandomEvent>();
-    List<RandomEvent> removeRandomEvents = new List<RandomEvent>();
     private void Start()
     {
         currrentTime = 0;
         RandomGenerate();
-        //randomEvents.Add(new RandomEvent
-        //{
-        //    startPosition = new Vector3(0.08f, 0, 0.75f),
-        //    startTime = 0,
-        //    randomEventsPath = submarinePath,
-        //    stayTime = 20,
-        //}) ;
-
-        //randomEvents.Add(new RandomEvent
-        //{
-        //    startPosition = new Vector3(0.08f, 0, 0.75f),
-        //    startTime = 0,
-        //    randomEventsPath = lglooPath,
-        //    stayTime = 20,
-        //});
-
-        //randomEvents.Add(new RandomEvent
-        //{
-        //    startPosition = new Vector3(0.08f, 0, 0.75f),
-        //    startTime = 120,
-        //    randomEventsPath = lglooPath,
-        //    stayTime = 20,
-        //});
-
-        //randomEvents.Add(new RandomEvent
-        //{
-        //    startPosition = new Vector3(0.08f, 0, 0.75f),
-        //    startTime = 180,
-        //    randomEventsPath = lglooPath,
-        //    stayTime = 20,
-        //});
-
-        //randomEvents.Add(new RandomEvent
-        //{
-        //    startPosition = new Vector3(0.08f, 0, 0.75f),
-        //    startTime = 60,
-        //    randomEventsPath = lglooPath,
-        //    stayTime = 20,
-        //});
-        //randomEvents.Add(new RandomEvent
-        //{
-        //    startPosition = new Vector3(0.08f, 0, 0.75f),
-        //    startTime = 150,
-        //    randomEventsPath = lglooPath,
-        //    stayTime = 20,
-        //});
-        //randomEvents.Add(new RandomEvent
-        //{
-        //    startPosition = new Vector3(0.08f, 0, 0.75f),
-        //    startTime = 90,
-        //    randomEventsPath = lglooPath,
-        //    stayTime = 20,
-        //});
-
-        //randomEvents.Add(new RandomEvent
-        //{
-        //    startPosition = new Vector3(0.08f, 0, 0.75f),
-        //    startTime = 210,
-        //    randomEventsPath = lglooPath,
-        //    stayTime = 20,
-        //});
-
-        //randomEvents.Add(new RandomEvent
-        //{
-        //    startPosition = new Vector3(0, 0, 0),
-        //    startTime = 0,
-        //    randomEventsPath = winFarmPath,
-        //    stayTime = 20,
-        //});
-
-        //randomEvents.Add(new RandomEvent
-        //{
-        //    startPosition = new Vector3(0, 0, 0),
-        //    startTime = 40,
-        //    randomEventsPath = winFarmPath,
-        //    stayTime = 40,
-        //});
-
-        //randomEvents.Add(new RandomEvent
-        //{
-        //    startPosition = new Vector3(0, 0, 0),
-        //    startTime = 20,
-        //    randomEventsPath = submarinePath,
-        //});
-
-        //randomEvents.Add(new RandomEvent
-        //{
-        //    startPosition = new Vector3(0, 0, 0),
-        //    startTime = 80,
-        //    randomEventsPath = submarinePath,
-        //});
-
-        //randomEvents.Add(new RandomEvent
-        //{
-        //    startPosition = new Vector3(0, 0, 0),
-        //    startTime = 90,
-        //    randomEventsPath = winFarmPath,
-        //});
-
-        //randomEvents.Add(new RandomEvent
-        //{
-        //    startPosition = new Vector3(0, 0, 0),
-        //    startTime = 150,
-        //    randomEventsPath = winFarmPath,
-        //});
-
-        //randomEvents.Add(new RandomEvent
-        //{
-        //    startPosition = new Vector3(0, 0, 0),
-        //    startTime = 200,
-        //    randomEventsPath = winFarmPath,
-        //});
     }
 
     // Update is called once per frame
@@ -233,5 +154,21 @@ public class RandomEventsControl : MonoBehaviour
             randomEvents.Remove(item);
         }
         removeRandomEvents.Clear();
+
+        foreach (var item in skillItems)
+        {
+            if (currrentTime > item.startTime)
+            {
+                var objectPrefab = Resources.Load<GameObject>(item.skillItemPath);
+                var objectGameObject = Instantiate(objectPrefab, item.startPosition, Quaternion.Euler(new Vector3(0, 0, 0)));
+                objectGameObject.SetActive(true);
+                removeSkillItems.Add(item);
+            }
+        }
+        foreach (var item in removeSkillItems)
+        {
+            skillItems.Remove(item);
+        }
+        removeSkillItems.Clear();
     }
 }

@@ -79,6 +79,12 @@ public class LglooControl : MonoBehaviour,IRandomEventsObject
             if ((collision.transform.position - transform.position).magnitude < enterDistance && angle < enterAngle && collision.collider.GetComponent<CharacterContorl>())
             {
                 user = collision.collider.GetComponent<CharacterContorl>();
+
+                if(user.skill && user.isUseSkill)
+                {
+                    user.skill.ExitUseMode();
+                }
+
                 SetContorlLgloo(user);
                 
                 canEnter = false;
@@ -100,10 +106,19 @@ public class LglooControl : MonoBehaviour,IRandomEventsObject
         user.chargeAction = MoveCharge;
         user.jumpAction = MoveJump;
         user.releaseAciton = MoveRelease;
+        user.interactWeaponAction = null;
     }
 
-    private void MoveWalk(Vector2 axisInput)
+    private void MoveWalk(Vector2 axisInput,ControlDeviceType controlDeviceType)
     {
+        if (controlDeviceType == ControlDeviceType.Mouse)
+        {
+            Vector3 screenPosition = Camera.main.WorldToScreenPoint(transform.position);
+            var detalPosition = axisInput - new Vector2(screenPosition.x, screenPosition.y);
+            axisInput = detalPosition.normalized;
+        }
+        else
+            axisInput = axisInput.normalized;
         if (axisInput.magnitude > 0.01f)
         {
             targetAngle = Mathf.Atan2(axisInput.x, axisInput.y) * Mathf.Rad2Deg + Camera.main.transform.eulerAngles.y;

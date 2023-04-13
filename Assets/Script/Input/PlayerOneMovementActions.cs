@@ -236,6 +236,17 @@ public partial class @PlayerOneMovementActions : IInputActionCollection2, IDispo
                     ""action"": ""InteractWeapon"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1c67c89d-97a7-46a9-8e9e-75e610c5d9db"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""InteractWeapon"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }

@@ -60,53 +60,20 @@ public class InputReader : InputReaderBase
         */
     }
 
-
-    //DISABLE if using old input system
-    private void GetDeviceNew(InputAction.CallbackContext ctx)
-    {
-        oldInput = isMouseAndKeyboard;
-
-        if (ctx.control.device is Keyboard || ctx.control.device is Mouse) isMouseAndKeyboard = true;
-        else isMouseAndKeyboard = false;
-
-
-        if (oldInput != isMouseAndKeyboard && isMouseAndKeyboard) changedInputToMouseAndKeyboard.Invoke();
-        else if (oldInput != isMouseAndKeyboard && !isMouseAndKeyboard) changedInputToGamepad.Invoke();
-    }
-
-
-    //ENABLE if using old input system
-    private void GetDeviceOld()
-    {
-        /*
-
-        oldInput = isMouseAndKeyboard;
-
-        if (Input.GetJoystickNames().Length > 0) isMouseAndKeyboard = false;
-        else isMouseAndKeyboard = true;
-
-        if (oldInput != isMouseAndKeyboard && isMouseAndKeyboard) changedInputToMouseAndKeyboard.Invoke();
-        else if (oldInput != isMouseAndKeyboard && !isMouseAndKeyboard) changedInputToGamepad.Invoke();
-
-        */
-    }
-
-
     #region Actions
 
     //DISABLE if using old input system
     public void OnMove(InputAction.CallbackContext ctx)
     {
-        if (ctx.control.device is Mouse)
-        {
-            var t = ctx.ReadValue<Vector2>();
-            Vector3 screenPosition = Camera.main.WorldToScreenPoint(player.transform.position);
-            var detalPosition = ctx.ReadValue<Vector2>() - new Vector2(screenPosition.x, screenPosition.y);
-            axisInput = detalPosition.normalized;
-
-        }
-        else
-            axisInput = ctx.ReadValue<Vector2>().normalized;
+        //if (ctx.control.device is Mouse)
+        //{
+        //    Vector3 screenPosition = Camera.main.WorldToScreenPoint(player.transform.position);
+        //    var detalPosition = ctx.ReadValue<Vector2>() - new Vector2(screenPosition.x, screenPosition.y);
+        //    axisInput = detalPosition.normalized;
+        //}
+        //else
+        //    axisInput = ctx.ReadValue<Vector2>().normalized;
+        axisInput = ctx.ReadValue<Vector2>();
         GetDeviceNew(ctx);
     }
 

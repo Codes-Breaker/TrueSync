@@ -30,6 +30,8 @@ public class CharacterContorl : MonoBehaviour
     private Vector2 axisInput;
     private bool jump;
     private bool charge;
+    private bool interactWeapon;
+    private ControlDeviceType inputControlDeviceType;
 
     //摇杆输入值最小值
     private float movementThrashold = 0.35f;
@@ -71,6 +73,10 @@ public class CharacterContorl : MonoBehaviour
     public bool isGrabWall = false;
     [HideInInspector]
     public float HPtimer;
+    [HideInInspector]
+    public SkillItemControllerBase skill;
+    [HideInInspector]
+    public bool isUseSkill;
     //攻击力
     public float forceArgument;
     //防御力系数
@@ -138,15 +144,17 @@ public class CharacterContorl : MonoBehaviour
     //眩晕阈值
     public float stunThreshold;
 
-    public delegate void MoveAciotn(Vector2 axisInput);
+    public delegate void MoveAciotn(Vector2 axisInput,ControlDeviceType controlDeviceType);
     public delegate void ChargeAction(bool isChange);
     public delegate void JumpAction(bool isJump);
     public delegate void ReleaseAciton(bool isChage);
+    public delegate void InteractWeaponAction(bool isUseWeapon);
 
     public MoveAciotn moveAciotn;
     public ChargeAction chargeAction;
     public JumpAction jumpAction;
     public ReleaseAciton releaseAciton;
+    public InteractWeaponAction interactWeaponAction;
 
     public List<Buff> buffs = new List<Buff>();
 
@@ -165,7 +173,6 @@ public class CharacterContorl : MonoBehaviour
         initialRotation = ridbody.transform.rotation.eulerAngles;
         initialRot = ridbody.transform.rotation;
         currentDrown = maxDrowning;
-        inputReader.player = this;
         gameController = GameObject.Find("GameManager").GetComponent<GameController>();
         SetFlashMeshRendererBlock(false);
     }
@@ -177,9 +184,17 @@ public class CharacterContorl : MonoBehaviour
 
     private void Update()
     {
+        ReadInput();
+    }
+
+    private void ReadInput()
+    {
         axisInput = inputReader.axisInput;
         jump = inputReader.jump;
         charge = inputReader.charge;
+        interactWeapon = inputReader.interact;
+        inputControlDeviceType = inputReader.controlDeviceType;
+        
     }
 
     private void LateUpdate()
@@ -201,6 +216,7 @@ public class CharacterContorl : MonoBehaviour
         chargeAction = MoveCharge;
         jumpAction = MoveJump;
         releaseAciton = MoveRelease;
+        interactWeaponAction = UseWeapon;
     }
 
     private void SetStun()
@@ -213,6 +229,8 @@ public class CharacterContorl : MonoBehaviour
             stunEffect.gameObject.SetActive(false);
         }
     }
+
+    
 
     private void Stun(float time)
     {
@@ -257,10 +275,16 @@ public class CharacterContorl : MonoBehaviour
             {
                 if (!isBuffStun())
                 {
-                    moveAciotn(axisInput);
-                    chargeAction(charge);
-                    releaseAciton(charge);
-                    jumpAction(jump);
+                    if(moveAciotn != null)
+                        moveAciotn(axisInput, inputControlDeviceType);
+                    if(chargeAction != null)
+                        chargeAction(charge);
+                    if(releaseAciton !=null)
+                        releaseAciton(charge);
+                    if(jumpAction != null)
+                        jumpAction(jump);
+                    if(interactWeaponAction != null)
+                        interactWeaponAction(interactWeapon);
                 }
 
             }
@@ -473,8 +497,16 @@ public class CharacterContorl : MonoBehaviour
         return false;
     }
 
-    private void MoveWalk(Vector2 axisInput)
+    private void MoveWalk(Vector2 axisInput,ControlDeviceType controlDeviceType)
     {
+        if (controlDeviceType == ControlDeviceType.Mouse)
+        {
+            Vector3 screenPosition = Camera.main.WorldToScreenPoint(transform.position);
+            var detalPosition = axisInput - new Vector2(screenPosition.x, screenPosition.y);
+            axisInput = detalPosition.normalized;
+        }
+        else
+            axisInput = axisInput.normalized;
         if (axisInput.magnitude > movementThrashold && (!releasing || canReleaseTurn))
         {
             targetAngle = Mathf.Atan2(axisInput.x, axisInput.y) * Mathf.Rad2Deg + Camera.main.transform.eulerAngles.y;
@@ -491,6 +523,14 @@ public class CharacterContorl : MonoBehaviour
 
     private void MoveJump(bool jump)
     {
+    }
+
+    private void UseWeapon(bool isUse)
+    {
+        if(isUse && skill && currentGas == 0)
+        {
+            skill.UseSkillItem();
+        }
     }
 
     private void MoveCharge(bool charge)
@@ -728,7 +768,14 @@ public class CharacterContorl : MonoBehaviour
             }
             ridbody.AddExplosionForce((otherCollision.forceArgument + m2) * (1 + (vulnerbility / maxVulnerbility)) + 200 * lglooNerfRate, collision.contacts[0].point, 4);
             collision.collider.gameObject.GetComponent<Rigidbody>().AddExplosionForce((forceArgument + m1) * (1 + (otherCollision.vulnerbility / otherCollision.maxVulnerbility)) + 50, collision.contacts[0].point, 4);
+
+            //如果对方在施法过程里打断施法
+            if(otherCollision.skill && otherCollision.isUseSkill)
+            {
+                otherCollision.skill.ExitUseMode();
+            }
         }
+
     }
 
 
