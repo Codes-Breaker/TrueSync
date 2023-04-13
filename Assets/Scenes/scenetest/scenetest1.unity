@@ -335,7 +335,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 67670406}
   m_LocalRotation: {x: 0, y: -0.9265482, z: 0.37617624, w: 0}
-  m_LocalPosition: {x: -0.19000131, y: 11.288373, z: 8.912883}
+  m_LocalPosition: {x: -0.19000006, y: 12.45007, z: 10.107736}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6145,6 +6145,8 @@ MonoBehaviour:
   isSwimmy: 0
   isGrabWall: 0
   HPtimer: 0
+  skill: {fileID: 0}
+  isUseSkill: 0
   forceArgument: 200
   receivedForceRate: 0.2
   swinging: 0
@@ -12936,6 +12938,8 @@ MonoBehaviour:
   isSwimmy: 0
   isGrabWall: 0
   HPtimer: 0
+  skill: {fileID: 0}
+  isUseSkill: 0
   forceArgument: 100
   receivedForceRate: 1
   swinging: 0
@@ -18834,7 +18838,7 @@ MonoBehaviour:
   charge: 0
   pull: 0
   interact: 0
-  player: {fileID: 0}
+  controlDeviceType: 0
   hasJumped: 0
   skippedFrame: 0
   isMouseAndKeyboard: 1
@@ -18911,7 +18915,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1179497702}
   m_LocalRotation: {x: -0, y: -0.9265482, z: 0.37617624, w: 0}
-  m_LocalPosition: {x: -0.0000012516975, y: 8.568373, z: 8.812882}
+  m_LocalPosition: {x: 0, y: 9.73007, z: 10.007735}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -18948,7 +18952,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 2.2222223, y: 1}
+    m_SensorSize: {x: 1.7777778, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -20274,6 +20278,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7431066599129400923, guid: 1f34892cfffdb4240ab5139006621bab,
         type: 3}
+      propertyPath: missileBoomRollRate
+      value: 0.459
+      objectReference: {fileID: 0}
+    - target: {fileID: 7431066599129400923, guid: 1f34892cfffdb4240ab5139006621bab,
+        type: 3}
       propertyPath: submarineStartDelay
       value: 10
       objectReference: {fileID: 0}
@@ -20291,6 +20300,11 @@ PrefabInstance:
         type: 3}
       propertyPath: submarineGenerateFrequency
       value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 7431066599129400923, guid: 1f34892cfffdb4240ab5139006621bab,
+        type: 3}
+      propertyPath: missileBoomGenerateFrequency
+      value: 20
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1f34892cfffdb4240ab5139006621bab, type: 3}
@@ -27209,7 +27223,7 @@ MonoBehaviour:
   charge: 0
   pull: 0
   interact: 0
-  player: {fileID: 0}
+  controlDeviceType: 0
   hasJumped: 0
   skippedFrame: 0
   isMouseAndKeyboard: 1
@@ -30027,6 +30041,8 @@ MonoBehaviour:
   isSwimmy: 0
   isGrabWall: 0
   HPtimer: 0
+  skill: {fileID: 0}
+  isUseSkill: 0
   forceArgument: 120
   receivedForceRate: 1
   swinging: 0
@@ -30123,6 +30139,8 @@ MonoBehaviour:
   isSwimmy: 0
   isGrabWall: 0
   HPtimer: 0
+  skill: {fileID: 0}
+  isUseSkill: 0
   forceArgument: 220
   receivedForceRate: 1
   swinging: 0

@@ -60,37 +60,6 @@ public class InputReader_Two : InputReaderBase
         */
     }
 
-
-    //DISABLE if using old input system
-    private void GetDeviceNew(InputAction.CallbackContext ctx)
-    {
-        oldInput = isMouseAndKeyboard;
-
-        if (ctx.control.device is Keyboard || ctx.control.device is Mouse) isMouseAndKeyboard = true;
-        else isMouseAndKeyboard = false;
-
-        if (oldInput != isMouseAndKeyboard && isMouseAndKeyboard) changedInputToMouseAndKeyboard.Invoke();
-        else if (oldInput != isMouseAndKeyboard && !isMouseAndKeyboard) changedInputToGamepad.Invoke();
-    }
-
-
-    //ENABLE if using old input system
-    private void GetDeviceOld()
-    {
-        /*
-
-        oldInput = isMouseAndKeyboard;
-
-        if (Input.GetJoystickNames().Length > 0) isMouseAndKeyboard = false;
-        else isMouseAndKeyboard = true;
-
-        if (oldInput != isMouseAndKeyboard && isMouseAndKeyboard) changedInputToMouseAndKeyboard.Invoke();
-        else if (oldInput != isMouseAndKeyboard && !isMouseAndKeyboard) changedInputToGamepad.Invoke();
-
-        */
-    }
-
-
     #region Actions
 
     //DISABLE if using old input system

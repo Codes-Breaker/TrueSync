@@ -1,8 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.Events;
+using UnityEngine.InputSystem;
 
 using UnityEngine;
+
+public enum ControlDeviceType
+{
+    Mouse = 1,
+    Keyboard =2,
+    Gamepad = 3
+}
 
 public class InputReaderBase : MonoBehaviour
 {
@@ -33,13 +41,30 @@ public class InputReaderBase : MonoBehaviour
     public bool pull;
     [HideInInspector]
     public bool interact;
-    [HideInInspector]
-    public CharacterContorl player;
 
 
-
+    public ControlDeviceType controlDeviceType;
     public bool hasJumped = false;
     public bool skippedFrame = false;
     public bool isMouseAndKeyboard = true;
     public bool oldInput = true;
+
+    public void GetDeviceNew(InputAction.CallbackContext ctx)
+    {
+        oldInput = isMouseAndKeyboard;
+
+        if (ctx.control.device is Keyboard || ctx.control.device is Mouse) isMouseAndKeyboard = true;
+        else isMouseAndKeyboard = false;
+
+        if (ctx.control.device is Keyboard)
+            controlDeviceType = ControlDeviceType.Keyboard;
+        else if (ctx.control.device is Mouse)
+            controlDeviceType = ControlDeviceType.Mouse;
+        else
+            controlDeviceType = ControlDeviceType.Gamepad;
+
+
+        if (oldInput != isMouseAndKeyboard && isMouseAndKeyboard) changedInputToMouseAndKeyboard.Invoke();
+        else if (oldInput != isMouseAndKeyboard && !isMouseAndKeyboard) changedInputToGamepad.Invoke();
+    }
 }
