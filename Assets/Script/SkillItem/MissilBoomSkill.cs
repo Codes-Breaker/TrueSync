@@ -32,6 +32,7 @@ public class MissilBoomSkill : SkillItemBase
     private GameObject cruiserGameObject;
     private GameObject missileBoomGameObject;
     private CinemachineTargetGroup cinemachineTargetGroup;
+    private string missileBombExplosionPath = "Prefabs/Effect/MissileBomb_Explosion";
 
     private float currentTIme;
 
@@ -96,7 +97,7 @@ public class MissilBoomSkill : SkillItemBase
             .OnComplete(() => {
                 MissileBoomExplode();
                 Destroy(missileBoomGameObject);
-                Destroy(gameObject);
+                Destroy(gameObject,3f);
             });
     }
 
@@ -118,6 +119,10 @@ public class MissilBoomSkill : SkillItemBase
                 }
             }
         }
+        var effectPrefab = Resources.Load(missileBombExplosionPath);
+        var effectGameObject = (GameObject)Instantiate(effectPrefab, skillItemData.targetPosition, Quaternion.Euler(Vector3.zero),transform);
+        effectGameObject.transform.localScale = explosionRangeRadius* Vector3.one/4;
+
     }
 
 }
