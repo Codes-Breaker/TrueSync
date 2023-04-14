@@ -110,8 +110,11 @@ public class MissilBoomSkill : SkillItemBase
             {
                 if ((item.transform.position - skillItemData.targetPosition).magnitude < explosionRangeRadius)
                 {
-                    if (item.GetComponent<CharacterContorl>())
-                        item.GetComponent<Rigidbody>().AddExplosionForce(explosionForceArgument,skillItemData.targetPosition, explosionRangeRadius);
+                    if (item.GetComponent<CharacterContorl>() && !item.GetComponent<CharacterContorl>().invulernable)
+                    {
+                        item.GetComponent<Rigidbody>().AddExplosionForce(explosionForceArgument, skillItemData.targetPosition, explosionRangeRadius);
+                    }
+
                     if(item.GetComponent<IRandomEventsObject>() != null)
                     {
                         item.GetComponent<IRandomEventsObject>().OnExit();
