@@ -317,7 +317,7 @@ public partial class @PlayerTwoMovementActions : IInputActionCollection2, IDispo
                 {
                     ""name"": """",
                     ""id"": ""0e19d2ef-431e-4cd6-8fca-bbaccd7b3923"",
-                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""GamePad"",

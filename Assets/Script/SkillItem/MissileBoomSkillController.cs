@@ -14,11 +14,22 @@ public class MissileBoomSkillController : SkillItemControllerBase
 
     public GameObject MissilBoomPrefab;
 
+    public List<(Vector3, Vector3)> randomPlaceAndRotation = new List<(Vector3, Vector3)>()
+    {
+        (new Vector3(11.37f, 2f, 5.6f), new Vector3(0, -48, 0)),
+        (new Vector3(11.37f, 2f, -5.6f), new Vector3(0, 48, 0)),
+        (new Vector3(0.33f, 2f, 0.58f), new Vector3(0, -48, 0)),
+        (new Vector3(-11.64f, 2f, -5.6f), new Vector3(0, -48, 0)),
+        (new Vector3(-11.64f, 2f, 5.6f), new Vector3(0, 48, 0)),
+    };
+
     protected override void Init()
     {
         base.Init();
         skillAreaMarker.SetActive(false);
     }
+
+   
 
     public override void UseSkillItem()
     {
@@ -98,7 +109,7 @@ public class MissileBoomSkillController : SkillItemControllerBase
                 Ray ray = Camera.main.ScreenPointToRay(point);
                 if (Physics.Raycast(ray, out hitInfo, Mathf.Infinity, layerMask))
                 {
-                    skillAreaMarker.transform.localPosition = Vector3.Lerp(skillAreaMarker.transform.localPosition, transform.InverseTransformPoint(hitInfo.point), 0.1f);
+                    skillAreaMarker.transform.localPosition = Vector3.Lerp(skillAreaMarker.transform.localPosition, transform.InverseTransformPoint(hitInfo.point), 0.3f);
                     skillAreaMarker.transform.localScale = Vector3.one * skillMarkerSize;
                     currentTargetPoint = skillAreaMarker.transform.position;
                 }
