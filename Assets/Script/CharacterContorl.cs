@@ -97,7 +97,7 @@ public class CharacterContorl : MonoBehaviour
     public float maxDrowning = 1000;
     public float currentDrown = 0;
     private float totalDrown = 0;
-    private const int minDrown = 20;
+    private const int minDrown = 50;
 
     [Range(0, 1)]
     public float continueReceivedForceRate = 0.2f; 
@@ -109,7 +109,7 @@ public class CharacterContorl : MonoBehaviour
     //碰撞受击累积值
     public float vulnerbility = 0f;
     //易伤最大值
-    public float maxVulnerbility = 50.0f;
+    public float maxVulnerbility = 25.0f;
 
     [Range(0, 1)]
     //易伤系数
@@ -723,7 +723,7 @@ public class CharacterContorl : MonoBehaviour
                 lglooNerfRate = 0.5f;
             }
 
-            ridbody.AddExplosionForce((otherCollision.forceArgument + m2) * (1 + (vulnerbility/maxVulnerbility)) * continueReceivedForceRate + 200 * lglooNerfRate, collision.contacts[0].point, 4);
+            ridbody.AddExplosionForce((otherCollision.forceArgument + m2) * (1 + Mathf.Pow(2, (vulnerbility/10))) * continueReceivedForceRate + 200 * lglooNerfRate, collision.contacts[0].point, 4);
             collision.collider.gameObject.GetComponent<Rigidbody>().AddExplosionForce((forceArgument + m1) * (1 + (otherCollision.vulnerbility / otherCollision.maxVulnerbility)) * otherCollision.continueReceivedForceRate + 50, collision.contacts[0].point, 4);
 
             receivedForceSum += (forceArgument + vulnerbility) * m * 0.2f;
@@ -766,7 +766,7 @@ public class CharacterContorl : MonoBehaviour
             {
                 lglooNerfRate = 0.5f;
             }
-            ridbody.AddExplosionForce((otherCollision.forceArgument + m2) * (1 + (vulnerbility / maxVulnerbility)) + 200 * lglooNerfRate, collision.contacts[0].point, 4);
+            ridbody.AddExplosionForce((otherCollision.forceArgument + m2) * (1 + Mathf.Pow(2, (vulnerbility / 10))) + 200 * lglooNerfRate, collision.contacts[0].point, 4);
             collision.collider.gameObject.GetComponent<Rigidbody>().AddExplosionForce((forceArgument + m1) * (1 + (otherCollision.vulnerbility / otherCollision.maxVulnerbility)) + 50, collision.contacts[0].point, 4);
 
             //如果对方在施法过程里打断施法

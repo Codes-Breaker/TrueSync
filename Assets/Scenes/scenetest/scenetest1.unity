@@ -335,7 +335,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 67670406}
   m_LocalRotation: {x: 0, y: -0.9265482, z: 0.37617624, w: 0}
-  m_LocalPosition: {x: -0.18999988, y: 12.45007, z: 10.107736}
+  m_LocalPosition: {x: -0.1899993, y: 11.2883835, z: 8.912886}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -18915,7 +18915,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1179497702}
   m_LocalRotation: {x: -0, y: -0.9265482, z: 0.37617624, w: 0}
-  m_LocalPosition: {x: 0.00000017881393, y: 9.73007, z: 10.007735}
+  m_LocalPosition: {x: 0.0000007599592, y: 8.568383, z: 8.812885}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -18952,7 +18952,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.7777778, y: 1}
+    m_SensorSize: {x: 2.2222223, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -26691,6 +26691,37 @@ Transform:
   m_Father: {fileID: 294804118}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1666970787
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1666970788}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1666970788
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1666970787}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -11.64, y: 1.843, z: 5.94}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 25
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1699673433
 GameObject:
   m_ObjectHideFlags: 0
@@ -26762,7 +26793,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1699673433}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 256b88724ca42bd44b03063faf96043a, type: 3}
   m_Name: 
@@ -30017,7 +30048,7 @@ MonoBehaviour:
   groundMask:
     serializedVersion: 2
     m_Bits: 64
-  chargeTime: 3
+  chargeTime: 2
   releaseTime: 0.5
   cureTime: 20
   vulnerbilityText: {fileID: 495867733}
@@ -30043,7 +30074,7 @@ MonoBehaviour:
   HPtimer: 0
   skill: {fileID: 0}
   isUseSkill: 0
-  forceArgument: 120
+  forceArgument: 150
   receivedForceRate: 1
   swinging: 0
   readyswing: 0
@@ -30051,7 +30082,7 @@ MonoBehaviour:
   velocityBeforeCollision: {x: 0, y: 0, z: 0}
   positionBeforeCollision: {x: 0, y: 0, z: 0}
   maxReleaseVelocity: 7
-  maxDrowning: 1000
+  maxDrowning: 300
   currentDrown: 0
   continueReceivedForceRate: 1
   invulernableTime: 0
@@ -30141,7 +30172,7 @@ MonoBehaviour:
   HPtimer: 0
   skill: {fileID: 0}
   isUseSkill: 0
-  forceArgument: 220
+  forceArgument: 170
   receivedForceRate: 1
   swinging: 0
   readyswing: 0
@@ -30149,7 +30180,7 @@ MonoBehaviour:
   velocityBeforeCollision: {x: 0, y: 0, z: 0}
   positionBeforeCollision: {x: 0, y: 0, z: 0}
   maxReleaseVelocity: 7
-  maxDrowning: 1000
+  maxDrowning: 300
   currentDrown: 0
   continueReceivedForceRate: 1
   invulernableTime: 0
