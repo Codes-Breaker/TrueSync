@@ -7,6 +7,10 @@ public class LglooControl : MonoBehaviour,IRandomEventsObject
 {
     public bool canEnter;
     private bool isShow;
+    [Header("进入冰屋演出时长")]
+    public float enterLglooDelayTime;
+    [Header("延迟发射时长")]
+    public float shootDelayTime;
     public float enterAngle;
     public float enterDistance;
     private float targetAngle;
@@ -17,6 +21,8 @@ public class LglooControl : MonoBehaviour,IRandomEventsObject
     public float endDuration;
     private CharacterContorl user;
     private float userY;
+
+    private bool isReadyToShoot;
   
     public void Init()
     {
@@ -95,6 +101,16 @@ public class LglooControl : MonoBehaviour,IRandomEventsObject
 
                 user.transform.position = transform.position;
 
+                user.skinnedMeshRenderer.enabled = false;
+                user.canvas.enabled = false;
+
+                var localScale = transform.localScale;
+                transform.DOScale(localScale*1.1f, enterLglooDelayTime)
+                    .SetEase(Ease.OutBounce)
+                    .SetLoops(4, LoopType.Yoyo)
+                    .OnComplete(()=> {
+                        isReadyToShoot = true;
+                    });
             }
 
         }
@@ -111,6 +127,8 @@ public class LglooControl : MonoBehaviour,IRandomEventsObject
 
     private void MoveWalk(Vector2 axisInput,ControlDeviceType controlDeviceType)
     {
+        if (!isReadyToShoot)
+            return;
         if (controlDeviceType == ControlDeviceType.Mouse)
         {
             Vector3 screenPosition = Camera.main.WorldToScreenPoint(transform.position);
@@ -129,15 +147,35 @@ public class LglooControl : MonoBehaviour,IRandomEventsObject
 
     private void MoveJump(bool jump)
     {
-
+        if (!isReadyToShoot)
+            return;
     }
 
     private void MoveCharge(bool charge)
     {
-        if(charge)
+        if (!isReadyToShoot)
+            return;
+        if (charge)
         {
-            Fire();
-            OnExit();
+            //禁用旋转
+            user.moveAciotn = null;
+
+            var localScale = transform.localScale.z;
+
+            Tweener compressTween = transform.DOScaleZ( localScale * 0.8f, shootDelayTime * 0.95f) ;
+            compressTween.OnComplete(() =>
+            {
+                Sequence springTween = DOTween.Sequence();
+                springTween.Append(transform.DOScale(localScale, shootDelayTime * 0.05f))
+                    //.Append(transform.DOScaleZ(1f, shootDelayTime * 0.1f)
+                    //.SetEase(Ease.OutBounce))
+                    .OnComplete(()=> {
+                        Fire();
+                        OnExit();
+                    });
+
+                springTween.Play();
+            });
         }
     }
 
@@ -147,6 +185,8 @@ public class LglooControl : MonoBehaviour,IRandomEventsObject
         user.transform.position = transform.position ;
         user.transform.position = new Vector3(user.transform.position.x, userY, user.transform.position.z);
         user.SetKinematics(false);
+        user.skinnedMeshRenderer.enabled = true;
+        user.canvas.enabled = true;
         var ridbody = user.GetComponent<Rigidbody>();
         user.targetAngle = targetAngle;
         ridbody.transform.rotation = Quaternion.Euler(new Vector3(0, targetAngle, 0));
@@ -159,6 +199,7 @@ public class LglooControl : MonoBehaviour,IRandomEventsObject
 
     private  void MoveRelease(bool chage)
     {
-
+        if (!isReadyToShoot)
+            return;
     }
 }

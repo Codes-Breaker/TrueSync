@@ -8,10 +8,14 @@ public class SkillItemControllerBase : MonoBehaviour
     public CharacterContorl user;
     public Image iconPrefab;
     private Image icon;
-    
-    public void CreatSkillItemm()
-    {
+    private float stayTime;
+    private float currentTime;
+    private bool isShow = false;
 
+    public void CreatSkillItemm(float stayTimeData)
+    {
+        stayTime = stayTimeData;
+        isShow = true;
     }
 
     public virtual void UseSkillItem()
@@ -40,7 +44,14 @@ public class SkillItemControllerBase : MonoBehaviour
 
     private void Update()
     {
-        if(user)
+        if (!isShow)
+            return;
+        currentTime += Time.deltaTime;
+        if (currentTime > stayTime && user == null)
+        {
+            OnEnd();
+        }
+        if (user)
             SetIcon();
     }
 
@@ -63,13 +74,17 @@ public class SkillItemControllerBase : MonoBehaviour
 
     private void DestoryIcon()
     {
-        GameObject.Destroy(icon);
+        if(icon)
+            GameObject.Destroy(icon);
     }
 
     protected virtual void OnEnd()
     {
-        user.isUseSkill = false;
-        user = null;
+        if(user)
+        {
+            user.isUseSkill = false;
+            user = null;
+        }
         DestoryIcon();
         GameObject.Destroy(gameObject);
     }
