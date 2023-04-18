@@ -17,6 +17,7 @@ public class SubmarineControl : MonoBehaviour, IRandomEventsObject
     public Material mat2; //Ԥ����
     public Collider meshCollider;
     public MeshRenderer meshRenderer;
+    public GameObject hitEffect;
 
     public List<(Vector3, Vector3)> randomPlaceAndRotation = new List<(Vector3, Vector3)>()
     {
@@ -65,7 +66,7 @@ public class SubmarineControl : MonoBehaviour, IRandomEventsObject
     {
         if(currentTime< stayTime)
         {
-
+            hitEffect.SetActive(true);
         }
         transform.DOLocalMoveY(0f, 2).OnComplete(() =>
         {
@@ -88,6 +89,7 @@ public class SubmarineControl : MonoBehaviour, IRandomEventsObject
         meshRenderer.material = mat2;
         transform.position = new Vector3(transform.position.x, 3.2f, transform.position.z);
         currentTime = 0;
+        hitEffect.SetActive(false);
         this.gameObject.SetActive(true);
 
     }
