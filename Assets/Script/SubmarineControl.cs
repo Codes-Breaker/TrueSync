@@ -16,6 +16,7 @@ public class SubmarineControl : MonoBehaviour, IRandomEventsObject
     public Material mat1; //��ͨ
     public Material mat2; //Ԥ����
     public Collider meshCollider;
+    public MeshRenderer meshRenderer;
 
     public List<(Vector3, Vector3)> randomPlaceAndRotation = new List<(Vector3, Vector3)>()
     {
@@ -34,9 +35,9 @@ public class SubmarineControl : MonoBehaviour, IRandomEventsObject
         {
             showComplete = true;
             transform.position = new Vector3(transform.position.x, 0, transform.position.z);
-            transform.gameObject.GetComponent<MeshRenderer>().material = mat1;
-            GetComponent<Collider>().enabled = true;
-            transform.DOLocalMoveY(2.3f, 2).OnComplete(() =>
+            meshRenderer.material = mat1;
+            meshCollider.enabled = true;
+            transform.DOLocalMoveY(3.2f, 2).OnComplete(() =>
             {
                 isShow = true;
             });
@@ -79,9 +80,9 @@ public class SubmarineControl : MonoBehaviour, IRandomEventsObject
         transform.rotation = Quaternion.Euler(rand.Item2);
         startPrepare = true;
         transform.position = position;
-        GetComponent<Collider>().enabled = false;
-        transform.gameObject.GetComponent<MeshRenderer>().material = mat2;
-        transform.position = new Vector3(transform.position.x, 2.3f, transform.position.z);
+        meshCollider.enabled = false;
+        meshRenderer.material = mat2;
+        transform.position = new Vector3(transform.position.x, 3.2f, transform.position.z);
         currentTime = 0;
         this.gameObject.SetActive(true);
 

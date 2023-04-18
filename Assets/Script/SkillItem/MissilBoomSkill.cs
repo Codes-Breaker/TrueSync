@@ -40,22 +40,22 @@ public class MissilBoomSkill : SkillItemBase
     {
         cruiserDatas.Add(new cruiserData
         {
-            position = new Vector3(-15.44f, 0.82f, 8.43f),
+            position = new Vector3(-15.44f, 0.5f, 8.43f),
             quaternion = new Vector3(0, 37.152f, 0),
         });
         cruiserDatas.Add(new cruiserData
         {
-            position = new Vector3(-18.11f, 1f, -8.76f),
+            position = new Vector3(-18.11f, 0.5f, -8.76f),
             quaternion = new Vector3(0, -31.544f, 0),
         });
         cruiserDatas.Add(new cruiserData
         {
-            position = new Vector3(15.2f, 1f, 8.95f),
+            position = new Vector3(15.2f, 0.5f, 8.95f),
             quaternion = new Vector3(0, -31.544f, 0),
         });
         cruiserDatas.Add(new cruiserData
         {
-            position = new Vector3(15.92f, 1f, -8.47f),
+            position = new Vector3(15.92f, 0.5f, -8.47f),
             quaternion = new Vector3(0, 37.677f, 0),
         });
     }
