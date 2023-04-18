@@ -16,7 +16,7 @@ public struct SkillItem
     public float startTime;
     public Vector3 startPosition;
     public string skillItemPath;
-
+    public float stayTime;
 }
 
 public class RandomEventsControl : MonoBehaviour
@@ -49,6 +49,8 @@ public class RandomEventsControl : MonoBehaviour
     public int missileBoomGenerateFrequency;
     [Range(0, 1)]
     public float missileBoomRollRate;
+    public int missileBoomStartDelay;
+    public int missileBoomStayTime;
 
     private float currrentTime;
 
@@ -72,8 +74,9 @@ public class RandomEventsControl : MonoBehaviour
                 skillItems.Add(new SkillItem
                 {
                     startPosition = new Vector3(0, 2, -5.44f),
-                    startTime = (i) * missileBoomGenerateFrequency ,
-                    skillItemPath = missileBoomPath
+                    startTime = (i) * missileBoomGenerateFrequency + missileBoomStartDelay,
+                    skillItemPath = missileBoomPath,
+                    stayTime = missileBoomStayTime,
                 });
             }
         }
@@ -162,6 +165,7 @@ public class RandomEventsControl : MonoBehaviour
                 var objectPrefab = Resources.Load<GameObject>(item.skillItemPath);
                 var objectGameObject = Instantiate(objectPrefab, item.startPosition, Quaternion.Euler(new Vector3(0, 0, 0)));
                 objectGameObject.SetActive(true);
+                objectGameObject.GetComponent<SkillItemControllerBase>()?.CreatSkillItemm(item.stayTime);
                 removeSkillItems.Add(item);
             }
         }
