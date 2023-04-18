@@ -51,6 +51,11 @@ public class SkillItemControllerBase : MonoBehaviour
         {
             OnEnd();
         }
+        
+    }
+
+    private void LateUpdate()
+    {
         if (user)
             SetIcon();
     }
