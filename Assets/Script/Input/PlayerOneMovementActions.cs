@@ -24,7 +24,7 @@ public partial class @PlayerOneMovementActions : IInputActionCollection2, IDispo
     ""name"": ""PlayerOneMovementActions"",
     ""maps"": [
         {
-            ""name"": ""Gameplay"",
+            ""name"": ""Action"",
             ""id"": ""65086328-0fba-4ced-a9ad-281a5db3ede1"",
             ""actions"": [
                 {
@@ -37,17 +37,8 @@ public partial class @PlayerOneMovementActions : IInputActionCollection2, IDispo
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Jump"",
-                    ""type"": ""Button"",
-                    ""id"": ""317b44b6-69a2-4f16-8459-7ff071438999"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
                     ""name"": ""Charge"",
-                    ""type"": ""Button"",
+                    ""type"": ""PassThrough"",
                     ""id"": ""7f7ed9af-28be-4f44-aed9-9d05eb3bb529"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
@@ -55,26 +46,8 @@ public partial class @PlayerOneMovementActions : IInputActionCollection2, IDispo
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Camera"",
-                    ""type"": ""PassThrough"",
-                    ""id"": ""691c33f0-245f-4dda-94f0-3c11d4d9926a"",
-                    ""expectedControlType"": ""Axis"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": true
-                },
-                {
-                    ""name"": ""Pull"",
-                    ""type"": ""Button"",
-                    ""id"": ""9f92bee8-6f7d-49b7-973f-78720af614e7"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
                     ""name"": ""InteractWeapon"",
-                    ""type"": ""Button"",
+                    ""type"": ""PassThrough"",
                     ""id"": ""6473c0cb-4db6-41fb-b1c9-73f9cf8429eb"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
@@ -83,17 +56,6 @@ public partial class @PlayerOneMovementActions : IInputActionCollection2, IDispo
                 }
             ],
             ""bindings"": [
-                {
-                    ""name"": """",
-                    ""id"": ""b354c5de-ab60-41fa-9047-b66c6303a713"",
-                    ""path"": ""<Keyboard>/space"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard"",
-                    ""action"": ""Jump"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
                 {
                     ""name"": ""WASD"",
                     ""id"": ""e433ff48-5b56-434a-9d5f-aac3ec1979d2"",
@@ -162,6 +124,17 @@ public partial class @PlayerOneMovementActions : IInputActionCollection2, IDispo
                 },
                 {
                     ""name"": """",
+                    ""id"": ""38e52786-05bc-4d25-919e-62430a71fba1"",
+                    ""path"": ""<Gamepad>/leftStick"",
+                    ""interactions"": """",
+                    ""processors"": ""StickDeadzone"",
+                    ""groups"": ""GamePad"",
+                    ""action"": ""Movement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""7127d6f5-dd11-482b-991f-89a44f33f107"",
                     ""path"": ""<Keyboard>/leftShift"",
                     ""interactions"": """",
@@ -177,52 +150,8 @@ public partial class @PlayerOneMovementActions : IInputActionCollection2, IDispo
                     ""path"": ""<Mouse>/leftButton"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""Mouse"",
                     ""action"": ""Charge"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""MouseDelta"",
-                    ""id"": ""9984aabf-180c-411f-9696-a55f7a51d7c0"",
-                    ""path"": ""1DAxis"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Camera"",
-                    ""isComposite"": true,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""negative"",
-                    ""id"": ""55cbcac8-61de-49d3-8e5c-9cdd8f345fe6"",
-                    ""path"": ""<Mouse>/delta/left"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Camera"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""positive"",
-                    ""id"": ""24a5c615-8487-475a-8194-e8fea7a27282"",
-                    ""path"": ""<Mouse>/delta/right"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Camera"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""6e9c499d-5d7b-4ac9-b5d1-e42deecddde2"",
-                    ""path"": ""<Keyboard>/e"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard"",
-                    ""action"": ""Pull"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -243,7 +172,207 @@ public partial class @PlayerOneMovementActions : IInputActionCollection2, IDispo
                     ""path"": ""<Mouse>/rightButton"",
                     ""interactions"": """",
                     ""processors"": """",
+                    ""groups"": ""Mouse"",
+                    ""action"": ""InteractWeapon"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d5272e57-ce24-4a4c-813b-e19de82d9065"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""GamePad"",
+                    ""action"": ""Charge"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2a3b1e1b-b66d-471d-a936-97d0813687cd"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""GamePad"",
+                    ""action"": ""InteractWeapon"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
+            ""name"": ""Action1"",
+            ""id"": ""76df637c-0631-41e0-8e7d-07a688d9f9a2"",
+            ""actions"": [
+                {
+                    ""name"": ""Movement"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""fb80aeb8-3520-4a54-b8d7-09ba67fb9f29"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Charge"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""08d53de2-d4e0-4ca8-810e-bf07aa63b10c"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""InteractWeapon"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""7075835a-54b8-402a-934d-0e3f51d4feda"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": ""WASD"",
+                    ""id"": ""a0347474-8f94-4ecb-8d7a-069d43944b03"",
+                    ""path"": ""2DVector(mode=2)"",
+                    ""interactions"": """",
+                    ""processors"": """",
                     ""groups"": """",
+                    ""action"": ""Movement"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""3abe6dcc-61d2-406f-93ec-fc48f764eb13"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Movement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""7a9afce1-d71f-47fa-8ab4-42ec815ee46e"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Movement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""82393ca7-9c57-4ac5-bc8d-9124e2ce6e7e"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Movement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""bed08c31-f262-4a7b-8583-1beb2ae3b7f0"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Movement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b0b2de99-02a2-46a0-accd-702140b6e288"",
+                    ""path"": ""<Mouse>/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Mouse"",
+                    ""action"": ""Movement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""af1f0a7d-f2a7-4ab9-a78d-508f0f2d003c"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Charge"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""fc918f71-6363-4cee-ab43-a706d82cfff1"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Mouse"",
+                    ""action"": ""Charge"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""064a1cce-82df-44bc-9962-c6dd6e4c6207"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""InteractWeapon"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2a719346-d8e2-4541-9d90-4e51bcd6d3a7"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Mouse"",
+                    ""action"": ""InteractWeapon"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e753ece0-bf8f-47d2-8b82-817336161cf6"",
+                    ""path"": ""<Gamepad>/leftStick"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""GamePad"",
+                    ""action"": ""Movement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6a9e7e68-8b72-4961-8d3d-f63b6a646af2"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""GamePad"",
+                    ""action"": ""Charge"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e2ae922a-2253-4d46-ac0d-35d1c241eff5"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""GamePad"",
                     ""action"": ""InteractWeapon"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -287,14 +416,16 @@ public partial class @PlayerOneMovementActions : IInputActionCollection2, IDispo
         }
     ]
 }");
-        // Gameplay
-        m_Gameplay = asset.FindActionMap("Gameplay", throwIfNotFound: true);
-        m_Gameplay_Movement = m_Gameplay.FindAction("Movement", throwIfNotFound: true);
-        m_Gameplay_Jump = m_Gameplay.FindAction("Jump", throwIfNotFound: true);
-        m_Gameplay_Charge = m_Gameplay.FindAction("Charge", throwIfNotFound: true);
-        m_Gameplay_Camera = m_Gameplay.FindAction("Camera", throwIfNotFound: true);
-        m_Gameplay_Pull = m_Gameplay.FindAction("Pull", throwIfNotFound: true);
-        m_Gameplay_InteractWeapon = m_Gameplay.FindAction("InteractWeapon", throwIfNotFound: true);
+        // Action
+        m_Action = asset.FindActionMap("Action", throwIfNotFound: true);
+        m_Action_Movement = m_Action.FindAction("Movement", throwIfNotFound: true);
+        m_Action_Charge = m_Action.FindAction("Charge", throwIfNotFound: true);
+        m_Action_InteractWeapon = m_Action.FindAction("InteractWeapon", throwIfNotFound: true);
+        // Action1
+        m_Action1 = asset.FindActionMap("Action1", throwIfNotFound: true);
+        m_Action1_Movement = m_Action1.FindAction("Movement", throwIfNotFound: true);
+        m_Action1_Charge = m_Action1.FindAction("Charge", throwIfNotFound: true);
+        m_Action1_InteractWeapon = m_Action1.FindAction("InteractWeapon", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -351,78 +482,103 @@ public partial class @PlayerOneMovementActions : IInputActionCollection2, IDispo
         return asset.FindBinding(bindingMask, out action);
     }
 
-    // Gameplay
-    private readonly InputActionMap m_Gameplay;
-    private IGameplayActions m_GameplayActionsCallbackInterface;
-    private readonly InputAction m_Gameplay_Movement;
-    private readonly InputAction m_Gameplay_Jump;
-    private readonly InputAction m_Gameplay_Charge;
-    private readonly InputAction m_Gameplay_Camera;
-    private readonly InputAction m_Gameplay_Pull;
-    private readonly InputAction m_Gameplay_InteractWeapon;
-    public struct GameplayActions
+    // Action
+    private readonly InputActionMap m_Action;
+    private IActionActions m_ActionActionsCallbackInterface;
+    private readonly InputAction m_Action_Movement;
+    private readonly InputAction m_Action_Charge;
+    private readonly InputAction m_Action_InteractWeapon;
+    public struct ActionActions
     {
         private @PlayerOneMovementActions m_Wrapper;
-        public GameplayActions(@PlayerOneMovementActions wrapper) { m_Wrapper = wrapper; }
-        public InputAction @Movement => m_Wrapper.m_Gameplay_Movement;
-        public InputAction @Jump => m_Wrapper.m_Gameplay_Jump;
-        public InputAction @Charge => m_Wrapper.m_Gameplay_Charge;
-        public InputAction @Camera => m_Wrapper.m_Gameplay_Camera;
-        public InputAction @Pull => m_Wrapper.m_Gameplay_Pull;
-        public InputAction @InteractWeapon => m_Wrapper.m_Gameplay_InteractWeapon;
-        public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
+        public ActionActions(@PlayerOneMovementActions wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Movement => m_Wrapper.m_Action_Movement;
+        public InputAction @Charge => m_Wrapper.m_Action_Charge;
+        public InputAction @InteractWeapon => m_Wrapper.m_Action_InteractWeapon;
+        public InputActionMap Get() { return m_Wrapper.m_Action; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
         public bool enabled => Get().enabled;
-        public static implicit operator InputActionMap(GameplayActions set) { return set.Get(); }
-        public void SetCallbacks(IGameplayActions instance)
+        public static implicit operator InputActionMap(ActionActions set) { return set.Get(); }
+        public void SetCallbacks(IActionActions instance)
         {
-            if (m_Wrapper.m_GameplayActionsCallbackInterface != null)
+            if (m_Wrapper.m_ActionActionsCallbackInterface != null)
             {
-                @Movement.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnMovement;
-                @Movement.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnMovement;
-                @Movement.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnMovement;
-                @Jump.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnJump;
-                @Jump.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnJump;
-                @Jump.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnJump;
-                @Charge.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnCharge;
-                @Charge.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnCharge;
-                @Charge.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnCharge;
-                @Camera.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnCamera;
-                @Camera.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnCamera;
-                @Camera.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnCamera;
-                @Pull.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPull;
-                @Pull.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPull;
-                @Pull.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPull;
-                @InteractWeapon.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnInteractWeapon;
-                @InteractWeapon.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnInteractWeapon;
-                @InteractWeapon.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnInteractWeapon;
+                @Movement.started -= m_Wrapper.m_ActionActionsCallbackInterface.OnMovement;
+                @Movement.performed -= m_Wrapper.m_ActionActionsCallbackInterface.OnMovement;
+                @Movement.canceled -= m_Wrapper.m_ActionActionsCallbackInterface.OnMovement;
+                @Charge.started -= m_Wrapper.m_ActionActionsCallbackInterface.OnCharge;
+                @Charge.performed -= m_Wrapper.m_ActionActionsCallbackInterface.OnCharge;
+                @Charge.canceled -= m_Wrapper.m_ActionActionsCallbackInterface.OnCharge;
+                @InteractWeapon.started -= m_Wrapper.m_ActionActionsCallbackInterface.OnInteractWeapon;
+                @InteractWeapon.performed -= m_Wrapper.m_ActionActionsCallbackInterface.OnInteractWeapon;
+                @InteractWeapon.canceled -= m_Wrapper.m_ActionActionsCallbackInterface.OnInteractWeapon;
             }
-            m_Wrapper.m_GameplayActionsCallbackInterface = instance;
+            m_Wrapper.m_ActionActionsCallbackInterface = instance;
             if (instance != null)
             {
                 @Movement.started += instance.OnMovement;
                 @Movement.performed += instance.OnMovement;
                 @Movement.canceled += instance.OnMovement;
-                @Jump.started += instance.OnJump;
-                @Jump.performed += instance.OnJump;
-                @Jump.canceled += instance.OnJump;
                 @Charge.started += instance.OnCharge;
                 @Charge.performed += instance.OnCharge;
                 @Charge.canceled += instance.OnCharge;
-                @Camera.started += instance.OnCamera;
-                @Camera.performed += instance.OnCamera;
-                @Camera.canceled += instance.OnCamera;
-                @Pull.started += instance.OnPull;
-                @Pull.performed += instance.OnPull;
-                @Pull.canceled += instance.OnPull;
                 @InteractWeapon.started += instance.OnInteractWeapon;
                 @InteractWeapon.performed += instance.OnInteractWeapon;
                 @InteractWeapon.canceled += instance.OnInteractWeapon;
             }
         }
     }
-    public GameplayActions @Gameplay => new GameplayActions(this);
+    public ActionActions @Action => new ActionActions(this);
+
+    // Action1
+    private readonly InputActionMap m_Action1;
+    private IAction1Actions m_Action1ActionsCallbackInterface;
+    private readonly InputAction m_Action1_Movement;
+    private readonly InputAction m_Action1_Charge;
+    private readonly InputAction m_Action1_InteractWeapon;
+    public struct Action1Actions
+    {
+        private @PlayerOneMovementActions m_Wrapper;
+        public Action1Actions(@PlayerOneMovementActions wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Movement => m_Wrapper.m_Action1_Movement;
+        public InputAction @Charge => m_Wrapper.m_Action1_Charge;
+        public InputAction @InteractWeapon => m_Wrapper.m_Action1_InteractWeapon;
+        public InputActionMap Get() { return m_Wrapper.m_Action1; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(Action1Actions set) { return set.Get(); }
+        public void SetCallbacks(IAction1Actions instance)
+        {
+            if (m_Wrapper.m_Action1ActionsCallbackInterface != null)
+            {
+                @Movement.started -= m_Wrapper.m_Action1ActionsCallbackInterface.OnMovement;
+                @Movement.performed -= m_Wrapper.m_Action1ActionsCallbackInterface.OnMovement;
+                @Movement.canceled -= m_Wrapper.m_Action1ActionsCallbackInterface.OnMovement;
+                @Charge.started -= m_Wrapper.m_Action1ActionsCallbackInterface.OnCharge;
+                @Charge.performed -= m_Wrapper.m_Action1ActionsCallbackInterface.OnCharge;
+                @Charge.canceled -= m_Wrapper.m_Action1ActionsCallbackInterface.OnCharge;
+                @InteractWeapon.started -= m_Wrapper.m_Action1ActionsCallbackInterface.OnInteractWeapon;
+                @InteractWeapon.performed -= m_Wrapper.m_Action1ActionsCallbackInterface.OnInteractWeapon;
+                @InteractWeapon.canceled -= m_Wrapper.m_Action1ActionsCallbackInterface.OnInteractWeapon;
+            }
+            m_Wrapper.m_Action1ActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @Movement.started += instance.OnMovement;
+                @Movement.performed += instance.OnMovement;
+                @Movement.canceled += instance.OnMovement;
+                @Charge.started += instance.OnCharge;
+                @Charge.performed += instance.OnCharge;
+                @Charge.canceled += instance.OnCharge;
+                @InteractWeapon.started += instance.OnInteractWeapon;
+                @InteractWeapon.performed += instance.OnInteractWeapon;
+                @InteractWeapon.canceled += instance.OnInteractWeapon;
+            }
+        }
+    }
+    public Action1Actions @Action1 => new Action1Actions(this);
     private int m_KeyboardSchemeIndex = -1;
     public InputControlScheme KeyboardScheme
     {
@@ -450,13 +606,16 @@ public partial class @PlayerOneMovementActions : IInputActionCollection2, IDispo
             return asset.controlSchemes[m_MouseSchemeIndex];
         }
     }
-    public interface IGameplayActions
+    public interface IActionActions
     {
         void OnMovement(InputAction.CallbackContext context);
-        void OnJump(InputAction.CallbackContext context);
         void OnCharge(InputAction.CallbackContext context);
-        void OnCamera(InputAction.CallbackContext context);
-        void OnPull(InputAction.CallbackContext context);
+        void OnInteractWeapon(InputAction.CallbackContext context);
+    }
+    public interface IAction1Actions
+    {
+        void OnMovement(InputAction.CallbackContext context);
+        void OnCharge(InputAction.CallbackContext context);
         void OnInteractWeapon(InputAction.CallbackContext context);
     }
 }
