@@ -14,6 +14,7 @@ public class MissilBoomSkill : SkillItemBase
 {
     public GameObject cruiserPrefab;
     public GameObject missileBoomPrefab;
+    public GameObject skillAreaMarker;
     [Header("巡航舰升起时间")]
     public float cruiserRiseTime;
     [Header("导弹飞行时间")]
@@ -79,6 +80,10 @@ public class MissilBoomSkill : SkillItemBase
                 Destroy(cruiserGameObject);
             });
         });
+        //爆炸区域标志
+        skillAreaMarker.SetActive(true);
+        skillAreaMarker.transform.localScale = Vector3.one * 5;
+        skillAreaMarker.transform.position = skillItemData.targetPosition;
     }
     private void LaunchMissileBoom()
     {
@@ -96,6 +101,7 @@ public class MissilBoomSkill : SkillItemBase
             .OnUpdate(()=>missileBoomGameObject.transform.LookAt(lookAtTarget))
             .OnComplete(() => {
                 MissileBoomExplode();
+                skillAreaMarker.SetActive(false);
                 Destroy(missileBoomGameObject);
                 Destroy(gameObject,3f);
             });

@@ -7,6 +7,7 @@ public class LglooControl : MonoBehaviour,IRandomEventsObject
 {
     public bool canEnter;
     private bool isShow;
+    private bool hasFire;
     [Header("进入冰屋演出时长")]
     public float enterLglooDelayTime;
     [Header("延迟发射时长")]
@@ -19,6 +20,7 @@ public class LglooControl : MonoBehaviour,IRandomEventsObject
     private float currentTime;
     private float stayTime;
     public float endDuration;
+    public GameObject lglooDestroy;
     private CharacterContorl user;
     private float userY;
 
@@ -27,6 +29,8 @@ public class LglooControl : MonoBehaviour,IRandomEventsObject
     public void Init()
     {
         canEnter = false;
+        hasFire = false;
+        lglooDestroy.SetActive(false);
     }
     public void FixedUpdate()
     {
@@ -58,7 +62,19 @@ public class LglooControl : MonoBehaviour,IRandomEventsObject
     public void OnExit()
     {
         if (user)
+        {
             Fire();
+        }
+        if(currentTime < stayTime && !hasFire)
+        {
+            GetComponent<MeshCollider>().enabled = false;
+            GetComponent<MeshRenderer>().enabled = false;
+            lglooDestroy.SetActive(true);
+            transform.DOLocalMoveY(transform.position.y, endDuration).OnComplete(() => {
+                gameObject.SetActive(false);
+            });
+            return;
+        }
         transform.DOLocalMoveY(0f, endDuration).OnComplete(() => {
             gameObject.SetActive(false);
         });
@@ -193,6 +209,7 @@ public class LglooControl : MonoBehaviour,IRandomEventsObject
         user.SetControlSelf();
         user.buffs.Add(new LglooBuff(user));
         user = null;
+        hasFire = true;
     }
 
 

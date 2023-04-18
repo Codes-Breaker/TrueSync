@@ -69,7 +69,7 @@ public class InputReadManager : MonoBehaviour
         
         if (controlDevices.Contains(device))
             return;
-        Debug.Log(device.name);
+        //Debug.Log(device.name);
         controlDevices.Add(device);
         if(chooseCharactersPanel.gameObject.activeSelf)
             chooseCharactersPanel.AddCharacterItem(device);

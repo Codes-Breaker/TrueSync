@@ -67,6 +67,7 @@ public class SkillItemControllerBase : MonoBehaviour
 
     private void SetIcon()
     {
+        user.canvas.transform.forward = Camera.main.transform.forward;
         icon.transform.position = user.transform.position;
         icon.transform.localPosition = icon.transform.localPosition + new Vector3(0, 2.1f + (user.bodyCollider.transform.localScale.x - 1) * 1.2f, 0);
     }
