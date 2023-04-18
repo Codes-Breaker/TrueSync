@@ -716,7 +716,7 @@ public class CharacterContorl : MonoBehaviour
                 lglooNerfRate = 0.5f;
             }
 
-            ridbody.AddExplosionForce((otherCollision.forceArgument + m2) * (1 + Mathf.Pow(2, (vulnerbility/10))) * continueReceivedForceRate + 200 * lglooNerfRate, collision.contacts[0].point, 4);
+            ridbody.AddExplosionForce((otherCollision.forceArgument + m2) * (1 + Mathf.Pow(1.5f, (vulnerbility/10))) * continueReceivedForceRate + 200 * lglooNerfRate, collision.contacts[0].point, 4);
             collision.collider.gameObject.GetComponent<Rigidbody>().AddExplosionForce((forceArgument + m1) * (1 + (otherCollision.vulnerbility / otherCollision.maxVulnerbility)) * otherCollision.continueReceivedForceRate + 50, collision.contacts[0].point, 4);
 
             receivedForceSum += (forceArgument + vulnerbility) * m * 0.2f;
@@ -759,7 +759,7 @@ public class CharacterContorl : MonoBehaviour
             {
                 lglooNerfRate = 0.5f;
             }
-            ridbody.AddExplosionForce((otherCollision.forceArgument + m2) * (1 + Mathf.Pow(2, (vulnerbility / 10))) + 200 * lglooNerfRate, collision.contacts[0].point, 4);
+            ridbody.AddExplosionForce((otherCollision.forceArgument + m2) * (1 + Mathf.Pow(1.5f, (vulnerbility / 10))) + 200 * lglooNerfRate, collision.contacts[0].point, 4);
             collision.collider.gameObject.GetComponent<Rigidbody>().AddExplosionForce((forceArgument + m1) * (1 + (otherCollision.vulnerbility / otherCollision.maxVulnerbility)) + 50, collision.contacts[0].point, 4);
 
             //如果对方在施法过程里打断施法
