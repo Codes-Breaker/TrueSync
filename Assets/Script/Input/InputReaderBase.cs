@@ -103,7 +103,7 @@ public class InputReaderBase : MonoBehaviour
         if (ctx.control.device != device)
             return;
         axisInput = ctx.ReadValue<Vector2>();
-        Debug.Log(axisInput);
+       // Debug.Log(axisInput);
         GetDeviceNew(ctx);
     }
 

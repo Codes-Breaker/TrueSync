@@ -62,6 +62,10 @@ public class SubmarineControl : MonoBehaviour, IRandomEventsObject
 
     public void OnExit()
     {
+        if(currentTime< stayTime)
+        {
+
+        }
         transform.DOLocalMoveY(0f, 2).OnComplete(() =>
         {
             this.gameObject.SetActive(false);
