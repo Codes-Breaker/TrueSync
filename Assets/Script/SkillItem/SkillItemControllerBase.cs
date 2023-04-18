@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public class SkillItemControllerBase : MonoBehaviour
 {
@@ -10,12 +11,17 @@ public class SkillItemControllerBase : MonoBehaviour
     private Image icon;
     private float stayTime;
     private float currentTime;
+    public GameObject itemGameObject;
     private bool isShow = false;
 
     public void CreatSkillItemm(float stayTimeData)
     {
         stayTime = stayTimeData;
         isShow = true;
+        itemGameObject.SetActive(true);
+        itemGameObject.transform.DORotate(new Vector3(0, 360, 0), 1f, RotateMode.FastBeyond360)
+            .SetLoops(-1, LoopType.Restart)
+            .SetEase(Ease.Linear);
     }
 
     public virtual void UseSkillItem()
@@ -39,6 +45,7 @@ public class SkillItemControllerBase : MonoBehaviour
     }
     protected virtual void Init()
     {
+        itemGameObject.SetActive(false);
         CreatIcon();
     }
 
