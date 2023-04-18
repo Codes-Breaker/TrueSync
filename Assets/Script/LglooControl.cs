@@ -120,7 +120,6 @@ public class LglooControl : MonoBehaviour,IRandomEventsObject
     {
         user.moveAciotn = MoveWalk;
         user.chargeAction = MoveCharge;
-        user.jumpAction = MoveJump;
         user.releaseAciton = MoveRelease;
         user.interactWeaponAction = null;
     }

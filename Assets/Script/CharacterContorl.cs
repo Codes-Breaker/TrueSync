@@ -28,7 +28,6 @@ public class CharacterContorl : MonoBehaviour
 
     //¿ØÖÆÆ÷Ïà¹Ø
     private Vector2 axisInput;
-    private bool jump;
     private bool charge;
     private bool interactWeapon;
     private ControlDeviceType inputControlDeviceType;
@@ -146,13 +145,11 @@ public class CharacterContorl : MonoBehaviour
 
     public delegate void MoveAciotn(Vector2 axisInput,ControlDeviceType controlDeviceType);
     public delegate void ChargeAction(bool isChange);
-    public delegate void JumpAction(bool isJump);
     public delegate void ReleaseAciton(bool isChage);
     public delegate void InteractWeaponAction(bool isUseWeapon);
 
     public MoveAciotn moveAciotn;
     public ChargeAction chargeAction;
-    public JumpAction jumpAction;
     public ReleaseAciton releaseAciton;
     public InteractWeaponAction interactWeaponAction;
 
@@ -190,7 +187,6 @@ public class CharacterContorl : MonoBehaviour
     private void ReadInput()
     {
         axisInput = inputReader.axisInput;
-        jump = inputReader.jump;
         charge = inputReader.charge;
         interactWeapon = inputReader.interact;
         inputControlDeviceType = inputReader.controlDeviceType;
@@ -214,7 +210,6 @@ public class CharacterContorl : MonoBehaviour
     {
         moveAciotn = MoveWalk;
         chargeAction = MoveCharge;
-        jumpAction = MoveJump;
         releaseAciton = MoveRelease;
         interactWeaponAction = UseWeapon;
     }
@@ -281,8 +276,6 @@ public class CharacterContorl : MonoBehaviour
                         chargeAction(charge);
                     if(releaseAciton !=null)
                         releaseAciton(charge);
-                    if(jumpAction != null)
-                        jumpAction(jump);
                     if(interactWeaponAction != null)
                         interactWeaponAction(interactWeapon);
                 }
