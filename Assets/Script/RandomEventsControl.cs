@@ -26,6 +26,7 @@ public class RandomEventsControl : MonoBehaviour
     string winFarmPath = "Prefabs/WindFarm";
     string missileBoomPath = "Prefabs/MissileBoomController";
 
+    public bool startCountdown=false;
 
 
     public int lglooGenerateFrequency;
@@ -141,6 +142,8 @@ public class RandomEventsControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!startCountdown)
+            return;
         currrentTime += Time.deltaTime;
         foreach(var item in randomEvents)
         {
