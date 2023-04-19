@@ -12,8 +12,16 @@ public class ChooseCharactersPanelItemControl : MonoBehaviour
     public TextMeshProUGUI playerIndexText;
     private bool isButtonDown;
     private int playerIndex;
-
+    public Image background;
     public CharacterType characterType = CharacterType.Seal;
+    public List<Sprite> images = new List<Sprite>();
+    public Image avatar;
+
+    private void Awake()
+    {
+
+    }
+
     public void Init(InputDevice inputDevice, int playerIndex)
     {
         var go = new GameObject("InputReader");
@@ -21,7 +29,8 @@ public class ChooseCharactersPanelItemControl : MonoBehaviour
         inputReader.Init(inputDevice);
         this.playerIndex = playerIndex;
         playerIndexText.text = $"P{playerIndex}";
-        playerIndexText.color = InputReadManager.Instance.playerColors[playerIndex - 1];
+        background.color = InputReadManager.Instance.playerColors[playerIndex - 1];
+        avatar.sprite = images[(int)characterType - 1];
     }
 
     private void LateUpdate()
@@ -43,5 +52,6 @@ public class ChooseCharactersPanelItemControl : MonoBehaviour
             characterNameText.text = "PolarBear";
         else if (characterType == CharacterType.SnowFox)
             characterNameText.text = "SnowFox";
+        avatar.sprite = images[(int)characterType - 1];
     }
 }

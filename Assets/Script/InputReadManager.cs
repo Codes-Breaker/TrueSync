@@ -39,7 +39,7 @@ public class InputReadManager : MonoBehaviour
     public List<InputDevice> controlDevices = new List<InputDevice>();
 
     private IDisposable m_ButtonPressListener;
-    public float timeLeft ;
+    public float timeLeft = 0;
     public TextMeshProUGUI countdownText;
 
     void Update()
@@ -47,7 +47,8 @@ public class InputReadManager : MonoBehaviour
         if (timeLeft > 0)
         {
             timeLeft -= Time.deltaTime;
-            countdownText.text =  Mathf.Round(timeLeft).ToString() + "seconds";
+            string formattedSeconds = Convert.ToInt32(timeLeft).ToString("D2");
+            countdownText.text = formattedSeconds;
         }
         else
         {
