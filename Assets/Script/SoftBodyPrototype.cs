@@ -213,7 +213,6 @@ public class SoftBodyPrototype : MonoBehaviour
     private void Respawn()
     {
         //transform.localPosition = TransformStartPosition;
-        Debug.LogError($"====¡· RESPAWN");
         CurrentCoolDown = Time.time;
         transform.localScale = TransformStartScale;
         InitializePointMassPositionsToBoundingBox();

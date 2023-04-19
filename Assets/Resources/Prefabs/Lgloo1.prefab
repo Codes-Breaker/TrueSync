@@ -93,7 +93,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3045334171822724155}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: de60b4131ff7de14d99c0a1d5340425f, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 4
@@ -114,13 +114,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   canEnter: 1
   enterLglooDelayTime: 0.1
-  shootDelayTime: 2
+  shootDelayTime: 0.3
   enterAngle: 45
   enterDistance: 4
   froceArgument: 80
   showDuration: 2
   endDuration: 2
   lglooDestroy: {fileID: 8906563970909011894}
+  randomIndex: -1
 --- !u!1001 &243049644
 PrefabInstance:
   m_ObjectHideFlags: 0

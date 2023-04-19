@@ -29,10 +29,10 @@ public class WindFarmControl : MonoBehaviour, IRandomEventsObject
     };
     private List<float> strengths = new List<float>()
     {
-        20,
-        30,
-        35,
-        40,
+        10,
+        13,
+        15,
+        17,
     };
 
     private void Awake()

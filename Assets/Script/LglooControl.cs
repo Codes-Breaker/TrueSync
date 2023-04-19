@@ -23,6 +23,15 @@ public class LglooControl : MonoBehaviour,IRandomEventsObject
     public GameObject lglooDestroy;
     private CharacterContorl user;
     private float userY;
+    public int randomIndex = -1;
+    public List<(Vector3, Vector3)> randomPlaceAndRotation = new List<(Vector3, Vector3)>()
+    {
+        (new Vector3(0, 1.61f, 0f), new Vector3(0, 0, 0)), //ÖÐ
+        (new Vector3(10.64f, 1.61f, 0f), new Vector3(0, -50, 0)), //×ó
+        (new Vector3(0.51f,1.61f, -4.84f), new Vector3(0, 30, 0)), //ÉÏ
+        (new Vector3(-11.32f, 1.61f, 0.67f), new Vector3(0, 48, 0)), //ÓÒ
+        (new Vector3(0.91f, 1.61f, 4.84f), new Vector3(0, -90, 0)), //ÏÂ
+    };
 
     private bool isReadyToShoot;
   
@@ -84,7 +93,10 @@ public class LglooControl : MonoBehaviour,IRandomEventsObject
     {
         this.stayTime = stayTime;
         canEnter = false;
-        transform.position = position;
+        randomIndex = Random.Range(0, randomPlaceAndRotation.Count);
+        var rand = randomPlaceAndRotation[randomIndex];
+        transform.position = rand.Item1;
+        transform.rotation = Quaternion.Euler(rand.Item2);
         transform.position = new Vector3(transform.position.x, 0f, transform.position.z);
         this.gameObject.SetActive(true);
         transform.DOLocalMoveY(1.5f, showDuration).OnComplete(()=>{

@@ -833,7 +833,6 @@ GameObject:
   - component: {fileID: 1061064621361653134}
   - component: {fileID: 1061064621361653135}
   - component: {fileID: 1061064621361653120}
-  - component: {fileID: 1061064621361653121}
   m_Layer: 10
   m_Name: CollisionEffect
   m_TagString: Untagged
@@ -886,28 +885,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &1061064621361653121
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1061064621361653133}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 256b88724ca42bd44b03063faf96043a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  PressureMultiplier: 50
-  SpringStiffness: 50
-  SpringDamping: 1.5
-  BounceCoefficient: 0.05
-  SlideCoefficient: 0.99
-  JumpSpeed: -8.5
-  JumpWaitMin: 0.1
-  JumpWaitMax: 0.2
-  CoolDown: 1
-  PositionThreshold: 1
 --- !u!1 &1279395308045467994
 GameObject:
   m_ObjectHideFlags: 0
@@ -11329,7 +11306,7 @@ MonoBehaviour:
   movementSpeed: 1.7
   brakeSpeedArgument: 10
   jumpForce: 40
-  releaseSpeedAtFirstArgument: 15
+  releaseSpeedAtFirstArgument: 10
   releaseSpeedLinearArgument: 0
   minLinearReleaseSpeedArgument: 0
   groundMask:
@@ -11361,15 +11338,15 @@ MonoBehaviour:
   HPtimer: 0
   skill: {fileID: 0}
   isUseSkill: 0
-  forceArgument: 170
-  receivedForceRate: 1
+  forceArgument: 70
+  receivedForceRate: 0.6
   swinging: 0
   readyswing: 0
   maxSpeedUpGas: 4
   velocityBeforeCollision: {x: 0, y: 0, z: 0}
   positionBeforeCollision: {x: 0, y: 0, z: 0}
   maxReleaseVelocity: 7
-  maxDrowning: 300
+  maxDrowning: 800
   currentDrown: 0
   continueReceivedForceRate: 1
   invulernableTime: 0
@@ -11414,7 +11391,7 @@ SphereCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5484514276718018883}
-  m_Material: {fileID: 13400000, guid: 30f4d681a8f91444591ea89a7d72307a, type: 2}
+  m_Material: {fileID: 13400000, guid: a5332a219a509da4f93d453855726556, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
