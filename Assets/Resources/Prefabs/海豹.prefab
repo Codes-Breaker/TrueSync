@@ -10559,14 +10559,14 @@ MonoBehaviour:
   movementSpeed: 1.7
   brakeSpeedArgument: 10
   jumpForce: 40
-  releaseSpeedAtFirstArgument: 10
+  releaseSpeedAtFirstArgument: 8
   releaseSpeedLinearArgument: 2
   minLinearReleaseSpeedArgument: 0
   groundMask:
     serializedVersion: 2
     m_Bits: 64
   chargeTime: 2
-  releaseTime: 0.5
+  releaseTime: 1
   cureTime: 20
   vulnerbilityText: {fileID: 495867733}
   gpSlider: {fileID: 730972529}
@@ -10591,7 +10591,7 @@ MonoBehaviour:
   HPtimer: 0
   skill: {fileID: 0}
   isUseSkill: 0
-  forceArgument: 150
+  forceArgument: 100
   receivedForceRate: 1
   swinging: 0
   readyswing: 0
@@ -10599,7 +10599,7 @@ MonoBehaviour:
   velocityBeforeCollision: {x: 0, y: 0, z: 0}
   positionBeforeCollision: {x: 0, y: 0, z: 0}
   maxReleaseVelocity: 7
-  maxDrowning: 300
+  maxDrowning: 800
   currentDrown: 0
   continueReceivedForceRate: 1
   invulernableTime: 0
@@ -11257,7 +11257,6 @@ GameObject:
   - component: {fileID: 5625931053378773200}
   - component: {fileID: 5625931053378773201}
   - component: {fileID: 5625931053378773206}
-  - component: {fileID: 5625931053378773207}
   m_Layer: 18
   m_Name: CollisionEffect
   m_TagString: Untagged
@@ -11310,28 +11309,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &5625931053378773207
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5625931053378773203}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 256b88724ca42bd44b03063faf96043a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  PressureMultiplier: 50
-  SpringStiffness: 50
-  SpringDamping: 1.5
-  BounceCoefficient: 0.05
-  SlideCoefficient: 0.99
-  JumpSpeed: -8.5
-  JumpWaitMin: 0
-  JumpWaitMax: 0.2
-  CoolDown: 1
-  PositionThreshold: 2
 --- !u!1 &5866969425761532507
 GameObject:
   m_ObjectHideFlags: 0

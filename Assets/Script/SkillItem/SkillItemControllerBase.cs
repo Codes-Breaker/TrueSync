@@ -12,7 +12,7 @@ public class SkillItemControllerBase : MonoBehaviour
     private float currentTime;
     private bool isShow = false;
 
-    public void CreatSkillItemm(float stayTimeData)
+    public virtual void CreatSkillItemm(float stayTimeData)
     {
         stayTime = stayTimeData;
         isShow = true;

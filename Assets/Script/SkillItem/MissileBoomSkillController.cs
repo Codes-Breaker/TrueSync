@@ -13,7 +13,7 @@ public class MissileBoomSkillController : SkillItemControllerBase
     public GameObject skillAreaMarker;
 
     public GameObject MissilBoomPrefab;
-
+    public int randomIndex = -1;
     public List<(Vector3, Vector3)> randomPlaceAndRotation = new List<(Vector3, Vector3)>()
     {
         (new Vector3(11.37f, 2f, 5.6f), new Vector3(0, -48, 0)),
@@ -22,6 +22,15 @@ public class MissileBoomSkillController : SkillItemControllerBase
         (new Vector3(-11.64f, 2f, -5.6f), new Vector3(0, -48, 0)),
         (new Vector3(-11.64f, 2f, 5.6f), new Vector3(0, 48, 0)),
     };
+
+    public override void CreatSkillItemm(float stayTimeData)
+    {
+        base.CreatSkillItemm(stayTimeData);
+        randomIndex = Random.Range(0, randomPlaceAndRotation.Count);
+        var rand = randomPlaceAndRotation[randomIndex];
+        this.transform.position = rand.Item1;
+        transform.rotation = Quaternion.Euler(rand.Item2);
+    }
 
     protected override void Init()
     {

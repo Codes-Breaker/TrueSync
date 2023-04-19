@@ -18,14 +18,15 @@ public class SubmarineControl : MonoBehaviour, IRandomEventsObject
     public Collider meshCollider;
     public MeshRenderer meshRenderer;
     public GameObject hitEffect;
+    public int randomIndex = -1;
 
     public List<(Vector3, Vector3)> randomPlaceAndRotation = new List<(Vector3, Vector3)>()
     {
-        (new Vector3(6.85f, 2.55f, -0.92f), new Vector3(0, -48, 0)),
-        (new Vector3(-7.71f, 2.55f, -2.65f), new Vector3(0, 48, 0)),
-        (new Vector3(-7.71f, 2.55f, 2.65f), new Vector3(0, -48, 0)),
-        (new Vector3(-7.71f, 2.55f, 2.65f), new Vector3(0, -48, 0)),
-        (new Vector3(6.85f, 2.55f, 2.65f), new Vector3(0, 48, 0)),
+        (new Vector3(6.85f, 2.55f, -0.92f), new Vector3(0, -48, 0)), //左上
+        (new Vector3(-7.71f, 2.55f, -2.65f), new Vector3(0, 48, 0)), //右上
+        (new Vector3(-7.71f, 2.55f, 2.65f), new Vector3(0, -48, 0)), //右下
+        (new Vector3(6.85f, 2.55f, 2.65f), new Vector3(0, 48, 0)), //左下
+        (new Vector3(-0.26f, 0, 2.65f), new Vector3(0, 0, 0)), //中
     };
 
     private void Update()
@@ -80,7 +81,8 @@ public class SubmarineControl : MonoBehaviour, IRandomEventsObject
     public void OnShow(Vector3 position, float stayTime)
     {
         this.stayTime = stayTime;
-        var rand = randomPlaceAndRotation[Random.Range(0, randomPlaceAndRotation.Count)];
+        randomIndex = Random.Range(0, randomPlaceAndRotation.Count);
+        var rand = randomPlaceAndRotation[randomIndex];
         position = rand.Item1;
         transform.rotation = Quaternion.Euler(rand.Item2);
         startPrepare = true;
