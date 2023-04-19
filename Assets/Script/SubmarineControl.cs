@@ -17,6 +17,7 @@ public class SubmarineControl : MonoBehaviour, IRandomEventsObject
     //public Material mat1; //��ͨ
     //public Material mat2; //Ԥ����
     //public Collider meshCollider;
+    public int explosiveForce = 2000;
    // public MeshRenderer meshRenderer;
     public GameObject hitEffect;
     public int randomIndex = -1;
@@ -87,8 +88,23 @@ public class SubmarineControl : MonoBehaviour, IRandomEventsObject
         {
             other.gameObject.GetComponent<IRandomEventsObject>().OnExit();
         }
-        if (other.gameObject.GetComponent<SkillItemControllerBase>())
-            other.gameObject.GetComponent<SkillItemControllerBase>().OnEnd();
+        //if (other.gameObject.GetComponent<SkillItemControllerBase>())
+        //    other.gameObject.GetComponent<SkillItemControllerBase>().OnEnd();
+    }
+
+    private void OnCollisionEnter(Collision other)
+    {
+        if (other.gameObject.GetComponent<IRandomEventsObject>() != null)
+        {
+            other.gameObject.GetComponent<IRandomEventsObject>().OnExit();
+        }
+        //if (other.gameObject.GetComponent<SkillItemControllerBase>())
+        //    other.gameObject.GetComponent<SkillItemControllerBase>().OnEnd();
+        if (other.gameObject.GetComponent<CharacterContorl>() && !other.gameObject.GetComponent<CharacterContorl>().invulernable)
+        {
+            BoxCollider trigger = GetComponent<BoxCollider>(); // 获取触发器的BoxCollider组件
+            other.gameObject.GetComponent<CharacterContorl>().ridbody.AddExplosionForce(explosiveForce, other.contacts[0].point, 20);
+        }
     }
 
     public void OnExit()

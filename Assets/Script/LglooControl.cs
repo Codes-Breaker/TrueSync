@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using System.Linq;
 
 public class LglooControl : MonoBehaviour,IRandomEventsObject
 {
@@ -32,6 +33,8 @@ public class LglooControl : MonoBehaviour,IRandomEventsObject
         (new Vector3(-11.32f, 1.61f, 0.67f), new Vector3(0, 48, 0)), //ср
         (new Vector3(0.91f, 1.61f, 4.84f), new Vector3(0, -90, 0)), //об
     };
+
+    public static List<int> ExistingIndex = new List<int>();
 
     private bool isReadyToShoot;
   
@@ -87,14 +90,29 @@ public class LglooControl : MonoBehaviour,IRandomEventsObject
         }
         transform.DOLocalMoveY(0f, endDuration).OnComplete(() => {
             gameObject.SetActive(false);
+            lock (ExistingIndex)
+            {
+                ExistingIndex.Remove(randomIndex);
+            }
         });
+
     }
 
     public void OnShow(Vector3 position,float stayTime)
     {
         this.stayTime = stayTime;
         canEnter = false;
-        randomIndex = Random.Range(0, randomPlaceAndRotation.Count);
+        var remainIndex = new List<int>();
+        for (int i = 0; i < randomPlaceAndRotation.Count; i++)
+        {
+            if (!ExistingIndex.Contains(i))
+                remainIndex.Add(i);
+        }
+        randomIndex = remainIndex[Random.Range(0, remainIndex.Count)];
+        lock (ExistingIndex)
+        {
+            ExistingIndex.Add(randomIndex);
+        }
         var rand = randomPlaceAndRotation[randomIndex];
         transform.position = rand.Item1;
         transform.rotation = Quaternion.Euler(rand.Item2);
