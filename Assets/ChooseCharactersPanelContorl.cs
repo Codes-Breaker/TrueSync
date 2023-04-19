@@ -11,12 +11,12 @@ public class ChooseCharactersPanelContorl : MonoBehaviour
 
     public List<ChooseCharactersPanelItemControl> chooseCharactersPanelItemControls = new List<ChooseCharactersPanelItemControl>();
 
-    public void AddCharacterItem(InputDevice device)
+    public void AddCharacterItem(InputDevice device, int playerIndex)
     {
         var item = Instantiate(chooseCharactersPanelItem,chooseCharactersPanelContent.transform);
         item.SetActive(true);
         var itemControl = item.GetComponent<ChooseCharactersPanelItemControl>();
-        itemControl.Init(device);
+        itemControl.Init(device, playerIndex);
         chooseCharactersPanelItemControls.Add(itemControl);
     }
 
