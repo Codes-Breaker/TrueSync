@@ -100,7 +100,7 @@ public class SubmarineControl : MonoBehaviour, IRandomEventsObject
         }
         //if (other.gameObject.GetComponent<SkillItemControllerBase>())
         //    other.gameObject.GetComponent<SkillItemControllerBase>().OnEnd();
-        if (other.gameObject.GetComponent<CharacterContorl>())
+        if (other.gameObject.GetComponent<CharacterContorl>() && !other.gameObject.GetComponent<CharacterContorl>().invulernable)
         {
             BoxCollider trigger = GetComponent<BoxCollider>(); // 获取触发器的BoxCollider组件
             other.gameObject.GetComponent<CharacterContorl>().ridbody.AddExplosionForce(explosiveForce, other.contacts[0].point, 20);
