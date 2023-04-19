@@ -752,6 +752,10 @@ public class CharacterContorl : MonoBehaviour
 
         if (collision.gameObject.GetComponent<CharacterContorl>())
         {
+            //ÌØÐ§
+            var eventObjectPrefab = Resources.Load<GameObject>("MediumHit");
+            var eventObjectGameObject = Instantiate(eventObjectPrefab, collision.contacts[0].point, Quaternion.Euler(new Vector3(0, 0, 0)));
+
             var otherCollision = collision.gameObject.GetComponent<CharacterContorl>();
 
             Vector3 vel1 = velocityBeforeCollision;
