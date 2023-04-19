@@ -157,7 +157,7 @@ public class MissileBoomSkillController : SkillItemControllerBase
         }
     }
 
-    protected override void OnEnd()
+    public override void OnEnd()
     {
         skillAreaMarker.SetActive(false);
         base.OnEnd();
