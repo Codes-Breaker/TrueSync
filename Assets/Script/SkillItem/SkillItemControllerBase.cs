@@ -91,7 +91,7 @@ public class SkillItemControllerBase : MonoBehaviour
             GameObject.Destroy(icon);
     }
 
-    protected virtual void OnEnd()
+    public virtual void OnEnd()
     {
         if(user)
         {

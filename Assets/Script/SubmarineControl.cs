@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Cinemachine;
 using DG.Tweening;
 
 public class SubmarineControl : MonoBehaviour, IRandomEventsObject
@@ -10,57 +11,84 @@ public class SubmarineControl : MonoBehaviour, IRandomEventsObject
     private bool isShow;
     private float startTime;
     public float endTime;
-    public float prepareShowTime;
-    private bool startPrepare;
-    private bool showComplete = false;
-    public Material mat1; //��ͨ
-    public Material mat2; //Ԥ����
-    public Collider meshCollider;
-    public MeshRenderer meshRenderer;
+    //public float prepareShowTime;
+    //private bool startPrepare;
+    //private bool showComplete = false;
+    //public Material mat1; //��ͨ
+    //public Material mat2; //Ԥ����
+    //public Collider meshCollider;
+   // public MeshRenderer meshRenderer;
     public GameObject hitEffect;
     public int randomIndex = -1;
 
-    public List<(Vector3, Vector3)> randomPlaceAndRotation = new List<(Vector3, Vector3)>()
+    //public List<(Vector3, Vector3)> randomPlaceAndRotation = new List<(Vector3, Vector3)>()
+    //{
+    //    (new Vector3(6.85f, 2.55f, -0.92f), new Vector3(0, -48, 0)), //左上
+    //    (new Vector3(-7.71f, 2.55f, -2.65f), new Vector3(0, 48, 0)), //右上
+    //    (new Vector3(-7.71f, 2.55f, 2.65f), new Vector3(0, -48, 0)), //右下
+    //    (new Vector3(6.85f, 2.55f, 2.65f), new Vector3(0, 48, 0)), //左下
+    //    (new Vector3(-0.26f, 0, 2.65f), new Vector3(0, 0, 0)), //中
+    //};
+    public struct SubmarinePathData{
+        public Vector3 startPoint;
+        public Vector3 endPoint;
+        public Vector3 rotation;
+    }
+
+    public List<SubmarinePathData> submarinePathDatas = new List<SubmarinePathData>()
     {
-        (new Vector3(6.85f, 2.55f, -0.92f), new Vector3(0, -48, 0)), //左上
-        (new Vector3(-7.71f, 2.55f, -2.65f), new Vector3(0, 48, 0)), //右上
-        (new Vector3(-7.71f, 2.55f, 2.65f), new Vector3(0, -48, 0)), //右下
-        (new Vector3(6.85f, 2.55f, 2.65f), new Vector3(0, 48, 0)), //左下
-        (new Vector3(-0.26f, 0, 2.65f), new Vector3(0, 0, 0)), //中
+        new SubmarinePathData
+        {
+            startPoint = new Vector3(0,0,11.35f),
+            endPoint = new Vector3(0,0,-16.3f),
+            rotation = new Vector3(0,0,0),
+        },
+        new SubmarinePathData
+        {
+            startPoint = new Vector3(0,0,-16.3f),
+            endPoint = new Vector3(0,0,11.35f),
+            rotation = new Vector3(0,180,0),
+        },
+        new SubmarinePathData
+        {
+            startPoint = new Vector3(8.37f, 0,11.5f),
+            endPoint = new Vector3(-19.43f,0,-11.81f),
+            rotation = new Vector3(0,50f,0)
+        },
+        new SubmarinePathData
+        {
+            startPoint = new Vector3(-18.34f, 0,9.51f),
+            endPoint = new Vector3(24f,0,-11.4f),
+            rotation = new Vector3(0,296.292f,0)
+        },
+        new SubmarinePathData
+        {
+            startPoint = new Vector3(20.4f, 0,0f),
+            endPoint = new Vector3(-20f,0,0),
+            rotation = new Vector3(0,90f,0)
+        },
+        new SubmarinePathData
+        {
+            startPoint = new Vector3(-20f, 0,0f),
+            endPoint = new Vector3(20.4f, 0,0f),
+            rotation = new Vector3(0,-90f,0)
+        }
     };
 
     private void Update()
     {
         if (!isShow)
             return;
-        if (isShow && !showComplete)
-        {
-            showComplete = true;
-            transform.position = new Vector3(transform.position.x, 0, transform.position.z);
-            meshRenderer.material = mat1;
-            meshCollider.enabled = true;
-            transform.DOLocalMoveY(3.2f, 2).OnComplete(() =>
-            {
-                isShow = true;
-            });
-        }
         currentTime += Time.deltaTime;
-        if (currentTime > stayTime)
-        {
-            OnExit();
-        }
     }
-
-    private void FixedUpdate()
+    private void OnTriggerEnter(Collider other)
     {
-        if (startPrepare)
+        if (other.gameObject.GetComponent<IRandomEventsObject>() != null)
         {
-            prepareShowTime = prepareShowTime -= Time.fixedDeltaTime;
-            if (prepareShowTime <= 0)
-            {
-                isShow = true;
-            }
+            other.gameObject.GetComponent<IRandomEventsObject>().OnExit();
         }
+        if (other.gameObject.GetComponent<SkillItemControllerBase>())
+            other.gameObject.GetComponent<SkillItemControllerBase>().OnEnd();
     }
 
     public void OnExit()
@@ -68,31 +96,43 @@ public class SubmarineControl : MonoBehaviour, IRandomEventsObject
         if(currentTime< stayTime)
         {
             hitEffect.SetActive(true);
+            DOTween.Kill(transform);
         }
-        transform.DOLocalMoveY(0f, 2).OnComplete(() =>
+        var cinemachineTargetGroup = GameObject.FindObjectOfType<CinemachineTargetGroup>();
+        cinemachineTargetGroup.RemoveMember(transform);
+        transform.DOLocalMoveY(-5f, endTime).OnComplete(() =>
         {
             this.gameObject.SetActive(false);
             isShow = false;
-            startPrepare = false;
-            showComplete = false;
         });
     }
 
     public void OnShow(Vector3 position, float stayTime)
     {
         this.stayTime = stayTime;
-        randomIndex = Random.Range(0, randomPlaceAndRotation.Count);
-        var rand = randomPlaceAndRotation[randomIndex];
-        position = rand.Item1;
-        transform.rotation = Quaternion.Euler(rand.Item2);
-        startPrepare = true;
-        transform.position = position;
-        meshCollider.enabled = false;
-        meshRenderer.material = mat2;
-        transform.position = new Vector3(transform.position.x, 3.2f, transform.position.z);
-        currentTime = 0;
-        hitEffect.SetActive(false);
+        randomIndex = Random.Range(0, submarinePathDatas.Count);
+        var randPathData = submarinePathDatas[randomIndex];
+        transform.rotation = Quaternion.Euler(randPathData.rotation);
+       // startPrepare = true;
+        transform.position =new Vector3( randPathData.startPoint.x,randPathData.startPoint.y-5f,randPathData.startPoint.z);
+        //meshCollider.enabled = false;
+        //meshRenderer.material = mat2;
+        //transform.position = new Vector3(transform.position.x, 3.2f, transform.position.z);
         this.gameObject.SetActive(true);
+        var cinemachineTargetGroup = GameObject.FindObjectOfType<CinemachineTargetGroup>();
+        cinemachineTargetGroup.AddMember(transform, 2, 4);
+        transform.DOMoveY(randPathData.startPoint.y, endTime).OnComplete(() =>
+        { 
+            transform.DOMove(randPathData.endPoint, stayTime)
+                .OnComplete(() =>
+                {
+                    OnExit();
+                })
+                .SetEase(Ease.Linear);
+            currentTime = 0;
+            isShow = true;
+        });
+        hitEffect.SetActive(false);
 
     }
 }
