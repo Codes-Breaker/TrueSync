@@ -88,8 +88,8 @@ public class SubmarineControl : MonoBehaviour, IRandomEventsObject
         {
             other.gameObject.GetComponent<IRandomEventsObject>().OnExit();
         }
-        if (other.gameObject.GetComponent<SkillItemControllerBase>())
-            other.gameObject.GetComponent<SkillItemControllerBase>().OnEnd();
+        //if (other.gameObject.GetComponent<SkillItemControllerBase>())
+        //    other.gameObject.GetComponent<SkillItemControllerBase>().OnEnd();
     }
 
     private void OnCollisionEnter(Collision other)
@@ -98,8 +98,8 @@ public class SubmarineControl : MonoBehaviour, IRandomEventsObject
         {
             other.gameObject.GetComponent<IRandomEventsObject>().OnExit();
         }
-        if (other.gameObject.GetComponent<SkillItemControllerBase>())
-            other.gameObject.GetComponent<SkillItemControllerBase>().OnEnd();
+        //if (other.gameObject.GetComponent<SkillItemControllerBase>())
+        //    other.gameObject.GetComponent<SkillItemControllerBase>().OnEnd();
         if (other.gameObject.GetComponent<CharacterContorl>())
         {
             BoxCollider trigger = GetComponent<BoxCollider>(); // 获取触发器的BoxCollider组件
