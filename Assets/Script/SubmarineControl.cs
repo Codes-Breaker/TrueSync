@@ -22,6 +22,11 @@ public class SubmarineControl : MonoBehaviour, IRandomEventsObject
     public GameObject hitEffect;
     public int randomIndex = -1;
 
+    public GameObject timeLapseBombPrefab;
+    public float launchBomBradius = 6;
+    public int launchBombNum = 2;
+    private bool hasLaunch;
+
     //public List<(Vector3, Vector3)> randomPlaceAndRotation = new List<(Vector3, Vector3)>()
     //{
     //    (new Vector3(6.85f, 2.55f, -0.92f), new Vector3(0, -48, 0)), //左上
@@ -81,6 +86,8 @@ public class SubmarineControl : MonoBehaviour, IRandomEventsObject
         if (!isShow)
             return;
         currentTime += Time.deltaTime;
+        if (currentTime > stayTime / 2 && !hasLaunch)
+            launchBomb();
     }
     private void OnTriggerEnter(Collider other)
     {
@@ -104,6 +111,28 @@ public class SubmarineControl : MonoBehaviour, IRandomEventsObject
         {
             BoxCollider trigger = GetComponent<BoxCollider>(); // 获取触发器的BoxCollider组件
             other.gameObject.GetComponent<CharacterContorl>().ridbody.AddExplosionForce(explosiveForce, other.contacts[0].point, 20);
+        }
+    }
+
+    private void launchBomb()
+    {
+        hasLaunch = true;
+        for(int i = 0;i < launchBombNum;i++)
+        {
+            var bomb = Instantiate(timeLapseBombPrefab);
+            Physics.IgnoreCollision(this.GetComponent<Collider>(), bomb.GetComponent<Collider>());
+            bomb.transform.position = transform.position;
+            bomb.SetActive(true);
+            if (bomb.GetComponent<SkillItemBase>())
+            {
+                var point = transform.position + Random.insideUnitSphere * launchBomBradius;
+                bomb.GetComponent<SkillItemBase>().Init(new SkillItemCreatData
+                {
+                    targetPosition = new Vector3(point.x,transform.position.y,point.z)
+                }) ;
+                bomb.GetComponent<SkillItemBase>().Show();
+            }
+
         }
     }
 
@@ -149,6 +178,6 @@ public class SubmarineControl : MonoBehaviour, IRandomEventsObject
             isShow = true;
         });
         hitEffect.SetActive(false);
-
+        hasLaunch = false;
     }
 }

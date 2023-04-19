@@ -78,7 +78,11 @@ public class LglooControl : MonoBehaviour,IRandomEventsObject
         {
             Fire();
         }
-        if(currentTime < stayTime && !fired)
+        lock (ExistingIndex)
+        {
+            ExistingIndex.Remove(randomIndex);
+        }
+        if (currentTime < stayTime && !fired)
         {
             GetComponent<MeshCollider>().enabled = false;
             GetComponent<MeshRenderer>().enabled = false;
@@ -90,10 +94,7 @@ public class LglooControl : MonoBehaviour,IRandomEventsObject
         }
         transform.DOLocalMoveY(0f, endDuration).OnComplete(() => {
             gameObject.SetActive(false);
-            lock (ExistingIndex)
-            {
-                ExistingIndex.Remove(randomIndex);
-            }
+
         });
 
     }
