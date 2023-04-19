@@ -70,11 +70,12 @@ public class LglooControl : MonoBehaviour,IRandomEventsObject
 
     public void OnExit()
     {
+        bool fired = hasFire;
         if (user)
         {
             Fire();
         }
-        if(currentTime < stayTime && !hasFire)
+        if(currentTime < stayTime && !fired)
         {
             GetComponent<MeshCollider>().enabled = false;
             GetComponent<MeshRenderer>().enabled = false;
