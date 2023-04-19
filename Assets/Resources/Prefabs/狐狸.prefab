@@ -11103,14 +11103,14 @@ MonoBehaviour:
   movementSpeed: 1.7
   brakeSpeedArgument: 10
   jumpForce: 40
-  releaseSpeedAtFirstArgument: 8
+  releaseSpeedAtFirstArgument: 10
   releaseSpeedLinearArgument: 2.5
   minLinearReleaseSpeedArgument: 0
   groundMask:
     serializedVersion: 2
     m_Bits: 64
-  chargeTime: 3
-  releaseTime: 1
+  chargeTime: 1.8
+  releaseTime: 1.1
   cureTime: 20
   vulnerbilityText: {fileID: 3428238402773522719}
   gpSlider: {fileID: 5834326471231464321}
@@ -11137,7 +11137,7 @@ MonoBehaviour:
   HPtimer: 0
   skill: {fileID: 0}
   isUseSkill: 0
-  forceArgument: 90
+  forceArgument: 95
   receivedForceRate: 1.1
   swinging: 0
   readyswing: 0

@@ -19,6 +19,7 @@ public class WindFarmControl : MonoBehaviour, IRandomEventsObject
     private bool startPrepare;
     private TMP_Text text;
     private Image windImage;
+    private GameObject infoBg;
     GameController gameController;
     private List<int> randomAngle = new List<int>()
     {
@@ -29,10 +30,10 @@ public class WindFarmControl : MonoBehaviour, IRandomEventsObject
     };
     private List<float> strengths = new List<float>()
     {
-        10,
-        13,
-        15,
-        17,
+        28,
+        30,
+        20,
+        25,
     };
 
     private void Awake()
@@ -40,6 +41,7 @@ public class WindFarmControl : MonoBehaviour, IRandomEventsObject
         gameController = GameObject.Find("GameManager").GetComponent<GameController>();
         text = gameController.windText.GetComponent<TMP_Text>();
         windImage = gameController.windIndicator.GetComponent<Image>();
+        infoBg = gameController.infoBg;
     }
     public void OnShow(Vector3 point, float stayTime)
     {
@@ -64,6 +66,7 @@ public class WindFarmControl : MonoBehaviour, IRandomEventsObject
         text.text = "";
         gameObject.SetActive(false);
         windImage.gameObject.SetActive(false);
+        infoBg.gameObject.SetActive(false);
         text.gameObject.SetActive(false);
     }
 
@@ -103,6 +106,7 @@ public class WindFarmControl : MonoBehaviour, IRandomEventsObject
             text.gameObject.SetActive(true);
             text.text = $"wind speed: {forceArgument} \nwind direction: {angleArgument}\n{(Convert.ToInt32(stayTime - currentTime))}s";
             windImage.gameObject.SetActive(true);
+            infoBg.gameObject.SetActive(true);
             foreach (var rigid in characterList)
             {
                 var character = rigid.GetComponent<CharacterContorl>();
@@ -129,6 +133,7 @@ public class WindFarmControl : MonoBehaviour, IRandomEventsObject
             text.gameObject.SetActive(false);
             text.text = "";
             windImage.gameObject.SetActive(false);
+            infoBg.gameObject.SetActive(false);
         }
     }
 }

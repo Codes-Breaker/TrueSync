@@ -9,11 +9,13 @@ public class GameController : MonoBehaviour
     public GameObject GameOverText;
     public GameObject windText;
     public GameObject windIndicator;
+    public GameObject infoBg;
     // Start is called before the first frame update
     void Awake()
     {
         GameOverText?.gameObject.SetActive(false);
         windText?.gameObject.SetActive(false);
+        infoBg?.gameObject.SetActive(false);
         windIndicator?.gameObject.SetActive(false);
     }
 
