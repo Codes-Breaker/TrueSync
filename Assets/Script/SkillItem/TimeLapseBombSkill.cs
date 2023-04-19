@@ -19,12 +19,14 @@ public class TimeLapseBombSkill: SkillItemBase
     public Transform root;
 
     private bool isCountDown;
+    private bool isAddCountDownEffct;
     private float currentTime;
 
     public override void Init(SkillItemCreatData skillItemCreatData)
     {
         base.Init(skillItemCreatData);
         isCountDown = false;
+        isAddCountDownEffct = false;
     }
     public override void Show()
     {
@@ -43,6 +45,8 @@ public class TimeLapseBombSkill: SkillItemBase
             }
             else
                 root.localScale = new Vector3(1,1-currentTime/explosionDelayTime,1);
+            if (currentTime > explosionDelayTime * 0.6f && !isAddCountDownEffct)
+                AddCountDownEffct();
         }
     }
 
@@ -56,15 +60,20 @@ public class TimeLapseBombSkill: SkillItemBase
             });
     }
 
+    public void AddCountDownEffct()
+    {
+        isAddCountDownEffct = true;
+        GameObject countDownEffctPrefab = (GameObject)Resources.Load(timeLapseBombCountDownEffectPath);
+        GameObject countDownEffctGameObject = Instantiate(countDownEffctPrefab, transform);
+        countDownEffctGameObject.transform.localPosition = Vector3.zero;
+        countDownEffctGameObject.SetActive(true);
+
+    }
     public void TimeLapseBombBommbCoutDown()
     {
         DOTween.Kill(transform);
         isCountDown = true;
         transform.GetComponent<Rigidbody>().isKinematic = false;
-        GameObject countDownEffctPrefab = (GameObject)Resources.Load(timeLapseBombCountDownEffectPath);
-        GameObject countDownEffctGameObject = Instantiate(countDownEffctPrefab, transform);
-        countDownEffctGameObject.transform.localPosition = Vector3.zero;
-        countDownEffctGameObject.SetActive(true);
     }
 
     public void TimeLapseBombExplode()
