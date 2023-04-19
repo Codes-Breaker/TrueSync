@@ -19,7 +19,7 @@ public class SkillItemControllerBase : MonoBehaviour
         stayTime = stayTimeData;
         isShow = true;
         itemGameObject.SetActive(true);
-        itemGameObject.transform.DORotate(new Vector3(0, 360, 0), 1f, RotateMode.FastBeyond360)
+        itemGameObject.transform.DOLocalRotate(new Vector3(0, 360, 0), 1f, RotateMode.FastBeyond360)
             .SetLoops(-1, LoopType.Restart)
             .SetEase(Ease.Linear);
     }
@@ -99,6 +99,7 @@ public class SkillItemControllerBase : MonoBehaviour
             user = null;
         }
         DestoryIcon();
+        DOTween.Kill(itemGameObject.transform);
         GameObject.Destroy(gameObject);
     }
 
