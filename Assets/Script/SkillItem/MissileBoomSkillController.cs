@@ -29,7 +29,7 @@ public class MissileBoomSkillController : SkillItemControllerBase
         randomIndex = Random.Range(0, randomPlaceAndRotation.Count);
         var rand = randomPlaceAndRotation[randomIndex];
         this.transform.position = rand.Item1;
-        transform.rotation = Quaternion.Euler(rand.Item2);
+        //transform.rotation = Quaternion.Euler(rand.Item2);
     }
 
     protected override void Init()
