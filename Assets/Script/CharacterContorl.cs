@@ -39,11 +39,13 @@ public class CharacterContorl : MonoBehaviour
     [Header("相关需要关联组件")]
     public TMP_Text vulnerbilityText;
     public Slider gpSlider;
+    public Slider hpSlider;
     public Image drownImage;
     public Canvas canvas;
     public Rigidbody ridbody;
     public Collider bodyCollider;
     public SkinnedMeshRenderer skinnedMeshRenderer;
+    public MeshRenderer ringRenderer;
     public float originalRadius;
     public float targetRadius;
     public Vector3 targetCenter;
@@ -95,6 +97,7 @@ public class CharacterContorl : MonoBehaviour
     public float maxReleaseVelocity;
 
     public float maxDrowning = 1000;
+    private float maxDrownValue = 1000;
     public float currentDrown = 0;
     private float totalDrown = 0;
     private const int minDrown = 50;
@@ -159,6 +162,7 @@ public class CharacterContorl : MonoBehaviour
     private GameController gameController;
 
     public MaterialController meshController;
+    public int playerIndex = -1;
 
     private void Awake()
     {
@@ -173,11 +177,13 @@ public class CharacterContorl : MonoBehaviour
         currentDrown = maxDrowning;
         gameController = GameObject.Find("GameManager").GetComponent<GameController>();
         SetFlashMeshRendererBlock(false);
+        maxDrownValue = maxDrowning;
     }
 
     private void Start()
     {
         SetControlSelf();
+        SetRingColor();
     }
 
     private void Update()
@@ -420,6 +426,14 @@ public class CharacterContorl : MonoBehaviour
     private void SetFlashMeshRendererBlock(bool value)
     {
         meshController.SetFlashMeshRendererBlock(value);
+    }
+
+    private void SetRingColor()
+    {
+        var rendererBlock = new MaterialPropertyBlock();
+        ringRenderer.GetPropertyBlock(rendererBlock, 0);
+        rendererBlock.SetColor("_Color", InputReadManager.Instance.playerColors[playerIndex]);
+        ringRenderer.SetPropertyBlock(rendererBlock, 0);
     }
 
     private void ReturnToPlace()
@@ -675,11 +689,14 @@ public class CharacterContorl : MonoBehaviour
                 vulnerbilityText.color = Color.white;
             }
             gpSlider.value = (float)(currentGas / maxActorGas);
+            hpSlider.value = (float)(maxDrowning / maxDrownValue);
             canvas.transform.forward = Camera.main.transform.forward;
             vulnerbilityText.transform.position = bodyCollider.transform.position;
             gpSlider.transform.position = bodyCollider.transform.position;
-            vulnerbilityText.transform.localPosition = vulnerbilityText.transform.localPosition + new Vector3(0.2f, 1.3f + (bodyCollider.transform.localScale.x - 1) * 1.2f, 0);
+            hpSlider.transform.position = bodyCollider.transform.position;
+            vulnerbilityText.transform.localPosition = vulnerbilityText.transform.localPosition + new Vector3(0.25f, 1.5f + (bodyCollider.transform.localScale.x - 1) * 1.2f, 0);
             gpSlider.transform.localPosition = gpSlider.transform.localPosition + new Vector3(0, 1.3f + (bodyCollider.transform.localScale.x - 1) * 1.2f, 0);
+            hpSlider.transform.localPosition = hpSlider.transform.localPosition + new Vector3(0, 1.5f + (bodyCollider.transform.localScale.x - 1) * 1.2f, 0);
             drownImage.transform.position = bodyCollider.transform.position;
             drownImage.transform.localPosition = drownImage.transform.localPosition + new Vector3(-1, 1.5f + (bodyCollider.transform.localScale.x - 1) * 1.2f, 0);
             drownImage.fillAmount = (maxDrowning - currentDrown) / maxDrowning;

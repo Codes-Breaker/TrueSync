@@ -9,14 +9,19 @@ public class ChooseCharactersPanelItemControl : MonoBehaviour
 {
     public InputReaderBase inputReader;
     public TextMeshProUGUI characterNameText;
+    public TextMeshProUGUI playerIndexText;
     private bool isButtonDown;
+    private int playerIndex;
 
     public CharacterType characterType = CharacterType.Seal;
-    public void Init(InputDevice inputDevice)
+    public void Init(InputDevice inputDevice, int playerIndex)
     {
         var go = new GameObject("InputReader");
         inputReader = go.AddComponent<InputReaderBase>();
         inputReader.Init(inputDevice);
+        this.playerIndex = playerIndex;
+        playerIndexText.text = $"P{playerIndex}";
+        playerIndexText.color = InputReadManager.Instance.playerColors[playerIndex - 1];
     }
 
     private void LateUpdate()
