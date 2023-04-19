@@ -230,6 +230,26 @@ PrefabInstance:
       propertyPath: m_Name
       value: FX_Smoke_Black_Large_01
       objectReference: {fileID: 0}
+    - target: {fileID: 1816309329769514706, guid: 41e99084a3d25184199d5ccb9da6cdcd,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7074925162364192974, guid: 41e99084a3d25184199d5ccb9da6cdcd,
+        type: 3}
+      propertyPath: prewarm
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7074925162364192974, guid: 41e99084a3d25184199d5ccb9da6cdcd,
+        type: 3}
+      propertyPath: lengthInSec
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7074925162364192974, guid: 41e99084a3d25184199d5ccb9da6cdcd,
+        type: 3}
+      propertyPath: playOnAwake
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7074925162364192974, guid: 41e99084a3d25184199d5ccb9da6cdcd,
         type: 3}
       propertyPath: simulationSpeed
@@ -239,6 +259,11 @@ PrefabInstance:
         type: 3}
       propertyPath: ShapeModule.type
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7074925162364192974, guid: 41e99084a3d25184199d5ccb9da6cdcd,
+        type: 3}
+      propertyPath: VelocityModule.enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7074925162364192974, guid: 41e99084a3d25184199d5ccb9da6cdcd,
         type: 3}
