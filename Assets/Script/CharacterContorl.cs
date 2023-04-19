@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.EventSystems;
+using Cinemachine;
 
 public class CharacterContorl : MonoBehaviour
 {
@@ -446,6 +447,8 @@ public class CharacterContorl : MonoBehaviour
     {
         //GameObject.Destroy(this.gameObject);
         //GameObject.Destroy(this.canvas);
+        var cinemachineTargetGroup = GameObject.FindObjectOfType<CinemachineTargetGroup>();
+        cinemachineTargetGroup.RemoveMember(transform);
         this.gameObject.SetActive(false);
         this.canvas.gameObject.SetActive(false);
         gameController.CheckGameState();

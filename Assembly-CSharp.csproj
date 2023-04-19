@@ -249,6 +249,7 @@
     <Compile Include="Assets\VolumetricFog2\Demo\Scripts\CapsuleController.cs" />
     <Compile Include="Assets\TrueSync\Physics\IPhysicsManager.cs" />
     <Compile Include="Assets\Script\SoftbodyReaction.cs" />
+    <Compile Include="Assets\ChooseCharactersPanelItemControl.cs" />
     <Compile Include="Assets\TrueSync\Physics\Jitter\Extra\Clones\CollisionIslandClone.cs" />
     <Compile Include="Assets\Nappin\PhysicsBasedCharacterController\Scripts\Extensions\PlatformSensor.cs" />
     <Compile Include="Assets\Prefabs\005\JSMovement3D.cs" />
@@ -342,6 +343,7 @@
     <Compile Include="Assets\PlayerMovement.cs" />
     <Compile Include="Assets\TrueSync\Physics\Farseer\Dynamics\Joints\FixedMouseJoint.cs" />
     <Compile Include="Assets\TrueSync\Engine\Math\TSQuaternion.cs" />
+    <Compile Include="Assets\ChooseCharactersPanelContorl.cs" />
     <Compile Include="Assets\TrueSync\Physics\Farseer\Extra\Clones\WorldClone2D.cs" />
     <Compile Include="Assets\ThirdParty\EffectCore\packs\WebDemoAssets\scripts\ExplodingProjectile.cs" />
     <Compile Include="Assets\TrueSync\Physics\Farseer\Common\Decomposition\CDT\Delaunay\DelaunayTriangle.cs" />
@@ -349,6 +351,7 @@
     <Compile Include="Assets\TrueSync\Physics\Farseer\Common\Decomposition\CDT\Delaunay\Sweep\DTSweepPointComparator.cs" />
     <Compile Include="Assets\Suriyun\Addon-PetZoo\Core\ControllerPetZoo.cs" />
     <Compile Include="Assets\Nappin\PhysicsBasedCharacterController\Scripts\AnimatedController.cs" />
+    <Compile Include="Assets\Script\InputReadManager.cs" />
     <Compile Include="Assets\TrueSync\Unity\TrueSyncBehaviour.cs" />
     <Compile Include="Assets\TrueSync\Physics\Jitter\Collision\CollisionIsland.cs" />
     <Compile Include="Assets\TrueSync\Physics\Farseer\Common\Stopwatch.cs" />
@@ -399,9 +402,6 @@
     <Compile Include="Assets\TrueSync\Physics\Jitter\Dynamics\Arbiter.cs" />
     <Compile Include="Assets\TrueSync\Physics\Farseer\Common\Decomposition\CDT\TriangulationConstraint.cs" />
     <Compile Include="Assets\ThirdParty\EffectCore\packs\StylizedMeleeCombatPack1\WebBuild\scripts\nextEffectMeleeCombat.cs" />
-    <Compile Include="Assets\Script\InputReadManager.cs" />
-    <Compile Include="Assets\ChooseCharactersPanelContorl.cs" />
-    <Compile Include="Assets\ChooseCharactersPanelItemControl.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Suriyun\UnityChanShader\Shader\Unitychan_chara_fuku.shader" />
