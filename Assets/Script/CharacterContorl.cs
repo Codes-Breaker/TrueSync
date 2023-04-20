@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using DG.Tweening;
 using UnityEngine.EventSystems;
 using Cinemachine;
 
@@ -777,6 +778,12 @@ public class CharacterContorl : MonoBehaviour
             var m2 = (Mathf.Cos(degree2) * vel2).magnitude;
 
             vulnerbility += Convert.ToInt32(receivedForceRate * m2 * 2);
+
+            if (Convert.ToInt32(receivedForceRate * m2 * 2) != 0)
+            {
+                DOTween.Kill(vulnerbilityText.transform);
+                vulnerbilityText.transform.DOShakeScale(0.6f, vibrato:7,strength:0.6f ).SetEase(Ease.OutQuad);
+            }
 
             var lglooNerfRate = 1f;
             if (hasLglooStun())
