@@ -120,18 +120,22 @@ public class SubmarineControl : MonoBehaviour, IRandomEventsObject
         var character = FindObjectsOfType<CharacterContorl>();
         foreach(var item in character)
         {
-            var bomb = Instantiate(timeLapseBombPrefab);
-            Physics.IgnoreCollision(this.GetComponent<Collider>(), bomb.GetComponent<Collider>());
-            bomb.transform.position = transform.position;
-            bomb.SetActive(true);
-            if (bomb.GetComponent<SkillItemBase>())
+            if(!item.isDead&&!item.jumpingBack&&!item.returning)
             {
-                var point = item.transform.position + Random.insideUnitSphere * launchBomBradius;
-                bomb.GetComponent<SkillItemBase>().Init(new SkillItemCreatData
+                var bomb = Instantiate(timeLapseBombPrefab);
+                Physics.IgnoreCollision(this.GetComponent<Collider>(), bomb.GetComponent<Collider>());
+                bomb.transform.position = transform.position;
+                bomb.SetActive(true);
+                if (bomb.GetComponent<SkillItemBase>())
                 {
-                    targetPosition = new Vector3(point.x,item.transform.position.y,point.z)
-                }) ;
-                bomb.GetComponent<SkillItemBase>().Show();
+                    var point = item.transform.position + Random.insideUnitSphere * launchBomBradius;
+                    bomb.GetComponent<SkillItemBase>().Init(new SkillItemCreatData
+                    {
+                        targetPosition = new Vector3(point.x,item.transform.position.y,point.z)
+                    }) ;
+                    bomb.GetComponent<SkillItemBase>().Show();
+                }
+
             }
 
         }
