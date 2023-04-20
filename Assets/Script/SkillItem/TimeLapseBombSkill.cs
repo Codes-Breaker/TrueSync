@@ -21,7 +21,8 @@ public class TimeLapseBombSkill: SkillItemBase
     private bool isCountDown;
     private bool isAddCountDownEffct;
     private float currentTime;
-
+    public Vector3 velocityBeforeCollision = Vector3.zero;
+    public Vector3 positionBeforeCollision = Vector3.zero;
     public override void Init(SkillItemCreatData skillItemCreatData)
     {
         base.Init(skillItemCreatData);
@@ -48,6 +49,12 @@ public class TimeLapseBombSkill: SkillItemBase
             if (currentTime > explosionDelayTime * 0.6f && !isAddCountDownEffct)
                 AddCountDownEffct();
         }
+    }
+
+    private void FixedUpdate()
+    {
+        velocityBeforeCollision = GetComponent<Rigidbody>().velocity;
+        positionBeforeCollision = GetComponent<Rigidbody>().position;
     }
 
     public void LaunchTimeLapseBomb()
