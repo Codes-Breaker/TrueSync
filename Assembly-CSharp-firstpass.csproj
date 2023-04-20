@@ -61,12 +61,13 @@
     <Compile Include="Assets\Plugins\TrueSyncDll\TrueSync\ReplayRecord.cs" />
     <Compile Include="Assets\Plugins\TrueSyncDll\TrueSync\ArrayResourcePool.cs" />
     <Compile Include="Assets\Plugins\TrueSyncDll\TrueSync\ChecksumExtractor.cs" />
+    <Compile Include="Assets\Plugins\Dedmigiant\DOTween\Modules\DOTweenModuleUtils.cs" />
     <Compile Include="Assets\Plugins\TrueSyncDll\TrueSync\TrueSyncManagedBehaviour.cs" />
     <Compile Include="Assets\Plugins\TrueSyncDll\TrueSync\AbstractLockstep.cs" />
     <Compile Include="Assets\Plugins\TrueSyncDll\TrueSync\CompoundStats.cs" />
     <Compile Include="Assets\Plugins\TrueSyncDll\TrueSync\ITrueSyncBehaviour.cs" />
-    <Compile Include="Assets\Plugins\Demigiant\DOTween\Modules\DOTweenModulePhysics2D.cs" />
     <Compile Include="Assets\Plugins\TrueSyncDll\TrueSync\ResourcePoolStateTrackerState.cs" />
+    <Compile Include="Assets\Plugins\Dedmigiant\DOTweenPro\DOTweenProShortcuts.cs" />
     <Compile Include="Assets\Plugins\Easy performant outline\Scripts\OutlineParameters.cs" />
     <Compile Include="Assets\Plugins\TrueSyncDll\TrueSync\ITrueSyncBehaviourCallbacks.cs" />
     <Compile Include="Assets\Plugins\TrueSyncDll\TrueSync\TrueSyncInputCallback.cs" />
@@ -76,6 +77,7 @@
     <Compile Include="Assets\Plugins\TrueSyncDll\TrueSync\ReplayMode.cs" />
     <Compile Include="Assets\Plugins\TrueSyncDll\TrueSync\HashList.cs" />
     <Compile Include="Assets\Plugins\Easy performant outline\Scripts\CameraUtility.cs" />
+    <Compile Include="Assets\Plugins\Dedmigiant\DOTween\Modules\DOTweenModuleAudio.cs" />
     <Compile Include="Assets\Plugins\TrueSyncDll\TrueSync\ResourcePoolItem.cs" />
     <Compile Include="Assets\Plugins\TrueSyncDll\TrueSync\StateTracker.cs" />
     <Compile Include="Assets\Plugins\DynamicBone\Scripts\DynamicBoneCollider.cs" />
@@ -83,7 +85,6 @@
     <Compile Include="Assets\Plugins\Easy performant outline\Scripts\OutlineCustomPass.cs" />
     <Compile Include="Assets\Plugins\Easy performant outline\Scripts\RenderTargetUtility.cs" />
     <Compile Include="Assets\Plugins\Easy performant outline\Scripts\Outlinable.cs" />
-    <Compile Include="Assets\Plugins\Demigiant\DOTween\Modules\DOTweenModuleUI.cs" />
     <Compile Include="Assets\Plugins\TrueSyncDll\TrueSync\SerializableDictionaryBytePlayer.cs" />
     <Compile Include="Assets\Plugins\TrueSyncDll\TrueSyncExtensionsCore.cs" />
     <Compile Include="Assets\Plugins\TrueSyncDll\TrueSync\IWorld.cs" />
@@ -95,23 +96,26 @@
     <Compile Include="Assets\Plugins\Easy performant outline\Scripts\DOTween support\DOTweenEPO.cs" />
     <Compile Include="Assets\Plugins\TrueSyncDll\TrueSync\SerializableDictionaryByteByte.cs" />
     <Compile Include="Assets\Plugins\DynamicBone\Scripts\DynamicBonePlaneCollider.cs" />
+    <Compile Include="Assets\Plugins\Dedmigiant\DOTweenPro\DOTweenTextMeshPro.cs" />
     <Compile Include="Assets\Plugins\TrueSyncDll\TrueSync\TrueSyncIsReady.cs" />
     <Compile Include="Assets\Plugins\TrueSyncDll\TrueSync\ICollider.cs" />
     <Compile Include="Assets\Plugins\Easy performant outline\Scripts\BlitUtility.cs" />
     <Compile Include="Assets\Plugins\TrueSyncDll\TrueSync\SerializableDictionary.cs" />
     <Compile Include="Assets\Plugins\TrueSyncDll\TrueSync\GenericBufferWindow.cs" />
+    <Compile Include="Assets\Plugins\Dedmigiant\DOTween\Modules\DOTweenModuleUnityVersion.cs" />
     <Compile Include="Assets\Plugins\TrueSyncDll\TrueSync\DefaultLockstep.cs" />
     <Compile Include="Assets\Plugins\TrueSyncDll\TrueSync\CountInfo.cs" />
+    <Compile Include="Assets\Plugins\Dedmigiant\DOTweenPro\DOTweenAnimation.cs" />
+    <Compile Include="Assets\Plugins\Dedmigiant\DOTween\Modules\DOTweenModuleUI.cs" />
     <Compile Include="Assets\Plugins\TrueSyncDll\TrueSync\ResourcePool.cs" />
     <Compile Include="Assets\Plugins\TrueSyncDll\TrueSync\WorldChecksumExtractor.cs" />
+    <Compile Include="Assets\Plugins\Dedmigiant\DOTween\Modules\DOTweenModulePhysics.cs" />
+    <Compile Include="Assets\Plugins\Dedmigiant\DOTween\Modules\DOTweenModulePhysics2D.cs" />
     <Compile Include="Assets\Plugins\TrueSyncDll\TrueSync\IWorldClone.cs" />
     <Compile Include="Assets\Plugins\Easy performant outline\Scripts\Outliner.cs" />
     <Compile Include="Assets\Plugins\DynamicBone\Demo\DynamicBoneDemo1.cs" />
-    <Compile Include="Assets\Plugins\Demigiant\DOTween\Modules\DOTweenModuleUnityVersion.cs" />
-    <Compile Include="Assets\Plugins\Demigiant\DOTween\Modules\DOTweenModuleEPOOutline.cs" />
     <Compile Include="Assets\Plugins\Easy performant outline\Scripts\URP support\URPOutlineFeature.cs" />
     <Compile Include="Assets\Plugins\Easy performant outline\Scripts\PipelineAssetUtility.cs" />
-    <Compile Include="Assets\Plugins\Demigiant\DOTween\Modules\DOTweenModuleUtils.cs" />
     <Compile Include="Assets\Plugins\Easy performant outline\Scripts\RendererFilteringUtility.cs" />
     <Compile Include="Assets\Plugins\TrueSyncDll\TrueSync\InputDataBase.cs" />
     <Compile Include="Assets\Plugins\TrueSyncDll\TrueSync\TrueSyncStats.cs" />
@@ -122,51 +126,55 @@
     <Compile Include="Assets\Plugins\TrueSyncDll\TrueSync\ITrueSyncBehaviourGamePlay.cs" />
     <Compile Include="Assets\Plugins\Easy performant outline\Scripts\CrateControl.cs" />
     <Compile Include="Assets\Plugins\TrueSyncDll\TrueSync\TrueSyncEventCallback.cs" />
+    <Compile Include="Assets\Plugins\Dedmigiant\DOTweenPro\DOTweenTk2d.cs" />
     <Compile Include="Assets\Plugins\TrueSyncDll\TrueSync\SerializableDictionaryByteInt.cs" />
     <Compile Include="Assets\Plugins\TrueSyncDll\IPhysicsManagerBase.cs" />
     <Compile Include="Assets\Plugins\TrueSyncDll\TrueSync\SerializableDictionaryByteString.cs" />
+    <Compile Include="Assets\Plugins\Dedmigiant\DOTween\Modules\DOTweenModuleSprite.cs" />
     <Compile Include="Assets\Plugins\Easy performant outline\Scripts\KeywordsUtility.cs" />
     <Compile Include="Assets\Plugins\TrueSyncDll\TrueSync\TrueSyncUpdateCallback.cs" />
     <Compile Include="Assets\Plugins\DynamicBone\Scripts\DynamicBone.cs" />
     <Compile Include="Assets\Plugins\TrueSyncDll\OnEventReceived.cs" />
     <Compile Include="Assets\Plugins\TrueSyncDll\Drawing.cs" />
     <Compile Include="Assets\Plugins\TrueSyncDll\TrueSync\AddTracking.cs" />
-    <Compile Include="Assets\Plugins\Demigiant\DOTween\Modules\DOTweenModulePhysics.cs" />
     <Compile Include="Assets\Plugins\TrueSyncDll\TrueSync\SyncedData.cs" />
-    <Compile Include="Assets\Plugins\Demigiant\DOTween\Modules\DOTweenModuleSprite.cs" />
     <Compile Include="Assets\Plugins\TrueSyncDll\TrueSync\TSPlayer.cs" />
     <Compile Include="Assets\Plugins\DynamicBone\Scripts\DynamicBoneColliderBase.cs" />
     <Compile Include="Assets\Plugins\TrueSyncDll\TrueSync\ReplayRecordSave.cs" />
     <Compile Include="Assets\Plugins\TrueSyncDll\TrueSync\TrueSyncInputDataProvider.cs" />
     <Compile Include="Assets\Plugins\Easy performant outline\Scripts\OnPreRenderEventTransferer.cs" />
     <Compile Include="Assets\Plugins\Easy performant outline\Scripts\TargetStateListener.cs" />
-    <Compile Include="Assets\Plugins\Demigiant\DOTween\Modules\DOTweenModuleAudio.cs" />
     <Compile Include="Assets\Plugins\TrueSyncDll\TrueSync\SyncedInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Plugins\Easy performant outline\Resources\Easy performant outline\Shaders\FinalBlit.shader" />
     <None Include="Assets\Plugins\Easy performant outline\Resources\Easy performant outline\Shaders\ZPrepass.shader" />
+    <None Include="Assets\Plugins\Dedmigiant\DOTweenPro\DOTweenPro.dll" />
     <None Include="Assets\Plugins\Easy performant outline\Resources\Easy performant outline\Shaders\Fills\ColorFill.shader" />
     <None Include="Assets\Plugins\Easy performant outline\Resources\Easy performant outline\Shaders\TransparentBlit.shader" />
+    <None Include="Assets\Plugins\Dedmigiant\DOTween\readme.txt" />
     <None Include="Assets\Plugins\Easy performant outline\Resources\Easy performant outline\Shaders\Dilate.shader" />
+    <None Include="Assets\Plugins\Dedmigiant\DemiLib\Core\DemiLib.dll" />
+    <None Include="Assets\Plugins\Dedmigiant\DOTweenPro\readme.txt" />
     <None Include="Assets\Plugins\Easy performant outline\Resources\Easy performant outline\Shaders\Fills\EmptyFill.shader" />
-    <None Include="Assets\Plugins\Demigiant\DOTween\DOTween.XML" />
+    <None Include="Assets\Plugins\Dedmigiant\DOTween\DOTween.XML" />
     <None Include="Assets\Plugins\Easy performant outline\Resources\Easy performant outline\Shaders\BasicBlit.shader" />
     <None Include="Assets\Plugins\Easy performant outline\Resources\Easy performant outline\Shaders\PartialBlit.shader" />
     <None Include="Assets\Plugins\Easy performant outline\Resources\Easy performant outline\Shaders\Fills\Fresnel.shader" />
     <None Include="Assets\Plugins\Easy performant outline\Resources\Easy performant outline\Shaders\Outline.shader" />
     <None Include="Assets\Plugins\Easy performant outline\Resources\Easy performant outline\Shaders\Fills\Dots.shader" />
-    <None Include="Assets\Plugins\Demigiant\DOTween\DOTween.dll" />
     <None Include="Assets\Plugins\Easy performant outline\Resources\Easy performant outline\Shaders\Fills\FillMask.shader" />
     <None Include="Assets\Plugins\Easy performant outline\Resources\Easy performant outline\Shaders\MiskCG.cginc" />
     <None Include="Assets\Plugins\Easy performant outline\Resources\Easy performant outline\Shaders\EdgeDilate.shader" />
+    <None Include="Assets\Plugins\Dedmigiant\DemiLib\Core\DemiLib.xml" />
+    <None Include="Assets\Plugins\Dedmigiant\DOTweenPro\DOTweenPro.XML" />
     <None Include="Assets\Plugins\Easy performant outline\Resources\Easy performant outline\Shaders\ClearStencil.shader" />
     <None Include="Assets\Plugins\Easy performant outline\Resources\Easy performant outline\Shaders\Blur.shader" />
     <None Include="Assets\Plugins\Easy performant outline\Resources\Easy performant outline\Shaders\OutlineMask.shader" />
     <None Include="Assets\Plugins\Easy performant outline\Resources\Easy performant outline\Shaders\Fills\Interlaced.shader" />
     <None Include="Assets\Plugins\Easy performant outline\Resources\Easy performant outline\Shaders\Obstacle.shader" />
-    <None Include="Assets\Plugins\Demigiant\DOTween\readme.txt" />
     <None Include="Assets\Plugins\DynamicBone\ReadMe.txt" />
+    <None Include="Assets\Plugins\Dedmigiant\DOTween\DOTween.dll" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
@@ -412,6 +420,9 @@
     <Reference Include="UnityEditor.UnityConnectModule">
       <HintPath>G:\Unity\Hub\Editor\2021.3.8f1c1\Editor\Data\Managed\UnityEngine\UnityEditor.UnityConnectModule.dll</HintPath>
     </Reference>
+    <Reference Include="DemiLib">
+      <HintPath>Assets\Plugins\Dedmigiant\DemiLib\Core\DemiLib.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.Burst.Unsafe">
       <HintPath>Library\PackageCache\com.unity.burst@1.7.3\Unity.Burst.Unsafe.dll</HintPath>
     </Reference>
@@ -428,10 +439,13 @@
       <HintPath>Library\PackageCache\com.unity.burst@1.7.3\Unity.Burst.CodeGen\Unity.Burst.Cecil.Rocks.dll</HintPath>
     </Reference>
     <Reference Include="DOTween">
-      <HintPath>Assets\Plugins\Demigiant\DOTween\DOTween.dll</HintPath>
+      <HintPath>Assets\Plugins\Dedmigiant\DOTween\DOTween.dll</HintPath>
     </Reference>
     <Reference Include="clipper_library">
       <HintPath>Library\PackageCache\com.unity.cinemachine@2.8.6\Runtime\ThirdParty\clipper_library.dll</HintPath>
+    </Reference>
+    <Reference Include="DOTweenPro">
+      <HintPath>Assets\Plugins\Dedmigiant\DOTweenPro\DOTweenPro.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>Library\PackageCache\com.unity.nuget.newtonsoft-json@3.0.2\Runtime\Newtonsoft.Json.dll</HintPath>

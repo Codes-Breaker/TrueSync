@@ -37,7 +37,7 @@ public class LglooControl : MonoBehaviour,IRandomEventsObject
         (new Vector3(0.91f, 1.61f, 4.84f), new Vector3(0, -90, 0)), //об
     };
 
-    public static List<int> ExistingIndex = new List<int>();
+
 
     private bool isReadyToShoot;
   
@@ -90,9 +90,9 @@ public class LglooControl : MonoBehaviour,IRandomEventsObject
         {
             Fire();
         }
-        lock (ExistingIndex)
+        lock (InputReadManager.Instance.ExistingIndex)
         {
-            ExistingIndex.Remove(randomIndex);
+            InputReadManager.Instance.ExistingIndex.Remove(randomIndex);
         }
         if (currentTime < stayTime && !fired)
         {
@@ -118,13 +118,13 @@ public class LglooControl : MonoBehaviour,IRandomEventsObject
         var remainIndex = new List<int>();
         for (int i = 0; i < randomPlaceAndRotation.Count; i++)
         {
-            if (!ExistingIndex.Contains(i))
+            if (!InputReadManager.Instance.ExistingIndex.Contains(i))
                 remainIndex.Add(i);
         }
         randomIndex = remainIndex[Random.Range(0, remainIndex.Count)];
-        lock (ExistingIndex)
+        lock (InputReadManager.Instance.ExistingIndex)
         {
-            ExistingIndex.Add(randomIndex);
+            InputReadManager.Instance.ExistingIndex.Add(randomIndex);
         }
         var rand = randomPlaceAndRotation[randomIndex];
         transform.position = rand.Item1;
