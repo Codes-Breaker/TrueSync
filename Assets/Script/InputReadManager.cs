@@ -103,7 +103,7 @@ public class InputReadManager : MonoBehaviour
                     characterGameObject = Instantiate((GameObject)Resources.Load(polarBearPath));
                     characterGameObject.GetComponent<CharacterContorl>().inputReader = item.inputReader;
                     cinemachineTargetGroup.AddMember(characterGameObject.transform, 2, 4);
-                    characterGameObject.transform.position = new Vector3(5 + index - 10, 6, 0);
+                    characterGameObject.transform.position = new Vector3(5 + 5*index - 10, 6, 0);
                     characterGameObject.GetComponent<CharacterContorl>().playerIndex = index;
                     index++;
                     break;
@@ -111,7 +111,7 @@ public class InputReadManager : MonoBehaviour
                     characterGameObject = Instantiate((GameObject)Resources.Load(snowFoxPath));
                     characterGameObject.GetComponent<CharacterContorl>().inputReader = item.inputReader;
                     cinemachineTargetGroup.AddMember(characterGameObject.transform, 2, 4);
-                    characterGameObject.transform.position = new Vector3(5 + index - 10, 6, 0);
+                    characterGameObject.transform.position = new Vector3(5 + 5*index - 10, 6, 0);
                     characterGameObject.GetComponent<CharacterContorl>().playerIndex = index;
                     index++;
                     break;
