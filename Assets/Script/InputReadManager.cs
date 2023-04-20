@@ -27,6 +27,7 @@ public class InputReadManager : MonoBehaviour
     public RandomEventsControl randomEventsControl;
     public List<PlayerData> playerDatas = new List<PlayerData>();
     private CinemachineTargetGroup cinemachineTargetGroup;
+    public List<int> ExistingIndex = new List<int>();
     public static InputReadManager Instance { get; protected set; }
     public List<Color> playerColors = new List<Color>();
 
@@ -64,6 +65,7 @@ public class InputReadManager : MonoBehaviour
          m_ButtonPressListener = InputSystem.onAnyButtonPress
          .Call(OnButtonPressed);
         Instance = this;
+        ExistingIndex = new List<int>();
     }
     void OnButtonPressed(InputControl button)
     {
@@ -85,6 +87,7 @@ public class InputReadManager : MonoBehaviour
         playerDatas = chooseCharactersPanel.GetCharactersData();
         cinemachineTargetGroup = GameObject.FindObjectOfType<CinemachineTargetGroup>();
         int index = 0;
+        var padding = 20f / (playerDatas.Count + 1);
         foreach (var item in playerDatas)
         {
             GameObject characterGameObject;
@@ -95,7 +98,7 @@ public class InputReadManager : MonoBehaviour
                     characterGameObject = Instantiate((GameObject)Resources.Load(sealPath));
                     characterGameObject.GetComponent<CharacterContorl>().inputReader = item.inputReader;
                     cinemachineTargetGroup.AddMember(characterGameObject.transform, 2, 4);
-                    characterGameObject.transform.position = new Vector3(5 + 5*index-10, 6, 0);
+                    characterGameObject.transform.position = new Vector3(-10 + padding*(index+1), 6, 0);
                     characterGameObject.GetComponent<CharacterContorl>().playerIndex = index;
                     index++;
                     break;
@@ -103,7 +106,7 @@ public class InputReadManager : MonoBehaviour
                     characterGameObject = Instantiate((GameObject)Resources.Load(polarBearPath));
                     characterGameObject.GetComponent<CharacterContorl>().inputReader = item.inputReader;
                     cinemachineTargetGroup.AddMember(characterGameObject.transform, 2, 4);
-                    characterGameObject.transform.position = new Vector3(5 + 5*index - 10, 6, 0);
+                    characterGameObject.transform.position = new Vector3(-10 + padding * (index + 1), 6, 0);
                     characterGameObject.GetComponent<CharacterContorl>().playerIndex = index;
                     index++;
                     break;
@@ -111,7 +114,7 @@ public class InputReadManager : MonoBehaviour
                     characterGameObject = Instantiate((GameObject)Resources.Load(snowFoxPath));
                     characterGameObject.GetComponent<CharacterContorl>().inputReader = item.inputReader;
                     cinemachineTargetGroup.AddMember(characterGameObject.transform, 2, 4);
-                    characterGameObject.transform.position = new Vector3(5 + 5*index - 10, 6, 0);
+                    characterGameObject.transform.position = new Vector3(-10 + padding * (index + 1), 6, 0);
                     characterGameObject.GetComponent<CharacterContorl>().playerIndex = index;
                     index++;
                     break;

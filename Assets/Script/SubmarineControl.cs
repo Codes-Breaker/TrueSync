@@ -120,7 +120,7 @@ public class SubmarineControl : MonoBehaviour, IRandomEventsObject
         var character = FindObjectsOfType<CharacterContorl>();
         foreach(var item in character)
         {
-            if(!item.isDead&&!item.jumpingBack&&!item.returning)
+            if(!item.isDead && !item.jumpingBack && !item.returning)
             {
                 var bomb = Instantiate(timeLapseBombPrefab);
                 Physics.IgnoreCollision(this.GetComponent<Collider>(), bomb.GetComponent<Collider>());

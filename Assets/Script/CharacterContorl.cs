@@ -763,7 +763,7 @@ public class CharacterContorl : MonoBehaviour
             var lglooNerfRate = 1f;
             if (hasLglooStun())
             {
-                lglooNerfRate = 0.5f;
+                lglooNerfRate = 0.3f;
             }
 
             ridbody.AddExplosionForce((otherCollision.forceArgument + m2) * (1 + Mathf.Pow(1.5f, (vulnerbility/10))) * continueReceivedForceRate + 200 * lglooNerfRate, collision.contacts[0].point, 4);
@@ -840,14 +840,13 @@ public class CharacterContorl : MonoBehaviour
 
             if (Convert.ToInt32(receivedForceRate * m2 * 2) != 0)
             {
-                DOTween.Kill(vulnerbilityText.transform);
                 vulnerbilityText.transform.DOShakeScale(0.6f, vibrato:7,strength:0.6f ).SetEase(Ease.OutQuad);
             }
 
             var lglooNerfRate = 1f;
             if (hasLglooStun())
             {
-                lglooNerfRate = 0.5f;
+                lglooNerfRate = 0.3f;
             }
             ridbody.AddExplosionForce((otherCollision.forceArgument + m2) * (1 + Mathf.Pow(1.5f, (vulnerbility / 10))) + 200 * lglooNerfRate, collision.contacts[0].point, 4);
             collision.collider.gameObject.GetComponent<Rigidbody>().AddExplosionForce((forceArgument + m1) * (1 + (otherCollision.vulnerbility / otherCollision.maxVulnerbility)) + 50, collision.contacts[0].point, 4);
