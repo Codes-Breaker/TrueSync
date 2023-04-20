@@ -24,7 +24,7 @@ public class SubmarineControl : MonoBehaviour, IRandomEventsObject
 
     public GameObject timeLapseBombPrefab;
     public float launchBomBradius = 6;
-    public int launchBombNum = 2;
+  //  public int launchBombNum = 2;
     private bool hasLaunch;
 
     //public List<(Vector3, Vector3)> randomPlaceAndRotation = new List<(Vector3, Vector3)>()
@@ -117,7 +117,8 @@ public class SubmarineControl : MonoBehaviour, IRandomEventsObject
     private void launchBomb()
     {
         hasLaunch = true;
-        for(int i = 0;i < launchBombNum;i++)
+        var character = FindObjectsOfType<CharacterContorl>();
+        foreach(var item in character)
         {
             var bomb = Instantiate(timeLapseBombPrefab);
             Physics.IgnoreCollision(this.GetComponent<Collider>(), bomb.GetComponent<Collider>());
@@ -125,10 +126,10 @@ public class SubmarineControl : MonoBehaviour, IRandomEventsObject
             bomb.SetActive(true);
             if (bomb.GetComponent<SkillItemBase>())
             {
-                var point = transform.position + Random.insideUnitSphere * launchBomBradius;
+                var point = item.transform.position + Random.insideUnitSphere * launchBomBradius;
                 bomb.GetComponent<SkillItemBase>().Init(new SkillItemCreatData
                 {
-                    targetPosition = new Vector3(point.x,transform.position.y,point.z)
+                    targetPosition = new Vector3(point.x,item.transform.position.y,point.z)
                 }) ;
                 bomb.GetComponent<SkillItemBase>().Show();
             }
