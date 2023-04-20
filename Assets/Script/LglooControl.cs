@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using System.Linq;
+using UnityEngine.UI;
 
 public class LglooControl : MonoBehaviour,IRandomEventsObject
 {
@@ -25,6 +26,8 @@ public class LglooControl : MonoBehaviour,IRandomEventsObject
     private CharacterContorl user;
     private float userY;
     public int randomIndex = -1;
+    public Canvas canvas;
+    public Image timeFill;
     public List<(Vector3, Vector3)> randomPlaceAndRotation = new List<(Vector3, Vector3)>()
     {
         (new Vector3(0, 1.61f, 0f), new Vector3(0, 0, 0)), //жа
@@ -43,6 +46,8 @@ public class LglooControl : MonoBehaviour,IRandomEventsObject
         canEnter = false;
         hasFire = false;
         lglooDestroy.SetActive(false);
+        canvas.worldCamera = Camera.main;
+        canvas.gameObject.SetActive(true);
     }
     public void FixedUpdate()
     {
@@ -60,6 +65,12 @@ public class LglooControl : MonoBehaviour,IRandomEventsObject
         }
     }
 
+
+    private void LateUpdate()
+    {
+        timeFill.fillAmount = (stayTime - currentTime) / stayTime;
+    }
+
     private void Update()
     {
         if (!isShow)
@@ -74,6 +85,7 @@ public class LglooControl : MonoBehaviour,IRandomEventsObject
     public void OnExit()
     {
         bool fired = hasFire;
+        canvas.gameObject.SetActive(false);
         if (user)
         {
             Fire();

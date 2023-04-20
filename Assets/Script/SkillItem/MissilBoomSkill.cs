@@ -121,6 +121,11 @@ public class MissilBoomSkill : SkillItemBase
                         item.GetComponent<Rigidbody>().AddExplosionForce(explosionForceArgument, skillItemData.targetPosition, explosionRangeRadius);
                     }
 
+                    if (item.GetComponent<TimeLapseBombSkill>())
+                    {
+                        item.GetComponent<TimeLapseBombSkill>().TimeLapseBombExplode();
+                    }
+
                     if(item.GetComponent<IRandomEventsObject>() != null)
                     {
                         item.GetComponent<IRandomEventsObject>().OnExit();

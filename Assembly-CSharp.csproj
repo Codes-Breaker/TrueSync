@@ -8,9 +8,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <RootNamespace>
-    </RootNamespace>
-    <ProjectGuid>{71304E04-4D70-28AA-CB4E-1D4DA0C56C9E}</ProjectGuid>
+    <RootNamespace></RootNamespace>
+    <ProjectGuid>{4ADC8BC2-34FF-2544-6924-E77E9C36C1AF}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Assembly-CSharp</AssemblyName>
@@ -99,6 +98,7 @@
     <Compile Include="Assets\TrueSync\Physics\Jitter\DataStructures\ReadOnlyHashset.cs" />
     <Compile Include="Assets\TrueSync\Physics\Jitter\Dynamics\Constraints\ConstraintHierarchy.cs" />
     <Compile Include="Assets\TrueSync\Physics\Farseer\Controllers\VelocityLimitController.cs" />
+    <Compile Include="Assets\Script\SkillItem\TimeLapseBombSkill.cs" />
     <Compile Include="Assets\Nappin\PhysicsBasedCharacterController\Scripts\Extensions\TrampolineSensor.cs" />
     <Compile Include="Assets\TrueSync\Physics\Jitter\Dynamics\Joints\Joint3D.cs" />
     <Compile Include="Assets\Script\CharacterManager.cs" />
@@ -403,7 +403,6 @@
     <Compile Include="Assets\TrueSync\Physics\Jitter\Dynamics\Arbiter.cs" />
     <Compile Include="Assets\TrueSync\Physics\Farseer\Common\Decomposition\CDT\TriangulationConstraint.cs" />
     <Compile Include="Assets\ThirdParty\EffectCore\packs\StylizedMeleeCombatPack1\WebBuild\scripts\nextEffectMeleeCombat.cs" />
-    <Compile Include="Assets\Script\SkillItem\TimeLapseBombSkill.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Suriyun\UnityChanShader\Shader\Unitychan_chara_fuku.shader" />
