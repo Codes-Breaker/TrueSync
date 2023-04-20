@@ -841,6 +841,7 @@ public class CharacterContorl : MonoBehaviour
             if (Convert.ToInt32(receivedForceRate * m2 * 2) != 0)
             {
                 DOTween.Kill(vulnerbilityText.transform);
+                vulnerbilityText.transform.localScale = new Vector3(1,1,1);
                 vulnerbilityText.transform.DOShakeScale(0.6f, vibrato:7,strength:0.6f ).SetEase(Ease.OutQuad);
             }
 
