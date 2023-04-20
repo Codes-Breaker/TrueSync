@@ -59,8 +59,8 @@ public class TimeLapseBombSkill: SkillItemBase
 
     public void LaunchTimeLapseBomb()
     {
-        transform.GetComponent<Rigidbody>().isKinematic = true;
-        transform.DOPath(new Vector3[] { transform.position, (transform.position + skillItemData.targetPosition) / 2 + Vector3.up * BoomHeight}, 1f, PathType.CatmullRom)
+        //transform.GetComponent<Rigidbody>().isKinematic = true;
+        transform.DOPath(new Vector3[] { transform.position, (transform.position + skillItemData.targetPosition) / 2 + Vector3.up * BoomHeight, skillItemData.targetPosition + Vector3.up * 2 }, 2f, PathType.CatmullRom)
             .SetEase(Ease.Linear)
             .OnComplete(() => {
                 TimeLapseBombBommbCoutDown();
@@ -80,7 +80,7 @@ public class TimeLapseBombSkill: SkillItemBase
     {
         DOTween.Kill(transform);
         isCountDown = true;
-        transform.GetComponent<Rigidbody>().isKinematic = false;
+        //transform.GetComponent<Rigidbody>().isKinematic = false;
     }
 
     public void TimeLapseBombExplode()
