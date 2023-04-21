@@ -253,6 +253,7 @@
     <Compile Include="Assets\TrueSync\Physics\Jitter\Extra\Clones\CollisionIslandClone.cs" />
     <Compile Include="Assets\Nappin\PhysicsBasedCharacterController\Scripts\Extensions\PlatformSensor.cs" />
     <Compile Include="Assets\Prefabs\005\JSMovement3D.cs" />
+    <Compile Include="Assets\TheLazzyKnight\Stylized Environment VFX\Scripts\WindDirector.cs" />
     <Compile Include="Assets\ScaleCollider.cs" />
     <Compile Include="Assets\Script\SkillItem\SkillItemControllerBase.cs" />
     <Compile Include="Assets\Script\SoftBodyPrototype.cs" />
@@ -1286,6 +1287,9 @@
     <Reference Include="Unity.Animation.Rigging.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.Animation.Rigging.Editor.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.VisualEffectGraph.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.VisualEffectGraph.Editor.dll</HintPath>
+    </Reference>
     <Reference Include="PPv2URPConverters">
       <HintPath>Library\ScriptAssemblies\PPv2URPConverters.dll</HintPath>
     </Reference>
@@ -1294,6 +1298,9 @@
     </Reference>
     <Reference Include="Unity.VisualStudio.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.VisualStudio.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.VisualEffectGraph.Runtime">
+      <HintPath>Library\ScriptAssemblies\Unity.VisualEffectGraph.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Timeline">
       <HintPath>Library\ScriptAssemblies\Unity.Timeline.dll</HintPath>

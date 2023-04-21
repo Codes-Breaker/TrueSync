@@ -11061,6 +11061,7 @@ GameObject:
   - component: {fileID: 1506629022080142848}
   - component: {fileID: 1506629022080142863}
   - component: {fileID: 1506629022080142862}
+  - component: {fileID: 5189331695768155832}
   m_Layer: 10
   m_Name: "\u72D0\u72F8"
   m_TagString: Untagged
@@ -11223,6 +11224,31 @@ MonoBehaviour:
   _maxSpeed: 100
   _warnOnSpeedClamp: 0
   _debugSubsteps: 0
+--- !u!114 &5189331695768155832
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1506629022080142861}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 131fd8c19a56d5a4ba96807822de1f0d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _version: 0
+  _raiseObject: 1
+  _buoyancyCoeff: 3
+  _boyancyTorque: 8
+  _accelerateDownhill: 0
+  _maximumBuoyancyForce: Infinity
+  _objectWidth: 3
+  _forceHeightOffset: -0.3
+  _dragInWaterUp: 3
+  _dragInWaterRight: 2
+  _dragInWaterForward: 1
+  _dragInWaterRotational: 0.2
+  _debugDraw: 0
 --- !u!1 &1506629022099175825
 GameObject:
   m_ObjectHideFlags: 0

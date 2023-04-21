@@ -1477,7 +1477,7 @@ CharacterJoint:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2920733464325190751}
-  m_ConnectedBody: {fileID: 5484514276718018886}
+  m_ConnectedBody: {fileID: 0}
   m_ConnectedArticulationBody: {fileID: 0}
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
@@ -11588,9 +11588,10 @@ GameObject:
   m_Component:
   - component: {fileID: 5140639079698160633}
   - component: {fileID: 5484514276718018884}
-  - component: {fileID: 5484514276718018886}
   - component: {fileID: 5484514276718018885}
   - component: {fileID: 1061064620547393459}
+  - component: {fileID: 6056790096098697947}
+  - component: {fileID: 5217842608453406656}
   m_Layer: 10
   m_Name: "\u767D\u718A"
   m_TagString: Untagged
@@ -11648,7 +11649,7 @@ MonoBehaviour:
   hpSlider: {fileID: 8737154829811637283}
   drownImage: {fileID: 185849559}
   canvas: {fileID: 1297859661}
-  ridbody: {fileID: 5484514276718018886}
+  ridbody: {fileID: 6056790096098697947}
   bodyCollider: {fileID: 5484514276718018885}
   skinnedMeshRenderer: {fileID: 264080562970461390}
   ringRenderer: {fileID: 62489727057651693}
@@ -11699,22 +11700,6 @@ MonoBehaviour:
   stunThreshold: 0
   meshController: {fileID: 9196369238665009256}
   playerIndex: -1
---- !u!54 &5484514276718018886
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5484514276718018883}
-  serializedVersion: 2
-  m_Mass: 8
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 1
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 112
-  m_CollisionDetection: 2
 --- !u!135 &5484514276718018885
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -11742,18 +11727,59 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _version: 0
   _radius: 1
-  _weight: 2
+  _weight: 5
   _weightUpDownMul: 0.5
   _innerSphereMultiplier: 1.55
   _innerSphereOffset: 0.109
   _velocityOffset: 0.04
   _compensateForWaveMotion: 0.45
-  _boostLargeWaves: 0
+  _boostLargeWaves: 1
   _teleportSpeed: 500
   _warnOnTeleport: 0
   _maxSpeed: 100
   _warnOnSpeedClamp: 0
   _debugSubsteps: 0
+--- !u!54 &6056790096098697947
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5484514276718018883}
+  serializedVersion: 2
+  m_Mass: 8
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 112
+  m_CollisionDetection: 2
+--- !u!114 &5217842608453406656
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5484514276718018883}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 131fd8c19a56d5a4ba96807822de1f0d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _version: 0
+  _raiseObject: 1
+  _buoyancyCoeff: 3
+  _boyancyTorque: 8
+  _accelerateDownhill: 0
+  _maximumBuoyancyForce: Infinity
+  _objectWidth: 3
+  _forceHeightOffset: -0.3
+  _dragInWaterUp: 3
+  _dragInWaterRight: 2
+  _dragInWaterForward: 1
+  _dragInWaterRotational: 0.2
+  _debugDraw: 0
 --- !u!1 &5966141611846728109
 GameObject:
   m_ObjectHideFlags: 0
@@ -12289,6 +12315,16 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 10
       objectReference: {fileID: 0}
+    - target: {fileID: 3911494481631482069, guid: 64b1744df296e4b438895c923213fca0,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3911494481631482069, guid: 64b1744df296e4b438895c923213fca0,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 879a8b39df4a95e439c775c8a2503665, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 64b1744df296e4b438895c923213fca0, type: 3}
 --- !u!1 &7251056436021213634 stripped

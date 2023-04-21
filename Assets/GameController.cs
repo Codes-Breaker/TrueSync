@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Linq;
+using UnityEngine.VFX;
 
 public class GameController : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class GameController : MonoBehaviour
     public GameObject windText;
     public GameObject windIndicator;
     public GameObject infoBg;
+    public VisualEffect windEffect;
     // Start is called before the first frame update
     void Awake()
     {
@@ -17,6 +19,7 @@ public class GameController : MonoBehaviour
         windText?.gameObject.SetActive(false);
         infoBg?.gameObject.SetActive(false);
         windIndicator?.gameObject.SetActive(false);
+        windEffect.SetFloat("ParticlesRate", 0);
     }
 
     public void CheckGameState()

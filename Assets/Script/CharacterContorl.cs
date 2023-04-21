@@ -208,10 +208,13 @@ public class CharacterContorl : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        Gizmos.color = Color.red;
-        Gizmos.DrawLine(this.ridbody.position, swimTarget);
-        Gizmos.color = Color.blue;
-        Gizmos.DrawLine(this.ridbody.position, jumpTarget);
+        if (this.ridbody != null)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawLine(this.ridbody.position, swimTarget);
+            Gizmos.color = Color.blue;
+            Gizmos.DrawLine(this.ridbody.position, jumpTarget);
+        }
     }
 
     public void SetControlSelf()
@@ -366,7 +369,8 @@ public class CharacterContorl : MonoBehaviour
     public void SetUpReturn()
     {
         currentDrown = maxDrowning;
-        foreach(var buff in buffs)
+        SetFlashMeshRendererBlock(false);
+        foreach (var buff in buffs)
         {
             buff.Finish();
         }
@@ -409,7 +413,8 @@ public class CharacterContorl : MonoBehaviour
         hDelta.y = 0;
         var hPos = Mathf.Lerp(0, HDist, curTime/ maxTime) * hDelta.normalized;
         var v = Mathf.Lerp(0, maxHeight, Mathf.Sin(Mathf.Lerp(0, (3f / 4f) * Mathf.PI, curTime / maxTime)));
-        
+        if (curTime <= maxTime/2f)
+            this.transform.LookAt(jumpTarget);
         Vector3 currentPos = startPos + new Vector3(hPos.x, v, hPos.z);
         ridbody.transform.position = currentPos;
         if (curTime >= maxTime)
@@ -439,8 +444,14 @@ public class CharacterContorl : MonoBehaviour
 
     private void ReturnToPlace()
     {
-        targetAngle = Mathf.Atan2(swimTarget.x, swimTarget.z) * Mathf.Rad2Deg + Camera.main.transform.eulerAngles.y;
-        this.ridbody.transform.rotation = Quaternion.Slerp(this.ridbody.rotation, Quaternion.Euler(new Vector3(0, targetAngle, 0) + initialRotation), 0.1f);
+        //targetAngle = Mathf.Atan2(swimTarget.x, swimTarget.z) * Mathf.Rad2Deg + Camera.main.transform.eulerAngles.y;
+        //this.ridbody.transform.rotation = Quaternion.Slerp(this.ridbody.rotation, Quaternion.Euler(new Vector3(0, targetAngle, 0) + initialRotation), 0.1f);
+        //this.transform.LookAt(swimTarget);
+
+        Vector3 relativePos = swimTarget - transform.position;
+        Quaternion toRotation = Quaternion.LookRotation(relativePos);
+        transform.rotation = Quaternion.Lerp(transform.rotation, toRotation, 1 * Time.deltaTime);
+
         var dir = (swimTarget - ridbody.transform.position).normalized;
         ridbody.transform.position = ridbody.transform.position + (dir * swimSpeed * Time.fixedDeltaTime);
         AccumulateDrown();
@@ -733,8 +744,8 @@ public class CharacterContorl : MonoBehaviour
             var m1 = (Mathf.Cos(degree1) * vel1).magnitude;
             var m2 = (Mathf.Cos(degree2) * vel2).magnitude;
 
-            ridbody.AddExplosionForce(m2 * 2 + 300, collision.contacts[0].point, 4);
-            collision.collider.gameObject.GetComponent<Rigidbody>().AddExplosionForce((forceArgument + m1) + 50, collision.contacts[0].point, 4);
+            ridbody.AddExplosionForce(m2 * 2.5f + 300, collision.contacts[0].point, 4);
+            collision.collider.gameObject.GetComponent<Rigidbody>().AddExplosionForce((forceArgument + m1)*1.5f + 50, collision.contacts[0].point, 4);
         }
         if (collision.gameObject.GetComponent<CharacterContorl>())
         {
@@ -806,8 +817,8 @@ public class CharacterContorl : MonoBehaviour
             var m1 = (Mathf.Cos(degree1) * vel1).magnitude;
             var m2 = (Mathf.Cos(degree2) * vel2).magnitude;
 
-            ridbody.AddExplosionForce(m2 * 2 + 600, collision.contacts[0].point, 4);
-            collision.collider.gameObject.GetComponent<Rigidbody>().AddExplosionForce((forceArgument + m1)*1.5f + 250, collision.contacts[0].point, 4);
+            ridbody.AddExplosionForce(m2 * 2.5f + 600, collision.contacts[0].point, 4);
+            collision.collider.gameObject.GetComponent<Rigidbody>().AddExplosionForce((forceArgument + m1)*2f + 250, collision.contacts[0].point, 4);
         }
 
         if (collision.gameObject.GetComponent<CharacterContorl>())
