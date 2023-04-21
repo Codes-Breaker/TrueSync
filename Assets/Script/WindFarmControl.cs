@@ -6,6 +6,7 @@ using System;
 using Random = UnityEngine.Random;
 using Object = UnityEngine.Object;
 using UnityEngine.UI;
+using UnityEngine.VFX;
 
 public class WindFarmControl : MonoBehaviour, IRandomEventsObject
 {
@@ -21,6 +22,7 @@ public class WindFarmControl : MonoBehaviour, IRandomEventsObject
     private Image windImage;
     private GameObject infoBg;
     GameController gameController;
+    private VisualEffect windEffect;
     private List<int> randomAngle = new List<int>()
     {
         0,
@@ -42,6 +44,7 @@ public class WindFarmControl : MonoBehaviour, IRandomEventsObject
         text = gameController.windText.GetComponent<TMP_Text>();
         windImage = gameController.windIndicator.GetComponent<Image>();
         infoBg = gameController.infoBg;
+        windEffect = gameController.windEffect;
     }
     public void OnShow(Vector3 point, float stayTime)
     {
@@ -68,6 +71,7 @@ public class WindFarmControl : MonoBehaviour, IRandomEventsObject
         windImage.gameObject.SetActive(false);
         infoBg.gameObject.SetActive(false);
         text.gameObject.SetActive(false);
+        windEffect.SetFloat("ParticlesRate", 0);
     }
 
     private void Update()
@@ -92,6 +96,7 @@ public class WindFarmControl : MonoBehaviour, IRandomEventsObject
             {
                 windImage.gameObject.GetComponent<RectTransform>().localRotation = Quaternion.identity;
                 windImage.gameObject.GetComponent<RectTransform>().Rotate(new Vector3(0, 0, angleArgument + 180));
+                windEffect.SetVector3("Wind Rotation", new Vector3(0, -angleArgument, 0));
                 isShow = true;
             }
         }
@@ -106,6 +111,7 @@ public class WindFarmControl : MonoBehaviour, IRandomEventsObject
             text.gameObject.SetActive(true);
             text.text = $"wind speed: {forceArgument} \nwind direction: {angleArgument}\n{(Convert.ToInt32(stayTime - currentTime))}s";
             windImage.gameObject.SetActive(true);
+            windEffect.SetFloat("ParticlesRate", 3);
             infoBg.gameObject.SetActive(true);
             foreach (var rigid in characterList)
             {
@@ -133,6 +139,7 @@ public class WindFarmControl : MonoBehaviour, IRandomEventsObject
             text.gameObject.SetActive(false);
             text.text = "";
             windImage.gameObject.SetActive(false);
+            windEffect.SetFloat("ParticlesRate", 0);
             infoBg.gameObject.SetActive(false);
         }
     }
