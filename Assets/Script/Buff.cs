@@ -29,7 +29,7 @@ public class Buff
             buffTimes = buffTimes - Time.fixedDeltaTime;
             if (buffTimes <= 0)
             {
-                isEnd = true;
+                Finish();
             }
         }
 
@@ -42,6 +42,7 @@ public class Buff
 
     public void Finish()
     {
+        OnBuffRemove();
         isEnd = true;
     }
 
