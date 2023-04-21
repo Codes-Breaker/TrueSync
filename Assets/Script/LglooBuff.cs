@@ -7,7 +7,7 @@ public class LglooBuff : StunBuff
     private float maxSpeed = 10;
     public LglooBuff(CharacterContorl target) : base(target)
     {
-        buffTimes = 0.5f;
+        buffTimes = 1.5f;
     }
 
     public override void OnBuffUpdate()
@@ -30,9 +30,16 @@ public class LglooBuff : StunBuff
         }
     }
 
+    public override void OnBuffRemove()
+    {
+        base.OnBuffRemove();
+        character.ridbody.velocity = Vector3.zero;
+    }
+
 
     public override void OnCollide(Collision collision)
     {
+
         base.OnCollide(collision);
         if (collision.transform.GetComponent<CharacterContorl>())
         {
