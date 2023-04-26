@@ -53,6 +53,15 @@ public partial class @PlayerOneMovementActions : IInputActionCollection2, IDispo
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Jump"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""395df206-48e0-47b2-82cb-544ea04bcc9a"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -196,6 +205,17 @@ public partial class @PlayerOneMovementActions : IInputActionCollection2, IDispo
                     ""processors"": """",
                     ""groups"": ""GamePad"",
                     ""action"": ""InteractWeapon"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7b35eeec-e402-4a90-abd6-d5044d5d7530"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""GamePad"",
+                    ""action"": ""Jump"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -421,6 +441,7 @@ public partial class @PlayerOneMovementActions : IInputActionCollection2, IDispo
         m_Action_Movement = m_Action.FindAction("Movement", throwIfNotFound: true);
         m_Action_Charge = m_Action.FindAction("Charge", throwIfNotFound: true);
         m_Action_InteractWeapon = m_Action.FindAction("InteractWeapon", throwIfNotFound: true);
+        m_Action_Jump = m_Action.FindAction("Jump", throwIfNotFound: true);
         // Action1
         m_Action1 = asset.FindActionMap("Action1", throwIfNotFound: true);
         m_Action1_Movement = m_Action1.FindAction("Movement", throwIfNotFound: true);
@@ -488,6 +509,7 @@ public partial class @PlayerOneMovementActions : IInputActionCollection2, IDispo
     private readonly InputAction m_Action_Movement;
     private readonly InputAction m_Action_Charge;
     private readonly InputAction m_Action_InteractWeapon;
+    private readonly InputAction m_Action_Jump;
     public struct ActionActions
     {
         private @PlayerOneMovementActions m_Wrapper;
@@ -495,6 +517,7 @@ public partial class @PlayerOneMovementActions : IInputActionCollection2, IDispo
         public InputAction @Movement => m_Wrapper.m_Action_Movement;
         public InputAction @Charge => m_Wrapper.m_Action_Charge;
         public InputAction @InteractWeapon => m_Wrapper.m_Action_InteractWeapon;
+        public InputAction @Jump => m_Wrapper.m_Action_Jump;
         public InputActionMap Get() { return m_Wrapper.m_Action; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -513,6 +536,9 @@ public partial class @PlayerOneMovementActions : IInputActionCollection2, IDispo
                 @InteractWeapon.started -= m_Wrapper.m_ActionActionsCallbackInterface.OnInteractWeapon;
                 @InteractWeapon.performed -= m_Wrapper.m_ActionActionsCallbackInterface.OnInteractWeapon;
                 @InteractWeapon.canceled -= m_Wrapper.m_ActionActionsCallbackInterface.OnInteractWeapon;
+                @Jump.started -= m_Wrapper.m_ActionActionsCallbackInterface.OnJump;
+                @Jump.performed -= m_Wrapper.m_ActionActionsCallbackInterface.OnJump;
+                @Jump.canceled -= m_Wrapper.m_ActionActionsCallbackInterface.OnJump;
             }
             m_Wrapper.m_ActionActionsCallbackInterface = instance;
             if (instance != null)
@@ -526,6 +552,9 @@ public partial class @PlayerOneMovementActions : IInputActionCollection2, IDispo
                 @InteractWeapon.started += instance.OnInteractWeapon;
                 @InteractWeapon.performed += instance.OnInteractWeapon;
                 @InteractWeapon.canceled += instance.OnInteractWeapon;
+                @Jump.started += instance.OnJump;
+                @Jump.performed += instance.OnJump;
+                @Jump.canceled += instance.OnJump;
             }
         }
     }
@@ -611,6 +640,7 @@ public partial class @PlayerOneMovementActions : IInputActionCollection2, IDispo
         void OnMovement(InputAction.CallbackContext context);
         void OnCharge(InputAction.CallbackContext context);
         void OnInteractWeapon(InputAction.CallbackContext context);
+        void OnJump(InputAction.CallbackContext context);
     }
     public interface IAction1Actions
     {
