@@ -14,7 +14,7 @@ public class CharacterContorl : MonoBehaviour
     public InputReaderBase inputReader;
     [Space(10)]
     [Header("参数")]
-    public float movementSpeed;
+    public float movementForce;
     public float brakeSpeedArgument;
     public float jumpForce;
     public float releaseSpeedAtFirstArgument;
@@ -32,6 +32,8 @@ public class CharacterContorl : MonoBehaviour
     private Vector2 axisInput;
     private bool charge;
     private bool interactWeapon;
+    private bool jump;
+    private bool hasJump = false;
     private ControlDeviceType inputControlDeviceType;
 
     //摇杆输入值最小值
@@ -96,6 +98,7 @@ public class CharacterContorl : MonoBehaviour
     public Vector3 positionBeforeCollision = Vector3.zero;
 
     public float maxReleaseVelocity;
+    public float maxWalkVelocity;
 
     public float maxDrowning = 1000;
     private float maxDrownValue = 1000;
@@ -135,8 +138,6 @@ public class CharacterContorl : MonoBehaviour
 
     //记录值
     public float receivedForceSum = 0;
-    //能否放气转向
-    public bool canReleaseTurn = false;
     //眩晕槽
     public float stunTime = 0;
     //眩晕时间
@@ -152,7 +153,9 @@ public class CharacterContorl : MonoBehaviour
     public delegate void ChargeAction(bool isChange);
     public delegate void ReleaseAciton(bool isChage);
     public delegate void InteractWeaponAction(bool isUseWeapon);
+    public delegate void JumpAction(bool isJump);
 
+    public JumpAction jumpAction;
     public MoveAciotn moveAciotn;
     public ChargeAction chargeAction;
     public ReleaseAciton releaseAciton;
@@ -198,7 +201,7 @@ public class CharacterContorl : MonoBehaviour
         charge = inputReader.charge;
         interactWeapon = inputReader.interact;
         inputControlDeviceType = inputReader.controlDeviceType;
-        
+        jump = inputReader.jump;
     }
 
     private void LateUpdate()
@@ -223,6 +226,7 @@ public class CharacterContorl : MonoBehaviour
         chargeAction = MoveCharge;
         releaseAciton = MoveRelease;
         interactWeaponAction = UseWeapon;
+        jumpAction = MoveJump;
     }
 
     private void SetStun()
@@ -289,6 +293,8 @@ public class CharacterContorl : MonoBehaviour
                         releaseAciton(charge);
                     if(interactWeaponAction != null)
                         interactWeaponAction(interactWeapon);
+                    if (jumpAction != null)
+                        jumpAction(jump);
                 }
 
             }
@@ -471,8 +477,6 @@ public class CharacterContorl : MonoBehaviour
 
     private void Dead()
     {
-        //GameObject.Destroy(this.gameObject);
-        //GameObject.Destroy(this.canvas);
         var cinemachineTargetGroup = GameObject.FindObjectOfType<CinemachineTargetGroup>();
         cinemachineTargetGroup.RemoveMember(transform);
         this.gameObject.SetActive(false);
@@ -529,9 +533,15 @@ public class CharacterContorl : MonoBehaviour
         }
         else
             axisInput = axisInput.normalized;
-        if (axisInput.magnitude > movementThrashold && (!releasing || canReleaseTurn))
+        if (axisInput.magnitude > movementThrashold )
         {
             targetAngle = Mathf.Atan2(axisInput.x, axisInput.y) * Mathf.Rad2Deg + Camera.main.transform.eulerAngles.y;
+            if (ridbody.velocity.magnitude < maxWalkVelocity && isGrounded)
+            {
+                var moveTarget = ridbody.transform.forward;
+                moveTarget = moveTarget.normalized;
+                ridbody.AddForce(moveTarget * movementForce, ForceMode.Force);
+            }
             isWalk = true;
         }
         else
@@ -545,6 +555,16 @@ public class CharacterContorl : MonoBehaviour
 
     private void MoveJump(bool jump)
     {
+        if (jump && isGrounded && !hasJump)
+        {
+
+            ridbody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+            hasJump = true;
+        }
+        if(!jump && isGrounded && hasJump)
+            hasJump =false;
+        
+
     }
 
     private void UseWeapon(bool isUse)
@@ -586,7 +606,7 @@ public class CharacterContorl : MonoBehaviour
                 releasing = false;
                 speedUpGas = maxSpeedUpGas;
             }
-            else if (currentGas > 0)
+            else if (currentGas > 0 && isGrounded)
             {
                 var releaseDir = ridbody.transform.forward;
                 releaseDir = releaseDir.normalized;
@@ -598,11 +618,6 @@ public class CharacterContorl : MonoBehaviour
 
                 var degree1 = d1 * Mathf.Deg2Rad;
                 var m1 = (Mathf.Cos(degree1) * vel1).magnitude;
-                //if (m1 <= maxReleaseVelocity/4.0f)
-                //{
-                //    var addSpeed = EaseOutCirc(currentGas / (maxActorGas)) * releaseSpeedAtFirstArgument;
-                //    ridbody.AddForce(releaseDir * addSpeed, ForceMode.Impulse);
-                //}
 
                 if (speedUpGas >= 0)
                 {
@@ -641,7 +656,7 @@ public class CharacterContorl : MonoBehaviour
 
     private void CheckIsGrounded()
     {
-        isGrounded = Physics.CheckSphere(bodyCollider.transform.position - new Vector3(0, (bodyCollider as SphereCollider).radius / 2, 0), 2f, groundMask);
+        isGrounded = Physics.CheckSphere(bodyCollider.transform.position - new Vector3(0, (bodyCollider as SphereCollider).radius , 0), 0.02f, groundMask);
     }
 
 
@@ -686,7 +701,7 @@ public class CharacterContorl : MonoBehaviour
     }
 
     #endregion
-
+    #region SetUI
     private void SetSlider()
     {
         if (vulnerbilityText != null)
@@ -715,7 +730,9 @@ public class CharacterContorl : MonoBehaviour
         }
 
     }
+    #endregion
 
+    #region OnCollison
     private void OnCollisionStay(Collision collision)
     {
         if (collision.gameObject.GetComponent<TimeLapseBombSkill>())
@@ -872,6 +889,6 @@ public class CharacterContorl : MonoBehaviour
         }
 
     }
-
+    #endregion
 
 }

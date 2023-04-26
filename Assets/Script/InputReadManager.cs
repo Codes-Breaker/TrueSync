@@ -54,7 +54,7 @@ public class InputReadManager : MonoBehaviour
         else
         {
             CreatCharacter();
-            randomEventsControl.startCountdown = true;
+            //randomEventsControl.startCountdown = true;
             m_ButtonPressListener?.Dispose();
             Destroy(chooseCharactersPanel.gameObject);
             Destroy(gameObject);
@@ -72,7 +72,8 @@ public class InputReadManager : MonoBehaviour
         if (!Application.isPlaying)
             return;
         var device = button.device;
-        
+        if (device is Mouse || device is Keyboard)
+            return;
         if (controlDevices.Contains(device))
             return;
         //Debug.Log(device.name);
