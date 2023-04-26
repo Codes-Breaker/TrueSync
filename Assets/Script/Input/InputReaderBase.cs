@@ -73,6 +73,8 @@ public class InputReaderBase : MonoBehaviour
 
         movementActions.Action.InteractWeapon.performed += ctx => OnInteract(ctx);
         movementActions.Action.InteractWeapon.canceled += ctx => InteractEnd(ctx);
+
+        movementActions.Action.Jump.performed += ctx => OnJump(ctx);
         movementActions.Action.Enable();
     }
 
@@ -150,6 +152,17 @@ public class InputReaderBase : MonoBehaviour
         else if (button.wasReleasedThisFrame)
             interact = false;
 
+    }
+
+    public void OnJump(InputAction.CallbackContext ctx)
+    {
+        if (ctx.control.device != device)
+            return;
+        var button = (ButtonControl)ctx.control;
+        if (button.wasPressedThisFrame)
+            jump  = true;
+        else if (button.wasReleasedThisFrame)
+            jump = false;
     }
 
     public void InteractEnd(InputAction.CallbackContext ctx)
