@@ -178,10 +178,10 @@ public class LglooControl : MonoBehaviour,IRandomEventsObject
 
     private void SetContorlLgloo(CharacterContorl user)
     {
-        user.moveAciotn = MoveWalk;
-        user.chargeAction = MoveCharge;
-        user.releaseAciton = MoveRelease;
-        user.interactWeaponAction = null;
+        user.inputReader.moveAciotn = MoveWalk;
+        user.inputReader.chargeAction = MoveCharge;
+        user.inputReader.releaseAciton = MoveRelease;
+        user.inputReader.interactWeaponAction = null;
     }
 
     private void MoveWalk(Vector2 axisInput,ControlDeviceType controlDeviceType)
@@ -217,7 +217,7 @@ public class LglooControl : MonoBehaviour,IRandomEventsObject
         if (charge)
         {
             //½ûÓÃÐý×ª
-            user.moveAciotn = null;
+            user.inputReader.moveAciotn = null;
 
             var localScale = transform.localScale.z;
 
