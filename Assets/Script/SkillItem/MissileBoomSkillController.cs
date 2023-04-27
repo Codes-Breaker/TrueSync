@@ -48,9 +48,9 @@ public class MissileBoomSkillController : SkillItemControllerBase
 
     private void SetControlMissileBoom()
     {
-        user.moveAciotn = MoveAim;
-        user.interactWeaponAction = LaunchMissile;
-        user.chargeAction = null;
+        user.inputReader.moveAciotn = MoveAim;
+        user.inputReader.interactWeaponAction = LaunchMissile;
+        user.inputReader.chargeAction = null;
     }
 
     private void MoveAim(Vector2 axisInput, ControlDeviceType controlDeviceType)

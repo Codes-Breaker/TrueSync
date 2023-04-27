@@ -10559,27 +10559,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inputReader: {fileID: 0}
-  movementSpeed: 1.7
+  movementForce: 40
   brakeSpeedArgument: 10
   jumpForce: 40
   releaseSpeedAtFirstArgument: 8
   releaseSpeedLinearArgument: 2
+  releaseTorqueArgument: 90
   minLinearReleaseSpeedArgument: 0
+  decelerationForceArgument: 40
+  decelerationTorqueArgument: 90
   groundMask:
     serializedVersion: 2
     m_Bits: 64
   chargeTime: 2
   releaseTime: 1
   cureTime: 20
-  vulnerbilityText: {fileID: 495867733}
-  gpSlider: {fileID: 730972529}
-  hpSlider: {fileID: 2919299171052309264}
-  drownImage: {fileID: 878355152}
-  canvas: {fileID: 1189252971}
-  ridbody: {fileID: 915939878953024071}
-  bodyCollider: {fileID: 915939878953024068}
-  skinnedMeshRenderer: {fileID: 4828079827313328079}
-  ringRenderer: {fileID: 4735278465243697840}
   originalRadius: 0
   targetRadius: 0.012
   targetCenter: {x: 0, y: 0, z: 0}
@@ -10604,6 +10598,7 @@ MonoBehaviour:
   velocityBeforeCollision: {x: 0, y: 0, z: 0}
   positionBeforeCollision: {x: 0, y: 0, z: 0}
   maxReleaseVelocity: 7
+  maxWalkVelocity: 0
   maxDrowning: 500
   currentDrown: 0
   continueReceivedForceRate: 1
@@ -10620,12 +10615,20 @@ MonoBehaviour:
   swimSpeed: 1
   isDead: 0
   receivedForceSum: 0
-  canReleaseTurn: 0
   stunTime: 0
   maxStunTime: 0
+  vulnerbilityText: {fileID: 495867733}
+  gpSlider: {fileID: 730972529}
+  hpSlider: {fileID: 2919299171052309264}
+  drownImage: {fileID: 878355152}
+  canvas: {fileID: 1189252971}
+  ridbody: {fileID: 915939878953024071}
+  bodyCollider: {fileID: 915939878953024068}
+  skinnedMeshRenderer: {fileID: 4828079827313328079}
+  ringRenderer: {fileID: 4735278465243697840}
+  meshController: {fileID: 2723547656396917427}
   stunEffect: {fileID: 32542209294830757}
   stunThreshold: 7
-  meshController: {fileID: 2723547656396917427}
   playerIndex: -1
 --- !u!54 &915939878953024071
 Rigidbody:
