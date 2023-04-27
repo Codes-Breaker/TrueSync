@@ -56,23 +56,23 @@
     <Analyzer Include="C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\MudBun\Script\Editor\ProjectPrefs.cs" />
+    <Compile Include="Assets\MudBun\Script\Editor\DecalMeshMaterialEditor.cs" />
+    <Compile Include="Assets\MudBun\Script\Editor\CreationMenu.cs" />
+    <Compile Include="Assets\MudBun\Script\Editor\MudRendererEditor.cs" />
+    <Compile Include="Assets\MudBun\Script\Editor\MudBunMenu.cs" />
     <Compile Include="Assets\MudBun\Script\Editor\MudRendererBaseEditor.cs" />
+    <Compile Include="Assets\MudBun\Script\Editor\MudBunEditorWindowBase.cs" />
+    <Compile Include="Assets\MudBun\Script\Editor\MudMeshMultiTexturedMaterialEditor.cs" />
+    <Compile Include="Assets\MudBun\Script\Editor\MudBunQuickCreationWindow.cs" />
+    <Compile Include="Assets\MudBun\Script\Editor\CompatibilityManager.cs" />
+    <Compile Include="Assets\MudBun\Script\Editor\MudMeshSingleTexturedMaterialEditor.cs" />
+    <Compile Include="Assets\MudBun\Script\Editor\MudEditorBase.cs" />
     <Compile Include="Assets\MudBun\Script\Editor\MudBunStartScreen.cs" />
     <Compile Include="Assets\MudBun\Script\Editor\MudSplatMultiTexturedMaterialEditor.cs" />
-    <Compile Include="Assets\MudBun\Script\Editor\CreationMenu.cs" />
-    <Compile Include="Assets\MudBun\Script\Editor\DecalMeshMaterialEditor.cs" />
-    <Compile Include="Assets\MudBun\Script\Editor\MudMeshMultiTexturedMaterialEditor.cs" />
-    <Compile Include="Assets\MudBun\Script\Editor\MudBunEditorWindowBase.cs" />
-    <Compile Include="Assets\MudBun\Script\Editor\MudMeshSingleTexturedMaterialEditor.cs" />
-    <Compile Include="Assets\MudBun\Script\Editor\MudRendererEditor.cs" />
-    <Compile Include="Assets\MudBun\Script\Editor\MudSplatSingleTexturedMaterialEditor.cs" />
-    <Compile Include="Assets\MudBun\Script\Editor\MudBunMenu.cs" />
     <Compile Include="Assets\MudBun\Script\Editor\MudEditorWindowBase.cs" />
-    <Compile Include="Assets\MudBun\Script\Editor\MudBunQuickCreationWindow.cs" />
-    <Compile Include="Assets\MudBun\Script\Editor\MudEditorBase.cs" />
     <Compile Include="Assets\MudBun\Script\Editor\MudBrushEditor.cs" />
-    <Compile Include="Assets\MudBun\Script\Editor\CompatibilityManager.cs" />
-    <Compile Include="Assets\MudBun\Script\Editor\ProjectPrefs.cs" />
+    <Compile Include="Assets\MudBun\Script\Editor\MudSplatSingleTexturedMaterialEditor.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\MudBun\Script\Editor\MudBun.Editor.asmdef" />
