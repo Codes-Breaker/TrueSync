@@ -20,6 +20,8 @@ public class CharacterContorl : MonoBehaviour
     public float releaseSpeedAtFirstArgument;
     public float releaseSpeedLinearArgument;
     public float minLinearReleaseSpeedArgument;
+    public float decelerationForceArgument;
+    public float decelerationTorqueArgument;
     [Tooltip("地面的Layers")]
     [SerializeField] public LayerMask groundMask;
     [Tooltip("Lerp计算参数")]
@@ -28,27 +30,11 @@ public class CharacterContorl : MonoBehaviour
     public float releaseTime;
     public float cureTime;
 
-    //控制器相关
-    private Vector2 axisInput;
-    private bool charge;
-    private bool interactWeapon;
-    private bool jump;
     private bool hasJump = false;
-    private ControlDeviceType inputControlDeviceType;
+
 
     //摇杆输入值最小值
     private float movementThrashold = 0.35f;
-    [Space(10)]
-    [Header("相关需要关联组件")]
-    public TMP_Text vulnerbilityText;
-    public Slider gpSlider;
-    public Slider hpSlider;
-    public Image drownImage;
-    public Canvas canvas;
-    public Rigidbody ridbody;
-    public Collider bodyCollider;
-    public SkinnedMeshRenderer skinnedMeshRenderer;
-    public MeshRenderer ringRenderer;
     public float originalRadius;
     public float targetRadius;
     public Vector3 targetCenter;
@@ -74,8 +60,6 @@ public class CharacterContorl : MonoBehaviour
     public bool releasing = false;
     [HideInInspector]
     public bool isSwimmy = false;
-    [HideInInspector]
-    public bool isGrabWall = false;
     [HideInInspector]
     public float HPtimer;
     [HideInInspector]
@@ -144,28 +128,27 @@ public class CharacterContorl : MonoBehaviour
     public float maxStunTime = 0;
     //是否眩晕
     private bool isStun = false;
+    [Space(10)]
+    [Header("相关需要关联组件")]
+    public TMP_Text vulnerbilityText;
+    public Slider gpSlider;
+    public Slider hpSlider;
+    public Image drownImage;
+    public Canvas canvas;
+    public Rigidbody ridbody;
+    public Collider bodyCollider;
+    public SkinnedMeshRenderer skinnedMeshRenderer;
+    public MeshRenderer ringRenderer;
+    public MaterialController meshController;
     //特效资源
     public GameObject stunEffect;
     //眩晕阈值
     public float stunThreshold;
 
-    public delegate void MoveAciotn(Vector2 axisInput,ControlDeviceType controlDeviceType);
-    public delegate void ChargeAction(bool isChange);
-    public delegate void ReleaseAciton(bool isChage);
-    public delegate void InteractWeaponAction(bool isUseWeapon);
-    public delegate void JumpAction(bool isJump);
-
-    public JumpAction jumpAction;
-    public MoveAciotn moveAciotn;
-    public ChargeAction chargeAction;
-    public ReleaseAciton releaseAciton;
-    public InteractWeaponAction interactWeaponAction;
-
     public List<Buff> buffs = new List<Buff>();
 
     private GameController gameController;
 
-    public MaterialController meshController;
     public int playerIndex = -1;
 
     private void Awake()
@@ -190,20 +173,6 @@ public class CharacterContorl : MonoBehaviour
         SetRingColor();
     }
 
-    private void Update()
-    {
-        ReadInput();
-    }
-
-    private void ReadInput()
-    {
-        axisInput = inputReader.axisInput;
-        charge = inputReader.charge;
-        interactWeapon = inputReader.interact;
-        inputControlDeviceType = inputReader.controlDeviceType;
-        jump = inputReader.jump;
-    }
-
     private void LateUpdate()
     {
         SetSlider();
@@ -222,11 +191,12 @@ public class CharacterContorl : MonoBehaviour
 
     public void SetControlSelf()
     {
-        moveAciotn = MoveWalk;
-        chargeAction = MoveCharge;
-        releaseAciton = MoveRelease;
-        interactWeaponAction = UseWeapon;
-        jumpAction = MoveJump;
+        inputReader.moveAciotn = MoveWalk;
+        inputReader.chargeAction = MoveCharge;
+        inputReader.releaseAciton = MoveRelease;
+        inputReader.interactWeaponAction = UseWeapon;
+        inputReader.jumpAction = MoveJump;
+        inputReader.brakeAciton = MoveBrake;
     }
 
     private void SetStun()
@@ -285,16 +255,7 @@ public class CharacterContorl : MonoBehaviour
             {
                 if (!isBuffStun())
                 {
-                    if(moveAciotn != null)
-                        moveAciotn(axisInput, inputControlDeviceType);
-                    if(chargeAction != null)
-                        chargeAction(charge);
-                    if(releaseAciton !=null)
-                        releaseAciton(charge);
-                    if(interactWeaponAction != null)
-                        interactWeaponAction(interactWeapon);
-                    if (jumpAction != null)
-                        jumpAction(jump);
+
                 }
 
             }
@@ -552,6 +513,14 @@ public class CharacterContorl : MonoBehaviour
 
     }
 
+    private void MoveBrake(bool brake)
+    {
+        if (brake)
+        {
+            ridbody.AddForce(-ridbody.velocity * decelerationForceArgument);
+            ridbody.AddTorque(-ridbody.angularVelocity * decelerationTorqueArgument);
+        }
+    }
 
     private void MoveJump(bool jump)
     {
@@ -606,7 +575,7 @@ public class CharacterContorl : MonoBehaviour
                 releasing = false;
                 speedUpGas = maxSpeedUpGas;
             }
-            else if (currentGas > 0 && isGrounded)
+            else if (currentGas > 0 && isGrounded )
             {
                 var releaseDir = ridbody.transform.forward;
                 releaseDir = releaseDir.normalized;
@@ -637,7 +606,6 @@ public class CharacterContorl : MonoBehaviour
                     }
 
                 }
-                
 
                 // currentGas = currentGas - (currentGas) / releaseTime * Time.fixedDeltaTime;
                 currentGas = currentGas - (maxActorGas) / releaseTime * Time.fixedDeltaTime;

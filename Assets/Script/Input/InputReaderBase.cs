@@ -33,6 +33,8 @@ public class InputReaderBase : MonoBehaviour
     [HideInInspector]
     public bool jump;
     [HideInInspector]
+    public bool brake;
+    [HideInInspector]
     public bool jumpHold;
     [HideInInspector]
     public float zoom;
@@ -50,8 +52,20 @@ public class InputReaderBase : MonoBehaviour
     public bool isMouseAndKeyboard = true;
     public bool oldInput = true;
 
+    public delegate void MoveAciotn(Vector2 axisInput, ControlDeviceType controlDeviceType);
+    public delegate void ChargeAction(bool isChange);
+    public delegate void ReleaseAciton(bool isChage);
+    public delegate void InteractWeaponAction(bool isUseWeapon);
+    public delegate void JumpAction(bool isJump);
+    public delegate void BrakeAciton(bool isBrake);
 
-    //DISABLE if using old input system
+    public BrakeAciton brakeAciton;
+    public JumpAction jumpAction;
+    public MoveAciotn moveAciotn;
+    public ChargeAction chargeAction;
+    public ReleaseAciton releaseAciton;
+    public InteractWeaponAction interactWeaponAction;
+
     private PlayerOneMovementActions movementActions;
 
 
@@ -74,9 +88,29 @@ public class InputReaderBase : MonoBehaviour
         movementActions.Action.InteractWeapon.performed += ctx => OnInteract(ctx);
         movementActions.Action.InteractWeapon.canceled += ctx => InteractEnd(ctx);
 
+        movementActions.Action.Brake.performed += ctx => OnBrake(ctx);
+
         movementActions.Action.Jump.performed += ctx => OnJump(ctx);
         movementActions.Action.Enable();
     }
+
+
+    private void FixedUpdate()
+    {
+        if (moveAciotn != null)
+            moveAciotn(axisInput, controlDeviceType);
+        if (chargeAction != null)
+            chargeAction(charge);
+        if (releaseAciton != null)
+            releaseAciton(charge);
+        if (interactWeaponAction != null)
+            interactWeaponAction(interact);
+        if (jumpAction != null)
+            jumpAction(jump);
+        if (brakeAciton != null)
+            brakeAciton(brake);
+    }
+
 
     public void GetDeviceNew(InputAction.CallbackContext ctx)
     {
@@ -129,6 +163,18 @@ public class InputReaderBase : MonoBehaviour
             charge = true;
         else if (button.wasReleasedThisFrame)
             charge = false;
+
+    } 
+    
+    public void OnBrake(InputAction.CallbackContext ctx)
+    {
+        if (ctx.control.device != device)
+            return;
+        var button = (ButtonControl)ctx.control;
+        if (button.wasPressedThisFrame)
+            brake = true;
+        else if (button.wasReleasedThisFrame)
+            brake = false;
 
     }
 

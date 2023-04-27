@@ -116,7 +116,8 @@ public class WindFarmControl : MonoBehaviour, IRandomEventsObject
             foreach (var rigid in characterList)
             {
                 var character = rigid.GetComponent<CharacterContorl>();
-                if (!character.invulernable && !character.returning)
+                //if (!character.invulernable && !character.returning)
+                if (!character.invulernable)
                 {
                     var vel1 = character.velocityBeforeCollision;
                     var d1 = Vector3.Angle(vel1, forward);
