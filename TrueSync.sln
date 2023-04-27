@@ -19,6 +19,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MK.Toon.Examples", "MK.Toon
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MK.Toon", "MK.Toon.csproj", "{BDD26D44-C6E7-A53D-AEB1-4D3C64592798}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MudBun", "MudBun.csproj", "{91ED6EB1-16D2-8150-D650-CFB2CB37B400}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MudBun.Manager", "MudBun.Manager.csproj", "{CF14C217-163C-8A21-0685-B7AABB69903F}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AmplifyShaderEditor", "AmplifyShaderEditor.csproj", "{37C4A6C7-FF94-4553-7713-FBF5F15FD773}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MK.Toon.Editor", "MK.Toon.Editor.csproj", "{1AEED1B3-6128-3076-1795-F014FB058F1C}"
@@ -40,6 +44,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MK.MKTextureChannelPacker", "MK.MKTextureChannelPacker.csproj", "{009FE64A-924A-3793-91F1-0FD91BB9E54E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MK.MeshUtility", "MK.MeshUtility.csproj", "{5993EEA5-43D0-81EC-5DCF-B6F6B1C81C0D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MudBun.Editor", "MudBun.Editor.csproj", "{184FAB00-93F3-421A-E79E-05D83A3C992E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MudBun.Customization.Editor", "MudBun.Customization.Editor.csproj", "{5FAE5F25-215D-40F6-DF7D-7090020486AC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -83,6 +91,14 @@ Global
 		{BDD26D44-C6E7-A53D-AEB1-4D3C64592798}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BDD26D44-C6E7-A53D-AEB1-4D3C64592798}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BDD26D44-C6E7-A53D-AEB1-4D3C64592798}.Release|Any CPU.Build.0 = Release|Any CPU
+		{91ED6EB1-16D2-8150-D650-CFB2CB37B400}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{91ED6EB1-16D2-8150-D650-CFB2CB37B400}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{91ED6EB1-16D2-8150-D650-CFB2CB37B400}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{91ED6EB1-16D2-8150-D650-CFB2CB37B400}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CF14C217-163C-8A21-0685-B7AABB69903F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CF14C217-163C-8A21-0685-B7AABB69903F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CF14C217-163C-8A21-0685-B7AABB69903F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CF14C217-163C-8A21-0685-B7AABB69903F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{37C4A6C7-FF94-4553-7713-FBF5F15FD773}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{37C4A6C7-FF94-4553-7713-FBF5F15FD773}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{37C4A6C7-FF94-4553-7713-FBF5F15FD773}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -127,6 +143,14 @@ Global
 		{5993EEA5-43D0-81EC-5DCF-B6F6B1C81C0D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5993EEA5-43D0-81EC-5DCF-B6F6B1C81C0D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5993EEA5-43D0-81EC-5DCF-B6F6B1C81C0D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{184FAB00-93F3-421A-E79E-05D83A3C992E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{184FAB00-93F3-421A-E79E-05D83A3C992E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{184FAB00-93F3-421A-E79E-05D83A3C992E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{184FAB00-93F3-421A-E79E-05D83A3C992E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5FAE5F25-215D-40F6-DF7D-7090020486AC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5FAE5F25-215D-40F6-DF7D-7090020486AC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5FAE5F25-215D-40F6-DF7D-7090020486AC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5FAE5F25-215D-40F6-DF7D-7090020486AC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

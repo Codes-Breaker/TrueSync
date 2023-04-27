@@ -62,6 +62,15 @@ public partial class @PlayerOneMovementActions : IInputActionCollection2, IDispo
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Brake"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""20bd0e20-5025-49b5-8753-cffc26d25774"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -216,6 +225,17 @@ public partial class @PlayerOneMovementActions : IInputActionCollection2, IDispo
                     ""processors"": """",
                     ""groups"": ""GamePad"",
                     ""action"": ""Jump"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e461a733-d73a-4321-a43a-60d9e1396128"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""GamePad"",
+                    ""action"": ""Brake"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -442,6 +462,7 @@ public partial class @PlayerOneMovementActions : IInputActionCollection2, IDispo
         m_Action_Charge = m_Action.FindAction("Charge", throwIfNotFound: true);
         m_Action_InteractWeapon = m_Action.FindAction("InteractWeapon", throwIfNotFound: true);
         m_Action_Jump = m_Action.FindAction("Jump", throwIfNotFound: true);
+        m_Action_Brake = m_Action.FindAction("Brake", throwIfNotFound: true);
         // Action1
         m_Action1 = asset.FindActionMap("Action1", throwIfNotFound: true);
         m_Action1_Movement = m_Action1.FindAction("Movement", throwIfNotFound: true);
@@ -510,6 +531,7 @@ public partial class @PlayerOneMovementActions : IInputActionCollection2, IDispo
     private readonly InputAction m_Action_Charge;
     private readonly InputAction m_Action_InteractWeapon;
     private readonly InputAction m_Action_Jump;
+    private readonly InputAction m_Action_Brake;
     public struct ActionActions
     {
         private @PlayerOneMovementActions m_Wrapper;
@@ -518,6 +540,7 @@ public partial class @PlayerOneMovementActions : IInputActionCollection2, IDispo
         public InputAction @Charge => m_Wrapper.m_Action_Charge;
         public InputAction @InteractWeapon => m_Wrapper.m_Action_InteractWeapon;
         public InputAction @Jump => m_Wrapper.m_Action_Jump;
+        public InputAction @Brake => m_Wrapper.m_Action_Brake;
         public InputActionMap Get() { return m_Wrapper.m_Action; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -539,6 +562,9 @@ public partial class @PlayerOneMovementActions : IInputActionCollection2, IDispo
                 @Jump.started -= m_Wrapper.m_ActionActionsCallbackInterface.OnJump;
                 @Jump.performed -= m_Wrapper.m_ActionActionsCallbackInterface.OnJump;
                 @Jump.canceled -= m_Wrapper.m_ActionActionsCallbackInterface.OnJump;
+                @Brake.started -= m_Wrapper.m_ActionActionsCallbackInterface.OnBrake;
+                @Brake.performed -= m_Wrapper.m_ActionActionsCallbackInterface.OnBrake;
+                @Brake.canceled -= m_Wrapper.m_ActionActionsCallbackInterface.OnBrake;
             }
             m_Wrapper.m_ActionActionsCallbackInterface = instance;
             if (instance != null)
@@ -555,6 +581,9 @@ public partial class @PlayerOneMovementActions : IInputActionCollection2, IDispo
                 @Jump.started += instance.OnJump;
                 @Jump.performed += instance.OnJump;
                 @Jump.canceled += instance.OnJump;
+                @Brake.started += instance.OnBrake;
+                @Brake.performed += instance.OnBrake;
+                @Brake.canceled += instance.OnBrake;
             }
         }
     }
@@ -641,6 +670,7 @@ public partial class @PlayerOneMovementActions : IInputActionCollection2, IDispo
         void OnCharge(InputAction.CallbackContext context);
         void OnInteractWeapon(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
+        void OnBrake(InputAction.CallbackContext context);
     }
     public interface IAction1Actions
     {
