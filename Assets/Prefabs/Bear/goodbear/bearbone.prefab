@@ -490,7 +490,6 @@ GameObject:
   - component: {fileID: 2450544754602465654}
   - component: {fileID: 3369674013110166568}
   - component: {fileID: 3369674013110166571}
-  - component: {fileID: 3369674013110166569}
   - component: {fileID: 3369674013110166566}
   m_Layer: 0
   m_Name: bearbone
@@ -1264,26 +1263,6 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.82036054
   m_Center: {x: 0, y: 0.11158073, z: -0.37217867}
---- !u!114 &3369674013110166569
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3369674013110166570}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 95dc0aee27aeaa841955da1e5c5472de, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MaxLinearSpeed: 0.5
-  LinearThrust: 3
-  MaxAngularSpeed: 30
-  AngularThrust: 30
-  LinearDrag: 4
-  AngularDrag: 30
-  Tilt: 15
-  Hover: 1
 --- !u!95 &3369674013110166566
 Animator:
   serializedVersion: 4

@@ -161,7 +161,7 @@ public class LglooControl : MonoBehaviour,IRandomEventsObject
 
                 user.transform.position = transform.position;
 
-                user.skinnedMeshRenderer.enabled = false;
+                //user.skinnedMeshRenderer.enabled = false;
                 user.canvas.enabled = false;
 
                 var localScale = transform.localScale;
@@ -244,7 +244,7 @@ public class LglooControl : MonoBehaviour,IRandomEventsObject
         user.transform.position = transform.position ;
         user.transform.position = new Vector3(user.transform.position.x, userY, user.transform.position.z);
         user.SetKinematics(false);
-        user.skinnedMeshRenderer.enabled = true;
+        //user.skinnedMeshRenderer.enabled = true;
         user.canvas.enabled = true;
         var ridbody = user.GetComponent<Rigidbody>();
         user.targetAngle = targetAngle;
