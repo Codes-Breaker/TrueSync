@@ -15,8 +15,6 @@ public class CharacterContorl : MonoBehaviour
     [Space(10)]
     [Header("参数")]
     public float movementForce;
-    [Header("刹车力系数")]
-    public float brakeSpeedArgument;
     [Header("跳跃力系数")]
     public float jumpForce;
     [Header("放气起始力系数")]
@@ -38,6 +36,7 @@ public class CharacterContorl : MonoBehaviour
     public float cureTime;
 
     private bool hasJump = false;
+    private bool hasBrake = false;
 
 
     //摇杆输入值最小值
@@ -148,6 +147,7 @@ public class CharacterContorl : MonoBehaviour
     public Collider bodyCollider;
     //public SkinnedMeshRenderer skinnedMeshRenderer;
     public MeshRenderer ringRenderer;
+    public Animator anima;
     //public MaterialController meshController;
     //特效资源
     public GameObject stunEffect;
@@ -486,17 +486,19 @@ public class CharacterContorl : MonoBehaviour
         if (axisInput.magnitude > movementThrashold )
         {
             targetAngle = Mathf.Atan2(axisInput.x, axisInput.y) * Mathf.Rad2Deg + Camera.main.transform.eulerAngles.y;
-            if (ridbody.velocity.magnitude < maxWalkVelocity && isGrounded)
+            if (ridbody.velocity.magnitude < maxWalkVelocity)
             {
                 var moveTarget = ridbody.transform.forward;
                 moveTarget = moveTarget.normalized;
                 ridbody.AddForce(moveTarget * movementForce, ForceMode.Force);
             }
             isWalk = true;
+            anima.SetBool("isWalk",isWalk);
         }
         else
         {
             isWalk = false;
+            anima.SetBool("isWalk", isWalk);
         }
         this.ridbody.transform.rotation = Quaternion.Slerp(this.ridbody.rotation, Quaternion.Euler(new Vector3(0, targetAngle, 0) + initialRotation), 0.1f);
 
@@ -508,6 +510,19 @@ public class CharacterContorl : MonoBehaviour
         {
             ridbody.AddForce(-ridbody.velocity * decelerationForceArgument);
             ridbody.AddTorque(-ridbody.angularVelocity * decelerationTorqueArgument);
+            if(!hasBrake)
+            {
+                anima.SetBool("isBrake", true);
+                hasBrake = true;
+            }
+        }
+        else
+        {
+            if(hasBrake)
+            {
+                anima.SetBool("isBrake", false);
+                hasBrake = false;
+            }
         }
     }
 
@@ -564,7 +579,7 @@ public class CharacterContorl : MonoBehaviour
                 releasing = false;
                 speedUpGas = maxSpeedUpGas;
             }
-            else if (currentGas > 0 && isGrounded )
+            else if (currentGas > 0)
             {
                 var releaseDir = ridbody.transform.forward;
                 releaseDir = releaseDir.normalized;
@@ -613,7 +628,7 @@ public class CharacterContorl : MonoBehaviour
 
     private void CheckIsGrounded()
     {
-        isGrounded = Physics.CheckSphere(bodyCollider.transform.position - new Vector3(0, (bodyCollider as SphereCollider).radius , 0), 0.02f, groundMask);
+        isGrounded = Physics.CheckSphere(bodyCollider.transform.position+(bodyCollider as SphereCollider).center - new Vector3(0, (bodyCollider as SphereCollider).radius , 0), 0.02f, groundMask);
     }
 
 
