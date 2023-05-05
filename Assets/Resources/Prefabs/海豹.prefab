@@ -10560,11 +10560,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inputReader: {fileID: 0}
   movementForce: 40
-  brakeSpeedArgument: 10
+  brakeSpeedArgument: 1
   jumpForce: 40
   releaseSpeedAtFirstArgument: 8
   releaseSpeedLinearArgument: 2
-  releaseTorqueArgument: 90
   minLinearReleaseSpeedArgument: 0
   decelerationForceArgument: 40
   decelerationTorqueArgument: 90
@@ -10574,10 +10573,6 @@ MonoBehaviour:
   chargeTime: 2
   releaseTime: 1
   cureTime: 20
-  originalRadius: 0
-  targetRadius: 0.012
-  targetCenter: {x: 0, y: 0, z: 0}
-  originalCenter: {x: 0, y: 0, z: 0}
   sensitivity: 1
   isWalk: 0
   isGrounded: 0
@@ -10586,7 +10581,6 @@ MonoBehaviour:
   currentGas: 0
   releasing: 0
   isSwimmy: 0
-  isGrabWall: 0
   HPtimer: 0
   skill: {fileID: 0}
   isUseSkill: 0
@@ -10598,7 +10592,7 @@ MonoBehaviour:
   velocityBeforeCollision: {x: 0, y: 0, z: 0}
   positionBeforeCollision: {x: 0, y: 0, z: 0}
   maxReleaseVelocity: 7
-  maxWalkVelocity: 0
+  maxWalkVelocity: 2
   maxDrowning: 500
   currentDrown: 0
   continueReceivedForceRate: 1
@@ -10608,11 +10602,6 @@ MonoBehaviour:
   vulnerbility: 0
   maxVulnerbility: 100
   vulerbilityReactRate: 1
-  returning: 0
-  jumpingBack: 0
-  swimTarget: {x: 0, y: 0, z: 0}
-  jumpTarget: {x: 0, y: 0, z: 0}
-  swimSpeed: 1
   isDead: 0
   receivedForceSum: 0
   stunTime: 0
@@ -10624,9 +10613,7 @@ MonoBehaviour:
   canvas: {fileID: 1189252971}
   ridbody: {fileID: 915939878953024071}
   bodyCollider: {fileID: 915939878953024068}
-  skinnedMeshRenderer: {fileID: 4828079827313328079}
   ringRenderer: {fileID: 4735278465243697840}
-  meshController: {fileID: 2723547656396917427}
   stunEffect: {fileID: 32542209294830757}
   stunThreshold: 7
   playerIndex: -1

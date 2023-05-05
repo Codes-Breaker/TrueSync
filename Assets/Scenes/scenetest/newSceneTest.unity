@@ -142,7 +142,7 @@ PrefabInstance:
     - target: {fileID: 575830573397549304, guid: 8482846a6c5a2434ea0f2e3479a5bd3d,
         type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 575830573397549304, guid: 8482846a6c5a2434ea0f2e3479a5bd3d,
         type: 3}
@@ -198,6 +198,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: "\u6D77\u8C79"
+      objectReference: {fileID: 0}
+    - target: {fileID: 915939878953024069, guid: 8482846a6c5a2434ea0f2e3479a5bd3d,
+        type: 3}
+      propertyPath: maxWalkVelocity
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7333722540145890734, guid: 8482846a6c5a2434ea0f2e3479a5bd3d,
         type: 3}
@@ -2909,6 +2914,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: island_C_01
       objectReference: {fileID: 0}
+    - target: {fileID: 1803979185537350, guid: 8b404e5e7b6ccea4895a317b2617cc89, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4225331389641038, guid: 8b404e5e7b6ccea4895a317b2617cc89, type: 3}
       propertyPath: m_RootOrder
       value: 15
@@ -3476,7 +3485,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1230593621
 Transform:
   m_ObjectHideFlags: 0
@@ -4226,6 +4235,10 @@ PrefabInstance:
     - target: {fileID: 1830936468803934, guid: 0e5b94df29f597247a3ebfcd4c1ba82c, type: 3}
       propertyPath: m_Name
       value: acacia_A
+      objectReference: {fileID: 0}
+    - target: {fileID: 1830936468803934, guid: 0e5b94df29f597247a3ebfcd4c1ba82c, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4520054131022202, guid: 0e5b94df29f597247a3ebfcd4c1ba82c, type: 3}
       propertyPath: m_RootOrder
@@ -5071,6 +5084,10 @@ PrefabInstance:
     - target: {fileID: 1151359957357650, guid: 145b9c30bd1da74429578c4c4eb9cd5c, type: 3}
       propertyPath: m_Name
       value: pine_B_02
+      objectReference: {fileID: 0}
+    - target: {fileID: 1151359957357650, guid: 145b9c30bd1da74429578c4c4eb9cd5c, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4605047136513068, guid: 145b9c30bd1da74429578c4c4eb9cd5c, type: 3}
       propertyPath: m_RootOrder
@@ -6225,7 +6242,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &2013326122
 MonoBehaviour:
   m_ObjectHideFlags: 0
