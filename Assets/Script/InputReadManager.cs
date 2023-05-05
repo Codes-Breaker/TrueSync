@@ -32,7 +32,7 @@ public class InputReadManager : MonoBehaviour
     public List<Color> playerColors = new List<Color>();
 
     //Ô¤ÖÆÌåPath
-    private string sealPath = "Prefabs/º£±ª";
+    private string sealPath = "Prefabs/bear";
     private string polarBearPath = "Prefabs/°×ÐÜ";
     private string snowFoxPath = "Prefabs/ºüÀê";
 
@@ -99,7 +99,7 @@ public class InputReadManager : MonoBehaviour
                     characterGameObject = Instantiate((GameObject)Resources.Load(sealPath));
                     characterGameObject.GetComponent<CharacterContorl>().inputReader = item.inputReader;
                     cinemachineTargetGroup.AddMember(characterGameObject.transform, 2, 4);
-                    characterGameObject.transform.position = new Vector3(-10 + padding*(index+1), 6, 0);
+                    characterGameObject.transform.position = new Vector3(-10 + padding*(index+1), 10, 0);
                     characterGameObject.GetComponent<CharacterContorl>().playerIndex = index;
                     index++;
                     break;
