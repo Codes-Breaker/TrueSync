@@ -17,9 +17,21 @@ public class CarController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // forward
+        var forward = new Vector3(transform.forward.x, 0, transform.forward.z);
 
         // Moving
-        MoveForce += transform.forward * MoveSpeed * Input.GetAxis("Vertical") * Time.deltaTime;
+        MoveForce += forward * MoveSpeed * Input.GetAxis("Vertical") * Time.deltaTime;
+
+        if (Mathf.Abs(Input.GetAxis("Vertical")) > 0.2f)
+        {
+            GetComponent<Animator>().SetBool("run", true);
+        }
+        else
+        {
+            GetComponent<Animator>().SetBool("run", false);
+        }
+
         transform.position += MoveForce * Time.deltaTime;
 
         // Steering
@@ -33,7 +45,7 @@ public class CarController : MonoBehaviour
         // Traction
         Debug.DrawRay(transform.position, MoveForce.normalized * 3);
         Debug.DrawRay(transform.position, transform.forward * 3, Color.blue);
-        MoveForce = Vector3.Lerp(MoveForce.normalized, transform.forward, Traction * Time.deltaTime) * MoveForce.magnitude;
+        MoveForce = Vector3.Lerp(MoveForce.normalized, forward, Traction * Time.deltaTime) * MoveForce.magnitude;
 
     }
 }
