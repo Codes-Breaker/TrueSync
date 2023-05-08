@@ -838,8 +838,8 @@ MonoBehaviour:
   sensitivity: 1
   isWalk: 0
   isGrounded: 0
-  targetAngle: 225.09344
-  currentHPValue: 100
+  targetAngle: 0
+  currentHPValue: 0
   currentGas: 0
   releasing: 0
   isSwimmy: 0
@@ -851,12 +851,12 @@ MonoBehaviour:
   swinging: 0
   readyswing: 0
   maxSpeedUpGas: 5
-  velocityBeforeCollision: {x: 7.9573927, y: -58.4171, z: 4.313588}
-  positionBeforeCollision: {x: 52.557953, y: -172.46571, z: 41.43461}
+  velocityBeforeCollision: {x: 0, y: 0, z: 0}
+  positionBeforeCollision: {x: 0, y: 0, z: 0}
   maxReleaseVelocity: 7
   maxWalkVelocity: 3
   maxDrowning: 500
-  currentDrown: 500
+  currentDrown: 0
   continueReceivedForceRate: 1
   invulernableTime: 0
   maxInvulnerableTime: 5
@@ -868,18 +868,18 @@ MonoBehaviour:
   receivedForceSum: 0
   stunTime: 0
   maxStunTime: 0
-  vulnerbilityText: {fileID: 0}
-  gpSlider: {fileID: 0}
-  hpSlider: {fileID: 0}
-  drownImage: {fileID: 0}
-  canvas: {fileID: 0}
-  ridbody: {fileID: 0}
-  bodyCollider: {fileID: 0}
-  ringRenderer: {fileID: 0}
-  anima: {fileID: 0}
-  stunEffect: {fileID: 0}
+  vulnerbilityText: {fileID: 3363199716405325221}
+  gpSlider: {fileID: 3363199715567418241}
+  hpSlider: {fileID: 445596275646968288}
+  drownImage: {fileID: 3363199715999766560}
+  canvas: {fileID: 3363199717367641499}
+  ridbody: {fileID: 31244803598737795}
+  bodyCollider: {fileID: 31244803598737792}
+  ringRenderer: {fileID: 8006110403244238912}
+  anima: {fileID: 31244803598737805}
+  stunEffect: {fileID: 3377665245391582805}
   stunThreshold: 7
-  playerIndex: 0
+  playerIndex: -1
 --- !u!1 &81112328069851868
 GameObject:
   m_ObjectHideFlags: 0

@@ -11,11 +11,8 @@ public class ElasticFloor : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
 
-        Debug.Log("collisionEnter");
         if (collision.gameObject.GetComponent<CharacterContorl>())
         {
-
-            Debug.Log("characterCollisionEnter");
             ballRigidbody = collision.collider.attachedRigidbody;
             // 计算入射方向
             Vector3 inDirection = collision.contacts[0].point - ballRigidbody.worldCenterOfMass;
