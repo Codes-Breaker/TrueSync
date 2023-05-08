@@ -23,13 +23,17 @@ public class CarController : MonoBehaviour
         // Moving
         MoveForce += forward * MoveSpeed * Input.GetAxis("Vertical") * Time.deltaTime;
 
-        if (Mathf.Abs(Input.GetAxis("Vertical")) > 0.2f)
+        if (GetComponent<Animator>())
         {
-            GetComponent<Animator>().SetBool("run", true);
-        }
-        else
-        {
-            GetComponent<Animator>().SetBool("run", false);
+            if (Mathf.Abs(Input.GetAxis("Vertical")) > 0.2f)
+            {
+                GetComponent<Animator>().SetBool("run", true);
+            }
+            else
+            {
+                GetComponent<Animator>().SetBool("run", false);
+            }
+
         }
 
         transform.position += MoveForce * Time.deltaTime;
