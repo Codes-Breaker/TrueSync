@@ -139,6 +139,8 @@ public class FootIK : MonoBehaviour
                 ProjectedAxisAngles(out angleAboutX, out angleAboutZ, allFootTransforms[i], allHitNormals[i]);
                 allTargetTransforms[i].position = new Vector3(allFootTransforms[i].position.x, hitPoint.y + yOffset, allFootTransforms[i].position.z);
                 allTargetTransforms[i].rotation = allFootTransforms[i].rotation;
+                allTargetTransforms[i].localEulerAngles = new Vector3(allTargetTransforms[i].localEulerAngles.x + angleAboutX,
+                    allTargetTransforms[i].localEulerAngles.y, allTargetTransforms[i].localEulerAngles.x + angleAboutZ);
             }
             else
             {

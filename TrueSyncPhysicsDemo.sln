@@ -25,6 +25,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MudBun.Manager", "MudBun.Ma
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AmplifyShaderEditor", "AmplifyShaderEditor.csproj", "{04DD196D-0417-BA6B-852D-703B8ABEEF50}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp-Editor-firstpass", "Assembly-CSharp-Editor-firstpass.csproj", "{B2ACE213-6E3F-2CAF-DAF3-889B5259DFCE}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MK.Toon.Editor", "MK.Toon.Editor.csproj", "{1545D50E-3697-41C5-57D9-0CEC8D3105C9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp-Editor", "Assembly-CSharp-Editor.csproj", "{568443C3-574D-F865-D6B3-AE9D827A57D7}"
@@ -36,8 +38,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StompyRobot.SRDebugger.Editor", "StompyRobot.SRDebugger.Editor.csproj", "{1A1A6058-DB5F-2391-1D4D-CB3E0682DA86}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crest.Helpers.Editor", "Crest.Helpers.Editor.csproj", "{1377DB0B-FCFC-7589-99EE-841D5BD8FA7C}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp-Editor-firstpass", "Assembly-CSharp-Editor-firstpass.csproj", "{B2ACE213-6E3F-2CAF-DAF3-889B5259DFCE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MK.RampCreator", "MK.RampCreator.csproj", "{F110B1C7-70C9-899E-A2D9-7796D5C83A6E}"
 EndProject
@@ -103,6 +103,10 @@ Global
 		{04DD196D-0417-BA6B-852D-703B8ABEEF50}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{04DD196D-0417-BA6B-852D-703B8ABEEF50}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{04DD196D-0417-BA6B-852D-703B8ABEEF50}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B2ACE213-6E3F-2CAF-DAF3-889B5259DFCE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B2ACE213-6E3F-2CAF-DAF3-889B5259DFCE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B2ACE213-6E3F-2CAF-DAF3-889B5259DFCE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B2ACE213-6E3F-2CAF-DAF3-889B5259DFCE}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1545D50E-3697-41C5-57D9-0CEC8D3105C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1545D50E-3697-41C5-57D9-0CEC8D3105C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1545D50E-3697-41C5-57D9-0CEC8D3105C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -127,10 +131,6 @@ Global
 		{1377DB0B-FCFC-7589-99EE-841D5BD8FA7C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1377DB0B-FCFC-7589-99EE-841D5BD8FA7C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1377DB0B-FCFC-7589-99EE-841D5BD8FA7C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B2ACE213-6E3F-2CAF-DAF3-889B5259DFCE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B2ACE213-6E3F-2CAF-DAF3-889B5259DFCE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B2ACE213-6E3F-2CAF-DAF3-889B5259DFCE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B2ACE213-6E3F-2CAF-DAF3-889B5259DFCE}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F110B1C7-70C9-899E-A2D9-7796D5C83A6E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F110B1C7-70C9-899E-A2D9-7796D5C83A6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F110B1C7-70C9-899E-A2D9-7796D5C83A6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
