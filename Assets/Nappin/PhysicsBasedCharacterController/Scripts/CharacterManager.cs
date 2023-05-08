@@ -4,8 +4,8 @@ using UnityEngine.Events;
 
 namespace PhysicsBasedCharacterController
 {
-    //[RequireComponent(typeof(CapsuleCollider))]
-    //[RequireComponent(typeof(Rigidbody))]
+    [RequireComponent(typeof(CapsuleCollider))]
+    [RequireComponent(typeof(Rigidbody))]
     public class CharacterManager : MonoBehaviour
     {
         [Header("Movement specifics")]
@@ -126,7 +126,7 @@ namespace PhysicsBasedCharacterController
         [Tooltip("Head reference")]
         public Transform headPoint;
         [Space(10)]
- 
+
         [Tooltip("Input reference")]
         public InputReader input;
         [Space(10)]
