@@ -14,9 +14,16 @@ public class CharacterContorl : MonoBehaviour
     public InputReaderBase inputReader;
     [Space(10)]
     [Header("参数")]
+    [Header("走路力系数")]
     public float movementForce;
-    [Header("跳跃力系数")]
-    public float jumpForce;
+    [Header("最大行走速度")]
+    public float maxWalkVelocity;
+    [Header("跳跃最小力系数")]
+    public float jumpMinForce;
+    [Header("跳跃最大力")]
+    public float jumpMaxForce;
+    [Header("跳跃蓄力时间")]
+    public float jumpChargeTime;
     [Header("放气起始力系数")]
     public float releaseSpeedAtFirstArgument;
     [Header("放气后续加速力系数")]
@@ -53,10 +60,8 @@ public class CharacterContorl : MonoBehaviour
     private Vector3 initialRotation;
     private Quaternion initialRot;
     // 隐藏参数
-    [HideInInspector]
-    public bool isWalk;
-    [HideInInspector]
-    public bool isGrounded;
+    private bool isWalk;
+    private bool isGrounded;
     [HideInInspector]
     public float targetAngle;
     private float maxHPValue = 100;
@@ -82,8 +87,8 @@ public class CharacterContorl : MonoBehaviour
     [Range(0, 2)]
     public float receivedForceRate = 1;
 
-    public bool swinging = false;
-    public bool readyswing = false;
+    //public bool swinging = false;
+    //public bool readyswing = false;
 
     int speedUpGas = 0;
     public int maxSpeedUpGas = 5;
@@ -94,10 +99,10 @@ public class CharacterContorl : MonoBehaviour
     public Vector3 positionBeforeCollision = Vector3.zero;
 
     public float maxReleaseVelocity;
-    public float maxWalkVelocity;
 
     public float maxDrowning = 1000;
     private float maxDrownValue = 1000;
+    private float currentJumpTime = 0f;
     public float currentDrown = 0;
     private float totalDrown = 0;
     private const int minDrown = 50;
@@ -555,12 +560,27 @@ public class CharacterContorl : MonoBehaviour
     {
         if (jump && (isGrounded||isTouchingSlope) && !hasJump)
         {
-
-            ridbody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             hasJump = true;
+
         }
+        if(hasJump)
+        {
+            if ((isGrounded || isTouchingSlope))
+                currentJumpTime += Time.fixedDeltaTime;
+            else
+            {
+                currentJumpTime = 0;
+                hasJump = false;
+            }
+        }
+
         if(!jump && (isGrounded||isTouchingSlope) && hasJump)
-            hasJump =false;
+        {
+            var jumpForce = jumpMinForce + (jumpMaxForce - jumpMinForce) * Mathf.Min(1, currentJumpTime / jumpChargeTime);
+            ridbody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+            hasJump = false;
+            currentJumpTime = 0;
+        }
         
 
     }
@@ -708,21 +728,21 @@ public class CharacterContorl : MonoBehaviour
         }
 
 
-        if (isSwimmy)
-        {
-            currentHPValue = currentHPValue + maxHPValue / cureTime * Time.fixedDeltaTime;
-            currentHPValue = Mathf.Min(currentHPValue, maxHPValue);
-            if (currentHPValue == maxHPValue)
-            {
-                isSwimmy = false;
-            }
-            return false;
-        }
+        //if (isSwimmy)
+        //{
+        //    currentHPValue = currentHPValue + maxHPValue / cureTime * Time.fixedDeltaTime;
+        //    currentHPValue = Mathf.Min(currentHPValue, maxHPValue);
+        //    if (currentHPValue == maxHPValue)
+        //    {
+        //        isSwimmy = false;
+        //    }
+        //    return false;
+        //}
 
         if (currentHPValue <= 0)
         {
             currentHPValue = 0;
-            isSwimmy = true;
+          //  isSwimmy = true;
             return false;
         }
         return true;
