@@ -9,11 +9,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 802995706215545659}
-  - component: {fileID: 3025962970885053864}
   - component: {fileID: 913783405116218589}
   - component: {fileID: 31244803598737795}
   - component: {fileID: 31244803598737792}
   - component: {fileID: 31244803598737805}
+  - component: {fileID: 3025962970885053864}
+  - component: {fileID: 4905247197419792959}
   m_Layer: 0
   m_Name: bear
   m_TagString: Untagged
@@ -43,77 +44,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3025962970885053864
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 31244803598737793}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c03154937164d8e4d9515ed3e0c17985, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  inputReader: {fileID: 0}
-  movementForce: 40
-  maxWalkVelocity: 3
-  jumpMinForce: 40
-  jumpMaxForce: 80
-  jumpChargeTime: 3
-  releaseSpeedAtFirstArgument: 0.5
-  releaseSpeedLinearArgument: 1
-  minLinearReleaseSpeedArgument: 2
-  decelerationForceArgument: 8
-  decelerationTorqueArgument: 5
-  groundMask:
-    serializedVersion: 2
-    m_Bits: 64
-  chargeTime: 2
-  releaseTime: 5
-  slopeCheckerThrashold: 0.51
-  maxClimbableSlopeAngle: 40
-  cureTime: 20
-  sensitivity: 1
-  targetAngle: 0
-  currentHPValue: 0
-  currentGas: 0
-  releasing: 0
-  isSwimmy: 0
-  HPtimer: 0
-  skill: {fileID: 0}
-  isUseSkill: 0
-  forceArgument: 100
-  receivedForceRate: 1
-  maxSpeedUpGas: 5
-  velocityBeforeCollision: {x: 0, y: 0, z: 0}
-  positionBeforeCollision: {x: 0, y: 0, z: 0}
-  maxReleaseVelocity: 7
-  maxDrowning: 500
-  currentDrown: 0
-  continueReceivedForceRate: 1
-  invulernableTime: 0
-  maxInvulnerableTime: 5
-  invulernable: 0
-  vulnerbility: 0
-  maxVulnerbility: 100
-  vulerbilityReactRate: 1
-  isDead: 0
-  receivedForceSum: 0
-  stunTime: 0
-  maxStunTime: 0
-  vulnerbilityText: {fileID: 3363199716405325221}
-  gpSlider: {fileID: 3363199715567418241}
-  hpSlider: {fileID: 445596275646968288}
-  drownImage: {fileID: 3363199715999766560}
-  canvas: {fileID: 3363199717367641499}
-  ridbody: {fileID: 31244803598737795}
-  bodyCollider: {fileID: 31244803598737792}
-  ringRenderer: {fileID: 8006110403244238912}
-  anima: {fileID: 31244803598737805}
-  stunEffect: {fileID: 3377665245391582805}
-  stunThreshold: 7
-  playerIndex: -1
 --- !u!114 &913783405116218589
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -880,6 +810,102 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &3025962970885053864
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 31244803598737793}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c03154937164d8e4d9515ed3e0c17985, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inputReader: {fileID: 0}
+  movementForce: 40
+  jumpForce: 40
+  releaseSpeedAtFirstArgument: 0.5
+  releaseSpeedLinearArgument: 1
+  minLinearReleaseSpeedArgument: 2
+  decelerationForceArgument: 8
+  decelerationTorqueArgument: 5
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 64
+  chargeTime: 2
+  releaseTime: 5
+  cureTime: 20
+  sensitivity: 1
+  isWalk: 0
+  isGrounded: 0
+  targetAngle: 0
+  currentHPValue: 0
+  currentGas: 0
+  releasing: 0
+  isSwimmy: 0
+  HPtimer: 0
+  skill: {fileID: 0}
+  isUseSkill: 0
+  forceArgument: 100
+  receivedForceRate: 1
+  swinging: 0
+  readyswing: 0
+  maxSpeedUpGas: 5
+  velocityBeforeCollision: {x: 0, y: 0, z: 0}
+  positionBeforeCollision: {x: 0, y: 0, z: 0}
+  maxReleaseVelocity: 7
+  maxWalkVelocity: 3
+  maxDrowning: 500
+  currentDrown: 0
+  continueReceivedForceRate: 1
+  invulernableTime: 0
+  maxInvulnerableTime: 5
+  invulernable: 0
+  vulnerbility: 0
+  maxVulnerbility: 100
+  vulerbilityReactRate: 1
+  isDead: 0
+  receivedForceSum: 0
+  stunTime: 0
+  maxStunTime: 0
+  vulnerbilityText: {fileID: 3363199716405325221}
+  gpSlider: {fileID: 3363199715567418241}
+  hpSlider: {fileID: 445596275646968288}
+  drownImage: {fileID: 3363199715999766560}
+  canvas: {fileID: 3363199717367641499}
+  ridbody: {fileID: 31244803598737795}
+  bodyCollider: {fileID: 31244803598737792}
+  ringRenderer: {fileID: 8006110403244238912}
+  anima: {fileID: 31244803598737805}
+  stunEffect: {fileID: 3377665245391582805}
+  stunThreshold: 7
+  playerIndex: -1
+--- !u!114 &4905247197419792959
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 31244803598737793}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 131fd8c19a56d5a4ba96807822de1f0d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _version: 0
+  _raiseObject: 1
+  _buoyancyCoeff: 3
+  _boyancyTorque: 8
+  _accelerateDownhill: 0
+  _maximumBuoyancyForce: Infinity
+  _objectWidth: 3
+  _forceHeightOffset: -0.3
+  _dragInWaterUp: 3
+  _dragInWaterRight: 2
+  _dragInWaterForward: 1
+  _dragInWaterRotational: 0.2
+  _debugDraw: 0
 --- !u!1 &81112328069851868
 GameObject:
   m_ObjectHideFlags: 0
