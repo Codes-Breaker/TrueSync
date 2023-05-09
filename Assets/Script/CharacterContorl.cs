@@ -33,6 +33,10 @@ public class CharacterContorl : MonoBehaviour
     public float chargeTime;
     [Tooltip("Lerp计算参数")]
     public float releaseTime;
+    [Header("斜坡距离底部的检测距离")]
+    public float slopeCheckerThrashold = 0.51f;
+    [Header("最大斜坡角度")]
+    public float maxClimbableSlopeAngle = 40f;
     public float cureTime;
 
     private bool hasJump = false;
@@ -109,6 +113,9 @@ public class CharacterContorl : MonoBehaviour
     public float vulnerbility = 0f;
     //易伤最大值
     public float maxVulnerbility = 25.0f;
+    //用于计算地面倾斜角
+    private Vector3 groundNormal;
+    private bool isTouchingSlope = false;
 
     [Range(0, 1)]
     //易伤系数
@@ -249,7 +256,9 @@ public class CharacterContorl : MonoBehaviour
         CheckInVulernable();
         CheckIsGrounded();
         UpdateBuff();
-    
+        CheckSlopeAndDirections();
+       // BalanceGravity();
+
         SetState();
         if (!isGrounded)
         {
@@ -330,6 +339,21 @@ public class CharacterContorl : MonoBehaviour
         {
             buff.Finish();
         }
+    }
+
+   //平衡斜面上摩擦力
+    private void BalanceGravity()
+    {
+        float gravitationalForce = Mathf.Abs(Physics.gravity.y) * ridbody.mass;
+        Vector3 verticalGravity = Vector3.Project(-Physics.gravity, groundNormal);
+        Vector3 horizontalGravity = -Physics.gravity - verticalGravity;
+        //0.5f时斜面摩擦力系数
+        Vector3 frictionForce = -horizontalGravity.normalized * gravitationalForce * 0.5f;
+        Vector3 totalForce = verticalGravity + horizontalGravity + frictionForce;
+
+
+        ridbody.AddForce(-totalForce, ForceMode.Force);
+
     }
 
 
@@ -504,6 +528,7 @@ public class CharacterContorl : MonoBehaviour
 
     }
 
+   
     private void MoveBrake(bool brake)
     {
         if (brake)
@@ -528,13 +553,13 @@ public class CharacterContorl : MonoBehaviour
 
     private void MoveJump(bool jump)
     {
-        if (jump && isGrounded && !hasJump)
+        if (jump && (isGrounded||isTouchingSlope) && !hasJump)
         {
 
             ridbody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             hasJump = true;
         }
-        if(!jump && isGrounded && hasJump)
+        if(!jump && (isGrounded||isTouchingSlope) && hasJump)
             hasJump =false;
         
 
@@ -629,8 +654,39 @@ public class CharacterContorl : MonoBehaviour
     private void CheckIsGrounded()
     {
         isGrounded = Physics.CheckSphere(bodyCollider.transform.position+(bodyCollider as SphereCollider).center - new Vector3(0, (bodyCollider as SphereCollider).radius , 0), 0.02f, groundMask);
+        //float sphereRadius = (bodyCollider as SphereCollider).radius;
+        //float sphereDistance = sphereRadius - 0.02f;
+
+        //Vector3 sphereCenter = bodyCollider.transform.position + (bodyCollider as SphereCollider).center - new Vector3(0, sphereRadius, 0);
+        //RaycastHit hit;
+        //if (Physics.SphereCast(sphereCenter, sphereRadius, Vector3.down, out hit, sphereDistance + 0.01f, groundMask))
+        //{
+        //    isGrounded = true;
+        //}
+        //else
+        //{
+        //    isGrounded = false;
+        //}
     }
 
+    private void CheckSlopeAndDirections()
+    {
+        RaycastHit slopeHit;
+        isTouchingSlope = false;
+        if(Physics.SphereCast(bodyCollider.transform.position + (bodyCollider as SphereCollider).center, slopeCheckerThrashold,Vector3.down,out slopeHit, (bodyCollider as SphereCollider).radius + 0.2f, groundMask))
+        {
+            groundNormal = slopeHit.normal;
+            if(Vector3.Angle(Vector3.up, slopeHit.normal) < maxClimbableSlopeAngle)
+            {
+                transform.rotation = Quaternion.Slerp(transform.rotation,Quaternion.FromToRotation(transform.up, slopeHit.normal) * transform.rotation,0.2f);
+                isTouchingSlope = true;
+            }
+        }
+        else
+        {
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.FromToRotation(transform.up,Vector3.zero) * transform.rotation, 0.2f);
+        }
+    }
 
     private bool CheckHP()
     {
