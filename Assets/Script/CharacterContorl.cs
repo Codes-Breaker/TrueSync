@@ -7,6 +7,8 @@ using TMPro;
 using DG.Tweening;
 using UnityEngine.EventSystems;
 using Cinemachine;
+using Crest;
+using RangeAttribute = UnityEngine.RangeAttribute;
 
 public class CharacterContorl : MonoBehaviour
 {
@@ -171,6 +173,10 @@ public class CharacterContorl : MonoBehaviour
     private GameController gameController;
 
     public int playerIndex = -1;
+
+    public SimpleFloatingObject floatObj;
+
+    public bool isInWater = false;
 
     private void Awake()
     {
@@ -558,14 +564,14 @@ public class CharacterContorl : MonoBehaviour
 
     private void MoveJump(bool jump)
     {
-        if (jump && (isGrounded||isTouchingSlope) && !hasJump)
+        if (jump && (isGrounded||isTouchingSlope||isInWater) && !hasJump)
         {
             hasJump = true;
 
         }
         if(hasJump)
         {
-            if ((isGrounded || isTouchingSlope))
+            if ((isGrounded || isTouchingSlope || isInWater))
                 currentJumpTime += Time.fixedDeltaTime;
             else
             {
@@ -574,7 +580,7 @@ public class CharacterContorl : MonoBehaviour
             }
         }
 
-        if(!jump && (isGrounded||isTouchingSlope) && hasJump)
+        if(!jump && (isGrounded||isTouchingSlope|| isInWater) && hasJump)
         {
             var jumpForce = jumpMinForce + (jumpMaxForce - jumpMinForce) * Mathf.Min(1, currentJumpTime / jumpChargeTime);
             ridbody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
@@ -670,6 +676,12 @@ public class CharacterContorl : MonoBehaviour
     #endregion
 
     #region Check
+    SampleHeightHelper _sampleHeightHelper = new SampleHeightHelper();
+
+    private void CheckIsInWater()
+    {
+        isInWater = floatObj.InWater;
+    }
 
     private void CheckIsGrounded()
     {
