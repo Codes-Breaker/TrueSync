@@ -764,7 +764,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inputReader: {fileID: 0}
   movementForce: 40
-  jumpForce: 40
+  maxWalkVelocity: 3
+  jumpMinForce: 40
+  jumpMaxForce: 80
+  jumpChargeTime: 3
   releaseSpeedAtFirstArgument: 0.5
   releaseSpeedLinearArgument: 1
   minLinearReleaseSpeedArgument: 2
@@ -779,8 +782,6 @@ MonoBehaviour:
   maxClimbableSlopeAngle: 40
   cureTime: 20
   sensitivity: 1
-  isWalk: 0
-  isGrounded: 0
   targetAngle: 0
   currentHPValue: 0
   currentGas: 0
@@ -791,13 +792,10 @@ MonoBehaviour:
   isUseSkill: 0
   forceArgument: 100
   receivedForceRate: 1
-  swinging: 0
-  readyswing: 0
   maxSpeedUpGas: 5
   velocityBeforeCollision: {x: 0, y: 0, z: 0}
   positionBeforeCollision: {x: 0, y: 0, z: 0}
   maxReleaseVelocity: 7
-  maxWalkVelocity: 3
   maxDrowning: 500
   currentDrown: 0
   continueReceivedForceRate: 1
@@ -823,6 +821,8 @@ MonoBehaviour:
   stunEffect: {fileID: 3377665245391582805}
   stunThreshold: 7
   playerIndex: -1
+  floatObj: {fileID: 4905247197419792959}
+  isInWater: 0
 --- !u!114 &4905247197419792959
 MonoBehaviour:
   m_ObjectHideFlags: 0
