@@ -31,7 +31,11 @@ namespace RootMotion.Demos {
 
 			// Locomotion
 			animator.SetFloat("Speed", speed);
-
+			animator.SetBool("OnGround", characterController.animState.onGround);
+			if (!characterController.animState.onGround)
+			{
+				animator.SetFloat("Jump", characterController.animState.yVelocity);
+			}
 			// Movement
 			characterController.Move(characterController.transform.forward * Time.deltaTime * speed, Quaternion.identity);
 		}
