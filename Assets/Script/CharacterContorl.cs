@@ -97,7 +97,7 @@ public class CharacterContorl : MonoBehaviour
     public Vector3 velocityBeforeCollision = Vector3.zero;
     [HideInInspector]
     public Vector3 positionBeforeCollision = Vector3.zero;
-
+    [Header("最大放气速度")]
     public float maxReleaseVelocity;
 
     public float maxDrowning = 1000;
@@ -209,6 +209,10 @@ public class CharacterContorl : MonoBehaviour
     //        Gizmos.DrawLine(this.ridbody.position, jumpTarget);
     //    }
     //}
+    private void Update()
+    {
+        SetAnimatorArgument();
+    }
 
     public void SetControlSelf()
     {
@@ -297,6 +301,11 @@ public class CharacterContorl : MonoBehaviour
                 SetGameLayerRecursive(child.gameObject, _layer);
 
         }
+    }
+
+    private void SetAnimatorArgument()
+    {
+        anima.SetFloat("Speed",ridbody.velocity.magnitude);
     }
 
     private void SetCollider(bool set)
@@ -522,12 +531,12 @@ public class CharacterContorl : MonoBehaviour
                 ridbody.AddForce(moveTarget * movementForce, ForceMode.Force);
             }
             isWalk = true;
-            anima.SetBool("isWalk",isWalk);
+            //anima.SetBool("isWalk",isWalk);
         }
         else
         {
             isWalk = false;
-            anima.SetBool("isWalk", isWalk);
+            //anima.SetBool("isWalk", isWalk);
         }
         this.ridbody.transform.rotation = Quaternion.Slerp(this.ridbody.rotation, Quaternion.Euler(new Vector3(0, targetAngle, 0) + initialRotation), 0.1f);
 
