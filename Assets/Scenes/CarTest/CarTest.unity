@@ -1740,7 +1740,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 761463079}
   m_LocalRotation: {x: -0, y: -0.9265482, z: 0.37617624, w: 0}
-  m_LocalPosition: {x: 0.00000166893, y: 8.568369, z: 8.812879}
+  m_LocalPosition: {x: 0.00000029802223, y: 8.568375, z: 8.812881}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1879,7 +1879,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &820484792
 Transform:
   m_ObjectHideFlags: 0
@@ -3159,7 +3159,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 961739749}
   m_LocalRotation: {x: 0, y: -0.9265482, z: 0.37617624, w: 0}
-  m_LocalPosition: {x: 3.3400016, y: 12.079949, z: 9.9207}
+  m_LocalPosition: {x: 0.00000029802223, y: 16.078375, z: 8.812881}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4391,7 +4391,7 @@ MonoBehaviour:
   m_RotationMode: 0
   m_UpdateMethod: 2
   m_Targets:
-  - target: {fileID: 1116089259369277998}
+  - target: {fileID: 4963964117757428552}
     weight: 1
     radius: 4
 --- !u!4 &1408042752
@@ -4402,7 +4402,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1408042750}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.34, y: 3.511581, z: 1.1078213}
+  m_LocalPosition: {x: 0, y: 7.51, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -6741,12 +6741,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &1116089259369277998 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 7949742896289479264, guid: 1c2374ba6e5189d438a56c02df04b5ba,
-    type: 3}
-  m_PrefabInstance: {fileID: 7002548007527862350}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1116089259369278004
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8871,7 +8865,7 @@ MonoBehaviour:
   spherecastRadius: 0.1
   groundLayers:
     serializedVersion: 2
-    m_Bits: 257
+    m_Bits: 321
   characterAnimation: {fileID: 1120766965}
   userControl: {fileID: 5739938588196854260}
   cam: {fileID: 0}
@@ -8903,17 +8897,6 @@ MonoBehaviour:
   wallRunMaxRotationAngle: 70
   wallRunWeightSpeed: 5
   crouchCapsuleScaleMlp: 0.6
-  currentGas: 0
-  releasing: 0
-  releaseTime: 0
-  chargeTime: 0
-  maxSpeedUpGas: 5
-  releaseSpeedAtFirstArgument: 0
-  releaseSpeedLinearArgument: 0
-  minLinearReleaseSpeedArgument: 0
-  velocityBeforeCollision: {x: 0, y: 0, z: 0}
-  positionBeforeCollision: {x: 0, y: 0, z: 0}
-  maxReleaseVelocity: 0
 --- !u!136 &5739938588196854262
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -8924,10 +8907,10 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 1.145184
+  m_Radius: 1.1120372
   m_Height: 3.0854836
   m_Direction: 2
-  m_Center: {x: 0, y: 1.1382084, z: -0.12589931}
+  m_Center: {x: 0, y: 1.1713552, z: -0.12589931}
 --- !u!1 &5808802820298416767
 GameObject:
   m_ObjectHideFlags: 0
@@ -9297,7 +9280,7 @@ PrefabInstance:
     - target: {fileID: 7002548007972154136, guid: 1c2374ba6e5189d438a56c02df04b5ba,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7002548007972154137, guid: 1c2374ba6e5189d438a56c02df04b5ba,
         type: 3}
