@@ -31,7 +31,7 @@ namespace RootMotion.Demos {
 
 			// Locomotion
 			animator.SetFloat("Speed", speed);
-
+			Debug.Log(speed + ",,,,," + characterController.animState.moveDirection.z);
 			// Movement
 			characterController.Move(characterController.transform.forward * Time.deltaTime * speed, Quaternion.identity);
 		}
