@@ -54,6 +54,7 @@ namespace RootMotion.Demos {
 			float walkMultiplier = (walkByDefault ? walkToggle ? 1 : 0.5f : walkToggle ? 0.5f : 1);
 
 			state.move *= walkMultiplier;
+			Debug.LogError($"move speed: {state.move}");
 			
 			// calculate the head look target position
 			state.lookPos = transform.position + cam.forward * 100f;
