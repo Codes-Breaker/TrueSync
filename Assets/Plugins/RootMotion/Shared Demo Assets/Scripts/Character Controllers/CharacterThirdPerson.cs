@@ -230,7 +230,7 @@ namespace RootMotion.Demos {
                     {
                         Quaternion rotation = Quaternion.FromToRotation(transform.up, normal);
                         velocity = Quaternion.Lerp(Quaternion.identity, rotation, velocityToGroundTangentWeight) * velocity;
-                    }
+					}
 				}
                 else
                 {

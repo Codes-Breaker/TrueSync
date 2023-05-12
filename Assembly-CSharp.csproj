@@ -136,11 +136,13 @@
     <Compile Include="Assets\TrueSync\Physics\Jitter\Collision\CollisionSystemBrute.cs" />
     <Compile Include="Assets\BruteForce\Scripts\BF_InteractiveEffectsAdditional.cs" />
     <Compile Include="Assets\TrueSync\Physics\Jitter\Collision\Shapes\TerrainShape.cs" />
+    <Compile Include="Assets\MaintainScale.cs" />
     <Compile Include="Assets\TrueSync\Physics\Farseer\Common\Decomposition\CDT\TriangulationPoint.cs" />
     <Compile Include="Assets\TrueSync\Physics\Farseer\Collision\IBroadPhase.cs" />
     <Compile Include="Assets\Boing Kit\Script\BoingBoneCollider.cs" />
     <Compile Include="Assets\Suriyun\Addon-PetZoo\Core\AgentLinkMover.cs" />
     <Compile Include="Assets\Nappin\PhysicsBasedCharacterController\Scripts\Extensions\CameraManager.cs" />
+    <Compile Include="Assets\FixedScale.cs" />
     <Compile Include="Assets\TrueSync\Physics\Farseer\Common\Decomposition\FlipcodeDecomposer.cs" />
     <Compile Include="Assets\TrueSync\Unity\PhysicsWorldManager.cs" />
     <Compile Include="Assets\TrueSync\Physics\Farseer\Common\Decomposition\Seidel\Edge.cs" />
@@ -282,6 +284,7 @@
     <Compile Include="Assets\TrueSync\Physics\Farseer\Common\Decomposition\CDT\Delaunay\Sweep\PointOnEdgeException.cs" />
     <Compile Include="Assets\TrueSync\Physics\Farseer\Dynamics\Body.cs" />
     <Compile Include="Assets\TrueSync\Physics\Farseer\Common\PhysicsLogic\SimpleExplosion.cs" />
+    <Compile Include="Assets\ExplosiveTest.cs" />
     <Compile Include="Assets\TrueSync\Physics\Farseer\DebugViewBase.cs" />
     <Compile Include="Assets\TrueSync\Physics\Farseer\Common\LineTools.cs" />
     <Compile Include="Assets\Boing Kit\Examples\Boing Bones\Length Stiffness Comparison\LengthStiffnessComparison.cs" />
@@ -1453,8 +1456,14 @@
     <Reference Include="Unity.PlasticSCM.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.PlasticSCM.Editor.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.Polybrush.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.Polybrush.Editor.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.Services.Core">
       <HintPath>Library\ScriptAssemblies\Unity.Services.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Polybrush">
+      <HintPath>Library\ScriptAssemblies\Unity.Polybrush.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Animation.Rigging">
       <HintPath>Library\ScriptAssemblies\Unity.Animation.Rigging.dll</HintPath>
