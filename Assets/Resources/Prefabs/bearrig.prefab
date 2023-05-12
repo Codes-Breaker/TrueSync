@@ -26754,17 +26754,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inputReader: {fileID: 0}
-  movementSpeedUpTime: 0
-  movementForce: 40
-  maxMovementVelocity: 0
-  jumpMinForce: 40
-  jumpMaxForce: 80
-  jumpChargeTime: 3
+  movementSpeedUpTime: 1
+  movementRotationRate: 0.08
+  movementMaxVelocity: 3
+  jumpForce: 40
+  runMaxVelocity: 7
+  runSpeedUpTime: 3
+  runSpeedUpRotationRate: 0.06
+  runMaxSpeedRotationRate: 0.03
+  decelerationForceArgument: 6
+  decelerationTorqueArgument: 5
   releaseSpeedAtFirstArgument: 0.5
   releaseSpeedLinearArgument: 1
   minLinearReleaseSpeedArgument: 2
-  decelerationForceArgument: 8
-  decelerationTorqueArgument: 5
   groundMask:
     serializedVersion: 2
     m_Bits: 80

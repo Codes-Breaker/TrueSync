@@ -35,6 +35,10 @@ public class CharacterContorl : MonoBehaviour
     public float runSpeedUpRotationRate;
     [Header("跑步最大速度时转向Lerp系数")]
     public float runMaxSpeedRotationRate;
+    [Header("跑步充能时间")]
+    public float chargeTime;
+    [Header("最大跑步时间")]
+    public float releaseTime;
     [Space(10)]
     [Header("刹车相关参数")]
     [Header("减速力系数系数")]
@@ -50,16 +54,12 @@ public class CharacterContorl : MonoBehaviour
     public float minLinearReleaseSpeedArgument;
     [Header("地面的Layers")]
     [SerializeField] public LayerMask groundMask;
-    [Tooltip("Lerp计算参数")]
-    public float chargeTime;
-    [Tooltip("Lerp计算参数")]
-    public float releaseTime;
     [Header("斜坡距离底部的检测距离")]
     public float slopeCheckerThrashold = 0.51f;
     [Header("最大斜坡角度")]
     public float maxClimbableSlopeAngle = 40f;
-    public float cureTime;
 
+    public float cureTime;
     private bool hasJump = false;
     private bool hasBrake = false;
 
@@ -452,22 +452,43 @@ public class CharacterContorl : MonoBehaviour
         else
             axisInput = axisInput.normalized;
         //
-        if (axisInput.magnitude > movementThrashold )
+        if(releasing)
         {
-            targetAngle = Mathf.Atan2(axisInput.x, axisInput.y) * Mathf.Rad2Deg + Camera.main.transform.eulerAngles.y;
-            //if (ridbody.velocity.magnitude < maxMovementVelocity)
-            //{
-            //    var moveTarget = ridbody.transform.forward;
-            //    moveTarget = moveTarget.normalized;
-            //    ridbody.AddForce(moveTarget * movementForce, ForceMode.Force);
-            //}
-            if(releasing)
+            isWalk = false;
+            if(ridbody.velocity.magnitude < runMaxVelocity * 0.9f)
             {
-
+                var acceleration = runMaxVelocity / runSpeedUpTime;
+                var forceMagnitude = ridbody.mass * acceleration;
+                if (bodyCollider.material)
+                {
+                    var frictionForceMagnitude = ridbody.mass * bodyCollider.material.dynamicFriction * Physics.gravity.magnitude;
+                    forceMagnitude = forceMagnitude + frictionForceMagnitude;
+                }
+                var moveTarget = ridbody.transform.forward;
+                moveTarget = moveTarget.normalized;
+                ridbody.AddForce(moveTarget * forceMagnitude, ForceMode.Force);
+                if(axisInput.magnitude > movementThrashold)
+                {
+                    targetAngle = Mathf.Atan2(axisInput.x, axisInput.y) * Mathf.Rad2Deg + Camera.main.transform.eulerAngles.y;
+                    transform.rotation = Quaternion.Slerp(this.ridbody.rotation, Quaternion.Euler(new Vector3(0, targetAngle, 0) + initialRotation), runSpeedUpRotationRate);
+                }
             }
-
-            if(ridbody.velocity.magnitude < movementMaxVelocity)
+            else
             {
+                if (axisInput.magnitude > movementThrashold)
+                {
+                    targetAngle = Mathf.Atan2(axisInput.x, axisInput.y) * Mathf.Rad2Deg + Camera.main.transform.eulerAngles.y;
+                    transform.rotation = Quaternion.Slerp(this.ridbody.rotation, Quaternion.Euler(new Vector3(0, targetAngle, 0) + initialRotation), runMaxSpeedRotationRate);
+                }
+            }
+        }
+        else
+        {
+
+            if(ridbody.velocity.magnitude < movementMaxVelocity &&axisInput.magnitude > movementThrashold )
+            {
+                isWalk = true;
+                targetAngle = Mathf.Atan2(axisInput.x, axisInput.y) * Mathf.Rad2Deg + Camera.main.transform.eulerAngles.y;
                 var acceleration = movementMaxVelocity / movementSpeedUpTime;
                 var forceMagnitude = ridbody.mass * acceleration;
                 if(bodyCollider.material)
@@ -478,17 +499,16 @@ public class CharacterContorl : MonoBehaviour
                 var moveTarget = ridbody.transform.forward;
                 moveTarget = moveTarget.normalized;
                 ridbody.AddForce(moveTarget * forceMagnitude, ForceMode.Force);
+                transform.rotation = Quaternion.Slerp(this.ridbody.rotation, Quaternion.Euler(new Vector3(0, targetAngle, 0) + initialRotation), movementRotationRate);
+            }
+            else
+            {
+                isWalk = false;
             }
 
-            isWalk = true;
-
-            transform.rotation = Quaternion.Slerp(this.ridbody.rotation, Quaternion.Euler(new Vector3(0, targetAngle, 0) + initialRotation), movementRotationRate);
-        }
-        else
-        {
-            isWalk = false;
 
         }
+        
     }
 
    
@@ -584,35 +604,35 @@ public class CharacterContorl : MonoBehaviour
             }
             else if (currentGas > 0)
             {
-                var releaseDir = ridbody.transform.forward;
-                releaseDir = releaseDir.normalized;
+                //var releaseDir = ridbody.transform.forward;
+                //releaseDir = releaseDir.normalized;
 
 
-                Vector3 vel1 = velocityBeforeCollision;
+                //Vector3 vel1 = velocityBeforeCollision;
 
-                var d1 = Vector3.Angle(vel1, releaseDir);
+                //var d1 = Vector3.Angle(vel1, releaseDir);
 
-                var degree1 = d1 * Mathf.Deg2Rad;
-                var m1 = (Mathf.Cos(degree1) * vel1).magnitude;
+                //var degree1 = d1 * Mathf.Deg2Rad;
+                //var m1 = (Mathf.Cos(degree1) * vel1).magnitude;
 
-                if (speedUpGas >= 0)
-                {
-                    var addSpeed = EaseOutCirc(currentGas / (maxActorGas)) * releaseSpeedAtFirstArgument;
-                    if (m1 < maxReleaseVelocity)
-                        ridbody.AddForce(releaseDir * addSpeed, ForceMode.Impulse);
-                    speedUpGas--;
-                }
-                else
-                {
-                    var addSpeed = EaseOutCirc(currentGas / maxActorGas) * releaseSpeedLinearArgument;
-                    addSpeed = Mathf.Max(minLinearReleaseSpeedArgument, addSpeed);
-                    if (m1 < maxReleaseVelocity)
-                    {
-                        //Debug.LogError($"{this.gameObject.name} ======> {addSpeed}");
-                        ridbody.AddForce(releaseDir * addSpeed, ForceMode.Impulse);
-                    }
+                //if (speedUpGas >= 0)
+                //{
+                //    var addSpeed = EaseOutCirc(currentGas / (maxActorGas)) * releaseSpeedAtFirstArgument;
+                //    if (m1 < maxReleaseVelocity)
+                //        ridbody.AddForce(releaseDir * addSpeed, ForceMode.Impulse);
+                //    speedUpGas--;
+                //}
+                //else
+                //{
+                //    var addSpeed = EaseOutCirc(currentGas / maxActorGas) * releaseSpeedLinearArgument;
+                //    addSpeed = Mathf.Max(minLinearReleaseSpeedArgument, addSpeed);
+                //    if (m1 < maxReleaseVelocity)
+                //    {
+                //        //Debug.LogError($"{this.gameObject.name} ======> {addSpeed}");
+                //        ridbody.AddForce(releaseDir * addSpeed, ForceMode.Impulse);
+                //    }
 
-                }
+                //}
 
                 // currentGas = currentGas - (currentGas) / releaseTime * Time.fixedDeltaTime;
                 currentGas = currentGas - (maxActorGas) / releaseTime * Time.fixedDeltaTime;
