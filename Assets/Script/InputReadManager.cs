@@ -32,7 +32,7 @@ public class InputReadManager : MonoBehaviour
     public List<Color> playerColors = new List<Color>();
 
     //Ô¤ÖÆÌåPath
-    private string sealPath = "Prefabs/bear";
+    private string sealPath = "Prefabs/bearrig";
     private string polarBearPath = "Prefabs/°×ĞÜ";
     private string snowFoxPath = "Prefabs/ºüÀê";
 

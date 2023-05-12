@@ -267,7 +267,7 @@ public class CharacterContorl : MonoBehaviour
         CheckInVulernable();
         CheckIsGrounded();
         UpdateBuff();
-        CheckSlopeAndDirections();
+        // CheckSlopeAndDirections();
        // BalanceGravity();
 
         SetState();
