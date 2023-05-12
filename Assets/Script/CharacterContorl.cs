@@ -15,29 +15,39 @@ public class CharacterContorl : MonoBehaviour
     [Header("控制器")]
     public InputReaderBase inputReader;
     [Space(10)]
-    [Header("参数")]
+    [Header("走路参数")]
     [Header("走路速度提升需要时间")]
     public float movementSpeedUpTime;
-    [Header("走路力系数")]
-    public float movementForce;
+    [Header("走路转向Lerp系数")]
+    public float movementRotationRate;
     [Header("最大行走速度")]
-    public float maxMovementVelocity;
-    [Header("跳跃最小力系数")]
-    public float jumpMinForce;
-    [Header("跳跃最大力")]
-    public float jumpMaxForce;
-    [Header("跳跃蓄力时间")]
-    public float jumpChargeTime;
+    public float movementMaxVelocity;
+    [Space(10)]
+    [Header("跳跃力系数")]
+    public float jumpForce;
+    [Space(10)]
+    [Header("跑步状态相关参数")]
+    [Header("跑步最大速度")]
+    public float runMaxVelocity;
+    [Header("跑步速度提升需要时间")]
+    public float runSpeedUpTime;
+    [Header("跑步速度提升时转向Lerp系数")]
+    public float runSpeedUpRotationRate;
+    [Header("跑步最大速度时转向Lerp系数")]
+    public float runMaxSpeedRotationRate;
+    [Space(10)]
+    [Header("刹车相关参数")]
+    [Header("减速力系数系数")]
+    public float decelerationForceArgument;
+    [Header("减速扭矩力系数系数")]
+    public float decelerationTorqueArgument;
+
     [Header("放气起始力系数")]
     public float releaseSpeedAtFirstArgument;
     [Header("放气后续加速力系数")]
     public float releaseSpeedLinearArgument;
     [Header("放气最小加速度系数")]
     public float minLinearReleaseSpeedArgument;
-    [Header("减速力系数系数")]
-    public float decelerationForceArgument;
-    [Header("减速扭矩力系数系数")]
-    public float decelerationTorqueArgument;
     [Header("地面的Layers")]
     [SerializeField] public LayerMask groundMask;
     [Tooltip("Lerp计算参数")]
@@ -432,6 +442,7 @@ public class CharacterContorl : MonoBehaviour
 
     private void MoveWalk(Vector2 axisInput,ControlDeviceType controlDeviceType)
     {
+        //单位化输入方向
         if (controlDeviceType == ControlDeviceType.Mouse)
         {
             Vector3 screenPosition = Camera.main.WorldToScreenPoint(transform.position);
@@ -440,6 +451,7 @@ public class CharacterContorl : MonoBehaviour
         }
         else
             axisInput = axisInput.normalized;
+        //
         if (axisInput.magnitude > movementThrashold )
         {
             targetAngle = Mathf.Atan2(axisInput.x, axisInput.y) * Mathf.Rad2Deg + Camera.main.transform.eulerAngles.y;
@@ -449,10 +461,14 @@ public class CharacterContorl : MonoBehaviour
             //    moveTarget = moveTarget.normalized;
             //    ridbody.AddForce(moveTarget * movementForce, ForceMode.Force);
             //}
-
-            if(ridbody.velocity.magnitude < maxMovementVelocity)
+            if(releasing)
             {
-                var acceleration = maxMovementVelocity / movementSpeedUpTime;
+
+            }
+
+            if(ridbody.velocity.magnitude < movementMaxVelocity)
+            {
+                var acceleration = movementMaxVelocity / movementSpeedUpTime;
                 var forceMagnitude = ridbody.mass * acceleration;
                 if(bodyCollider.material)
                 {
@@ -466,15 +482,13 @@ public class CharacterContorl : MonoBehaviour
 
             isWalk = true;
 
-            //ridbody.MoveRotation(Quaternion.Slerp(this.ridbody.rotation, Quaternion.Euler(new Vector3(0, targetAngle, 0) + initialRotation), 0.1f));
-            transform.rotation = Quaternion.Slerp(this.ridbody.rotation, Quaternion.Euler(new Vector3(0, targetAngle, 0) + initialRotation), 0.03f);
+            transform.rotation = Quaternion.Slerp(this.ridbody.rotation, Quaternion.Euler(new Vector3(0, targetAngle, 0) + initialRotation), movementRotationRate);
         }
         else
         {
             isWalk = false;
 
         }
-        //this.ridbody.transform.rotation = Quaternion.Slerp(this.ridbody.rotation, Quaternion.Euler(new Vector3(0, targetAngle, 0) + initialRotation), 0.1f);
     }
 
    
@@ -518,13 +532,13 @@ public class CharacterContorl : MonoBehaviour
             }
         }
 
-        if(!jump && (isGrounded||isTouchingSlope|| isInWater) && hasJump)
-        {
-            var jumpForce = jumpMinForce + (jumpMaxForce - jumpMinForce) * Mathf.Min(1, currentJumpTime / jumpChargeTime);
-            ridbody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-            hasJump = false;
-            currentJumpTime = 0;
-        }
+        //if(!jump && (isGrounded||isTouchingSlope|| isInWater) && hasJump)
+        //{
+        //    var _jumpForce = jumpForce + (jumpMaxForce - jumpForce) * Mathf.Min(1, currentJumpTime / jumpChargeTime);
+        //    ridbody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        //    hasJump = false;
+        //    currentJumpTime = 0;
+        //}
         
 
     }
@@ -648,13 +662,13 @@ public class CharacterContorl : MonoBehaviour
             groundNormal = slopeHit.normal;
             if(Vector3.Angle(Vector3.up, slopeHit.normal) < maxClimbableSlopeAngle)
             {
-                transform.rotation = Quaternion.Slerp(transform.rotation,Quaternion.FromToRotation(transform.up, slopeHit.normal) * transform.rotation,0.2f);
+                //transform.rotation = Quaternion.Slerp(transform.rotation,Quaternion.FromToRotation(transform.up, slopeHit.normal) * transform.rotation,0.2f);
                 isTouchingSlope = true;
             }
         }
         else
         {
-            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.FromToRotation(transform.up,Vector3.zero) * transform.rotation, 0.2f);
+            //transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.FromToRotation(transform.up,Vector3.zero) * transform.rotation, 0.2f);
         }
     }
 
