@@ -16,10 +16,12 @@ public class CharacterContorl : MonoBehaviour
     public InputReaderBase inputReader;
     [Space(10)]
     [Header("参数")]
+    [Header("走路速度提升需要时间")]
+    public float movementSpeedUpTime;
     [Header("走路力系数")]
     public float movementForce;
     [Header("最大行走速度")]
-    public float maxWalkVelocity;
+    public float maxMovementVelocity;
     [Header("跳跃最小力系数")]
     public float jumpMinForce;
     [Header("跳跃最大力")]
@@ -60,6 +62,7 @@ public class CharacterContorl : MonoBehaviour
     //public Vector3 originalCenter;
     public float sensitivity = 0.5f;
     private Vector3 initialRotation;
+    private Vector3 forceTarget;
     private Quaternion initialRot;
     // 隐藏参数
     private bool isWalk;
@@ -99,7 +102,7 @@ public class CharacterContorl : MonoBehaviour
     public Vector3 velocityBeforeCollision = Vector3.zero;
     [HideInInspector]
     public Vector3 positionBeforeCollision = Vector3.zero;
-
+    [Header("最大放气速度")]
     public float maxReleaseVelocity;
 
     public float maxDrowning = 1000;
@@ -205,16 +208,27 @@ public class CharacterContorl : MonoBehaviour
         SetSlider();
     }
 
-    //private void OnDrawGizmos()
-    //{
-    //    if (this.ridbody != null)
-    //    {
-    //        Gizmos.color = Color.red;
-    //        Gizmos.DrawLine(this.ridbody.position, swimTarget);
-    //        Gizmos.color = Color.blue;
-    //        Gizmos.DrawLine(this.ridbody.position, jumpTarget);
-    //    }
-    //}
+    private void Update()
+    {
+        SetAnimatorArgument();
+    }
+
+    private void FixedUpdate()
+    {
+        velocityBeforeCollision = GetComponent<Rigidbody>().velocity;
+        positionBeforeCollision = GetComponent<Rigidbody>().position;
+        CheckInVulernable();
+        CheckIsGrounded();
+        UpdateBuff();
+        CheckSlopeAndDirections();
+       // BalanceGravity();
+
+        SetState();
+        if (!isGrounded)
+        {
+            //SetGravity();
+        }
+    }
 
     public void SetControlSelf()
     {
@@ -260,23 +274,6 @@ public class CharacterContorl : MonoBehaviour
     }
 
 
-    private void FixedUpdate()
-    {
-        velocityBeforeCollision = GetComponent<Rigidbody>().velocity;
-        positionBeforeCollision = GetComponent<Rigidbody>().position;
-        CheckInVulernable();
-        CheckIsGrounded();
-        UpdateBuff();
-        // CheckSlopeAndDirections();
-       // BalanceGravity();
-
-        SetState();
-        if (!isGrounded)
-        {
-            //SetGravity();
-        }
-    }
-
     private void CheckInVulernable()
     {
         if (invulernable && invulernableTime > 0)
@@ -303,6 +300,11 @@ public class CharacterContorl : MonoBehaviour
                 SetGameLayerRecursive(child.gameObject, _layer);
 
         }
+    }
+
+    private void SetAnimatorArgument()
+    {
+        anima.SetFloat("Speed",ridbody.velocity.magnitude);
     }
 
     private void SetCollider(bool set)
@@ -367,86 +369,6 @@ public class CharacterContorl : MonoBehaviour
 
     }
 
-
-    //public void SetUpJump()
-    //{
-    //    startPos = ridbody.transform.position;
-    //    HDist = (jumpTarget - new Vector3(ridbody.transform.position.x, jumpTarget.y, ridbody.transform.position.z)).magnitude;
-    //    HDist *= 1.2f;
-    //    curTime = 0;
-    //    currentGas = 0;
-    //    vulnerbility = 0;
-    //    releasing = false;
-    //    SetKinematics(true);
-
-    //    maxDrowning -= Mathf.Max(totalDrown, minDrown);
-    //    maxDrowning = Mathf.Max(0, maxDrowning);
-    //    currentDrown = maxDrowning;
-    //    totalDrown = 0;
-
-    //    if (maxDrowning <= 0)
-    //    {
-    //        Dead();
-    //    }
-    //}
-
-    //private float HDist = 0;
-    //private float curTime = 0;
-    //private float maxTime = 1f;
-    //private Vector3 startPos;
-    //private float maxHeight = 5;
-    //private void JumpToPlace()
-    //{
-    //    if (!jumpingBack)
-    //        return;
-    //    curTime += Time.fixedDeltaTime;
-    //    var hDelta = jumpTarget - startPos;
-    //    hDelta.y = 0;
-    //    var hPos = Mathf.Lerp(0, HDist, curTime/ maxTime) * hDelta.normalized;
-    //    var v = Mathf.Lerp(0, maxHeight, Mathf.Sin(Mathf.Lerp(0, (3f / 4f) * Mathf.PI, curTime / maxTime)));
-    //    if (curTime <= maxTime/2f)
-    //        this.transform.LookAt(jumpTarget);
-    //    Vector3 currentPos = startPos + new Vector3(hPos.x, v, hPos.z);
-    //    ridbody.transform.position = currentPos;
-    //    if (curTime >= maxTime)
-    //    {
-    //        jumpingBack = false;
-    //        SetKinematics(false);
-    //        SetCollider(false);
-    //        invulernable = true;
-    //        invulernableTime = maxInvulnerableTime;
-    //        SetFlashMeshRendererBlock(true);
-    //    }
-    //}
-
-    // 无敌特效示意
-    //private void SetFlashMeshRendererBlock(bool value)
-    //{
-    //    meshController.SetFlashMeshRendererBlock(value);
-    //}
-
-    private void SetRingColor()
-    {
-        var rendererBlock = new MaterialPropertyBlock();
-        ringRenderer.GetPropertyBlock(rendererBlock, 0);
-        rendererBlock.SetColor("_Color", InputReadManager.Instance.playerColors[playerIndex]);
-        ringRenderer.SetPropertyBlock(rendererBlock, 0);
-    }
-
-    //private void ReturnToPlace()
-    //{
-    //    //targetAngle = Mathf.Atan2(swimTarget.x, swimTarget.z) * Mathf.Rad2Deg + Camera.main.transform.eulerAngles.y;
-    //    //this.ridbody.transform.rotation = Quaternion.Slerp(this.ridbody.rotation, Quaternion.Euler(new Vector3(0, targetAngle, 0) + initialRotation), 0.1f);
-    //    //this.transform.LookAt(swimTarget);
-
-    //    Vector3 relativePos = swimTarget - transform.position;
-    //    Quaternion toRotation = Quaternion.LookRotation(relativePos);
-    //    transform.rotation = Quaternion.Lerp(transform.rotation, toRotation, 1 * Time.deltaTime);
-
-    //    var dir = (swimTarget - ridbody.transform.position).normalized;
-    //    ridbody.transform.position = ridbody.transform.position + (dir * swimSpeed * Time.fixedDeltaTime);
-    //    AccumulateDrown();
-    //}
 
     private void AccumulateDrown()
     {
@@ -521,22 +443,38 @@ public class CharacterContorl : MonoBehaviour
         if (axisInput.magnitude > movementThrashold )
         {
             targetAngle = Mathf.Atan2(axisInput.x, axisInput.y) * Mathf.Rad2Deg + Camera.main.transform.eulerAngles.y;
-            if (ridbody.velocity.magnitude < maxWalkVelocity)
+            //if (ridbody.velocity.magnitude < maxMovementVelocity)
+            //{
+            //    var moveTarget = ridbody.transform.forward;
+            //    moveTarget = moveTarget.normalized;
+            //    ridbody.AddForce(moveTarget * movementForce, ForceMode.Force);
+            //}
+
+            if(ridbody.velocity.magnitude < maxMovementVelocity)
             {
+                var acceleration = maxMovementVelocity / movementSpeedUpTime;
+                var forceMagnitude = ridbody.mass * acceleration;
+                if(bodyCollider.material)
+                {
+                    var frictionForceMagnitude = ridbody.mass * bodyCollider.material.dynamicFriction * Physics.gravity.magnitude;
+                    forceMagnitude = forceMagnitude + frictionForceMagnitude;
+                }
                 var moveTarget = ridbody.transform.forward;
                 moveTarget = moveTarget.normalized;
-                ridbody.AddForce(moveTarget * movementForce, ForceMode.Force);
+                ridbody.AddForce(moveTarget * forceMagnitude, ForceMode.Force);
             }
+
             isWalk = true;
-            anima.SetBool("isWalk",isWalk);
+
+            //ridbody.MoveRotation(Quaternion.Slerp(this.ridbody.rotation, Quaternion.Euler(new Vector3(0, targetAngle, 0) + initialRotation), 0.1f));
+            transform.rotation = Quaternion.Slerp(this.ridbody.rotation, Quaternion.Euler(new Vector3(0, targetAngle, 0) + initialRotation), 0.03f);
         }
         else
         {
             isWalk = false;
-            anima.SetBool("isWalk", isWalk);
-        }
-        this.ridbody.transform.rotation = Quaternion.Slerp(this.ridbody.rotation, Quaternion.Euler(new Vector3(0, targetAngle, 0) + initialRotation), 0.1f);
 
+        }
+        //this.ridbody.transform.rotation = Quaternion.Slerp(this.ridbody.rotation, Quaternion.Euler(new Vector3(0, targetAngle, 0) + initialRotation), 0.1f);
     }
 
    
@@ -789,6 +727,13 @@ public class CharacterContorl : MonoBehaviour
             drownImage.fillAmount = (maxDrowning - currentDrown) / maxDrowning;
         }
 
+    }
+    private void SetRingColor()
+    {
+        var rendererBlock = new MaterialPropertyBlock();
+        ringRenderer.GetPropertyBlock(rendererBlock, 0);
+        rendererBlock.SetColor("_Color", InputReadManager.Instance.playerColors[playerIndex]);
+        ringRenderer.SetPropertyBlock(rendererBlock, 0);
     }
     #endregion
 
