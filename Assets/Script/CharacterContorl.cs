@@ -56,6 +56,10 @@ public class CharacterContorl : MonoBehaviour
     [SerializeField] public LayerMask groundMask;
     [Header("Ð±ÆÂ¾àÀëµ×²¿µÄ¼ì²â¾àÀë")]
     public float slopeCheckerThrashold = 0.51f;
+    [Header("Ð±ÆÂ¼ì²âµãµÄÏòÇ°Æ«ÒÆ")]
+    public float slopeCheckerForwardOffset = 0.41f;
+    [Header("×îÐ¡Ð±ÆÂ½Ç¶È")]
+    public float miniClimbableSlopeAngle = 5;
     [Header("×î´óÐ±ÆÂ½Ç¶È")]
     public float maxClimbableSlopeAngle = 40f;
 
@@ -117,7 +121,6 @@ public class CharacterContorl : MonoBehaviour
 
     public float maxDrowning = 1000;
     private float maxDrownValue = 1000;
-    private float currentJumpTime = 0f;
     public float currentDrown = 0;
     private float totalDrown = 0;
     private const int minDrown = 50;
@@ -220,7 +223,7 @@ public class CharacterContorl : MonoBehaviour
         CheckInVulernable();
         CheckIsGrounded();
         UpdateBuff();
-        //CheckSlopeAndDirections();
+        CheckSlopeAndDirections();
        // BalanceGravity();
 
         SetState();
@@ -250,8 +253,6 @@ public class CharacterContorl : MonoBehaviour
             stunEffect.gameObject.SetActive(false);
         }
     }
-
-    
 
     private void Stun(float time)
     {
@@ -446,7 +447,7 @@ public class CharacterContorl : MonoBehaviour
         if(releasing)
         {
             isWalk = false;
-            if(ridbody.velocity.magnitude < runMaxVelocity * 0.9f)
+            if(ridbody.velocity.magnitude < runMaxVelocity * 0.96f)
             {
                 var acceleration = runMaxVelocity / runSpeedUpTime;
                 var forceMagnitude = ridbody.mass * acceleration;
@@ -457,6 +458,7 @@ public class CharacterContorl : MonoBehaviour
                 }
                 var moveTarget = ridbody.transform.forward;
                 moveTarget = moveTarget.normalized;
+                moveTarget = Vector3.ProjectOnPlane(moveTarget, groundNormal).normalized;
                 ridbody.AddForce(moveTarget * forceMagnitude, ForceMode.Force);
                 if(axisInput.magnitude > movementThrashold)
                 {
@@ -489,6 +491,7 @@ public class CharacterContorl : MonoBehaviour
                 }
                 var moveTarget = ridbody.transform.forward;
                 moveTarget = moveTarget.normalized;
+                moveTarget = Vector3.ProjectOnPlane(moveTarget, groundNormal).normalized;
                 ridbody.AddForce(moveTarget * forceMagnitude, ForceMode.Force);
                 transform.rotation = Quaternion.Slerp(this.ridbody.rotation, Quaternion.Euler(new Vector3(0, targetAngle, 0) + initialRotation), movementRotationRate);
             }
@@ -583,37 +586,6 @@ public class CharacterContorl : MonoBehaviour
             }
             else if (currentGas > 0)
             {
-                //var releaseDir = ridbody.transform.forward;
-                //releaseDir = releaseDir.normalized;
-
-
-                //Vector3 vel1 = velocityBeforeCollision;
-
-                //var d1 = Vector3.Angle(vel1, releaseDir);
-
-                //var degree1 = d1 * Mathf.Deg2Rad;
-                //var m1 = (Mathf.Cos(degree1) * vel1).magnitude;
-
-                //if (speedUpGas >= 0)
-                //{
-                //    var addSpeed = EaseOutCirc(currentGas / (maxActorGas)) * releaseSpeedAtFirstArgument;
-                //    if (m1 < maxReleaseVelocity)
-                //        ridbody.AddForce(releaseDir * addSpeed, ForceMode.Impulse);
-                //    speedUpGas--;
-                //}
-                //else
-                //{
-                //    var addSpeed = EaseOutCirc(currentGas / maxActorGas) * releaseSpeedLinearArgument;
-                //    addSpeed = Mathf.Max(minLinearReleaseSpeedArgument, addSpeed);
-                //    if (m1 < maxReleaseVelocity)
-                //    {
-                //        //Debug.LogError($"{this.gameObject.name} ======> {addSpeed}");
-                //        ridbody.AddForce(releaseDir * addSpeed, ForceMode.Impulse);
-                //    }
-
-                //}
-
-                // currentGas = currentGas - (currentGas) / releaseTime * Time.fixedDeltaTime;
                 currentGas = currentGas - (maxActorGas) / releaseTime * Time.fixedDeltaTime;
                 currentGas = Mathf.Max(0, currentGas);
 
@@ -637,38 +609,25 @@ public class CharacterContorl : MonoBehaviour
     private void CheckIsGrounded()
     {
         isGrounded = Physics.CheckSphere(bodyCollider.transform.position+(bodyCollider as SphereCollider).center - new Vector3(0, (bodyCollider as SphereCollider).radius , 0), 0.02f, groundMask);
-        //float sphereRadius = (bodyCollider as SphereCollider).radius;
-        //float sphereDistance = sphereRadius - 0.02f;
-
-        //Vector3 sphereCenter = bodyCollider.transform.position + (bodyCollider as SphereCollider).center - new Vector3(0, sphereRadius, 0);
-        //RaycastHit hit;
-        //if (Physics.SphereCast(sphereCenter, sphereRadius, Vector3.down, out hit, sphereDistance + 0.01f, groundMask))
-        //{
-        //    isGrounded = true;
-        //}
-        //else
-        //{
-        //    isGrounded = false;
-        //}
     }
 
     private void CheckSlopeAndDirections()
     {
         RaycastHit slopeHit;
         isTouchingSlope = false;
-        if(Physics.SphereCast(bodyCollider.transform.position + (bodyCollider as SphereCollider).center, slopeCheckerThrashold,Vector3.down,out slopeHit, (bodyCollider as SphereCollider).radius + 0.2f, groundMask))
+        if(Physics.SphereCast(bodyCollider.transform.position + (bodyCollider as SphereCollider).center + transform.forward.normalized * slopeCheckerForwardOffset, slopeCheckerThrashold,Vector3.down,out slopeHit, (bodyCollider as SphereCollider).radius + 0.2f, groundMask))
         {
             groundNormal = slopeHit.normal;
-            if(Vector3.Angle(Vector3.up, slopeHit.normal) < maxClimbableSlopeAngle)
+            Debug.Log(groundNormal);
+            if(Vector3.Angle(Vector3.up, slopeHit.normal) > miniClimbableSlopeAngle && Vector3.Angle(Vector3.up, slopeHit.normal) < maxClimbableSlopeAngle)
             {
-                //transform.rotation = Quaternion.Slerp(transform.rotation,Quaternion.FromToRotation(transform.up, slopeHit.normal) * transform.rotation,0.2f);
-                isTouchingSlope = true;
-                Debug.Log("______________________");
+                if(!isGrounded)
+                    isTouchingSlope = true;
             }
         }
         else
         {
-            //transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.FromToRotation(transform.up,Vector3.zero) * transform.rotation, 0.2f);
+            
         }
     }
 
