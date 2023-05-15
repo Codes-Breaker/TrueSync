@@ -538,29 +538,12 @@ public class CharacterContorl : MonoBehaviour
     {
         if (jump && (isGrounded||isTouchingSlope||isInWater) && !hasJump)
         {
+            ridbody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             hasJump = true;
 
         }
-        if(hasJump)
-        {
-            if ((isGrounded || isTouchingSlope || isInWater))
-                currentJumpTime += Time.fixedDeltaTime;
-            else
-            {
-                currentJumpTime = 0;
-                hasJump = false;
-            }
-        }
-
-        //if(!jump && (isGrounded||isTouchingSlope|| isInWater) && hasJump)
-        //{
-        //    var _jumpForce = jumpForce + (jumpMaxForce - jumpForce) * Mathf.Min(1, currentJumpTime / jumpChargeTime);
-        //    ridbody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-        //    hasJump = false;
-        //    currentJumpTime = 0;
-        //}
-        
-
+        if (!jump && (isGrounded || isTouchingSlope || isInWater) && hasJump)
+            hasJump = false;
     }
 
     private void UseWeapon(bool isUse)
@@ -684,6 +667,7 @@ public class CharacterContorl : MonoBehaviour
             {
                 //transform.rotation = Quaternion.Slerp(transform.rotation,Quaternion.FromToRotation(transform.up, slopeHit.normal) * transform.rotation,0.2f);
                 isTouchingSlope = true;
+                Debug.Log("______________________");
             }
         }
         else
