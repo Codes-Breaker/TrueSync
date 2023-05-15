@@ -9,6 +9,7 @@ using UnityEngine.EventSystems;
 using Cinemachine;
 using Crest;
 using RangeAttribute = UnityEngine.RangeAttribute;
+using RootMotion.FinalIK;
 
 public class CharacterContorl : MonoBehaviour
 {
@@ -178,6 +179,7 @@ public class CharacterContorl : MonoBehaviour
     public int playerIndex = -1;
 
     public SimpleFloatingObject floatObj;
+    public GrounderQuadruped grounderQuadruped;
 
     public bool isInWater = false;
 
@@ -211,6 +213,7 @@ public class CharacterContorl : MonoBehaviour
     private void Update()
     {
         SetAnimatorArgument();
+        SetIK();
     }
 
     private void FixedUpdate()
@@ -221,8 +224,8 @@ public class CharacterContorl : MonoBehaviour
         CheckIsGrounded();
         UpdateBuff();
         //CheckSlopeAndDirections();
-       // BalanceGravity();
-
+        // BalanceGravity();
+        CheckIsInWater();
         SetState();
         if (!isGrounded)
         {
@@ -644,11 +647,30 @@ public class CharacterContorl : MonoBehaviour
     #endregion
 
     #region Check
-    SampleHeightHelper _sampleHeightHelper = new SampleHeightHelper();
+    private void SetIK()
+    {
+        var targetIK = isInWater ? 0 : 1;
+
+        if (grounderQuadruped.weight != targetIK)
+        {
+            var speed = Time.deltaTime;
+            if (targetIK > grounderQuadruped.weight)
+            {
+                grounderQuadruped.weight += speed;
+                grounderQuadruped.weight = Mathf.Min(1, grounderQuadruped.weight);
+            }
+            else
+            {
+                grounderQuadruped.weight -= speed;
+                grounderQuadruped.weight = Mathf.Max(0, grounderQuadruped.weight);
+            }
+        }
+    }
 
     private void CheckIsInWater()
     {
         isInWater = floatObj.InWater;
+        Debug.LogError($"in water : {isInWater}");
     }
 
     private void CheckIsGrounded()
