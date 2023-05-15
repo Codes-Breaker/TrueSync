@@ -25902,7 +25902,7 @@ SphereCollider:
   m_GameObject: {fileID: 6218862705607805149}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Radius: 0.36083817
   m_Center: {x: 0, y: 0.051656485, z: 0}
@@ -26411,6 +26411,7 @@ GameObject:
   - component: {fileID: 6524800512801151489}
   - component: {fileID: 4147182195015774368}
   - component: {fileID: 8918281037288953238}
+  - component: {fileID: 8395411980937182289}
   m_Layer: 10
   m_Name: bearrig
   m_TagString: Untagged
@@ -26739,8 +26740,8 @@ SphereCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.87222075
-  m_Center: {x: 0.012022018, y: 0.8384812, z: 0.12462783}
+  m_Radius: 0.8456932
+  m_Center: {x: 0.012022018, y: 0.8650088, z: 0.12462783}
 --- !u!114 &6524800512801151489
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26754,9 +26755,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inputReader: {fileID: 0}
-  movementSpeedUpTime: 0
+  movementSpeedUpTime: 3
   movementForce: 40
-  maxMovementVelocity: 0
+  maxMovementVelocity: 3
   jumpMinForce: 40
   jumpMaxForce: 80
   jumpChargeTime: 3
@@ -26792,16 +26793,11 @@ MonoBehaviour:
   currentDrown: 0
   continueReceivedForceRate: 1
   invulernableTime: 0
-  maxInvulnerableTime: 5
   invulernable: 0
-  vulnerbility: 0
-  maxVulnerbility: 100
   vulerbilityReactRate: 1
   isDead: 0
-  receivedForceSum: 0
   stunTime: 0
   maxStunTime: 0
-  vulnerbilityText: {fileID: 8600943875096254091}
   gpSlider: {fileID: 4121841322639874642}
   hpSlider: {fileID: 2827711392416063840}
   drownImage: {fileID: 3386597691202627684}
@@ -26854,6 +26850,19 @@ CapsuleCollider:
   m_Height: 2.023413
   m_Direction: 2
   m_Center: {x: 0, y: 0.76915485, z: 0.12124574}
+--- !u!135 &8395411980937182289
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6524800512801151549}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 0
+  serializedVersion: 2
+  m_Radius: 1.0160673
+  m_Center: {x: 0, y: 0.6616075, z: 0.045277804}
 --- !u!1 &6545474141326401775
 GameObject:
   m_ObjectHideFlags: 0
