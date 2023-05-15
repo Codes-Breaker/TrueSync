@@ -9,6 +9,7 @@ using UnityEngine.EventSystems;
 using Cinemachine;
 using Crest;
 using RangeAttribute = UnityEngine.RangeAttribute;
+using RootMotion.FinalIK;
 
 public class CharacterContorl : MonoBehaviour
 {
@@ -181,6 +182,7 @@ public class CharacterContorl : MonoBehaviour
     public int playerIndex = -1;
 
     public SimpleFloatingObject floatObj;
+    public GrounderQuadruped grounderQuadruped;
 
     public bool isInWater = false;
 
@@ -214,6 +216,7 @@ public class CharacterContorl : MonoBehaviour
     private void Update()
     {
         SetAnimatorArgument();
+        SetIK();
     }
 
     private void FixedUpdate()
@@ -224,8 +227,8 @@ public class CharacterContorl : MonoBehaviour
         CheckIsGrounded();
         UpdateBuff();
         CheckSlopeAndDirections();
-       // BalanceGravity();
 
+        CheckIsInWater();
         SetState();
         if (!isGrounded)
         {
@@ -536,6 +539,7 @@ public class CharacterContorl : MonoBehaviour
             hasJump = true;
 
         }
+
         if (!jump && (isGrounded || isTouchingSlope || isInWater) && hasJump)
             hasJump = false;
     }
@@ -599,7 +603,25 @@ public class CharacterContorl : MonoBehaviour
     #endregion
 
     #region Check
-    SampleHeightHelper _sampleHeightHelper = new SampleHeightHelper();
+    private void SetIK()
+    {
+        var targetIK = isInWater ? 0 : 1;
+
+        if (grounderQuadruped.weight != targetIK)
+        {
+            var speed = Time.deltaTime;
+            if (targetIK > grounderQuadruped.weight)
+            {
+                grounderQuadruped.weight += speed;
+                grounderQuadruped.weight = Mathf.Min(1, grounderQuadruped.weight);
+            }
+            else
+            {
+                grounderQuadruped.weight -= speed;
+                grounderQuadruped.weight = Mathf.Max(0, grounderQuadruped.weight);
+            }
+        }
+    }
 
     private void CheckIsInWater()
     {
@@ -609,6 +631,7 @@ public class CharacterContorl : MonoBehaviour
     private void CheckIsGrounded()
     {
         isGrounded = Physics.CheckSphere(bodyCollider.transform.position+(bodyCollider as SphereCollider).center - new Vector3(0, (bodyCollider as SphereCollider).radius , 0), 0.02f, groundMask);
+
     }
 
     private void CheckSlopeAndDirections()
@@ -618,7 +641,7 @@ public class CharacterContorl : MonoBehaviour
         if(Physics.SphereCast(bodyCollider.transform.position + (bodyCollider as SphereCollider).center + transform.forward.normalized * slopeCheckerForwardOffset, slopeCheckerThrashold,Vector3.down,out slopeHit, (bodyCollider as SphereCollider).radius + 0.2f, groundMask))
         {
             groundNormal = slopeHit.normal;
-            Debug.Log(groundNormal);
+
             if(Vector3.Angle(Vector3.up, slopeHit.normal) > miniClimbableSlopeAngle && Vector3.Angle(Vector3.up, slopeHit.normal) < maxClimbableSlopeAngle)
             {
                 if(!isGrounded)
