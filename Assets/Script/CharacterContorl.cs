@@ -126,14 +126,7 @@ public class CharacterContorl : MonoBehaviour
     public float continueReceivedForceRate = 0.2f; 
 
     public float invulernableTime = 0;
-    public float maxInvulnerableTime = 5;
-    //是否处于无敌
     public bool invulernable = false;
-    //碰撞受击累积值
-    public float vulnerbility = 0f;
-    //易伤最大值
-    public float maxVulnerbility = 25.0f;
-    //用于计算地面倾斜角
     private Vector3 groundNormal;
     private bool isTouchingSlope = false;
 
@@ -155,8 +148,6 @@ public class CharacterContorl : MonoBehaviour
 
     private int defaultLayer = 0;
 
-    //记录值
-    public float receivedForceSum = 0;
     //眩晕槽
     public float stunTime = 0;
     //眩晕时间
@@ -165,7 +156,6 @@ public class CharacterContorl : MonoBehaviour
     private bool isStun = false;
     [Space(10)]
     [Header("相关需要关联组件")]
-    public TMP_Text vulnerbilityText;
     public Slider gpSlider;
     public Slider hpSlider;
     public Image drownImage;
@@ -314,7 +304,8 @@ public class CharacterContorl : MonoBehaviour
 
     private void SetAnimatorArgument()
     {
-        anima.SetFloat("Speed",ridbody.velocity.magnitude);
+        var speed = new Vector3(ridbody.velocity.x, 0, ridbody.velocity.z).magnitude;
+        anima.SetFloat("Speed", speed);
     }
 
     private void SetCollider(bool set)
@@ -565,6 +556,11 @@ public class CharacterContorl : MonoBehaviour
                 currentGas = Mathf.Min(maxActorGas, currentGas);
                 releasing = false;
             }
+            anima.SetBool("Charge", true);
+        }
+        else
+        {
+            anima.SetBool("Charge", false);
         }
     }
 
@@ -720,30 +716,19 @@ public class CharacterContorl : MonoBehaviour
     #region SetUI
     private void SetSlider()
     {
-        if (vulnerbilityText != null)
-        {
-            vulnerbilityText.text = $"{vulnerbility}%";
-            if (vulnerbility > maxVulnerbility)
-            {
-                vulnerbilityText.color = Color.red;
-            }
-            else
-            {
-                vulnerbilityText.color = Color.white;
-            }
+
+
             gpSlider.value = (float)(currentGas / maxActorGas);
             hpSlider.value = (float)(maxDrowning / maxDrownValue);
             canvas.transform.forward = Camera.main.transform.forward;
-            vulnerbilityText.transform.position = bodyCollider.transform.position;
             gpSlider.transform.position = bodyCollider.transform.position;
             hpSlider.transform.position = bodyCollider.transform.position;
-            vulnerbilityText.transform.localPosition = vulnerbilityText.transform.localPosition + new Vector3(0.25f, 1.5f + (bodyCollider.transform.localScale.x - 1) * 1.2f, 0);
             gpSlider.transform.localPosition = gpSlider.transform.localPosition + new Vector3(0, 1.3f + (bodyCollider.transform.localScale.x - 1) * 1.2f, 0);
             hpSlider.transform.localPosition = hpSlider.transform.localPosition + new Vector3(0, 1.5f + (bodyCollider.transform.localScale.x - 1) * 1.2f, 0);
             drownImage.transform.position = bodyCollider.transform.position;
             drownImage.transform.localPosition = drownImage.transform.localPosition + new Vector3(-1, 1.5f + (bodyCollider.transform.localScale.x - 1) * 1.2f, 0);
             drownImage.fillAmount = (maxDrowning - currentDrown) / maxDrowning;
-        }
+        
 
     }
     private void SetRingColor()
@@ -817,10 +802,11 @@ public class CharacterContorl : MonoBehaviour
                 lglooNerfRate = 0.5f;
             }
 
-            ridbody.AddExplosionForce((otherCollision.forceArgument + m2) * continueReceivedForceRate + 200 * lglooNerfRate, collision.contacts[0].point, 4);
-            collision.collider.gameObject.GetComponent<Rigidbody>().AddExplosionForce((forceArgument + m1) * otherCollision.continueReceivedForceRate + 50, collision.contacts[0].point, 4);
+            //ridbody.AddExplosionForce((otherCollision.forceArgument + m2) * continueReceivedForceRate + 200 * lglooNerfRate, collision.contacts[0].point, 4);
+            //collision.collider.gameObject.GetComponent<Rigidbody>().AddExplosionForce((forceArgument + m1) * otherCollision.continueReceivedForceRate + 50, collision.contacts[0].point, 4);
 
-            receivedForceSum += (forceArgument) * m * 0.2f;
+            ridbody.AddExplosionForce(m2 * 0.5f, collision.contacts[0].point, 4, 0.5f, ForceMode.VelocityChange);
+            collision.collider.gameObject.GetComponent<Rigidbody>().AddExplosionForce(m1 * 0.5f, collision.contacts[0].point, 4);
         }
     }
 
@@ -887,25 +873,21 @@ public class CharacterContorl : MonoBehaviour
             var m1 = (Mathf.Cos(degree1) * vel1).magnitude;
             var m2 = (Mathf.Cos(degree2) * vel2).magnitude;
 
-            vulnerbility += Convert.ToInt32(receivedForceRate * m2 * 2);
-
-            if (Convert.ToInt32(receivedForceRate * m2 * 2) != 0)
-            {
-                DOTween.Kill(vulnerbilityText.transform);
-                vulnerbilityText.transform.localScale = new Vector3(1,1,1);
-                vulnerbilityText.transform.DOShakeScale(0.6f, vibrato:7,strength:0.6f ).SetEase(Ease.OutQuad);
-            }
-
             var lglooNerfRate = 1f;
             if (hasLglooStun())
             {
                 lglooNerfRate = 0.5f;
             }
-            ridbody.AddExplosionForce((otherCollision.forceArgument + m2) + 200 * lglooNerfRate, collision.contacts[0].point, 4);
-            collision.collider.gameObject.GetComponent<Rigidbody>().AddExplosionForce((forceArgument + m1) + 50, collision.contacts[0].point, 4);
+            //ridbody.AddExplosionForce((otherCollision.forceArgument + m2) + 200 * lglooNerfRate, collision.contacts[0].point, 4);
+            //collision.collider.gameObject.GetComponent<Rigidbody>().AddExplosionForce((forceArgument + m1) + 50, collision.contacts[0].point, 4);
+
+            ridbody.AddExplosionForce(m2, collision.contacts[0].point, 4, 0.5f, ForceMode.VelocityChange);
+            collision.collider.gameObject.GetComponent<Rigidbody>().AddExplosionForce(m1, collision.contacts[0].point, 4);
+
+            Debug.LogError($"结算m1 : {m1} m2 : {m2}");
 
             //如果对方在施法过程里打断施法
-            if(otherCollision.skill && otherCollision.isUseSkill)
+            if (otherCollision.skill && otherCollision.isUseSkill)
             {
                 otherCollision.skill.ExitUseMode();
             }
