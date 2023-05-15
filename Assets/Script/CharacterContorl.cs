@@ -182,6 +182,10 @@ public class CharacterContorl : MonoBehaviour
     public GrounderQuadruped grounderQuadruped;
 
     public bool isInWater = false;
+    [Header("撞击速度攻击曲线")]
+    public AnimationCurve attackForceFeedback;
+    [Header("受击速度攻击曲线")]
+    public AnimationCurve hitForceFeedback;
 
     private void Awake()
     {
@@ -822,7 +826,7 @@ public class CharacterContorl : MonoBehaviour
             Vector3 contactToOther = cPoint - otherCollision.positionBeforeCollision;
 
             var d1 = Vector3.Angle(vel1, contactToMe);
-            var d2 = Vector3.Angle(vel1, contactToOther);
+            var d2 = Vector3.Angle(vel2, contactToOther);
 
             var degree1 = d1 * Mathf.Deg2Rad;
             var degree2 = d2 * Mathf.Deg2Rad;
@@ -840,11 +844,16 @@ public class CharacterContorl : MonoBehaviour
                 lglooNerfRate = 0.5f;
             }
 
+            //var attackForce = attackForceFeedback.Evaluate(m2);
+            //var hitForce = hitForceFeedback.Evaluate(m1);
+            //ridbody.AddExplosionForce((attackForce * bodyCollider.material.staticFriction * ridbody.mass + hitForce * bodyCollider.material.staticFriction * ridbody.mass) * 0.1f, collision.contacts[0].point, 2, 0f, ForceMode.Force);
+
+            //Debug.LogError($"结算m1 : {m1} m2 : {m2} attackForce {attackForce} hitForce {hitForce}");
             //ridbody.AddExplosionForce((otherCollision.forceArgument + m2) * continueReceivedForceRate + 200 * lglooNerfRate, collision.contacts[0].point, 4);
             //collision.collider.gameObject.GetComponent<Rigidbody>().AddExplosionForce((forceArgument + m1) * otherCollision.continueReceivedForceRate + 50, collision.contacts[0].point, 4);
 
-            ridbody.AddExplosionForce(m2 * 0.5f, collision.contacts[0].point, 4, 0.5f, ForceMode.VelocityChange);
-            collision.collider.gameObject.GetComponent<Rigidbody>().AddExplosionForce(m1 * 0.5f, collision.contacts[0].point, 4);
+            //ridbody.AddExplosionForce((m1 + m2) * 300f, collision.contacts[0].point, 2, 0f, ForceMode.Force);
+            //collision.collider.gameObject.GetComponent<Rigidbody>().AddExplosionForce((m1 + m2 * 0.25f) * 0.1f, collision.contacts[0].point, 2, 0f, ForceMode.VelocityChange);
         }
     }
 
@@ -901,7 +910,7 @@ public class CharacterContorl : MonoBehaviour
             Vector3 contactToOther = cPoint - otherCollision.positionBeforeCollision;
 
             var d1 = Vector3.Angle(vel1, contactToMe);
-            var d2 = Vector3.Angle(vel1, contactToOther);
+            var d2 = Vector3.Angle(vel2, contactToOther);
 
             var degree1 = d1 * Mathf.Deg2Rad;
             var degree2 = d2 * Mathf.Deg2Rad;
@@ -918,11 +927,11 @@ public class CharacterContorl : MonoBehaviour
             }
             //ridbody.AddExplosionForce((otherCollision.forceArgument + m2) + 200 * lglooNerfRate, collision.contacts[0].point, 4);
             //collision.collider.gameObject.GetComponent<Rigidbody>().AddExplosionForce((forceArgument + m1) + 50, collision.contacts[0].point, 4);
+            var attackForce = attackForceFeedback.Evaluate(m2);
+            var hitForce = hitForceFeedback.Evaluate(m1);
+            ridbody.AddExplosionForce((attackForce * bodyCollider.material.staticFriction * ridbody.mass + hitForce * bodyCollider.material.staticFriction * ridbody.mass), collision.contacts[0].point, 2, 0f, ForceMode.Force);
 
-            ridbody.AddExplosionForce(m2, collision.contacts[0].point, 4, 0.5f, ForceMode.VelocityChange);
-            collision.collider.gameObject.GetComponent<Rigidbody>().AddExplosionForce(m1, collision.contacts[0].point, 4);
-
-            Debug.LogError($"结算m1 : {m1} m2 : {m2}");
+            Debug.LogError($"结算 {otherCollision.gameObject.name} 对 {this.gameObject.name} -> m1 : {m1} m2 : {m2} 别人的attackForce {attackForce} 我的hitForce {hitForce}");
 
             //如果对方在施法过程里打断施法
             if (otherCollision.skill && otherCollision.isUseSkill)
