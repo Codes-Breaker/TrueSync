@@ -25663,7 +25663,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &7456146114163275588
 RectTransform:
   m_ObjectHideFlags: 0
@@ -26743,12 +26743,12 @@ MonoBehaviour:
   movementRotationRate: 0.08
   movementMaxVelocity: 3
   jumpForce: 40
-  runMaxVelocity: 8
+  runMaxVelocity: 7
   runSpeedUpTime: 2
-  runSpeedUpRotationRate: 0.06
-  runMaxSpeedRotationRate: 0.03
+  runSpeedUpRotationRate: 0.02
+  runMaxSpeedRotationRate: 0.01
   chargeTime: 5
-  releaseTime: 5
+  releaseTime: 10
   decelerationForceArgument: 8
   decelerationTorqueArgument: 5
   releaseSpeedAtFirstArgument: 0.5
@@ -26758,9 +26758,12 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 80
   slopeCheckerThrashold: 0.51
+  slopeCheckerForwardOffset: 0.41
+  miniClimbableSlopeAngle: 5
   maxClimbableSlopeAngle: 40
   cureTime: 20
   sensitivity: 1
+  isGrounded: 0
   targetAngle: 0
   currentHPValue: 0
   currentGas: 0
@@ -26851,6 +26854,49 @@ MonoBehaviour:
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  isAtMaxSpeed: 0
+  runAnimCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 4.243967
+      value: 0.95696986
+      inSlope: 0.005040422
+      outSlope: 0.005040422
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 7.4265127
+      value: 0.95927036
+      inSlope: 0.0023445352
+      outSlope: 0.0023445352
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 9.806577
+      value: 1.025523
+      inSlope: 0.07937317
+      outSlope: 0.07937317
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.61024916
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
@@ -27413,12 +27459,12 @@ GameObject:
   - component: {fileID: 7166226360883997328}
   - component: {fileID: 8600943875096254091}
   m_Layer: 10
-  m_Name: Vulnerbility
+  m_Name: Speed
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1313141505721787478
 RectTransform:
   m_ObjectHideFlags: 0
