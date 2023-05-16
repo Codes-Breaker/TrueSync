@@ -26743,7 +26743,7 @@ MonoBehaviour:
   movementRotationRate: 0.08
   movementMaxVelocity: 3
   jumpForce: 40
-  runMaxVelocity: 7
+  runMaxVelocity: 6
   runSpeedUpTime: 3
   runSpeedUpRotationRate: 0.06
   runMaxSpeedRotationRate: 0.03
@@ -26758,6 +26758,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 80
   slopeCheckerThrashold: 0.51
+  slopeCheckerForwardOffset: 0.41
+  miniClimbableSlopeAngle: 5
   maxClimbableSlopeAngle: 40
   cureTime: 20
   sensitivity: 1
