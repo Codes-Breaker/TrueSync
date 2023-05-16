@@ -454,16 +454,20 @@ public class CharacterContorl : MonoBehaviour
             {
                 var acceleration = runMaxVelocity / runSpeedUpTime;
                 var forceMagnitude = ridbody.mass * acceleration;
-                if (bodyCollider.material)
+                if (bodyCollider.material && (isGrounded||isTouchingSlope))
                 {
-                    var frictionForceMagnitude = ridbody.mass * bodyCollider.material.dynamicFriction * Physics.gravity.magnitude;
-                    forceMagnitude = forceMagnitude + frictionForceMagnitude;
+                    if(isTouchingSlope||isGrounded)
+                    {
+                        var frictionForceMagnitude = ridbody.mass * bodyCollider.material.dynamicFriction * Physics.gravity.magnitude;
+                        forceMagnitude = forceMagnitude + frictionForceMagnitude;
+                    }
                 }
                 var moveTarget = ridbody.transform.forward;
                 moveTarget = moveTarget.normalized;
                 moveTarget = Vector3.ProjectOnPlane(moveTarget, groundNormal).normalized;
                 ridbody.AddForce(moveTarget * forceMagnitude, ForceMode.Force);
-                if(axisInput.magnitude > movementThrashold)
+
+                if (axisInput.magnitude > movementThrashold)
                 {
                     targetAngle = Mathf.Atan2(axisInput.x, axisInput.y) * Mathf.Rad2Deg + Camera.main.transform.eulerAngles.y;
                     transform.rotation = Quaternion.Slerp(this.ridbody.rotation, Quaternion.Euler(new Vector3(0, targetAngle, 0) + initialRotation), runSpeedUpRotationRate);
@@ -698,18 +702,16 @@ public class CharacterContorl : MonoBehaviour
     #region SetUI
     private void SetSlider()
     {
-
-
-            gpSlider.value = (float)(currentGas / maxActorGas);
-            hpSlider.value = (float)(maxDrowning / maxDrownValue);
-            canvas.transform.forward = Camera.main.transform.forward;
-            gpSlider.transform.position = bodyCollider.transform.position;
-            hpSlider.transform.position = bodyCollider.transform.position;
-            gpSlider.transform.localPosition = gpSlider.transform.localPosition + new Vector3(0, 1.3f + (bodyCollider.transform.localScale.x - 1) * 1.2f, 0);
-            hpSlider.transform.localPosition = hpSlider.transform.localPosition + new Vector3(0, 1.5f + (bodyCollider.transform.localScale.x - 1) * 1.2f, 0);
-            drownImage.transform.position = bodyCollider.transform.position;
-            drownImage.transform.localPosition = drownImage.transform.localPosition + new Vector3(-1, 1.5f + (bodyCollider.transform.localScale.x - 1) * 1.2f, 0);
-            drownImage.fillAmount = (maxDrowning - currentDrown) / maxDrowning;
+        gpSlider.value = (float)(currentGas / maxActorGas);
+        hpSlider.value = (float)(maxDrowning / maxDrownValue);
+        canvas.transform.forward = Camera.main.transform.forward;
+        gpSlider.transform.position = bodyCollider.transform.position;
+        hpSlider.transform.position = bodyCollider.transform.position;
+        gpSlider.transform.localPosition = gpSlider.transform.localPosition + new Vector3(0, 1.7f + (bodyCollider.transform.localScale.x - 1) * 1.2f, 0);
+        hpSlider.transform.localPosition = hpSlider.transform.localPosition + new Vector3(0, 1.9f + (bodyCollider.transform.localScale.x - 1) * 1.2f, 0);
+        drownImage.transform.position = bodyCollider.transform.position;
+        drownImage.transform.localPosition = drownImage.transform.localPosition + new Vector3(-1, 1.5f + (bodyCollider.transform.localScale.x - 1) * 1.2f, 0);
+        drownImage.fillAmount = (maxDrowning - currentDrown) / maxDrowning;
         
 
     }
