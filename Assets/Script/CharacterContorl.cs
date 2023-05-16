@@ -458,18 +458,22 @@ public class CharacterContorl : MonoBehaviour
             {
                 var acceleration = runMaxVelocity / runSpeedUpTime;
                 var forceMagnitude = ridbody.mass * acceleration;
-                if (bodyCollider.material && (isGrounded||isTouchingSlope))
-                {
+                var gravityDivide = Vector3.zero; 
+                //if (bodyCollider.material && (isGrounded||isTouchingSlope))
+                //{
                     if(isTouchingSlope||isGrounded)
                     {
-                        var frictionForceMagnitude = ridbody.mass * bodyCollider.material.dynamicFriction * Physics.gravity.magnitude;
+                        gravityDivide = Vector3.ProjectOnPlane(Physics.gravity, groundNormal) * ridbody.mass;
+                        var gravityFrictionDivide = Physics.gravity - gravityDivide;
+                        var frictionForceMagnitude = ridbody.mass * bodyCollider.material.dynamicFriction * gravityFrictionDivide.magnitude;
                         forceMagnitude = forceMagnitude + frictionForceMagnitude;
                     }
-                }
+                
+                //补偿重力分量
                 var moveTarget = ridbody.transform.forward;
                 moveTarget = moveTarget.normalized;
                 moveTarget = Vector3.ProjectOnPlane(moveTarget, groundNormal).normalized;
-                ridbody.AddForce(moveTarget * forceMagnitude, ForceMode.Force);
+                ridbody.AddForce(moveTarget * forceMagnitude - gravityDivide, ForceMode.Force);
 
                 if (axisInput.magnitude > movementThrashold)
                 {
@@ -495,15 +499,22 @@ public class CharacterContorl : MonoBehaviour
                 targetAngle = Mathf.Atan2(axisInput.x, axisInput.y) * Mathf.Rad2Deg + Camera.main.transform.eulerAngles.y;
                 var acceleration = movementMaxVelocity / movementSpeedUpTime;
                 var forceMagnitude = ridbody.mass * acceleration;
-                if(bodyCollider.material)
-                {
-                    var frictionForceMagnitude = ridbody.mass * bodyCollider.material.dynamicFriction * Physics.gravity.magnitude;
-                    forceMagnitude = forceMagnitude + frictionForceMagnitude;
-                }
+
+                var gravityDivide = Vector3.zero;
+                //if (bodyCollider.material && (isGrounded || isTouchingSlope))
+                //{
+                    if (isTouchingSlope || isGrounded)
+                    {
+                        gravityDivide = Vector3.ProjectOnPlane(Physics.gravity, groundNormal) * ridbody.mass;
+                        var gravityFrictionDivide = Physics.gravity - gravityDivide;
+                        var frictionForceMagnitude = ridbody.mass * bodyCollider.material.dynamicFriction * gravityFrictionDivide.magnitude;
+                        forceMagnitude = forceMagnitude + frictionForceMagnitude;
+                    }
+                
                 var moveTarget = ridbody.transform.forward;
                 moveTarget = moveTarget.normalized;
                 moveTarget = Vector3.ProjectOnPlane(moveTarget, groundNormal).normalized;
-                ridbody.AddForce(moveTarget * forceMagnitude, ForceMode.Force);
+                ridbody.AddForce(moveTarget * forceMagnitude - gravityDivide, ForceMode.Force);
                 transform.rotation = Quaternion.Slerp(this.ridbody.rotation, Quaternion.Euler(new Vector3(0, targetAngle, 0) + initialRotation), movementRotationRate);
             }
             else
