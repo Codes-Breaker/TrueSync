@@ -25663,7 +25663,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &7456146114163275588
 RectTransform:
   m_ObjectHideFlags: 0
@@ -26801,63 +26801,6 @@ MonoBehaviour:
   floatObj: {fileID: 4147182195015774368}
   grounderQuadruped: {fileID: 6218862706769915548}
   isInWater: 0
-  attackForceFeedback:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: -0.14496613
-      value: 16.400291
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1.630177
-      value: 18.057224
-      inSlope: 5.0081906
-      outSlope: 5.0081906
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 14.016585
-      value: 500.32727
-      inSlope: 2
-      outSlope: 2
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  hitForceFeedback:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 15.633209
-      inSlope: 2
-      outSlope: 2
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 13.762054
-      value: 251.38489
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
   isAtMaxSpeed: 0
   runAnimCurve:
     serializedVersion: 2
@@ -26897,6 +26840,30 @@ MonoBehaviour:
       tangentMode: 0
       weightedMode: 0
       inWeight: 0.16016228
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  hitKnockbackCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 8.067995
+      value: 3.902904
+      inSlope: 1.3954726
+      outSlope: 1.3954726
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.07570872
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
@@ -27464,7 +27431,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1313141505721787478
 RectTransform:
   m_ObjectHideFlags: 0

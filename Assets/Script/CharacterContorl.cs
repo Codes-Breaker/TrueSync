@@ -186,14 +186,15 @@ public class CharacterContorl : MonoBehaviour
     public GrounderQuadruped grounderQuadruped;
 
     public bool isInWater = false;
-    [Header("撞击速度攻击曲线")]
-    public AnimationCurve attackForceFeedback;
-    [Header("受击速度攻击曲线")]
-    public AnimationCurve hitForceFeedback;
+
     [Header("是否达到最大速度")]
     public bool isAtMaxSpeed = false;
     [Header("动画速度曲线")]
     public AnimationCurve runAnimCurve;
+
+    [Header("速度击退曲线")]
+    public AnimationCurve hitKnockbackCurve;
+    
 
     private void Awake()
     {
@@ -245,7 +246,7 @@ public class CharacterContorl : MonoBehaviour
             //SetGravity();
         }
 
-        Debug.LogError($"{this.gameObject.name} ===== {(knockingPosition - this.transform.position).magnitude} {isGrounded} knock distance ==============================<<<<");
+        //Debug.LogError($"{this.gameObject.name} ===== {(knockingPosition - this.transform.position).magnitude} {isGrounded} knock distance ==============================<<<<");
     }
 
     private void CheckSpeed()
@@ -537,7 +538,7 @@ public class CharacterContorl : MonoBehaviour
                 moveTarget = moveTarget.normalized;
                 moveTarget = Vector3.ProjectOnPlane(moveTarget, groundNormal).normalized;
                 ridbody.AddForce(moveTarget * forceMagnitude - gravityDivide, ForceMode.Force);
-                Debug.Log($"{groundNormal} FORCE: {moveTarget * forceMagnitude - gravityDivide} Force Mag{(moveTarget * forceMagnitude - gravityDivide).magnitude}。。。{isTouchingSlope}...{isGrounded}..{moveTarget * forceMagnitude - gravityDivide}");
+                //Debug.Log($"{groundNormal} FORCE: {moveTarget * forceMagnitude - gravityDivide} Force Mag{(moveTarget * forceMagnitude - gravityDivide).magnitude}。。。{isTouchingSlope}...{isGrounded}..{moveTarget * forceMagnitude - gravityDivide}");
                 transform.rotation = Quaternion.Slerp(this.ridbody.rotation, Quaternion.Euler(new Vector3(0, targetAngle, 0) + initialRotation), movementRotationRate);
             }
             else
@@ -874,6 +875,11 @@ public class CharacterContorl : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 结算击退距离
+    /// </summary>
+    /// <param name="distance"></param>
+    /// <returns></returns>
     private float KnockBackForce(float distance)
     {
         var gravityDivide = Vector3.ProjectOnPlane(Physics.gravity, groundNormal) * ridbody.mass;
@@ -960,12 +966,10 @@ public class CharacterContorl : MonoBehaviour
             }
             //ridbody.AddExplosionForce((otherCollision.forceArgument + m2) + 200 * lglooNerfRate, collision.contacts[0].point, 4);
             //collision.collider.gameObject.GetComponent<Rigidbody>().AddExplosionForce((forceArgument + m1) + 50, collision.contacts[0].point, 4);
-            var attackForce = attackForceFeedback.Evaluate(m2);
             //出招加成
             var hasBuff = (otherCollision.isAtMaxSpeed && !otherCollision.isGrounded) ? 1.1f : 1;
-            var hitForce = hitForceFeedback.Evaluate(m1);
             var friction = bodyCollider.material.dynamicFriction * ridbody.mass;
-            var targetForce = (attackForce + hitForce + friction) * hasBuff;
+
             //if (isGrounded || isTouchingSlope)
             //{
             //    ridbody.AddExplosionForce(targetForce, collision.contacts[0].point, 2, 0f, ForceMode.Force);
@@ -977,11 +981,11 @@ public class CharacterContorl : MonoBehaviour
 
             var hitDir = Vector3.ProjectOnPlane((ridbody.position - collision.contacts[0].point), Vector3.up).normalized;
 
-            var force = KnockBackForce(2);
+            var force = KnockBackForce(hitKnockbackCurve.Evaluate(m2 * hasBuff));
           
             ridbody.AddForce(force * hitDir, ForceMode.Force);
 
-            Debug.LogError($"结算 {otherCollision.gameObject.name} force {force} hit Dir {hitDir}");
+            //Debug.LogError($"结算 {otherCollision.gameObject.name} force {force} hit Dir {hitDir}");
             knockingPosition = this.transform.position;
             var buff = new HitBuff(this);
             this.buffs.Add(buff);
