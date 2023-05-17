@@ -193,7 +193,8 @@ public class CharacterContorl : MonoBehaviour
     public bool isAtMaxSpeed = false;
     [Header("动画速度曲线")]
     public AnimationCurve runAnimCurve;
-
+    [Header("动画速度播放曲线")]
+    public AnimationCurve runAnimPlayCurve;
     [Header("速度击退曲线")]
     public AnimationCurve hitKnockbackCurve;
     [Header("击退范围上限")]
@@ -346,6 +347,7 @@ public class CharacterContorl : MonoBehaviour
     {
         var speed = new Vector3(ridbody.velocity.x, 0, ridbody.velocity.z).magnitude;
         anima.SetFloat("Speed", runAnimCurve.Evaluate(speed));
+        anima.SetFloat("playSpeed", runAnimPlayCurve.Evaluate(speed));
         anima.SetFloat("velocityY", ridbody.velocity.y);
         anima.SetBool("Releasing", releasing);
     }
@@ -857,7 +859,10 @@ public class CharacterContorl : MonoBehaviour
             {
                 lglooNerfRate = 0.5f;
             }
-
+            var force = KnockBackForce(1);
+            var hitDir = Vector3.ProjectOnPlane((ridbody.position - collision.contacts[0].point), Vector3.up).normalized;
+            if (otherCollision.releasing)
+                ridbody.AddForce((force) * hitDir, ForceMode.Force);
             //var attackForce = attackForceFeedback.Evaluate(m2);
             //var hitForce = hitForceFeedback.Evaluate(m1);
             //ridbody.AddExplosionForce((attackForce * bodyCollider.material.staticFriction * ridbody.mass + hitForce * bodyCollider.material.staticFriction * ridbody.mass) * 0.1f, collision.contacts[0].point, 2, 0f, ForceMode.Force);
