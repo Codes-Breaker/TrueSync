@@ -203,6 +203,9 @@ public class CharacterContorl : MonoBehaviour
     public float fallingGravityScale = 1;
     public float ascendingGravityScale = 1;
 
+    //刹车时的朝向
+    private Vector3 initialBrakeTarget = Vector3.zero;
+
 
     private void Awake()
     {
@@ -344,6 +347,7 @@ public class CharacterContorl : MonoBehaviour
         var speed = new Vector3(ridbody.velocity.x, 0, ridbody.velocity.z).magnitude;
         anima.SetFloat("Speed", runAnimCurve.Evaluate(speed));
         anima.SetFloat("velocityY", ridbody.velocity.y);
+        anima.SetBool("Releasing", releasing);
     }
 
     private void SetCollider(bool set)
@@ -553,7 +557,10 @@ public class CharacterContorl : MonoBehaviour
             {
                 anima.SetBool("isBrake", true);
                 hasBrake = true;
+                initialBrakeTarget = ridbody.transform.forward;
             }
+            anima.SetFloat("TargetAngle", Vector3.SignedAngle(initialBrakeTarget, transform.forward, Vector3.up));
+            anima.SetFloat("AbsTargetAngle", Math.Abs(Vector3.Angle(initialBrakeTarget, transform.forward)));
         }
         else
         {
