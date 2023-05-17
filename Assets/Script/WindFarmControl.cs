@@ -124,7 +124,7 @@ public class WindFarmControl : MonoBehaviour, IRandomEventsObject
 
                     var degree1 = d1 * Mathf.Deg2Rad;
                     var m1 = (Mathf.Cos(degree1) * vel1).magnitude;
-                    if (m1 <= character.maxReleaseVelocity)
+                    if (m1 <= character.runMaxVelocity)
                         rigid.AddForce(forward * forceArgument);
                 }
 
