@@ -26751,9 +26751,6 @@ MonoBehaviour:
   releaseTime: 5
   decelerationForceArgument: 8
   decelerationTorqueArgument: 5
-  releaseSpeedAtFirstArgument: 0.5
-  releaseSpeedLinearArgument: 1
-  minLinearReleaseSpeedArgument: 2
   groundMask:
     serializedVersion: 2
     m_Bits: 80
@@ -26761,6 +26758,12 @@ MonoBehaviour:
   slopeCheckerForwardOffset: 0.51
   miniClimbableSlopeAngle: -45
   maxClimbableSlopeAngle: 40
+  forceToHuntCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   cureTime: 20
   sensitivity: 1
   isGrounded: 0
@@ -26777,12 +26780,12 @@ MonoBehaviour:
   maxSpeedUpGas: 5
   velocityBeforeCollision: {x: 0, y: 0, z: 0}
   positionBeforeCollision: {x: 0, y: 0, z: 0}
-  maxReleaseVelocity: 7
   maxDrowning: 500
   currentDrown: 0
   continueReceivedForceRate: 1
   invulernableTime: 0
   invulernable: 0
+  isTouchingSlope: 0
   vulerbilityReactRate: 1
   isDead: 0
   stunTime: 0
@@ -26878,6 +26881,9 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   hitMaxDistance: 5
+  gravityScale: 1
+  fallingGravityScale: 1
+  ascendingGravityScale: 1
 --- !u!114 &4147182195015774368
 MonoBehaviour:
   m_ObjectHideFlags: 0
