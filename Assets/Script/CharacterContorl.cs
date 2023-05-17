@@ -571,7 +571,7 @@ public class CharacterContorl : MonoBehaviour
                 currentGas = 0;
         }
 
-        if (!jump && (isGrounded || isTouchingSlope || isInWater) && hasJump)
+        if (!jump && (isGrounded || isTouchingSlope || isInWater) && hasJump && ridbody.velocity.y <=0)
             hasJump = false;
 
     }
@@ -670,7 +670,7 @@ public class CharacterContorl : MonoBehaviour
     {
         RaycastHit slopeHit;
         isTouchingSlope = false;
-        if (Physics.SphereCast(bodyCollider.transform.position + (bodyCollider as SphereCollider).center + transform.forward.normalized * slopeCheckerForwardOffset, slopeCheckerThrashold, Vector3.down, out slopeHit, (bodyCollider as SphereCollider).radius + 0.2f, groundMask))
+        if (Physics.SphereCast(bodyCollider.transform.position + (bodyCollider as SphereCollider).center + transform.forward.normalized * slopeCheckerForwardOffset, slopeCheckerThrashold, Vector3.down, out slopeHit, (bodyCollider as SphereCollider).radius + 0.01f, groundMask))
         {
             groundNormal = slopeHit.normal;
 
@@ -942,7 +942,6 @@ public class CharacterContorl : MonoBehaviour
             //collision.collider.gameObject.GetComponent<Rigidbody>().AddExplosionForce((forceArgument + m1) + 50, collision.contacts[0].point, 4);
             //³öÕÐ¼Ó³É
             var hasBuff = (otherCollision.isAtMaxSpeed && !otherCollision.isGrounded) ? 1.1f : 1;
-            var friction = bodyCollider.material.dynamicFriction * ridbody.mass;
 
             //if (isGrounded || isTouchingSlope)
             //{
