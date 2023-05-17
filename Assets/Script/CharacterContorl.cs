@@ -47,12 +47,8 @@ public class CharacterContorl : MonoBehaviour
     [Header("减速扭矩力系数系数")]
     public float decelerationTorqueArgument;
 
-    [Header("放气起始力系数")]
-    public float releaseSpeedAtFirstArgument;
-    [Header("放气后续加速力系数")]
-    public float releaseSpeedLinearArgument;
-    [Header("放气最小加速度系数")]
-    public float minLinearReleaseSpeedArgument;
+    [Space(10)]
+    [Header("斜面相关设置")]
     [Header("地面的Layers")]
     [SerializeField] public LayerMask groundMask;
     [Header("斜坡距离底部的检测距离")]
@@ -63,8 +59,17 @@ public class CharacterContorl : MonoBehaviour
     public float miniClimbableSlopeAngle = 5;
     [Header("最大斜坡角度")]
     public float maxClimbableSlopeAngle = 40f;
-
+    
+    [Space(10)]
+    [Header("眩晕槽相关设置")]
+    [Header("眩晕槽最大值")]
+    private float maxHPValue = 100;
+    [Header("撞击力映射打击数值的曲线")]
+    public AnimationCurve forceToHuntCurve;
+    [Header("打击恢复时间")]
     public float cureTime;
+
+   
     private bool hasJump = false;
     private bool hasBrake = false;
 
@@ -84,7 +89,6 @@ public class CharacterContorl : MonoBehaviour
     private bool isGrounded;
     [HideInInspector]
     public float targetAngle;
-    private float maxHPValue = 100;
     [HideInInspector]
     public float currentHPValue;
     private float lastHPValue;
@@ -117,8 +121,6 @@ public class CharacterContorl : MonoBehaviour
     public Vector3 velocityBeforeCollision = Vector3.zero;
     [HideInInspector]
     public Vector3 positionBeforeCollision = Vector3.zero;
-    [Header("最大放气速度")]
-    public float maxReleaseVelocity;
 
     public float maxDrowning = 1000;
     private float maxDrownValue = 1000;
@@ -127,7 +129,7 @@ public class CharacterContorl : MonoBehaviour
     private const int minDrown = 50;
 
     [Range(0, 1)]
-    public float continueReceivedForceRate = 0.2f; 
+    public float continueReceivedForceRate = 0.2f;
 
     public float invulernableTime = 0;
     public bool invulernable = false;
@@ -233,7 +235,6 @@ public class CharacterContorl : MonoBehaviour
         CheckSlopeAndDirections();
 
         CheckIsInWater();
-        SetState();
         if (!isGrounded)
         {
             //SetGravity();
@@ -363,18 +364,8 @@ public class CharacterContorl : MonoBehaviour
         }
     }
 
-   //平衡斜面上摩擦力
-    private void BalanceGravity()
+    public void GetHurt()
     {
-        float gravitationalForce = Mathf.Abs(Physics.gravity.y) * ridbody.mass;
-        Vector3 verticalGravity = Vector3.Project(-Physics.gravity, groundNormal);
-        Vector3 horizontalGravity = -Physics.gravity - verticalGravity;
-        //0.5f时斜面摩擦力系数
-        Vector3 frictionForce = -horizontalGravity.normalized * gravitationalForce * 0.5f;
-        Vector3 totalForce = verticalGravity + horizontalGravity + frictionForce;
-
-
-        ridbody.AddForce(-totalForce, ForceMode.Force);
 
     }
 
@@ -407,13 +398,6 @@ public class CharacterContorl : MonoBehaviour
 
 
     #region Move
-
-    private void SetState()
-    {
-        var gasScale = (currentGas / (maxActorGas * 1.0f));
-        //skinnedMeshRenderer.SetBlendShapeWeight(0, gasScale * 100f);
-        //(bodyCollider as SphereCollider).radius = Mathf.Lerp(originalRadius, targetRadius, gasScale);
-    }
 
     private bool hasLglooStun()
     {
@@ -474,6 +458,7 @@ public class CharacterContorl : MonoBehaviour
                 moveTarget = moveTarget.normalized;
                 moveTarget = Vector3.ProjectOnPlane(moveTarget, groundNormal).normalized;
                 ridbody.AddForce(moveTarget * forceMagnitude - gravityDivide, ForceMode.Force);
+                
 
                 if (axisInput.magnitude > movementThrashold)
                 {
@@ -515,6 +500,7 @@ public class CharacterContorl : MonoBehaviour
                 moveTarget = moveTarget.normalized;
                 moveTarget = Vector3.ProjectOnPlane(moveTarget, groundNormal).normalized;
                 ridbody.AddForce(moveTarget * forceMagnitude - gravityDivide, ForceMode.Force);
+                Debug.Log(forceMagnitude);
                 transform.rotation = Quaternion.Slerp(this.ridbody.rotation, Quaternion.Euler(new Vector3(0, targetAngle, 0) + initialRotation), movementRotationRate);
             }
             else
