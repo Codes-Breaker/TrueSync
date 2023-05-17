@@ -133,7 +133,7 @@ public class CharacterContorl : MonoBehaviour
     public float invulernableTime = 0;
     public bool invulernable = false;
     private Vector3 groundNormal;
-    private bool isTouchingSlope = false;
+    public bool isTouchingSlope = false;
 
     [Range(0, 1)]
     //易伤系数
@@ -194,6 +194,8 @@ public class CharacterContorl : MonoBehaviour
 
     [Header("速度击退曲线")]
     public AnimationCurve hitKnockbackCurve;
+    [Header("击退范围上限")]
+    public float hitMaxDistance = 5;
     
 
     private void Awake()
@@ -338,6 +340,7 @@ public class CharacterContorl : MonoBehaviour
     {
         var speed = new Vector3(ridbody.velocity.x, 0, ridbody.velocity.z).magnitude;
         anima.SetFloat("Speed", runAnimCurve.Evaluate(speed));
+        anima.SetFloat("velocityY", ridbody.velocity.y);
     }
 
     private void SetCollider(bool set)
@@ -578,7 +581,8 @@ public class CharacterContorl : MonoBehaviour
     {
         if (buffs.Any(x => x is HitBuff))
             return;
-        if (isGrounded || isTouchingSlope)
+        //if (isGrounded || isTouchingSlope) //touching slope bug
+        if ((isGrounded || isTouchingSlope) && ridbody.velocity.y <= 0)
         {
             anima.SetBool("OnGround", true);
             anima.SetBool("Jump", false);
@@ -587,7 +591,7 @@ public class CharacterContorl : MonoBehaviour
         {
             ridbody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             hasJump = true;
-            anima.SetBool("OnGround", !isGrounded && !isTouchingSlope);
+            anima.SetBool("OnGround", false);
             anima.SetBool("Jump", true);
             if (isAtMaxSpeed)
                 currentGas = 0;
@@ -969,7 +973,7 @@ public class CharacterContorl : MonoBehaviour
             //出招加成
             var hasBuff = (otherCollision.isAtMaxSpeed && !otherCollision.isGrounded) ? 1.1f : 1;
             var friction = bodyCollider.material.dynamicFriction * ridbody.mass;
-
+            var myBuff = isAtMaxSpeed && !otherCollision.isGrounded ? 1.1f : 1;
             //if (isGrounded || isTouchingSlope)
             //{
             //    ridbody.AddExplosionForce(targetForce, collision.contacts[0].point, 2, 0f, ForceMode.Force);
@@ -981,9 +985,10 @@ public class CharacterContorl : MonoBehaviour
 
             var hitDir = Vector3.ProjectOnPlane((ridbody.position - collision.contacts[0].point), Vector3.up).normalized;
 
-            var force = KnockBackForce(hitKnockbackCurve.Evaluate(m2 * hasBuff));
-          
-            ridbody.AddForce(force * hitDir, ForceMode.Force);
+            var force = KnockBackForce(Math.Min(hitMaxDistance, hitKnockbackCurve.Evaluate(m2 * hasBuff) + hitKnockbackCurve.Evaluate(m1 * myBuff + 2)));
+           
+
+            ridbody.AddForce((force)* hitDir, ForceMode.Force);
 
             //Debug.LogError($"结算 {otherCollision.gameObject.name} force {force} hit Dir {hitDir}");
             knockingPosition = this.transform.position;
