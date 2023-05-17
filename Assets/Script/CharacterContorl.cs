@@ -198,7 +198,11 @@ public class CharacterContorl : MonoBehaviour
     public AnimationCurve hitKnockbackCurve;
     [Header("击退范围上限")]
     public float hitMaxDistance = 5;
-    
+    [Header("重力")]
+    public float gravityScale = 1;
+    public float fallingGravityScale = 1;
+    public float ascendingGravityScale = 1;
+
 
     private void Awake()
     {
@@ -218,6 +222,7 @@ public class CharacterContorl : MonoBehaviour
 
     private void Start()
     {
+        this.ridbody.useGravity = false;
         SetControlSelf();
         SetRingColor();
     }
@@ -244,17 +249,14 @@ public class CharacterContorl : MonoBehaviour
         CheckSlopeAndDirections();
 
         CheckIsInWater();
-        if (!isGrounded)
-        {
-            //SetGravity();
-        }
+        SetGravity();
 
         //Debug.LogError($"{this.gameObject.name} ===== {(knockingPosition - this.transform.position).magnitude} {isGrounded} knock distance ==============================<<<<");
     }
 
     private void CheckSpeed()
     {
-        //Debug.LogError($"current speed: {velocityBeforeCollision.magnitude} ---> {(velocityBeforeCollision.magnitude / runMaxVelocity) * 100}%");
+        Debug.LogError($"current speed: {velocityBeforeCollision.magnitude} ---> {(velocityBeforeCollision.magnitude / runMaxVelocity) * 100}% {(DateTime.Now - releaseDateTime).TotalSeconds} seconds");
         if (velocityBeforeCollision.magnitude >= runMaxVelocity * 0.9f)
         {
             SetRingMaxColor();
@@ -417,7 +419,15 @@ public class CharacterContorl : MonoBehaviour
 
     private void SetGravity()
     {
-        ridbody.AddForce(Physics.gravity - Vector3.one, ForceMode.Acceleration);
+        if (ridbody.velocity.y >= 0)
+        {
+            gravityScale = ascendingGravityScale;
+        }
+        else if (ridbody.velocity.y < 0)
+        {
+            gravityScale = fallingGravityScale;
+        }
+        ridbody.AddForce(Physics.gravity * (gravityScale) * ridbody.mass);
     }
 
 
