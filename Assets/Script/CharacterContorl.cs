@@ -128,7 +128,7 @@ public class CharacterContorl : MonoBehaviour
     private const int minDrown = 50;
 
     [Range(0, 1)]
-    public float continueReceivedForceRate = 0.2f; 
+    public float continueReceivedForceRate = 0.2f;
 
     public float invulernableTime = 0;
     public bool invulernable = false;
@@ -207,7 +207,7 @@ public class CharacterContorl : MonoBehaviour
         initialRot = ridbody.transform.rotation;
         currentDrown = maxDrowning;
         gameController = GameObject.Find("GameManager").GetComponent<GameController>();
-       // SetFlashMeshRendererBlock(false);
+        // SetFlashMeshRendererBlock(false);
         maxDrownValue = maxDrowning;
     }
 
@@ -244,6 +244,8 @@ public class CharacterContorl : MonoBehaviour
         {
             //SetGravity();
         }
+
+        Debug.LogError($"{this.gameObject.name} ===== {(knockingPosition - this.transform.position).magnitude} {isGrounded} knock distance ==============================<<<<");
     }
 
     private void CheckSpeed()
@@ -291,7 +293,7 @@ public class CharacterContorl : MonoBehaviour
 
     private void UpdateBuff()
     {
-        foreach(var buff in buffs.ToArray())
+        foreach (var buff in buffs.ToArray())
         {
             if (!buff.isEnd)
                 buff.OnBuffUpdate();
@@ -312,7 +314,7 @@ public class CharacterContorl : MonoBehaviour
             {
                 invulernable = false;
                 SetCollider(true);
-               // SetFlashMeshRendererBlock(false);
+                // SetFlashMeshRendererBlock(false);
             }
         }
     }
@@ -384,7 +386,7 @@ public class CharacterContorl : MonoBehaviour
         }
     }
 
-   //平衡斜面上摩擦力
+    //平衡斜面上摩擦力
     private void BalanceGravity()
     {
         float gravitationalForce = Mathf.Abs(Physics.gravity.y) * ridbody.mass;
@@ -450,7 +452,7 @@ public class CharacterContorl : MonoBehaviour
 
     private bool isBuffStun()
     {
-        foreach(var buff in buffs)
+        foreach (var buff in buffs)
         {
             if (buff is StunBuff)
             {
@@ -460,12 +462,8 @@ public class CharacterContorl : MonoBehaviour
         return false;
     }
 
-    private void MoveWalk(Vector2 axisInput,ControlDeviceType controlDeviceType)
+    private void MoveWalk(Vector2 axisInput, ControlDeviceType controlDeviceType)
     {
-        if (buffs.Any(x => x is HitBuff))
-            return;
-
-        Debug.Log($"Speed: {ridbody.velocity} ==> Magnitude {ridbody.velocity.magnitude}");
         //单位化输入方向
         if (controlDeviceType == ControlDeviceType.Mouse)
         {
@@ -476,25 +474,31 @@ public class CharacterContorl : MonoBehaviour
         else
             axisInput = axisInput.normalized;
         //
-        if(releasing)
+        if (releasing)
         {
             isWalk = false;
-            if(ridbody.velocity.magnitude < runMaxVelocity)
+            if (ridbody.velocity.magnitude < runMaxVelocity * 0.96f)
             {
                 var acceleration = runMaxVelocity / runSpeedUpTime;
                 var forceMagnitude = ridbody.mass * acceleration;
-                var moveTarget = ridbody.transform.forward;
-                if (bodyCollider.material)
+                var gravityDivide = Vector3.zero;
+                //if (bodyCollider.material && (isGrounded||isTouchingSlope))
+                //{
+                if (isTouchingSlope || isGrounded)
                 {
-
-                   var frictionForceMagnitude = ridbody.mass * (bodyCollider.material.dynamicFriction) * Physics.gravity.magnitude;
-                   forceMagnitude = forceMagnitude + frictionForceMagnitude;
+                    gravityDivide = Vector3.ProjectOnPlane(Physics.gravity, groundNormal) * ridbody.mass;
+                    var gravityFrictionDivide = Physics.gravity - gravityDivide;
+                    var frictionForceMagnitude = ridbody.mass * bodyCollider.material.dynamicFriction * gravityFrictionDivide.magnitude;
+                    forceMagnitude = forceMagnitude + frictionForceMagnitude;
                 }
 
+                //补偿重力分量
+                var moveTarget = ridbody.transform.forward;
                 moveTarget = moveTarget.normalized;
                 moveTarget = Vector3.ProjectOnPlane(moveTarget, groundNormal).normalized;
-                ridbody.AddForce(forceMagnitude * moveTarget, ForceMode.Force);
-                if(axisInput.magnitude > movementThrashold)
+                ridbody.AddForce(moveTarget * forceMagnitude - gravityDivide, ForceMode.Force);
+
+                if (axisInput.magnitude > movementThrashold)
                 {
                     targetAngle = Mathf.Atan2(axisInput.x, axisInput.y) * Mathf.Rad2Deg + Camera.main.transform.eulerAngles.y;
                     transform.rotation = Quaternion.Slerp(this.ridbody.rotation, Quaternion.Euler(new Vector3(0, targetAngle, 0) + initialRotation), runSpeedUpRotationRate);
@@ -512,39 +516,48 @@ public class CharacterContorl : MonoBehaviour
         else
         {
 
-            if(ridbody.velocity.magnitude < movementMaxVelocity &&axisInput.magnitude > movementThrashold )
+            if (ridbody.velocity.magnitude < movementMaxVelocity && axisInput.magnitude > movementThrashold)
             {
                 isWalk = true;
                 targetAngle = Mathf.Atan2(axisInput.x, axisInput.y) * Mathf.Rad2Deg + Camera.main.transform.eulerAngles.y;
                 var acceleration = movementMaxVelocity / movementSpeedUpTime;
                 var forceMagnitude = ridbody.mass * acceleration;
-                if(bodyCollider.material)
+
+                var gravityDivide = Vector3.zero;
+                //if (bodyCollider.material && (isGrounded || isTouchingSlope))
+                //{
+                if (isTouchingSlope || isGrounded)
                 {
-                    var frictionForceMagnitude = ridbody.mass * bodyCollider.material.dynamicFriction * Physics.gravity.magnitude;
+                    gravityDivide = Vector3.ProjectOnPlane(Physics.gravity, groundNormal) * ridbody.mass;
+                    var gravityFrictionDivide = Physics.gravity - gravityDivide;
+                    var frictionForceMagnitude = ridbody.mass * bodyCollider.material.dynamicFriction * gravityFrictionDivide.magnitude;
                     forceMagnitude = forceMagnitude + frictionForceMagnitude;
                 }
                 var moveTarget = ridbody.transform.forward;
                 moveTarget = moveTarget.normalized;
                 moveTarget = Vector3.ProjectOnPlane(moveTarget, groundNormal).normalized;
-                ridbody.AddForce(moveTarget * forceMagnitude, ForceMode.Force);
+                ridbody.AddForce(moveTarget * forceMagnitude - gravityDivide, ForceMode.Force);
+                Debug.Log($"{groundNormal} FORCE: {moveTarget * forceMagnitude - gravityDivide} Force Mag{(moveTarget * forceMagnitude - gravityDivide).magnitude}。。。{isTouchingSlope}...{isGrounded}..{moveTarget * forceMagnitude - gravityDivide}");
                 transform.rotation = Quaternion.Slerp(this.ridbody.rotation, Quaternion.Euler(new Vector3(0, targetAngle, 0) + initialRotation), movementRotationRate);
             }
             else
             {
                 isWalk = false;
             }
+
+
         }
 
     }
 
-   
+
     private void MoveBrake(bool brake)
     {
         if (brake)
         {
             ridbody.AddForce(-ridbody.velocity * decelerationForceArgument);
             ridbody.AddTorque(-ridbody.angularVelocity * decelerationTorqueArgument);
-            if(!hasBrake)
+            if (!hasBrake)
             {
                 anima.SetBool("isBrake", true);
                 hasBrake = true;
@@ -552,7 +565,7 @@ public class CharacterContorl : MonoBehaviour
         }
         else
         {
-            if(hasBrake)
+            if (hasBrake)
             {
                 anima.SetBool("isBrake", false);
                 hasBrake = false;
@@ -565,12 +578,16 @@ public class CharacterContorl : MonoBehaviour
         if (buffs.Any(x => x is HitBuff))
             return;
         if (isGrounded || isTouchingSlope)
+        {
             anima.SetBool("OnGround", true);
-        if (jump && (isGrounded||isTouchingSlope||isInWater) && !hasJump)
+            anima.SetBool("Jump", false);
+        }
+        if (jump && (isGrounded || isTouchingSlope || isInWater) && !hasJump)
         {
             ridbody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             hasJump = true;
-            anima.SetBool("OnGround", false);
+            anima.SetBool("OnGround", !isGrounded && !isTouchingSlope);
+            anima.SetBool("Jump", true);
             if (isAtMaxSpeed)
                 currentGas = 0;
         }
@@ -583,7 +600,7 @@ public class CharacterContorl : MonoBehaviour
 
     private void UseWeapon(bool isUse)
     {
-        if(isUse && skill && currentGas == 0)
+        if (isUse && skill && currentGas == 0)
         {
             skill.UseSkillItem();
         }
@@ -595,7 +612,7 @@ public class CharacterContorl : MonoBehaviour
         {
             if (currentGas < maxActorGas && !releasing)
             {
-               // currentGas = currentGas + (maxActorGas - currentGas) / chargeTime * Time.fixedDeltaTime;
+                // currentGas = currentGas + (maxActorGas - currentGas) / chargeTime * Time.fixedDeltaTime;
                 currentGas = currentGas + maxActorGas / chargeTime * Time.fixedDeltaTime;
                 currentGas = Mathf.Min(maxActorGas, currentGas);
                 releasing = false;
@@ -667,7 +684,7 @@ public class CharacterContorl : MonoBehaviour
 
     private void CheckIsGrounded()
     {
-        isGrounded = Physics.CheckSphere(bodyCollider.transform.position+(bodyCollider as SphereCollider).center - new Vector3(0, (bodyCollider as SphereCollider).radius , 0), 0.02f, groundMask);
+        isGrounded = Physics.CheckSphere(bodyCollider.transform.position + (bodyCollider as SphereCollider).center - new Vector3(0, (bodyCollider as SphereCollider).radius, 0), 0.02f, groundMask);
 
     }
 
@@ -675,19 +692,19 @@ public class CharacterContorl : MonoBehaviour
     {
         RaycastHit slopeHit;
         isTouchingSlope = false;
-        if(Physics.SphereCast(bodyCollider.transform.position + (bodyCollider as SphereCollider).center + transform.forward.normalized * slopeCheckerForwardOffset, slopeCheckerThrashold,Vector3.down,out slopeHit, (bodyCollider as SphereCollider).radius + 0.2f, groundMask))
+        if (Physics.SphereCast(bodyCollider.transform.position + (bodyCollider as SphereCollider).center + transform.forward.normalized * slopeCheckerForwardOffset, slopeCheckerThrashold, Vector3.down, out slopeHit, (bodyCollider as SphereCollider).radius + 0.2f, groundMask))
         {
             groundNormal = slopeHit.normal;
 
-            if(Vector3.Angle(Vector3.up, slopeHit.normal) > miniClimbableSlopeAngle && Vector3.Angle(Vector3.up, slopeHit.normal) < maxClimbableSlopeAngle)
+            if (Vector3.Angle(Vector3.up, slopeHit.normal) > miniClimbableSlopeAngle && Vector3.Angle(Vector3.up, slopeHit.normal) < maxClimbableSlopeAngle)
             {
-                if(!isGrounded)
+                if (!isGrounded)
                     isTouchingSlope = true;
             }
         }
         else
         {
-            
+
         }
     }
 
@@ -725,7 +742,7 @@ public class CharacterContorl : MonoBehaviour
         if (currentHPValue <= 0)
         {
             currentHPValue = 0;
-          //  isSwimmy = true;
+            //  isSwimmy = true;
             return false;
         }
         return true;
@@ -737,17 +754,17 @@ public class CharacterContorl : MonoBehaviour
     {
 
 
-            gpSlider.value = (float)(currentGas / maxActorGas);
-            hpSlider.value = (float)(maxDrowning / maxDrownValue);
-            canvas.transform.forward = Camera.main.transform.forward;
-            gpSlider.transform.position = bodyCollider.transform.position;
-            hpSlider.transform.position = bodyCollider.transform.position;
-            gpSlider.transform.localPosition = gpSlider.transform.localPosition + new Vector3(0, 1.3f + (bodyCollider.transform.localScale.x - 1) * 1.2f, 0);
-            hpSlider.transform.localPosition = hpSlider.transform.localPosition + new Vector3(0, 1.5f + (bodyCollider.transform.localScale.x - 1) * 1.2f, 0);
-            drownImage.transform.position = bodyCollider.transform.position;
-            drownImage.transform.localPosition = drownImage.transform.localPosition + new Vector3(-1, 1.5f + (bodyCollider.transform.localScale.x - 1) * 1.2f, 0);
-            drownImage.fillAmount = (maxDrowning - currentDrown) / maxDrowning;
-        
+        gpSlider.value = (float)(currentGas / maxActorGas);
+        hpSlider.value = (float)(maxDrowning / maxDrownValue);
+        canvas.transform.forward = Camera.main.transform.forward;
+        gpSlider.transform.position = bodyCollider.transform.position;
+        hpSlider.transform.position = bodyCollider.transform.position;
+        gpSlider.transform.localPosition = gpSlider.transform.localPosition + new Vector3(0, 1.7f + (bodyCollider.transform.localScale.x - 1) * 1.2f, 0);
+        hpSlider.transform.localPosition = hpSlider.transform.localPosition + new Vector3(0, 1.9f + (bodyCollider.transform.localScale.x - 1) * 1.2f, 0);
+        drownImage.transform.position = bodyCollider.transform.position;
+        drownImage.transform.localPosition = drownImage.transform.localPosition + new Vector3(-1, 1.5f + (bodyCollider.transform.localScale.x - 1) * 1.2f, 0);
+        drownImage.fillAmount = (maxDrowning - currentDrown) / maxDrowning;
+
 
     }
     private void SetRingColor()
@@ -812,7 +829,7 @@ public class CharacterContorl : MonoBehaviour
             var m2 = (Mathf.Cos(degree2) * vel2).magnitude;
 
             ridbody.AddExplosionForce(m2 * 2.5f + 300, collision.contacts[0].point, 4);
-            collision.collider.gameObject.GetComponent<Rigidbody>().AddExplosionForce((forceArgument + m1)*1.5f + 50, collision.contacts[0].point, 4);
+            collision.collider.gameObject.GetComponent<Rigidbody>().AddExplosionForce((forceArgument + m1) * 1.5f + 50, collision.contacts[0].point, 4);
         }
         if (collision.gameObject.GetComponent<CharacterContorl>())
         {
@@ -857,9 +874,23 @@ public class CharacterContorl : MonoBehaviour
         }
     }
 
+    private float KnockBackForce(float distance)
+    {
+        var gravityDivide = Vector3.ProjectOnPlane(Physics.gravity, groundNormal) * ridbody.mass;
+        var gravityFrictionDivide = Physics.gravity - gravityDivide;
+        var frictionForceAcceleration =  bodyCollider.material.dynamicFriction * gravityFrictionDivide.magnitude;
+
+        var desiredV0 = (float)Math.Sqrt((2 * frictionForceAcceleration * distance));
+        var acceleration = desiredV0 / Time.fixedDeltaTime;
+
+        return acceleration * ridbody.mass;
+    }
+
+    Vector3 knockingPosition = Vector3.zero;
+
     private void OnCollisionEnter(Collision collision)
     {
-        foreach(var buff in buffs)
+        foreach (var buff in buffs)
         {
             buff.OnCollide(collision);
         }
@@ -891,7 +922,7 @@ public class CharacterContorl : MonoBehaviour
             var m2 = (Mathf.Cos(degree2) * vel2).magnitude;
 
             ridbody.AddExplosionForce(m2 * 2.5f + 600, collision.contacts[0].point, 4);
-            collision.collider.gameObject.GetComponent<Rigidbody>().AddExplosionForce((forceArgument + m1)*2f + 250, collision.contacts[0].point, 4);
+            collision.collider.gameObject.GetComponent<Rigidbody>().AddExplosionForce((forceArgument + m1) * 2f + 250, collision.contacts[0].point, 4);
         }
 
         if (collision.gameObject.GetComponent<CharacterContorl>())
@@ -904,7 +935,7 @@ public class CharacterContorl : MonoBehaviour
 
             Vector3 vel1 = new Vector3(velocityBeforeCollision.x, velocityBeforeCollision.y, velocityBeforeCollision.z);
             vel1 = Vector3.ProjectOnPlane(vel1, groundNormal).normalized * vel1.magnitude;
-            Vector3 vel2 = new Vector3(otherCollision.velocityBeforeCollision.x,  otherCollision.velocityBeforeCollision.y, otherCollision.velocityBeforeCollision.z);
+            Vector3 vel2 = new Vector3(otherCollision.velocityBeforeCollision.x, otherCollision.velocityBeforeCollision.y, otherCollision.velocityBeforeCollision.z);
             vel2 = Vector3.ProjectOnPlane(vel2, groundNormal).normalized * vel2.magnitude;
 
             Vector3 cPoint = collision.contacts[0].point;
@@ -933,19 +964,25 @@ public class CharacterContorl : MonoBehaviour
             //出招加成
             var hasBuff = (otherCollision.isAtMaxSpeed && !otherCollision.isGrounded) ? 1.1f : 1;
             var hitForce = hitForceFeedback.Evaluate(m1);
-            var friction = bodyCollider.material.staticFriction * ridbody.mass;
-            var targetForce = (attackForce  + hitForce) * hasBuff * friction;
-            if (isGrounded || isTouchingSlope)
-            {
-                ridbody.AddExplosionForce(targetForce, collision.contacts[0].point, 2, 0f, ForceMode.Force);
-            }
-            else
-            {
-                StartCoroutine(AddExplosiveForceSmooth(targetForce * 0.5f, collision.contacts[0].point));
-            }
+            var friction = bodyCollider.material.dynamicFriction * ridbody.mass;
+            var targetForce = (attackForce + hitForce + friction) * hasBuff;
+            //if (isGrounded || isTouchingSlope)
+            //{
+            //    ridbody.AddExplosionForce(targetForce, collision.contacts[0].point, 2, 0f, ForceMode.Force);
+            //}
+            //else
+            //{
+            //    StartCoroutine(AddExplosiveForceSmooth(targetForce * 0.5f, collision.contacts[0].point));
+            //}
 
-            Debug.LogError($"结算 {otherCollision.gameObject.name} 对 {this.gameObject.name} -> m1 : {m1} m2 : {m2} 别人的attackForce {attackForce} 我的hitForce {hitForce}");
+            var hitDir = Vector3.ProjectOnPlane((ridbody.position - collision.contacts[0].point), Vector3.up).normalized;
 
+            var force = KnockBackForce(2);
+          
+            ridbody.AddForce(force * hitDir, ForceMode.Force);
+
+            Debug.LogError($"结算 {otherCollision.gameObject.name} force {force} hit Dir {hitDir}");
+            knockingPosition = this.transform.position;
             var buff = new HitBuff(this);
             this.buffs.Add(buff);
 
