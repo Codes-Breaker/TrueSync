@@ -146,6 +146,7 @@ public class CharacterContorl : MonoBehaviour
     //易伤系数
     public float vulerbilityReactRate = 1;
 
+
     public bool isDead = false;
 
     private int defaultLayer = 0;
@@ -207,6 +208,11 @@ public class CharacterContorl : MonoBehaviour
     //刹车时的朝向
     private Vector3 initialBrakeTarget = Vector3.zero;
 
+    private DateTime releaseTimer = DateTime.MinValue;
+
+    public GameObject smokeEffect;
+    public ParticleSystem particle;
+
     private void Awake()
     {
         speedUpGas = maxSpeedUpGas;
@@ -221,6 +227,9 @@ public class CharacterContorl : MonoBehaviour
         gameController = GameObject.Find("GameManager").GetComponent<GameController>();
         // SetFlashMeshRendererBlock(false);
         maxDrownValue = maxDrowning;
+
+        smokeEffect.gameObject.SetActive(true);
+        particle.Stop();
     }
 
     private void Start()
@@ -894,7 +903,6 @@ public class CharacterContorl : MonoBehaviour
 
         return acceleration * ridbody.mass;
     }
-
     /// <summary>
     /// 在空中的击退距离
     /// </summary>
@@ -922,7 +930,6 @@ public class CharacterContorl : MonoBehaviour
         }
         return forceMagnitude;
     }
-
     Vector3 knockingPosition = Vector3.zero;
 
     private void OnCollisionEnter(Collision collision)
