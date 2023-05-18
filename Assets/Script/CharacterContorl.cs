@@ -207,10 +207,14 @@ public class CharacterContorl : MonoBehaviour
     //刹车时的朝向
     private Vector3 initialBrakeTarget = Vector3.zero;
 
-    private DateTime releaseTimer = DateTime.MinValue;
+    private DateTime lastJumpLandTime = DateTime.MinValue;
+    [Header("跳跃间隔")]
+    public float jumpFrequency = 1f;
 
     public GameObject smokeEffect;
     public ParticleSystem particle;
+
+
 
     private void Awake()
     {
@@ -272,6 +276,7 @@ public class CharacterContorl : MonoBehaviour
         {
             SetRingMaxColor();
             isAtMaxSpeed = true;
+            anima.SetBool("isAtMaxSpeed", isAtMaxSpeed);
             if ((isGrounded || isTouchingSlope) && releasing)
                 particle.Play();
         }
@@ -279,8 +284,11 @@ public class CharacterContorl : MonoBehaviour
         {
             SetRingColor();
             isAtMaxSpeed = false;
+            anima.SetBool("isAtMaxSpeed", isAtMaxSpeed);
             particle.Stop();
         }
+        if (!isGrounded && !isTouchingSlope)
+            particle.Stop();
     }
 
     public void SetControlSelf()
@@ -561,6 +569,9 @@ public class CharacterContorl : MonoBehaviour
 
     private void MoveBrake(bool brake)
     {
+        //只有地面能刹车
+        if (!isGrounded && !isTouchingSlope)
+            return;
         if (brake)
         {
             ridbody.AddForce(-ridbody.velocity * decelerationForceArgument);
@@ -594,7 +605,7 @@ public class CharacterContorl : MonoBehaviour
             anima.SetBool("OnGround", true);
             anima.SetBool("Jump", false);
         }
-        if (jump && (isGrounded || isTouchingSlope || isInWater) && !hasJump)
+        if (jump && (isGrounded || isTouchingSlope || isInWater) && !hasJump && (DateTime.Now - lastJumpLandTime).TotalSeconds >= jumpFrequency)
         {
             ridbody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             hasJump = true;
@@ -604,8 +615,11 @@ public class CharacterContorl : MonoBehaviour
                 currentGas = 0;
         }
 
-        if (!jump && (isGrounded || isTouchingSlope || isInWater) && hasJump && ridbody.velocity.y <=0)
+        if (!jump && (isGrounded || isTouchingSlope || isInWater) && hasJump && ridbody.velocity.y <= 0)
+        {
             hasJump = false;
+            lastJumpLandTime = DateTime.Now;
+        }
 
     }
 
