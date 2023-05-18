@@ -207,7 +207,6 @@ public class CharacterContorl : MonoBehaviour
     //刹车时的朝向
     private Vector3 initialBrakeTarget = Vector3.zero;
 
-
     private void Awake()
     {
         speedUpGas = maxSpeedUpGas;
