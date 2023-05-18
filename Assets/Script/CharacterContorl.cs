@@ -207,6 +207,11 @@ public class CharacterContorl : MonoBehaviour
     //刹车时的朝向
     private Vector3 initialBrakeTarget = Vector3.zero;
 
+    private DateTime releaseTimer = DateTime.MinValue;
+
+    public GameObject smokeEffect;
+    public ParticleSystem particle;
+
     private void Awake()
     {
         speedUpGas = maxSpeedUpGas;
@@ -221,6 +226,9 @@ public class CharacterContorl : MonoBehaviour
         gameController = GameObject.Find("GameManager").GetComponent<GameController>();
         // SetFlashMeshRendererBlock(false);
         maxDrownValue = maxDrowning;
+
+        smokeEffect.gameObject.SetActive(true);
+        particle.Stop();
     }
 
     private void Start()
@@ -259,16 +267,19 @@ public class CharacterContorl : MonoBehaviour
 
     private void CheckSpeed()
     {
-        Debug.LogError($"current speed: {velocityBeforeCollision.magnitude} ---> {(velocityBeforeCollision.magnitude / runMaxVelocity) * 100}% {(DateTime.Now - releaseDateTime).TotalSeconds} seconds");
+        //Debug.LogError($"current speed: {velocityBeforeCollision.magnitude} ---> {(velocityBeforeCollision.magnitude / runMaxVelocity) * 100}% {(DateTime.Now - releaseDateTime).TotalSeconds} seconds");
         if (velocityBeforeCollision.magnitude >= runMaxVelocity * 0.9f)
         {
             SetRingMaxColor();
             isAtMaxSpeed = true;
+            if ((isGrounded || isTouchingSlope) && releasing)
+                particle.Play();
         }
         else
         {
             SetRingColor();
             isAtMaxSpeed = false;
+            particle.Stop();
         }
     }
 
@@ -890,6 +901,11 @@ public class CharacterContorl : MonoBehaviour
         var acceleration = desiredV0 / Time.fixedDeltaTime;
 
         return acceleration * ridbody.mass;
+    }
+
+    private float KnockBackAir(float distance)
+    {
+        return (distance / Time.fixedDeltaTime) * ridbody.mass;
     }
 
     Vector3 knockingPosition = Vector3.zero;
