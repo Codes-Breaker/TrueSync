@@ -27,6 +27,7 @@ public class CharacterContorl : MonoBehaviour
     [Space(10)]
     [Header("跳跃力系数")]
     public float jumpForce;
+
     [Space(10)]
     [Header("跑步状态相关参数")]
     [Header("跑步最大速度")]
@@ -41,12 +42,15 @@ public class CharacterContorl : MonoBehaviour
     public float chargeTime;
     [Header("最大跑步时间")]
     public float releaseTime;
+
     [Space(10)]
     [Header("刹车相关参数")]
     [Header("减速力系数系数")]
     public float decelerationForceArgument;
     [Header("减速扭矩力系数系数")]
     public float decelerationTorqueArgument;
+    [Header("最大刹车时间")]
+    public float maxBreakTime;
 
 
     [Space(10)]
@@ -141,16 +145,6 @@ public class CharacterContorl : MonoBehaviour
     [Range(0, 1)]
     //易伤系数
     public float vulerbilityReactRate = 1;
-    ////是否正在返回
-    //public bool returning = false;
-    ////是否正在跳跃
-    //public bool jumpingBack = false;
-    ////游泳目的地
-    //public Vector3 swimTarget = Vector3.zero;
-    ////跳跃目的地
-    //public Vector3 jumpTarget = Vector3.zero;
-    ////游泳速度
-    //public float swimSpeed = 1;
 
     public bool isDead = false;
 
@@ -255,12 +249,11 @@ public class CharacterContorl : MonoBehaviour
         CheckIsInWater();
         SetGravity();
 
-        //Debug.LogError($"{this.gameObject.name} ===== {(knockingPosition - this.transform.position).magnitude} {isGrounded} knock distance ==============================<<<<");
     }
 
     private void CheckSpeed()
     {
-        Debug.LogError($"current speed: {velocityBeforeCollision.magnitude} ---> {(velocityBeforeCollision.magnitude / runMaxVelocity) * 100}% {(DateTime.Now - releaseDateTime).TotalSeconds} seconds");
+       // Debug.LogError($"current speed: {velocityBeforeCollision.magnitude} ---> {(velocityBeforeCollision.magnitude / runMaxVelocity) * 100}% {(DateTime.Now - releaseDateTime).TotalSeconds} seconds");
         if (velocityBeforeCollision.magnitude >= runMaxVelocity * 0.9f)
         {
             SetRingMaxColor();
