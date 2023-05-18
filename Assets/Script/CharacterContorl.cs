@@ -172,6 +172,8 @@ public class CharacterContorl : MonoBehaviour
     public GameObject stunEffect;
     //眩晕阈值
     public float stunThreshold;
+    //当前的重力大大小
+    public Vector3 currentGravity;
 
     public List<Buff> buffs = new List<Buff>();
 
@@ -191,10 +193,14 @@ public class CharacterContorl : MonoBehaviour
     public AnimationCurve runAnimPlayCurve;
     [Header("速度击退曲线")]
     public AnimationCurve hitKnockbackCurve;
+    [Header("在空中的速度击退曲线")]
+    public AnimationCurve hitKnockBackOnAirCurve;
     [Header("击退范围上限")]
     public float hitMaxDistance = 5;
-    [Header("重力")]
+    [Header("重力相关")]
+    [Header("重力缩放")]
     public float gravityScale = 1;
+    [Header("下坠重力缩放")]
     public float fallingGravityScale = 1;
     public float ascendingGravityScale = 1;
 
@@ -250,20 +256,6 @@ public class CharacterContorl : MonoBehaviour
 
     }
 
-    private void CheckSpeed()
-    {
-       // Debug.LogError($"current speed: {velocityBeforeCollision.magnitude} ---> {(velocityBeforeCollision.magnitude / runMaxVelocity) * 100}% {(DateTime.Now - releaseDateTime).TotalSeconds} seconds");
-        if (velocityBeforeCollision.magnitude >= runMaxVelocity * 0.9f)
-        {
-            SetRingMaxColor();
-            isAtMaxSpeed = true;
-        }
-        else
-        {
-            SetRingColor();
-            isAtMaxSpeed = false;
-        }
-    }
 
     public void SetControlSelf()
     {
@@ -426,6 +418,7 @@ public class CharacterContorl : MonoBehaviour
             gravityScale = fallingGravityScale;
         }
         ridbody.AddForce(Physics.gravity * (gravityScale) * ridbody.mass);
+        currentGravity = Physics.gravity * (gravityScale);
     }
 
 
@@ -489,6 +482,7 @@ public class CharacterContorl : MonoBehaviour
                 moveTarget = moveTarget.normalized;
                 moveTarget = Vector3.ProjectOnPlane(moveTarget, groundNormal).normalized;
                 ridbody.AddForce(moveTarget * forceMagnitude - gravityDivide, ForceMode.Force);
+                //Debug.Log($"isTouchingSlope || isGrounded {isTouchingSlope || isGrounded} forceMagnitude {forceMagnitude} velocity {ridbody.velocity} velocityMagnitude {ridbody.velocity.magnitude}");
                 
 
                 if (axisInput.magnitude > movementThrashold)
@@ -504,6 +498,7 @@ public class CharacterContorl : MonoBehaviour
                     targetAngle = Mathf.Atan2(axisInput.x, axisInput.y) * Mathf.Rad2Deg + Camera.main.transform.eulerAngles.y;
                     transform.rotation = Quaternion.Slerp(this.ridbody.rotation, Quaternion.Euler(new Vector3(0, targetAngle, 0) + initialRotation), runMaxSpeedRotationRate);
                 }
+               // Debug.Log($"isTouchingSlope || isGrounded {isTouchingSlope || isGrounded} velocity {ridbody.velocity} velocityMagnitude {ridbody.velocity.magnitude}");
             }
         }
         else
@@ -650,6 +645,21 @@ public class CharacterContorl : MonoBehaviour
     #endregion
 
     #region Check
+    private void CheckSpeed()
+    {
+        // Debug.LogError($"current speed: {velocityBeforeCollision.magnitude} ---> {(velocityBeforeCollision.magnitude / runMaxVelocity) * 100}% {(DateTime.Now - releaseDateTime).TotalSeconds} seconds");
+        var horizontalVelocity = Vector3.ProjectOnPlane(velocityBeforeCollision, groundNormal);
+        if (horizontalVelocity.magnitude >= runMaxVelocity * 0.9f)
+        {
+            isAtMaxSpeed = true;
+            SetRingMaxColor();
+        }
+        else
+        {
+            isAtMaxSpeed = false;
+            SetRingColor();
+        }
+    }
     private void SetIK()
     {
         var targetIK = isInWater ? 0 : 1;
@@ -697,7 +707,7 @@ public class CharacterContorl : MonoBehaviour
         }
         else
         {
-
+            groundNormal = Vector3.up;
         }
     }
 
@@ -883,6 +893,34 @@ public class CharacterContorl : MonoBehaviour
         var acceleration = desiredV0 / Time.fixedDeltaTime;
 
         return acceleration * ridbody.mass;
+    }
+
+    /// <summary>
+    /// 在空中的击退距离
+    /// </summary>
+    /// <param name="distance"></param>
+    /// <returns></returns>
+    private float KnockBackOnAir(float distance)
+    {
+        var currentVelocity = ridbody.velocity;
+        float forceMagnitude = 0f;
+        if(currentVelocity.y > 0)
+        {
+            //上升状态处理
+            var riseTime = currentVelocity.y / currentGravity.magnitude;
+            var dropHeight = ridbody.transform.position.y + (bodyCollider as SphereCollider).center.y + currentGravity.magnitude * Mathf.Pow(riseTime, 2.0f);
+            var dropTime = Mathf.Sqrt(2 * currentGravity.magnitude * dropHeight);
+            var initialVelocity = distance / dropTime;
+            var acceleration = initialVelocity / Time.fixedDeltaTime;
+            forceMagnitude = acceleration * ridbody.mass;
+
+        }
+        else
+        {
+            //下降状态处理
+
+        }
+        return forceMagnitude;
     }
 
     Vector3 knockingPosition = Vector3.zero;
