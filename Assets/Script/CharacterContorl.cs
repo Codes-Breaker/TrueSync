@@ -535,8 +535,14 @@ public class CharacterContorl : MonoBehaviour
                 var moveTarget = ridbody.transform.forward;
                 moveTarget = moveTarget.normalized;
                 moveTarget = Vector3.ProjectOnPlane(moveTarget, groundNormal).normalized;
-                ridbody.AddForce(moveTarget * forceMagnitude - gravityDivide, ForceMode.Force);
-                transform.rotation = Quaternion.Slerp(this.ridbody.rotation, Quaternion.Euler(new Vector3(0, targetAngle, 0) + initialRotation), movementRotationRate);
+                
+                //如果刹车走路状态不在施加推进力
+                if(!hasBrake)
+                {
+
+                    ridbody.AddForce(moveTarget * forceMagnitude - gravityDivide, ForceMode.Force);
+                    transform.rotation = Quaternion.Slerp(this.ridbody.rotation, Quaternion.Euler(new Vector3(0, targetAngle, 0) + initialRotation), movementRotationRate);
+                }
             }
             else
             {
