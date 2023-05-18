@@ -194,8 +194,6 @@ public class CharacterContorl : MonoBehaviour
     public AnimationCurve runAnimPlayCurve;
     [Header("速度击退曲线")]
     public AnimationCurve hitKnockbackCurve;
-    [Header("在空中的速度击退曲线")]
-    public AnimationCurve hitKnockBackOnAirCurve;
     [Header("击退范围上限")]
     public float hitMaxDistance = 5;
     [Header("重力相关")]
@@ -903,12 +901,13 @@ public class CharacterContorl : MonoBehaviour
 
         return acceleration * ridbody.mass;
     }
+
     /// <summary>
     /// 在空中的击退距离
     /// </summary>
     /// <param name="distance"></param>
     /// <returns></returns>
-    private float KnockBackOnAir(float distance)
+    private float KnockBackOnAirForce(float distance)
     {
         var currentVelocity = ridbody.velocity;
         float forceMagnitude = 0f;
@@ -918,7 +917,7 @@ public class CharacterContorl : MonoBehaviour
             var riseTime = currentVelocity.y / currentGravity.magnitude;
             var dropHeight = ridbody.transform.position.y + (bodyCollider as SphereCollider).center.y + currentGravity.magnitude * Mathf.Pow(riseTime, 2.0f);
             var dropTime = Mathf.Sqrt(2 * currentGravity.magnitude * dropHeight);
-            var initialVelocity = distance / dropTime;
+            var initialVelocity = distance / (dropTime+ riseTime);
             var acceleration = initialVelocity / Time.fixedDeltaTime;
             forceMagnitude = acceleration * ridbody.mass;
 
@@ -926,7 +925,18 @@ public class CharacterContorl : MonoBehaviour
         else
         {
             //下降状态处理
+            var riseTime = Mathf.Abs(currentVelocity.y) / currentGravity.magnitude;
+            var dropHeight = ridbody.transform.position.y + (bodyCollider as SphereCollider).center.y + currentGravity.magnitude * Mathf.Pow(riseTime, 2.0f);
+            var dropMaxTime = Mathf.Sqrt(2 * currentGravity.magnitude * dropHeight);
+            var dropTime = dropMaxTime - riseTime;
 
+
+            var gravityDivide = Vector3.ProjectOnPlane(Physics.gravity, groundNormal) * ridbody.mass;
+            var gravityFrictionDivide = Physics.gravity - gravityDivide;
+            var frictionForceAcceleration = bodyCollider.material.dynamicFriction * gravityFrictionDivide.magnitude;
+
+            var initialVelocity = (float)(((distance) + frictionForceAcceleration * Mathf.Pow(riseTime, 2)/2)/(0.4 * dropTime + 0.6 * riseTime));
+            forceMagnitude = initialVelocity / Time.fixedDeltaTime * ridbody.mass;
         }
         return forceMagnitude;
     }
@@ -1017,7 +1027,11 @@ public class CharacterContorl : MonoBehaviour
 
             var hitDir = Vector3.ProjectOnPlane((ridbody.position - collision.contacts[0].point), Vector3.up).normalized;
 
-            var force = KnockBackForce(Math.Min(hitMaxDistance, hitKnockbackCurve.Evaluate(m2 * hasBuff) + hitKnockbackCurve.Evaluate(m1 * myBuff + 2)));
+            float force = 0f;
+            if (isGrounded || isTouchingSlope)
+                force = KnockBackForce(Math.Min(hitMaxDistance, hitKnockbackCurve.Evaluate(m2 * hasBuff) + hitKnockbackCurve.Evaluate(m1 * myBuff + 2)));
+            else
+                force = KnockBackOnAirForce(Math.Min(hitMaxDistance, hitKnockbackCurve.Evaluate(m2 * hasBuff) + hitKnockbackCurve.Evaluate(m1 * myBuff + 2)));
            
 
             ridbody.AddForce((force)* hitDir, ForceMode.Force);
