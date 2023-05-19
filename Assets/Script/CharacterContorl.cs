@@ -134,6 +134,7 @@ public class CharacterContorl : MonoBehaviour
     private float totalDrown = 0;
     private const int minDrown = 50;
     private bool isDrift;
+    private float driftAngle;
 
     [Range(0, 1)]
     public float continueReceivedForceRate = 0.2f;
@@ -347,6 +348,8 @@ public class CharacterContorl : MonoBehaviour
         anima.SetFloat("playSpeed", runAnimPlayCurve.Evaluate(speed));
         anima.SetFloat("velocityY", ridbody.velocity.y);
         anima.SetBool("Releasing", releasing);
+        anima.SetBool("isDrift", isDrift);
+        anima.SetFloat("driftAngle", driftAngle);
     }
 
     private void SetCollider(bool set)
@@ -754,6 +757,7 @@ public class CharacterContorl : MonoBehaviour
     {
         var velocity = Vector3.ProjectOnPlane(ridbody.velocity, groundNormal);
         var angle = Vector3.Angle(ridbody.transform.forward, velocity);
+        driftAngle = Vector3.SignedAngle(ridbody.transform.forward, velocity, Vector3.up);
         if (angle > minDriftAngle)
             isDrift = true;
         else
