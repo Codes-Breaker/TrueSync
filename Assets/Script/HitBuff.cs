@@ -16,7 +16,7 @@ public class HitBuff : StunBuff
     public override void OnBuffUpdate()
     {
         base.OnBuffUpdate();
-        Debug.LogError($"isonground: {this.character.isGrounded} ==> {this.character.ridbody.velocity}");
+       // Debug.LogError($"isonground: {this.character.isGrounded} ==> {this.character.ridbody.velocity}");
     }
 
     public override void OnBuffRemove()
