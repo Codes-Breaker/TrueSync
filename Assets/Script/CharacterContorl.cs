@@ -51,6 +51,8 @@ public class CharacterContorl : MonoBehaviour
     public float decelerationTorqueArgument;
     [Header("最大刹车时间")]
     public float maxBreakTime;
+    [Header("最小漂移角度")]
+    public float minDriftAngle = 30f;
 
 
     [Space(10)]
@@ -131,6 +133,7 @@ public class CharacterContorl : MonoBehaviour
     public float currentDrown = 0;
     private float totalDrown = 0;
     private const int minDrown = 50;
+    private bool isDrift;
 
     [Range(0, 1)]
     public float continueReceivedForceRate = 0.2f;
@@ -495,7 +498,9 @@ public class CharacterContorl : MonoBehaviour
                 moveTarget = Vector3.ProjectOnPlane(moveTarget, groundNormal).normalized;
                 ridbody.AddForce(moveTarget * forceMagnitude - gravityDivide, ForceMode.Force);
                 //Debug.Log($"isTouchingSlope || isGrounded {isTouchingSlope || isGrounded} forceMagnitude {forceMagnitude} velocity {ridbody.velocity} velocityMagnitude {ridbody.velocity.magnitude}");
-                
+                CheckisDrift();
+
+
 
                 if (axisInput.magnitude > movementThrashold)
                 {
@@ -505,6 +510,7 @@ public class CharacterContorl : MonoBehaviour
             }
             else
             {
+                CheckisDrift();
                 if (axisInput.magnitude > movementThrashold)
                 {
                     targetAngle = Mathf.Atan2(axisInput.x, axisInput.y) * Mathf.Rad2Deg + Camera.main.transform.eulerAngles.y;
@@ -534,8 +540,14 @@ public class CharacterContorl : MonoBehaviour
                 var moveTarget = ridbody.transform.forward;
                 moveTarget = moveTarget.normalized;
                 moveTarget = Vector3.ProjectOnPlane(moveTarget, groundNormal).normalized;
-                ridbody.AddForce(moveTarget * forceMagnitude - gravityDivide, ForceMode.Force);
-                transform.rotation = Quaternion.Slerp(this.ridbody.rotation, Quaternion.Euler(new Vector3(0, targetAngle, 0) + initialRotation), movementRotationRate);
+                
+                //如果刹车走路状态不在施加推进力
+                if(!hasBrake)
+                {
+
+                    ridbody.AddForce(moveTarget * forceMagnitude - gravityDivide, ForceMode.Force);
+                    transform.rotation = Quaternion.Slerp(this.ridbody.rotation, Quaternion.Euler(new Vector3(0, targetAngle, 0) + initialRotation), movementRotationRate);
+                }
             }
             else
             {
@@ -737,6 +749,17 @@ public class CharacterContorl : MonoBehaviour
         if (!isGrounded && !isTouchingSlope && !isStun)
             particle.Stop();
     }
+
+    private void CheckisDrift()
+    {
+        var velocity = Vector3.ProjectOnPlane(ridbody.velocity, groundNormal);
+        var angle = Vector3.Angle(ridbody.transform.forward, velocity);
+        if (angle > minDriftAngle)
+            isDrift = true;
+        else
+            isDrift = false;
+    }
+
     private void SetIK()
     {
         var targetIK = isInWater || isStun ? 0 : 1;
