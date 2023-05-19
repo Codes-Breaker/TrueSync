@@ -27,6 +27,8 @@ public class CharacterContorl : MonoBehaviour
     [Space(10)]
     [Header("跳跃力系数")]
     public float jumpForce;
+    [Header("跳跃间隔")]
+    public float jumpFrequency = 1f;
 
     [Space(10)]
     [Header("跑步状态相关参数")]
@@ -76,112 +78,6 @@ public class CharacterContorl : MonoBehaviour
     public AnimationCurve forceToHuntCurve;
     [Header("打击恢复时间")]
     public float cureTime;
-   
-    private bool hasJump = false;
-    private bool hasBrake = false;
-
-
-    //摇杆输入值最小值
-    private float movementThrashold = 0.35f;
-    //public float originalRadius;
-    //public float targetRadius;
-    //public Vector3 targetCenter;
-    //public Vector3 originalCenter;
-    public float sensitivity = 0.5f;
-    private Vector3 initialRotation;
-    private Vector3 forceTarget;
-    private Quaternion initialRot;
-    // 隐藏参数
-    private bool isWalk;
-    public bool isGrounded;
-    [HideInInspector]
-    public float targetAngle;
-    [HideInInspector]
-    public float currentHPValue;
-    private float lastHPValue;
-    private float maxActorGas = 100;
-    [HideInInspector]
-    public float currentGas;
-    [HideInInspector]
-    public bool releasing = false;
-    [HideInInspector]
-
-    public float HPtimer;
-    [HideInInspector]
-    public SkillItemControllerBase skill;
-    [HideInInspector]
-    public bool isUseSkill;
-    //攻击力
-    public float forceArgument;
-    //防御力系数
-    [Range(0, 2)]
-    public float receivedForceRate = 1;
-
-    //public bool swinging = false;
-    //public bool readyswing = false;
-
-    int speedUpGas = 0;
-    public int maxSpeedUpGas = 5;
-
-    [HideInInspector]
-    public Vector3 velocityBeforeCollision = Vector3.zero;
-    [HideInInspector]
-    public Vector3 positionBeforeCollision = Vector3.zero;
-
-
-    public float maxDrowning = 1000;
-    private float maxDrownValue = 1000;
-    public float currentDrown = 0;
-    private float totalDrown = 0;
-    private const int minDrown = 50;
-    private bool isDrift;
-    private float driftAngle;
-
-    [Range(0, 1)]
-    public float continueReceivedForceRate = 0.2f;
-
-    public float invulernableTime = 0;
-    public bool invulernable = false;
-    private Vector3 groundNormal;
-    public bool isTouchingSlope = false;
-
-    [Range(0, 1)]
-    //易伤系数
-    public float vulerbilityReactRate = 1;
-
-
-    public bool isDead = false;
-
-    private int defaultLayer = 0;
-
-    [Space(10)]
-    [Header("相关需要关联组件")]
-    public Slider gpSlider;
-    public Slider hpSlider;
-    public Image drownImage;
-    public Canvas canvas;
-    public Rigidbody ridbody;
-    public Collider bodyCollider;
-    //public SkinnedMeshRenderer skinnedMeshRenderer;
-    public MeshRenderer ringRenderer;
-    public Animator anima;
-    //public MaterialController meshController;
-    //特效资源
-    public GameObject stunEffect;
-    //眩晕阈值
-    public float stunThreshold;
-    //当前的重力大大小
-    public Vector3 currentGravity;
-
-    public List<Buff> buffs = new List<Buff>();
-
-    private GameController gameController;
-    public int playerIndex = 0;
-
-    public SimpleFloatingObject floatObj;
-    public GrounderQuadruped grounderQuadruped;
-
-    public bool isInWater = false;
 
     [Header("是否达到最大速度")]
     public bool isAtMaxSpeed = false;
@@ -193,36 +89,123 @@ public class CharacterContorl : MonoBehaviour
     public AnimationCurve hitKnockbackCurve;
     [Header("击退范围上限")]
     public float hitMaxDistance = 5;
+
     [Header("重力相关")]
     [Header("重力缩放")]
     public float gravityScale = 1;
     [Header("下坠重力缩放")]
     public float fallingGravityScale = 1;
     public float ascendingGravityScale = 1;
-
-    //刹车时的朝向
-    private Vector3 initialBrakeTarget = Vector3.zero;
-    private DateTime lastJumpLandTime = DateTime.MinValue;
-    [Header("跳跃间隔")]
-    public float jumpFrequency = 1f;
-
-    public GameObject smokeEffect;
-    public ParticleSystem particle;
-
+   
+    [Space(10)]
+    [Header("眩晕相关")]
     [Header("眩晕回复时间")]
     public float stunRecoverTime = 50;
-    private DateTime stunTime = DateTime.MinValue;
-    [HideInInspector]
-    //是否处于眩晕状态
+
+    [Space(10)]
+    [Header("相关需要关联组件")]
+    public Slider gpSlider;
+    public Slider hpSlider;
+    public Canvas canvas;
+    public Rigidbody ridbody;
+    public Collider bodyCollider;
+    public MeshRenderer ringRenderer;
+    private GameController gameController;
+    public Animator anima;
+    public GameObject meshObject;
+    public GameObject stunEffect;
+    public GameObject smokeEffect;
+    public ParticleSystem particle;
+    public SimpleFloatingObject floatObj;
+    public GrounderQuadruped grounderQuadruped;
+
+    //攻击力
+    public float forceArgument;
+    //防御力系数
+    [Range(0, 2)]
+    public float receivedForceRate = 1;
+
+    //地面法线
+    private Vector3 groundNormal;
+    public bool isDead = false;
+    private bool hasJump = false;
+    private bool hasBrake = false;
+    private bool isDrift;
+    private bool isWalk;
+    public bool isGrounded;
     public bool isStun { get; private set; }
     //起身
     public bool isRecovering { get; private set; }
-    //起身时间
-    private float recoveryTime = 1;
-    public GameObject meshObject;
-    [Header("眩晕摩擦力")]
+
+    //摇杆输入值最小值
+    private float movementThrashold = 0.35f;
+    public float sensitivity = 0.5f;
+    private Vector3 initialRotation;
+    private Vector3 forceTarget;
+    private Quaternion initialRot;
+    // 隐藏参数
+    [HideInInspector]
+    public float targetAngle;
+    [HideInInspector]
+    public float currentHPValue;
+    private float lastHPValue;
+    private float maxActorGas = 100;
+    [HideInInspector]
+    public float currentGas;
+    [HideInInspector]
+    public bool releasing = false;
+    [HideInInspector]
+    public float HPtimer;
+    [HideInInspector]
+    public SkillItemControllerBase skill;
+    [HideInInspector]
+    public bool isUseSkill;
+
+    int speedUpGas = 0;
+    public int maxSpeedUpGas = 5;
+
+    [HideInInspector]
+    public Vector3 velocityBeforeCollision = Vector3.zero;
+    [HideInInspector]
+    public Vector3 positionBeforeCollision = Vector3.zero;
+
+    private float driftAngle;
+
     [Range(0, 1)]
-    public float negativeForceConstant = 0.98f;
+    public float continueReceivedForceRate = 0.2f;
+
+    public float invulernableTime = 0;
+    public bool invulernable = false;
+    public bool isTouchingSlope = false;
+
+    private int defaultLayer = 0;
+
+    //public MaterialController meshController;
+    //特效资源
+    //当前的重力大大小
+    public Vector3 currentGravity;
+
+    public List<Buff> buffs = new List<Buff>();
+
+    public int playerIndex = 0;
+
+
+    public bool isInWater = false;
+
+    //刹车时的朝向
+    private Vector3 initialBrakeTarget = Vector3.zero;
+
+
+    //本地计时器相关
+    private float lastJumpLandTime ;
+    private float lastStunTime;
+
+    //是否处于眩晕状态
+    //起身时间
+    [HideInInspector]
+    private float recoveryTime = 1;
+
+
 
     private void Awake()
     {
@@ -234,10 +217,9 @@ public class CharacterContorl : MonoBehaviour
         defaultLayer = this.gameObject.layer;
         initialRotation = ridbody.transform.rotation.eulerAngles;
         initialRot = ridbody.transform.rotation;
-        currentDrown = maxDrowning;
+
         gameController = GameObject.Find("GameManager")?.GetComponent<GameController>();
-        // SetFlashMeshRendererBlock(false);
-        maxDrownValue = maxDrowning;
+
 
         smokeEffect.gameObject.SetActive(true);
         particle.Stop();
@@ -256,6 +238,7 @@ public class CharacterContorl : MonoBehaviour
     {
         SetSlider();
         SetRoll();
+        CheckStun();
     }
 
     private void Update()
@@ -269,7 +252,6 @@ public class CharacterContorl : MonoBehaviour
         velocityBeforeCollision = GetComponent<Rigidbody>().velocity;
         positionBeforeCollision = GetComponent<Rigidbody>().position;
         CheckHP();
-        CheckStun();
         CheckSpeed();
         CheckInVulernable();
         CheckIsGrounded();
@@ -277,7 +259,6 @@ public class CharacterContorl : MonoBehaviour
         CheckSlopeAndDirections();
         CheckIsInWater();
         SetGravity();
-        //SetStunFriction();
     }
 
     public void SetControlSelf()
@@ -312,19 +293,6 @@ public class CharacterContorl : MonoBehaviour
     }
 
 
-    private void CheckInVulernable()
-    {
-        if (invulernable && invulernableTime > 0)
-        {
-            invulernableTime -= Time.fixedDeltaTime;
-            if (invulernableTime <= 0)
-            {
-                invulernable = false;
-                SetCollider(true);
-                // SetFlashMeshRendererBlock(false);
-            }
-        }
-    }
 
     private void SetGameLayerRecursive(GameObject _go, int _layer)
     {
@@ -388,30 +356,6 @@ public class CharacterContorl : MonoBehaviour
         this.ridbody.gameObject.GetComponent<Collider>().enabled = !set;
     }
 
-    public void SetUpReturn()
-    {
-        currentDrown = maxDrowning;
-        //SetFlashMeshRendererBlock(false);
-        foreach (var buff in buffs)
-        {
-            buff.Finish();
-        }
-    }
-
-
-
-
-    private void AccumulateDrown()
-    {
-        currentDrown -= 1;
-        totalDrown += 1;
-
-        if (currentDrown <= 0)
-        {
-            isDead = true;
-            Dead();
-        }
-    }
 
     private void Dead()
     {
@@ -604,7 +548,11 @@ public class CharacterContorl : MonoBehaviour
             anima.SetBool("OnGround", true);
             anima.SetBool("Jump", false);
         }
-        if (jump && (isGrounded || isTouchingSlope || isInWater) && !hasJump && (DateTime.Now - lastJumpLandTime).TotalSeconds >= jumpFrequency)
+
+        if (hasJump)
+            lastJumpLandTime += Time.deltaTime;
+
+        if (jump && (isGrounded || isTouchingSlope || isInWater) && !hasJump && lastJumpLandTime >= jumpFrequency)
         {
             ridbody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             hasJump = true;
@@ -617,7 +565,7 @@ public class CharacterContorl : MonoBehaviour
         if (!jump && (isGrounded || isTouchingSlope || isInWater) && hasJump && ridbody.velocity.y <= 0)
         {
             hasJump = false;
-            lastJumpLandTime = DateTime.Now;
+            lastJumpLandTime = 0f;
         }
 
     }
@@ -651,14 +599,6 @@ public class CharacterContorl : MonoBehaviour
         }
     }
 
-    private float EaseOutCirc(float number)
-    {
-        return Mathf.Sqrt(1 - Mathf.Pow(number - 1, 2));
-    }
-
-
-    private float releaseGasGauge = 0;
-    public DateTime releaseDateTime = DateTime.MinValue;
     private void MoveRelease(bool charge)
     {
         if (isStun)
@@ -675,8 +615,6 @@ public class CharacterContorl : MonoBehaviour
             {
                 currentGas = currentGas - (maxActorGas) / releaseTime * Time.fixedDeltaTime;
                 currentGas = Mathf.Max(0, currentGas);
-                if (!releasing)
-                    releaseDateTime = DateTime.Now;
                 releasing = true;
             }
         }
@@ -702,15 +640,30 @@ public class CharacterContorl : MonoBehaviour
 
     }
 
+    private void CheckInVulernable()
+    {
+        if (invulernable && invulernableTime > 0)
+        {
+            invulernableTime -= Time.fixedDeltaTime;
+            if (invulernableTime <= 0)
+            {
+                invulernable = false;
+                SetCollider(true);
+                // SetFlashMeshRendererBlock(false);
+            }
+        }
+    }
+
     private void CheckHP()
     {
         if (isStun && !isRecovering)
         {
-            if ((DateTime.Now - stunTime).TotalSeconds >= stunRecoverTime)
+            lastStunTime += Time.fixedDeltaTime;
+            if (lastStunTime >= stunRecoverTime)
             {
                 isRecovering = true;
                 currentHPValue = maxHPValue;
-                ridbody.freezeRotation = true;
+
                 this.transform.DORotate(new Vector3(0, 0, 0), 0.2f).onComplete += () =>
                 {
                     isStun = false;
@@ -724,8 +677,7 @@ public class CharacterContorl : MonoBehaviour
             {
                 isStun = true;
                 SetStun();
-                ridbody.freezeRotation = false;
-                stunTime = DateTime.Now;
+                lastStunTime = 0 ;
             }
         }
     }
@@ -783,12 +735,6 @@ public class CharacterContorl : MonoBehaviour
         }
     }
 
-    private void SetStunFriction()
-    {
-        if (isStun)
-            ridbody.AddForce(ridbody.velocity * -negativeForceConstant);
-    }
-
     private void CheckIsInWater()
     {
         isInWater = floatObj.InWater;
@@ -841,9 +787,6 @@ public class CharacterContorl : MonoBehaviour
         hpSlider.transform.position = bodyCollider.transform.position;
         gpSlider.transform.localPosition = gpSlider.transform.localPosition + new Vector3(0, 1.7f + (bodyCollider.transform.localScale.x - 1) * 1.2f, 0);
         hpSlider.transform.localPosition = hpSlider.transform.localPosition + new Vector3(0, 1.9f + (bodyCollider.transform.localScale.x - 1) * 1.2f, 0);
-        drownImage.transform.position = bodyCollider.transform.position;
-        drownImage.transform.localPosition = drownImage.transform.localPosition + new Vector3(-1, 1.5f + (bodyCollider.transform.localScale.x - 1) * 1.2f, 0);
-        drownImage.fillAmount = (maxDrowning - currentDrown) / maxDrowning;
 
     }
     private void SetRingColor()
