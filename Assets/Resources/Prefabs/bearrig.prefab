@@ -20770,7 +20770,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5677479699309663618}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.65, z: 0}
+  m_LocalPosition: {x: 0, y: -0.65, z: -0.108}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -26864,7 +26864,7 @@ Rigidbody:
   serializedVersion: 2
   m_Mass: 8
   m_Drag: 0
-  m_AngularDrag: 0.05
+  m_AngularDrag: 4
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
@@ -26882,7 +26882,7 @@ SphereCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.87625444
-  m_Center: {x: 0, y: -0.008327842, z: 0.15665758}
+  m_Center: {x: 0, y: -0.008327842, z: 0}
 --- !u!114 &6524800512801151489
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26909,6 +26909,7 @@ MonoBehaviour:
   decelerationForceArgument: 10
   decelerationTorqueArgument: 5
   maxBreakTime: 0
+  minDriftAngle: 30
   groundMask:
     serializedVersion: 2
     m_Bits: 80
