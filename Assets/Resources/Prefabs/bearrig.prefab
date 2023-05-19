@@ -123,7 +123,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 352005015368033383}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.519, z: 0.091}
+  m_LocalPosition: {x: 0, y: 0.063, z: 0.091}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -20770,7 +20770,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5677479699309663618}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -0.65, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -26025,7 +26025,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6218862705607805149}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.49699998, z: 1.046}
+  m_LocalPosition: {x: 0, y: -0.168, z: 1.046}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -26252,7 +26252,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6218862706545571479}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.613, z: 0.183}
+  m_LocalPosition: {x: 0, y: -0.051999986, z: 0.183}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -26300,7 +26300,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6218862706769915550}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.155, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -26329,7 +26329,7 @@ MonoBehaviour:
       serializedVersion: 2
       m_Bits: 65
     maxStep: 0.5
-    heightOffset: 0
+    heightOffset: 0.65
     footSpeed: 3
     footRadius: 0.1
     footCenterOffset: 0
@@ -26350,7 +26350,7 @@ MonoBehaviour:
       serializedVersion: 2
       m_Bits: 65
     maxStep: 0.5
-    heightOffset: 0
+    heightOffset: 0.65
     footSpeed: 3
     footRadius: 0.1
     footCenterOffset: 0
@@ -26881,8 +26881,8 @@ SphereCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.96722394
-  m_Center: {x: 0, y: 0.68964046, z: 0.15665767}
+  m_Radius: 0.87625444
+  m_Center: {x: 0, y: -0.008327842, z: 0.15665758}
 --- !u!114 &6524800512801151489
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26908,6 +26908,7 @@ MonoBehaviour:
   releaseTime: 10
   decelerationForceArgument: 10
   decelerationTorqueArgument: 5
+  maxBreakTime: 0
   groundMask:
     serializedVersion: 2
     m_Bits: 80
@@ -26928,7 +26929,6 @@ MonoBehaviour:
   currentHPValue: 0
   currentGas: 0
   releasing: 0
-  isSwimmy: 0
   HPtimer: 0
   skill: {fileID: 0}
   isUseSkill: 0
@@ -26945,8 +26945,6 @@ MonoBehaviour:
   isTouchingSlope: 0
   vulerbilityReactRate: 1
   isDead: 0
-  stunTime: 0
-  maxStunTime: 0
   gpSlider: {fileID: 4121841322639874642}
   hpSlider: {fileID: 2827711392416063840}
   drownImage: {fileID: 3386597691202627684}
@@ -26957,6 +26955,7 @@ MonoBehaviour:
   anima: {fileID: 4382902077929413651}
   stunEffect: {fileID: 0}
   stunThreshold: 7
+  currentGravity: {x: 0, y: 0, z: 0}
   playerIndex: 0
   floatObj: {fileID: 4147182195015774368}
   grounderQuadruped: {fileID: 6218862706769915548}
@@ -27050,6 +27049,10 @@ MonoBehaviour:
   jumpFrequency: 0.25
   smokeEffect: {fileID: 87053686309883449}
   particle: {fileID: 2839387257817813285}
+  stunRecoverTime: 50
+  meshObject: {fileID: 0}
+  negativeForceConstant: 0.98
+  rollingColliders: []
 --- !u!114 &4147182195015774368
 MonoBehaviour:
   m_ObjectHideFlags: 0
