@@ -27,6 +27,7 @@ public class CharacterContorl : MonoBehaviour
     [Space(10)]
     [Header("跳跃力系数")]
     public float jumpForce;
+
     [Space(10)]
     [Header("跑步状态相关参数")]
     [Header("跑步最大速度")]
@@ -41,12 +42,15 @@ public class CharacterContorl : MonoBehaviour
     public float chargeTime;
     [Header("最大跑步时间")]
     public float releaseTime;
+
     [Space(10)]
     [Header("刹车相关参数")]
     [Header("减速力系数系数")]
     public float decelerationForceArgument;
     [Header("减速扭矩力系数系数")]
     public float decelerationTorqueArgument;
+    [Header("最大刹车时间")]
+    public float maxBreakTime;
 
 
     [Space(10)]
@@ -99,8 +103,6 @@ public class CharacterContorl : MonoBehaviour
     [HideInInspector]
     public bool releasing = false;
     [HideInInspector]
-    public bool isSwimmy = false;
-    [HideInInspector]
     public float HPtimer;
     [HideInInspector]
     public SkillItemControllerBase skill;
@@ -141,27 +143,12 @@ public class CharacterContorl : MonoBehaviour
     [Range(0, 1)]
     //易伤系数
     public float vulerbilityReactRate = 1;
-    ////是否正在返回
-    //public bool returning = false;
-    ////是否正在跳跃
-    //public bool jumpingBack = false;
-    ////游泳目的地
-    //public Vector3 swimTarget = Vector3.zero;
-    ////跳跃目的地
-    //public Vector3 jumpTarget = Vector3.zero;
-    ////游泳速度
-    //public float swimSpeed = 1;
+
 
     public bool isDead = false;
 
     private int defaultLayer = 0;
 
-    //眩晕槽
-    public float stunTime = 0;
-    //眩晕时间
-    public float maxStunTime = 0;
-    //是否眩晕
-    private bool isStun = false;
     [Space(10)]
     [Header("相关需要关联组件")]
     public Slider gpSlider;
@@ -178,6 +165,8 @@ public class CharacterContorl : MonoBehaviour
     public GameObject stunEffect;
     //眩晕阈值
     public float stunThreshold;
+    //当前的重力大大小
+    public Vector3 currentGravity;
 
     public List<Buff> buffs = new List<Buff>();
 
@@ -199,8 +188,10 @@ public class CharacterContorl : MonoBehaviour
     public AnimationCurve hitKnockbackCurve;
     [Header("击退范围上限")]
     public float hitMaxDistance = 5;
-    [Header("重力")]
+    [Header("重力相关")]
+    [Header("重力缩放")]
     public float gravityScale = 1;
+    [Header("下坠重力缩放")]
     public float fallingGravityScale = 1;
     public float ascendingGravityScale = 1;
 
@@ -214,8 +205,22 @@ public class CharacterContorl : MonoBehaviour
     public GameObject smokeEffect;
     public ParticleSystem particle;
 
+    [Header("眩晕回复时间")]
+    public float stunRecoverTime = 50;
+    private DateTime stunTime = DateTime.MinValue;
+    [HideInInspector]
+    //是否处于眩晕状态
+    public bool isStun { get; private set; }
+    //起身
+    public bool isRecovering { get; private set; }
+    //起身时间
+    private float recoveryTime = 1;
+    public GameObject meshObject;
+    [Header("眩晕摩擦力")]
+    [Range(0, 1)]
+    public float negativeForceConstant = 0.98f;
 
-
+    public List<Collider> rollingColliders;
     private void Awake()
     {
         speedUpGas = maxSpeedUpGas;
@@ -227,12 +232,14 @@ public class CharacterContorl : MonoBehaviour
         initialRotation = ridbody.transform.rotation.eulerAngles;
         initialRot = ridbody.transform.rotation;
         currentDrown = maxDrowning;
-        gameController = GameObject.Find("GameManager").GetComponent<GameController>();
+        gameController = GameObject.Find("GameManager")?.GetComponent<GameController>();
         // SetFlashMeshRendererBlock(false);
         maxDrownValue = maxDrowning;
 
         smokeEffect.gameObject.SetActive(true);
         particle.Stop();
+
+        SetStun();
     }
 
     private void Start()
@@ -245,6 +252,7 @@ public class CharacterContorl : MonoBehaviour
     private void LateUpdate()
     {
         SetSlider();
+        SetRoll();
     }
 
     private void Update()
@@ -257,38 +265,16 @@ public class CharacterContorl : MonoBehaviour
     {
         velocityBeforeCollision = GetComponent<Rigidbody>().velocity;
         positionBeforeCollision = GetComponent<Rigidbody>().position;
+        CheckHP();
+        CheckStun();
         CheckSpeed();
         CheckInVulernable();
         CheckIsGrounded();
         UpdateBuff();
         CheckSlopeAndDirections();
-
         CheckIsInWater();
         SetGravity();
-
-        //Debug.LogError($"{this.gameObject.name} ===== {(knockingPosition - this.transform.position).magnitude} {isGrounded} knock distance ==============================<<<<");
-    }
-
-    private void CheckSpeed()
-    {
-        //Debug.LogError($"current speed: {velocityBeforeCollision.magnitude} ---> {(velocityBeforeCollision.magnitude / runMaxVelocity) * 100}% {(DateTime.Now - releaseDateTime).TotalSeconds} seconds");
-        if (velocityBeforeCollision.magnitude >= runMaxVelocity * 0.9f)
-        {
-            SetRingMaxColor();
-            isAtMaxSpeed = true;
-            anima.SetBool("isAtMaxSpeed", isAtMaxSpeed);
-            if ((isGrounded || isTouchingSlope) && releasing)
-                particle.Play();
-        }
-        else
-        {
-            SetRingColor();
-            isAtMaxSpeed = false;
-            anima.SetBool("isAtMaxSpeed", isAtMaxSpeed);
-            particle.Stop();
-        }
-        if (!isGrounded && !isTouchingSlope)
-            particle.Stop();
+        //SetStunFriction();
     }
 
     public void SetControlSelf()
@@ -301,22 +287,12 @@ public class CharacterContorl : MonoBehaviour
         inputReader.brakeAciton = MoveBrake;
     }
 
-    private void SetStun()
+    public void TakeDamage(int number)
     {
-        stunTime += Time.fixedDeltaTime;
-        if (stunTime >= maxStunTime)
-        {
-            isStun = false;
-            stunTime = 0;
-            stunEffect.gameObject.SetActive(false);
-        }
-    }
-
-    private void Stun(float time)
-    {
-        maxStunTime = time;
-        isStun = true;
-        stunEffect.gameObject.SetActive(true);
+        if (isStun)
+            return;
+        currentHPValue = Math.Max(0, currentHPValue - number);
+        CheckHP();
     }
 
     private void UpdateBuff()
@@ -452,6 +428,7 @@ public class CharacterContorl : MonoBehaviour
             gravityScale = fallingGravityScale;
         }
         ridbody.AddForce(Physics.gravity * (gravityScale) * ridbody.mass);
+        currentGravity = Physics.gravity * (gravityScale);
     }
 
 
@@ -484,6 +461,8 @@ public class CharacterContorl : MonoBehaviour
 
     private void MoveWalk(Vector2 axisInput, ControlDeviceType controlDeviceType)
     {
+        if (isStun)
+            return;
         //单位化输入方向
         if (controlDeviceType == ControlDeviceType.Mouse)
         {
@@ -515,6 +494,7 @@ public class CharacterContorl : MonoBehaviour
                 moveTarget = moveTarget.normalized;
                 moveTarget = Vector3.ProjectOnPlane(moveTarget, groundNormal).normalized;
                 ridbody.AddForce(moveTarget * forceMagnitude - gravityDivide, ForceMode.Force);
+                //Debug.Log($"isTouchingSlope || isGrounded {isTouchingSlope || isGrounded} forceMagnitude {forceMagnitude} velocity {ridbody.velocity} velocityMagnitude {ridbody.velocity.magnitude}");
                 
 
                 if (axisInput.magnitude > movementThrashold)
@@ -530,6 +510,7 @@ public class CharacterContorl : MonoBehaviour
                     targetAngle = Mathf.Atan2(axisInput.x, axisInput.y) * Mathf.Rad2Deg + Camera.main.transform.eulerAngles.y;
                     transform.rotation = Quaternion.Slerp(this.ridbody.rotation, Quaternion.Euler(new Vector3(0, targetAngle, 0) + initialRotation), runMaxSpeedRotationRate);
                 }
+               // Debug.Log($"isTouchingSlope || isGrounded {isTouchingSlope || isGrounded} velocity {ridbody.velocity} velocityMagnitude {ridbody.velocity.magnitude}");
             }
         }
         else
@@ -569,6 +550,8 @@ public class CharacterContorl : MonoBehaviour
 
     private void MoveBrake(bool brake)
     {
+        if (isStun)
+            return;
         //只有地面能刹车
         if (!isGrounded && !isTouchingSlope)
             return;
@@ -597,6 +580,8 @@ public class CharacterContorl : MonoBehaviour
 
     private void MoveJump(bool jump)
     {
+        if (isStun)
+            return;
         if (buffs.Any(x => x is HitBuff))
             return;
         //if (isGrounded || isTouchingSlope) //touching slope bug
@@ -633,6 +618,8 @@ public class CharacterContorl : MonoBehaviour
 
     private void MoveCharge(bool charge)
     {
+        if (isStun)
+            return;
         if (charge)
         {
             if (currentGas < maxActorGas && !releasing)
@@ -660,6 +647,8 @@ public class CharacterContorl : MonoBehaviour
     public DateTime releaseDateTime = DateTime.MinValue;
     private void MoveRelease(bool charge)
     {
+        if (isStun)
+            return;
         if (!charge || releasing)
         {
             if (currentGas == 0)
@@ -682,9 +671,75 @@ public class CharacterContorl : MonoBehaviour
     #endregion
 
     #region Check
+
+    private void CheckStun()
+    {
+        if (isStun)
+        {
+            if (ElapsedRollTime < TargetRollTime)
+            {
+                ElapsedRollTime = ElapsedRollTime + Time.fixedDeltaTime;
+                if (ElapsedRollTime / TargetRollTime > 0.9f)
+                    ridbody.angularDrag = Mathf.Lerp(1, 3.5f, ElapsedRollTime / TargetRollTime);
+                else
+                    ridbody.angularDrag = 1;
+            }
+        }
+
+    }
+
+    private void CheckHP()
+    {
+        if (isStun && !isRecovering)
+        {
+            if ((DateTime.Now - stunTime).TotalSeconds >= stunRecoverTime)
+            {
+                isRecovering = true;
+                currentHPValue = maxHPValue;
+                ridbody.freezeRotation = true;
+                this.transform.DORotate(new Vector3(0, 0, 0), 0.2f).onComplete += () =>
+                {
+                    isStun = false;
+                    SetStun();
+                };
+            }
+        }
+        else
+        {
+            if (currentHPValue <= 0)
+            {
+                isStun = true;
+                SetStun();
+                ridbody.freezeRotation = false;
+                stunTime = DateTime.Now;
+            }
+        }
+    }
+
+    private void CheckSpeed()
+    {
+        //Debug.LogError($"current speed: {velocityBeforeCollision.magnitude} ---> {(velocityBeforeCollision.magnitude / runMaxVelocity) * 100}% {(DateTime.Now - releaseDateTime).TotalSeconds} seconds");
+        if (velocityBeforeCollision.magnitude >= runMaxVelocity * 0.9f)
+        {
+            SetRingMaxColor();
+            isAtMaxSpeed = true;
+            anima.SetBool("isAtMaxSpeed", isAtMaxSpeed);
+            if ((isGrounded || isTouchingSlope) && releasing)
+                particle.Play();
+        }
+        else
+        {
+            SetRingColor();
+            isAtMaxSpeed = false;
+            anima.SetBool("isAtMaxSpeed", isAtMaxSpeed);
+            particle.Stop();
+        }
+        if (!isGrounded && !isTouchingSlope && !isStun)
+            particle.Stop();
+    }
     private void SetIK()
     {
-        var targetIK = isInWater ? 0 : 1;
+        var targetIK = isInWater || isStun ? 0 : 1;
 
         if (grounderQuadruped.weight != targetIK)
         {
@@ -702,9 +757,40 @@ public class CharacterContorl : MonoBehaviour
         }
     }
 
+    private void SetStunFriction()
+    {
+        if (isStun)
+            ridbody.AddForce(ridbody.velocity * -negativeForceConstant);
+    }
+
     private void CheckIsInWater()
     {
         isInWater = floatObj.InWater;
+    }
+
+    private float ElapsedRollTime; //过去了的时间
+    private float TargetRollTime; //目标时间
+
+    private void SetStun()
+    {
+        rollingColliders.ForEach(x => x.GetComponent<Rigidbody>().isKinematic = !isStun);
+        rollingColliders.ForEach(x => x.GetComponent<Rigidbody>().detectCollisions = !isStun);
+        rollingColliders.ForEach(x => x.GetComponent<Joint>().connectedBody = isStun ? ridbody : null);
+        rollingColliders.ForEach(x => x.GetComponent<SphereCollider>().isTrigger = !isStun);
+        rollingColliders.ForEach(x => Physics.IgnoreCollision(bodyCollider, x.GetComponent<SphereCollider>()));
+        if (isStun)
+        {
+            ridbody.angularDrag = 1f;
+            (bodyCollider as SphereCollider).material.bounceCombine = PhysicMaterialCombine.Average;
+            (bodyCollider as SphereCollider).material.bounciness = 0.5f;
+        }
+        else
+        {
+            ridbody.angularDrag = 0f;
+            (bodyCollider as SphereCollider).material.bounceCombine = PhysicMaterialCombine.Minimum;
+            (bodyCollider as SphereCollider).material.bounciness = 0;
+        }
+
     }
 
     private void CheckIsGrounded()
@@ -729,57 +815,16 @@ public class CharacterContorl : MonoBehaviour
         }
         else
         {
-
+            groundNormal = Vector3.up;
         }
-    }
-
-    private bool CheckHP()
-    {
-
-        if (currentHPValue == lastHPValue)
-            HPtimer += Time.fixedDeltaTime;
-        else
-            HPtimer = 0;
-
-        if (HPtimer > 15)
-        {
-            currentHPValue = currentHPValue + maxHPValue / cureTime * Time.fixedDeltaTime;
-            currentHPValue = Mathf.Min(currentHPValue, maxHPValue);
-            lastHPValue = currentHPValue;
-        }
-        else
-        {
-            lastHPValue = currentHPValue;
-        }
-
-
-        //if (isSwimmy)
-        //{
-        //    currentHPValue = currentHPValue + maxHPValue / cureTime * Time.fixedDeltaTime;
-        //    currentHPValue = Mathf.Min(currentHPValue, maxHPValue);
-        //    if (currentHPValue == maxHPValue)
-        //    {
-        //        isSwimmy = false;
-        //    }
-        //    return false;
-        //}
-
-        if (currentHPValue <= 0)
-        {
-            currentHPValue = 0;
-            return false;
-        }
-        return true;
     }
 
     #endregion
     #region SetUI
     private void SetSlider()
     {
-
-
         gpSlider.value = (float)(currentGas / maxActorGas);
-        hpSlider.value = (float)(maxDrowning / maxDrownValue);
+        hpSlider.value = (float)(currentHPValue / maxHPValue);
         canvas.transform.forward = Camera.main.transform.forward;
         gpSlider.transform.position = bodyCollider.transform.position;
         hpSlider.transform.position = bodyCollider.transform.position;
@@ -788,8 +833,6 @@ public class CharacterContorl : MonoBehaviour
         drownImage.transform.position = bodyCollider.transform.position;
         drownImage.transform.localPosition = drownImage.transform.localPosition + new Vector3(-1, 1.5f + (bodyCollider.transform.localScale.x - 1) * 1.2f, 0);
         drownImage.fillAmount = (maxDrowning - currentDrown) / maxDrowning;
-
-
     }
     private void SetRingColor()
     {
@@ -821,6 +864,22 @@ public class CharacterContorl : MonoBehaviour
     }
 
     #endregion
+
+    #region Render
+    private void SetRoll()
+    {
+        if (isStun)
+        {
+            //Vector3 rotationAxis = -Vector3.Cross(groundNormal, ridbody.velocity);
+            //var rotationAmount = ridbody.velocity.magnitude * (float)Math.Cos(10);
+            //Debug.LogError($"===> rotation amount {rotationAmount}");
+
+            //meshObject.transform.Rotate(rotationAxis, -rotationAmount, Space.Self);
+        }
+    }
+
+    #endregion
+
 
     #region OnCollison
     private void OnCollisionStay(Collision collision)
@@ -884,6 +943,7 @@ public class CharacterContorl : MonoBehaviour
                 lglooNerfRate = 0.5f;
             }
             var force = KnockBackForce(1);
+
             var hitDir = Vector3.ProjectOnPlane((ridbody.position - collision.contacts[0].point), Vector3.up).normalized;
             if (otherCollision.releasing)
                 ridbody.AddForce((force) * hitDir, ForceMode.Force);
@@ -917,11 +977,44 @@ public class CharacterContorl : MonoBehaviour
         return acceleration * ridbody.mass;
     }
 
-    private float KnockBackAir(float distance)
+    /// <summary>
+    /// 在空中的击退距离
+    /// </summary>
+    /// <param name="distance"></param>
+    /// <returns></returns>
+    private float KnockBackOnAirForce(float distance)
     {
-        return (distance / Time.fixedDeltaTime) * ridbody.mass;
-    }
+        var currentVelocity = ridbody.velocity;
+        float forceMagnitude = 0f;
+        if(currentVelocity.y > 0)
+        {
+            //上升状态处理
+            var riseTime = currentVelocity.y / currentGravity.magnitude;
+            var dropHeight = ridbody.transform.position.y + (bodyCollider as SphereCollider).center.y + currentGravity.magnitude * Mathf.Pow(riseTime, 2.0f);
+            var dropTime = Mathf.Sqrt(2 * currentGravity.magnitude * dropHeight);
+            var initialVelocity = distance / (dropTime+ riseTime);
+            var acceleration = initialVelocity / Time.fixedDeltaTime;
+            forceMagnitude = acceleration * ridbody.mass;
 
+        }
+        else
+        {
+            //下降状态处理
+            var riseTime = Mathf.Abs(currentVelocity.y) / currentGravity.magnitude;
+            var dropHeight = ridbody.transform.position.y + (bodyCollider as SphereCollider).center.y + currentGravity.magnitude * Mathf.Pow(riseTime, 2.0f);
+            var dropMaxTime = Mathf.Sqrt(2 * currentGravity.magnitude * dropHeight);
+            var dropTime = dropMaxTime - riseTime;
+
+
+            var gravityDivide = Vector3.ProjectOnPlane(Physics.gravity, groundNormal) * ridbody.mass;
+            var gravityFrictionDivide = Physics.gravity - gravityDivide;
+            var frictionForceAcceleration = bodyCollider.material.dynamicFriction * gravityFrictionDivide.magnitude;
+
+            var initialVelocity = (float)(((distance) + frictionForceAcceleration * Mathf.Pow(riseTime, 2)/2)/(0.4 * dropTime + 0.6 * riseTime));
+            forceMagnitude = initialVelocity / Time.fixedDeltaTime * ridbody.mass;
+        }
+        return forceMagnitude;
+    }
     Vector3 knockingPosition = Vector3.zero;
 
     private void OnCollisionEnter(Collision collision)
@@ -998,20 +1091,17 @@ public class CharacterContorl : MonoBehaviour
             //出招加成
             var hasBuff = (otherCollision.isAtMaxSpeed && !otherCollision.isGrounded) ? 1.1f : 1;
             var myBuff = isAtMaxSpeed && !otherCollision.isGrounded ? 1.1f : 1;
-            //if (isGrounded || isTouchingSlope)
-            //{
-            //    ridbody.AddExplosionForce(targetForce, collision.contacts[0].point, 2, 0f, ForceMode.Force);
-            //}
-            //else
-            //{
-            //    StartCoroutine(AddExplosiveForceSmooth(targetForce * 0.5f, collision.contacts[0].point));
-            //}
-
             var hitDir = Vector3.ProjectOnPlane((ridbody.position - collision.contacts[0].point), Vector3.up).normalized;
 
-            var force = KnockBackForce(Math.Min(hitMaxDistance, hitKnockbackCurve.Evaluate(m2 * hasBuff) + hitKnockbackCurve.Evaluate(m1 * myBuff + 2)));
-           
+            var hitDistance = Math.Min(hitMaxDistance, hitKnockbackCurve.Evaluate(m2 * hasBuff) + hitKnockbackCurve.Evaluate(m1 * myBuff + 2));
 
+            float force = 0f;
+            if (isGrounded || isTouchingSlope)
+                force = KnockBackForce(hitDistance);
+            else
+                force = KnockBackOnAirForce(hitDistance);
+
+            TakeDamage((int)(hitKnockbackCurve.Evaluate(m2 * hasBuff) * 10));
             ridbody.AddForce((force)* hitDir, ForceMode.Force);
 
             //Debug.LogError($"结算 {otherCollision.gameObject.name} force {force} hit Dir {hitDir}");
@@ -1023,6 +1113,17 @@ public class CharacterContorl : MonoBehaviour
             if (otherCollision.skill && otherCollision.isUseSkill)
             {
                 otherCollision.skill.ExitUseMode();
+            }
+
+            //旋转
+            if (isStun)
+            {
+                var targetTime = hitKnockbackCurve.Evaluate(m2 * hasBuff);
+                TargetRollTime = Math.Max(targetTime, TargetRollTime);
+                if (TargetRollTime - ElapsedRollTime < targetTime)
+                {
+                    TargetRollTime += (targetTime - (TargetRollTime - ElapsedRollTime));
+                }
             }
         }
 
