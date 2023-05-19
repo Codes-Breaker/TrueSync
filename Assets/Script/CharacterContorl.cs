@@ -224,7 +224,6 @@ public class CharacterContorl : MonoBehaviour
     [Range(0, 1)]
     public float negativeForceConstant = 0.98f;
 
-    public List<Collider> rollingColliders;
     private void Awake()
     {
         speedUpGas = maxSpeedUpGas;
@@ -800,23 +799,7 @@ public class CharacterContorl : MonoBehaviour
 
     private void SetStun()
     {
-        rollingColliders.ForEach(x => x.GetComponent<Rigidbody>().isKinematic = !isStun);
-        rollingColliders.ForEach(x => x.GetComponent<Rigidbody>().detectCollisions = !isStun);
-        rollingColliders.ForEach(x => x.GetComponent<Joint>().connectedBody = isStun ? ridbody : null);
-        rollingColliders.ForEach(x => x.GetComponent<SphereCollider>().isTrigger = !isStun);
-        rollingColliders.ForEach(x => Physics.IgnoreCollision(bodyCollider, x.GetComponent<SphereCollider>()));
-        if (isStun)
-        {
-            ridbody.angularDrag = 1f;
-            (bodyCollider as SphereCollider).material.bounceCombine = PhysicMaterialCombine.Average;
-            (bodyCollider as SphereCollider).material.bounciness = 0.5f;
-        }
-        else
-        {
-            ridbody.angularDrag = 0f;
-            (bodyCollider as SphereCollider).material.bounceCombine = PhysicMaterialCombine.Minimum;
-            (bodyCollider as SphereCollider).material.bounciness = 0;
-        }
+
 
     }
 
@@ -1119,9 +1102,10 @@ public class CharacterContorl : MonoBehaviour
             var hasBuff = (otherCollision.isAtMaxSpeed && !otherCollision.isGrounded) ? 1.1f : 1;
             var myBuff = isAtMaxSpeed && !otherCollision.isGrounded ? 1.1f : 1;
 
-            var hitDir = Vector3.ProjectOnPlane((ridbody.position - collision.contacts[0].point), Vector3.up).normalized;
-
-            var hitDistance = Math.Min(hitMaxDistance, hitKnockbackCurve.Evaluate(momentumOther * hasBuff) + hitKnockbackCurve.Evaluate(momentumSelf * myBuff + 2));
+            var hitDir = Vector3.ProjectOnPlane((ridbody.position - collision.contacts[0].point), groundNormal).normalized;
+            var myHitKnockback = hitKnockbackCurve.Evaluate(momentumSelf * myBuff + 2);
+            var otherHitKnockback = hitKnockbackCurve.Evaluate(momentumOther * hasBuff);
+            var hitDistance = Math.Min(hitMaxDistance, otherHitKnockback + myHitKnockback);
 
             float force = 0f;
             //施加水平推力
@@ -1130,6 +1114,14 @@ public class CharacterContorl : MonoBehaviour
             else
                 force = KnockBackOnAirForce(Math.Min(hitMaxDistance, hitKnockbackCurve.Evaluate(momentumOther * hasBuff) + hitKnockbackCurve.Evaluate(momentumSelf * myBuff + 2)));
            
+            var hitOnPlane = Vector3.ProjectOnPlane((collision.contacts[0].point - ridbody.position), groundNormal).normalized;
+            var forwardOnPlane = Vector3.ProjectOnPlane(ridbody.transform.forward, groundNormal).normalized;
+            var hitAngle = Vector3.Angle(forwardOnPlane, hitOnPlane);
+            anima.SetFloat("hitAngle", hitAngle);
+            if (myHitKnockback > 1 || otherHitKnockback > 1)
+            {
+                anima.SetBool("isHit", true);
+            }
 
             TakeDamage((int)(hitKnockbackCurve.Evaluate(momentumOther * hasBuff) * 10));
             ridbody.AddForce((force)* hitDir, ForceMode.Force);
