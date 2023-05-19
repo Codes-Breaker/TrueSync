@@ -95,10 +95,6 @@ public class CollisionStun : MonoBehaviour
             collision.collider.gameObject.GetComponent<Rigidbody>().AddExplosionForce(froceArgument * m2, collision.contacts[0].point, 4);
         }
 
-
-        //�˺�������impulse��ֶκ���
-        if (characterManager.isSwimmy)
-            return;
         if (m2 > 8)
         {
             characterManager.currentHPValue = characterManager.currentHPValue - 20;
