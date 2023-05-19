@@ -1009,55 +1009,59 @@ public class CharacterContorl : MonoBehaviour
             var eventObjectGameObject = Instantiate(eventObjectPrefab, collision.contacts[0].point, Quaternion.Euler(new Vector3(0, 0, 0)));
 
             var otherCollision = collision.gameObject.GetComponent<CharacterContorl>();
-            Vector3 vel1 = new Vector3(velocityBeforeCollision.x, velocityBeforeCollision.y, velocityBeforeCollision.z);
-            vel1 = Vector3.ProjectOnPlane(vel1, groundNormal).normalized * vel1.magnitude;
-            Vector3 vel2 = new Vector3(otherCollision.velocityBeforeCollision.x, otherCollision.velocityBeforeCollision.y, otherCollision.velocityBeforeCollision.z);
-            vel2 = Vector3.ProjectOnPlane(vel2, groundNormal).normalized * vel2.magnitude;
+            //自身速度
+            Vector3 velocitySelf = new Vector3(velocityBeforeCollision.x, velocityBeforeCollision.y, velocityBeforeCollision.z);
+            velocitySelf = Vector3.ProjectOnPlane(velocitySelf, groundNormal).normalized * velocitySelf.magnitude;
+            //对方速度
+            Vector3 velocityOther = new Vector3(otherCollision.velocityBeforeCollision.x, otherCollision.velocityBeforeCollision.y, otherCollision.velocityBeforeCollision.z);
+            velocityOther = Vector3.ProjectOnPlane(velocityOther, groundNormal).normalized * velocityOther.magnitude;
 
             Vector3 cPoint = collision.contacts[0].point;
             Vector3 contactToMe = cPoint - positionBeforeCollision;
             Vector3 contactToOther = cPoint - otherCollision.positionBeforeCollision;
 
-            var d1 = Vector3.Angle(vel1, contactToMe);
-            var d2 = Vector3.Angle(vel2, contactToOther);
+            var angleSelf = Vector3.Angle(velocitySelf, contactToMe);
+            var angleOther = Vector3.Angle(velocityOther, contactToOther);
 
-            var degree1 = d1 * Mathf.Deg2Rad;
-            var degree2 = d2 * Mathf.Deg2Rad;
+            var degreeSelf = angleSelf * Mathf.Deg2Rad;
+            var degreeOther = angleOther * Mathf.Deg2Rad;
 
             Vector3 impactVelocity = collision.relativeVelocity;
 
-            var m1 = (Mathf.Cos(degree1) * vel1).magnitude;
-            var m2 = (Mathf.Cos(degree2) * vel2).magnitude;
+            var momentumSelf = (Mathf.Cos(degreeSelf) * velocitySelf).magnitude;
+            var momentumOther = (Mathf.Cos(degreeOther) * velocityOther).magnitude;
 
             var lglooNerfRate = 1f;
             if (hasLglooStun())
             {
                 lglooNerfRate = 0.5f;
             }
-            //ridbody.AddExplosionForce((otherCollision.forceArgument + m2) + 200 * lglooNerfRate, collision.contacts[0].point, 4);
-            //collision.collider.gameObject.GetComponent<Rigidbody>().AddExplosionForce((forceArgument + m1) + 50, collision.contacts[0].point, 4);
             //出招加成
             var hasBuff = (otherCollision.isAtMaxSpeed && !otherCollision.isGrounded) ? 1.1f : 1;
             var myBuff = isAtMaxSpeed && !otherCollision.isGrounded ? 1.1f : 1;
-            //if (isGrounded || isTouchingSlope)
-            //{
-            //    ridbody.AddExplosionForce(targetForce, collision.contacts[0].point, 2, 0f, ForceMode.Force);
-            //}
-            //else
-            //{
-            //    StartCoroutine(AddExplosiveForceSmooth(targetForce * 0.5f, collision.contacts[0].point));
-            //}
 
             var hitDir = Vector3.ProjectOnPlane((ridbody.position - collision.contacts[0].point), Vector3.up).normalized;
 
             float force = 0f;
+            //施加水平推力
             if (isGrounded || isTouchingSlope)
-                force = KnockBackForce(Math.Min(hitMaxDistance, hitKnockbackCurve.Evaluate(m2 * hasBuff) + hitKnockbackCurve.Evaluate(m1 * myBuff + 2)));
+                force = KnockBackForce(Math.Min(hitMaxDistance, hitKnockbackCurve.Evaluate(momentumOther * hasBuff) + hitKnockbackCurve.Evaluate(momentumSelf * myBuff + 2)));
             else
-                force = KnockBackOnAirForce(Math.Min(hitMaxDistance, hitKnockbackCurve.Evaluate(m2 * hasBuff) + hitKnockbackCurve.Evaluate(m1 * myBuff + 2)));
+                force = KnockBackOnAirForce(Math.Min(hitMaxDistance, hitKnockbackCurve.Evaluate(momentumOther * hasBuff) + hitKnockbackCurve.Evaluate(momentumSelf * myBuff + 2)));
            
 
             ridbody.AddForce((force)* hitDir, ForceMode.Force);
+
+            //施加转角力 正值顺时针转动，负值逆时针转动
+            var torgueAngle = Vector3.SignedAngle(velocityOther, contactToOther, groundNormal);
+            if (torgueAngle >= 0)
+            {
+                ridbody.AddRelativeTorque(Vector3.right * velocityOther.magnitude * Mathf.Cos(torgueAngle * Mathf.Deg2Rad), ForceMode.Force);
+            }
+            else
+            {
+                ridbody.AddRelativeTorque(Vector3.left * velocityOther.magnitude * Mathf.Cos(torgueAngle * Mathf.Deg2Rad), ForceMode.Force);
+            }
 
             //Debug.LogError($"结算 {otherCollision.gameObject.name} force {force} hit Dir {hitDir}");
             knockingPosition = this.transform.position;
