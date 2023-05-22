@@ -182,6 +182,7 @@ public class CharacterContorl : MonoBehaviour
     public GrounderQuadruped grounderQuadruped;
 
     public bool isInWater = false;
+    private bool hasInWater = false;
 
     [Header("是否达到最大速度")]
     public bool isAtMaxSpeed = false;
@@ -347,6 +348,16 @@ public class CharacterContorl : MonoBehaviour
         anima.SetFloat("playSpeed", runAnimPlayCurve.Evaluate(speed));
         anima.SetFloat("velocityY", ridbody.velocity.y);
         anima.SetBool("Releasing", releasing);
+        if (isInWater && !hasInWater)
+        {
+            anima.SetTrigger("isInWater");
+            hasInWater = true;
+        }
+        else if (!isInWater && hasInWater)
+        {
+            hasInWater = false;
+        }
+        anima.SetBool("inWater", isInWater);
         anima.SetBool("isDrift", isDrift);
         anima.SetFloat("driftAngle", driftAngle);
     }
@@ -564,11 +575,26 @@ public class CharacterContorl : MonoBehaviour
 
     private void MoveBrake(bool brake)
     {
-        if (isStun)
+        if (isStun || isInWater)
+        {
+            if (hasBrake)
+            {
+                anima.SetBool("isBrake", false);
+                hasBrake = false;
+            }
             return;
+        }
         //只有地面能刹车
         if (!isGrounded && !isTouchingSlope)
+        {
+            if (hasBrake)
+            {
+                anima.SetBool("isBrake", false);
+                hasBrake = false;
+            }
             return;
+        }
+
         if (brake)
         {
             ridbody.AddForce(-ridbody.velocity * decelerationForceArgument);
@@ -765,21 +791,22 @@ public class CharacterContorl : MonoBehaviour
 
     private void SetIK()
     {
-        var targetIK = isInWater || isStun ? 0 : 1;
+        var targetIK = isInWater || isStun ? 1 : 1;
 
         if (grounderQuadruped.weight != targetIK)
         {
-            var speed = Time.deltaTime;
-            if (targetIK > grounderQuadruped.weight)
-            {
-                grounderQuadruped.weight += speed;
-                grounderQuadruped.weight = Mathf.Min(1, grounderQuadruped.weight);
-            }
-            else
-            {
-                grounderQuadruped.weight -= speed;
-                grounderQuadruped.weight = Mathf.Max(0, grounderQuadruped.weight);
-            }
+            //var speed = Time.deltaTime;
+            grounderQuadruped.weight = targetIK;
+            //if (targetIK > grounderQuadruped.weight)
+            //{
+            //    grounderQuadruped.weight += speed;
+            //    grounderQuadruped.weight = Mathf.Min(1, grounderQuadruped.weight);
+            //}
+            //else
+            //{
+            //    grounderQuadruped.weight -= speed;
+            //    grounderQuadruped.weight = Mathf.Max(0, grounderQuadruped.weight);
+            //}
         }
     }
 
