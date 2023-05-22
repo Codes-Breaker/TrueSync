@@ -213,16 +213,42 @@ public class CharacterContorl : MonoBehaviour
 
 
     //本地计时器相关
-    private float lastJumpLandTime ;
+    private float lastJumpLandTime;
     private float lastStunTime;
     private float ElapsedRollTime; //过去了的时间
     private float TargetRollTime; //目标时间
+    private float lastLeaveWaterTime; //回到岸上过去了的时间
+    private float lastInWaterTime; //上次入水时间
+    private float lastCollisionTime; //上次碰撞时间
+    private float lastHPSubtractTime = 0; //上次扣血时间
+    private float lastHPRecoveryTime = 0; //上次回血时间
+    private float lastStunRecoveryTime = 0; //上次眩晕回复时间
 
     //是否处于眩晕状态
     //起身时间
     [HideInInspector]
     private float recoveryTime = 1;
+    [Header("回血间隔时间")]
+    public float hpRecoveryFrequency = 1;
+    [Header("回岸回血延时时间")]
+    public float leaveWaterRecoveryFrequency = 5;
+    [Header("回血量")]
+    public float HPRecoveryRate = 2;
+    [Header("扣血量")]
+    public float HPSubtractRate = 5;
+    [Header("扣血间隔时间")]
+    public float hpSubtractFrequency = 1;
+    [Header("入水扣血延时时间")]
+    public float inWaterSubtractFrequency = 3;
+    [Header("眩晕回复间隔时间")]
+    public float stunRecoveryFrequency = 1;
+    [Header("眩晕回复量")]
+    public float stunRecoveryRate = 2;
+    [Header("眩晕回血延时时间")]
+    public float withoutCollidingRecoveryFrequency = 3;
 
+    //是否处于碰撞角色
+    private bool isCollidingCharacter = false;
 
 
     private void Awake()
@@ -276,6 +302,8 @@ public class CharacterContorl : MonoBehaviour
         UpdateBuff();
         CheckSlopeAndDirections();
         CheckIsInWater();
+        UpdateHP();
+        UpdateStunRecovery();
         SetGravity();
     }
 
@@ -287,6 +315,13 @@ public class CharacterContorl : MonoBehaviour
         inputReader.interactWeaponAction = UseWeapon;
         inputReader.jumpAction = MoveJump;
         inputReader.brakeAciton = MoveBrake;
+    }
+
+    private void SetDead()
+    {
+        isDead = true;
+        anima.enabled = false;
+        Dead();
     }
 
     public void TakeDamage(int number)
@@ -306,6 +341,82 @@ public class CharacterContorl : MonoBehaviour
             if (buff.isEnd)
             {
                 buffs.Remove(buff);
+            }
+        }
+    }
+
+    private void UpdateStunRecovery()
+    {
+        if (isDead)
+            return;
+        if (!isCollidingCharacter)
+            lastCollisionTime += Time.fixedDeltaTime;
+        if (!isCollidingCharacter)
+        {
+            if (lastCollisionTime > withoutCollidingRecoveryFrequency)
+            {
+                if (lastStunRecoveryTime > stunRecoveryFrequency)
+                {
+                    if (currentStunValue < maxStunValue)
+                    {
+                        currentStunValue += stunRecoveryRate;
+                        currentStunValue = Math.Min(currentStunValue, maxStunValue);
+                        lastStunRecoveryTime = 0;
+                    }
+                }
+                else
+                {
+                    lastStunRecoveryTime += Time.fixedDeltaTime;
+                }
+            }
+
+        }
+
+    }
+
+    private void UpdateHP()
+    {
+        if (isDead)
+            return;
+
+        if (isInWater)
+        {
+            //入水扣血判定
+            if (lastInWaterTime > inWaterSubtractFrequency)
+            {
+                if (lastHPSubtractTime > hpSubtractFrequency)
+                {
+                    currentHPValue -= HPSubtractRate;
+                    currentHPValue = Math.Max(currentHPValue, 0);
+                    lastHPSubtractTime = 0;
+                    if (currentHPValue == 0)
+                    {
+                        SetDead();
+                    }
+                }
+                else
+                {
+                    lastHPSubtractTime += Time.fixedDeltaTime;
+                }
+            }
+        }
+        else
+        {
+            if (lastLeaveWaterTime > leaveWaterRecoveryFrequency)
+            {
+                if (currentHPValue < maxHPValue)
+                {
+                    if (lastHPRecoveryTime > hpRecoveryFrequency)
+                    {
+                        currentHPValue += HPRecoveryRate;
+                        currentHPValue = Math.Min(currentHPValue, maxHPValue);
+                        lastHPRecoveryTime = 0;
+                    }
+                    else
+                    {
+                        lastHPRecoveryTime += Time.fixedDeltaTime;
+                    }
+                }
             }
         }
     }
@@ -389,7 +500,7 @@ public class CharacterContorl : MonoBehaviour
     {
         var cinemachineTargetGroup = GameObject.FindObjectOfType<CinemachineTargetGroup>();
         cinemachineTargetGroup.RemoveMember(transform);
-        this.gameObject.SetActive(false);
+        //this.gameObject.SetActive(false);
         this.canvas.gameObject.SetActive(false);
         gameController.CheckGameState();
     }
@@ -426,7 +537,7 @@ public class CharacterContorl : MonoBehaviour
 
     private void MoveWalk(Vector2 axisInput, ControlDeviceType controlDeviceType)
     {
-        if (isStun)
+        if (isStun || isDead)
             return;
         //单位化输入方向
         if (controlDeviceType == ControlDeviceType.Mouse)
@@ -524,6 +635,8 @@ public class CharacterContorl : MonoBehaviour
 
     private void MoveBrake(bool brake)
     {
+        if (isDead)
+            return;
         if (isStun || isInWater)
         {
             if (hasBrake)
@@ -569,7 +682,7 @@ public class CharacterContorl : MonoBehaviour
 
     private void MoveJump(bool jump)
     {
-        if (isStun)
+        if (isStun || isDead)
             return;
         if (buffs.Any(x => x is HitBuff))
             return;
@@ -617,7 +730,7 @@ public class CharacterContorl : MonoBehaviour
 
     private void MoveCharge(bool charge)
     {
-        if (isStun)
+        if (isStun || isDead)
             return;
         if (charge)
         {
@@ -638,7 +751,7 @@ public class CharacterContorl : MonoBehaviour
 
     private void MoveRelease(bool charge)
     {
-        if (isStun)
+        if (isStun || isDead)
             return;
         if (!charge || releasing)
         {
@@ -782,7 +895,29 @@ public class CharacterContorl : MonoBehaviour
 
     private void CheckIsInWater()
     {
+        if (floatObj.InWater && !isInWater)
+        {
+            //入水判定
+            lastInWaterTime = 0;
+
+        }
+
+        if (!floatObj.InWater && isInWater)
+        {
+            //出水判定
+            lastLeaveWaterTime = 0;
+        }
+
         isInWater = floatObj.InWater;
+
+        if (isInWater)
+        {
+            lastInWaterTime += Time.fixedDeltaTime;
+        }
+        else
+        {
+            lastLeaveWaterTime += Time.fixedDeltaTime;
+        }
     }
 
     private void CheckIsGrounded()
@@ -939,6 +1074,14 @@ public class CharacterContorl : MonoBehaviour
             //ridbody.AddExplosionForce((m1 + m2) * 300f, collision.contacts[0].point, 2, 0f, ForceMode.Force);
             //collision.collider.gameObject.GetComponent<Rigidbody>().AddExplosionForce((m1 + m2 * 0.25f) * 0.1f, collision.contacts[0].point, 2, 0f, ForceMode.VelocityChange);
         }
+
+       
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        lastCollisionTime = 0;
+        isCollidingCharacter = false;
     }
 
     /// <summary>
@@ -1037,6 +1180,7 @@ public class CharacterContorl : MonoBehaviour
 
         if (collision.gameObject.GetComponent<CharacterContorl>())
         {
+            isCollidingCharacter = true;
             //特效
             var eventObjectPrefab = Resources.Load<GameObject>("MediumHit");
             var eventObjectGameObject = Instantiate(eventObjectPrefab, collision.contacts[0].point, Quaternion.Euler(new Vector3(0, 0, 0)));
