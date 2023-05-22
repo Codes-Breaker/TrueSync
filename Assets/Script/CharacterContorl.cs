@@ -777,8 +777,8 @@ public class CharacterContorl : MonoBehaviour
             if(ridbody.velocity.magnitude > stunStopRollMinVelocity)
             {
                 rollRotationAxis = - Vector3.Cross(groundNormal, ridbody.velocity);
-                rollRotationAmount = Vector3.ProjectOnPlane(ridbody.velocity,groundNormal).magnitude * velocityToRollAngleArgument;
-                IKObject.transform.Rotate(rollRotationAxis, -rollRotationAmount, Space.Self);
+                rollRotationAmount = ridbody.velocity.magnitude;
+                IKObject.transform.Rotate(rollRotationAxis, - rollRotationAmount, Space.World);
                 isRollContinu = true;
             }
             else
@@ -789,7 +789,7 @@ public class CharacterContorl : MonoBehaviour
                 //近乎停止旋转时的平衡补偿
                 if(isRollContinu)
                 {
-                    IKObject.transform.Rotate(rollRotationAxis, -rollRotationAmount, Space.Self);
+                    IKObject.transform.Rotate(rollRotationAxis, -rollRotationAmount, Space.World);
 
                 }
             }
@@ -816,15 +816,14 @@ public class CharacterContorl : MonoBehaviour
 
     private void CheckStun()
     {
-        if (isStun && !isRecovering)
+        if (isStun)
         {
             lastStunTime += Time.fixedDeltaTime;
             if (lastStunTime >= stunRecoverTime)
             {
-                isRecovering = true;
                 currentStunValue = maxStunValue;
 
-                this.transform.DORotate(new Vector3(0, 0, 0), 0.2f).onComplete += () =>
+                IKObject.transform.DOLocalRotate(new Vector3(0, 0, 0), 0.5f).onComplete += () =>
                 {
                     isStun = false;
                 };
