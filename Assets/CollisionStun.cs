@@ -95,22 +95,22 @@ public class CollisionStun : MonoBehaviour
             collision.collider.gameObject.GetComponent<Rigidbody>().AddExplosionForce(froceArgument * m2, collision.contacts[0].point, 4);
         }
 
-        if (m2 > 8)
-        {
-            characterManager.currentHPValue = characterManager.currentHPValue - 20;
-        }
-        else if(m2 > 6) 
-        {
-            characterManager.currentHPValue = characterManager.currentHPValue - 16;
-        }
-        else if(m2 > 4)
-        {
-            characterManager.currentHPValue = characterManager.currentHPValue - 12;
-        }
-        else if(m2 > 2)
-        {
-            characterManager.currentHPValue = characterManager.currentHPValue - 8;
-        }
+        //if (m2 > 8)
+        //{
+        //    characterManager.currentHPValue = characterManager.currentHPValue - 20;
+        //}
+        //else if(m2 > 6) 
+        //{
+        //    characterManager.currentHPValue = characterManager.currentHPValue - 16;
+        //}
+        //else if(m2 > 4)
+        //{
+        //    characterManager.currentHPValue = characterManager.currentHPValue - 12;
+        //}
+        //else if(m2 > 2)
+        //{
+        //    characterManager.currentHPValue = characterManager.currentHPValue - 8;
+        //}
     }
 
     static Vector3 ComputeIncidentVelocity(Rigidbody body, Collision collision, out Vector3 otherVelocity)
