@@ -84,6 +84,12 @@ public class CharacterContorl : MonoBehaviour
     public float stunRecoverTime = 50;
     [Header("速度换算旋转速度参数")]
     public float velocityToRollAngleArgument = 1;
+    [Header("眩晕旋转停止时最大角度")]
+    public float stunStopRollMaxAngle;
+    [Header("眩晕旋转停止时最小角度")]
+    public float stunStopRollMinAngle;
+    [Header("眩晕时停止转动的最小速度阈值")]
+    public float stunStopRollMinVelocity;
 
     [Header("是否达到最大速度")]
     public bool isAtMaxSpeed = false;
@@ -135,6 +141,7 @@ public class CharacterContorl : MonoBehaviour
     private bool hasBrake = false;
     private bool isDrift;
     private bool isWalk;
+    private bool isRollContinu;
     public bool isGrounded;
     public bool isStun { get; private set; }
     //起身
@@ -192,6 +199,10 @@ public class CharacterContorl : MonoBehaviour
     public List<Buff> buffs = new List<Buff>();
 
     public int playerIndex = 0;
+
+    //眩晕旋转状态相关
+    Vector3 rollRotationAxis = Vector3.zero;
+    float rollRotationAmount = 0f;
 
 
     public bool isInWater = false;
@@ -650,11 +661,25 @@ public class CharacterContorl : MonoBehaviour
     {
         if (isStun)
         {
-            Vector3 rotationAxis = - Vector3.Cross(groundNormal, ridbody.velocity);
-            var rotationAmount = Vector3.ProjectOnPlane(ridbody.velocity,groundNormal).magnitude * velocityToRollAngleArgument;
-            
+            if(ridbody.velocity.magnitude > stunStopRollMinVelocity)
+            {
+                rollRotationAxis = - Vector3.Cross(groundNormal, ridbody.velocity);
+                rollRotationAmount = Vector3.ProjectOnPlane(ridbody.velocity,groundNormal).magnitude * velocityToRollAngleArgument;
+                IKObject.transform.Rotate(rollRotationAxis, -rollRotationAmount, Space.Self);
+                isRollContinu = true;
+            }
+            else
+            {
+                var upAngle = Vector3.Angle(IKObject.transform.up, groundNormal);
+                var forwardAngle = Vector3.Angle(IKObject.transform.forward, groundNormal);
+                isRollContinu = upAngle < stunStopRollMinAngle || (180f - upAngle) < stunStopRollMinAngle || (stunStopRollMaxAngle < upAngle && upAngle < (180 - stunStopRollMaxAngle))&&(stunStopRollMaxAngle < forwardAngle && forwardAngle < (180 - stunStopRollMaxAngle));
+                //近乎停止旋转时的平衡补偿
+                if(isRollContinu)
+                {
+                    IKObject.transform.Rotate(rollRotationAxis, -rollRotationAmount, Space.Self);
 
-            IKObject.transform.Rotate(rotationAxis, -rotationAmount, Space.Self);
+                }
+            }
         }
     }
 
@@ -737,22 +762,21 @@ public class CharacterContorl : MonoBehaviour
 
     private void SetIK()
     {
-        var targetIK = isInWater || isStun ? 1 : 1;
+        var targetIK = isStun ? 0 : 1;
 
         if (grounderQuadruped.weight != targetIK)
         {
-            //var speed = Time.deltaTime;
-            grounderQuadruped.weight = targetIK;
-            //if (targetIK > grounderQuadruped.weight)
-            //{
-            //    grounderQuadruped.weight += speed;
-            //    grounderQuadruped.weight = Mathf.Min(1, grounderQuadruped.weight);
-            //}
-            //else
-            //{
-            //    grounderQuadruped.weight -= speed;
-            //    grounderQuadruped.weight = Mathf.Max(0, grounderQuadruped.weight);
-            //}
+            var speed = Time.deltaTime;
+            if (targetIK > grounderQuadruped.weight)
+            {
+                grounderQuadruped.weight += speed;
+                grounderQuadruped.weight = Mathf.Min(1, grounderQuadruped.weight);
+            }
+            else
+            {
+                grounderQuadruped.weight -= speed;
+                grounderQuadruped.weight = Mathf.Max(0, grounderQuadruped.weight);
+            }
         }
     }
 
