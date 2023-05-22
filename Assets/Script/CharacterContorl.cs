@@ -115,12 +115,11 @@ public class CharacterContorl : MonoBehaviour
     private GameController gameController;
     public Animator anima;
     public GameObject IKObject;
-    public GameObject stunEffect;
     public GameObject smokeEffect;
     public ParticleSystem particle;
     public SimpleFloatingObject floatObj;
     public GrounderQuadruped grounderQuadruped;
-
+    public RagdollActivator ragdollController;
     //攻击力
     public float forceArgument;
     //防御力系数
@@ -206,7 +205,6 @@ public class CharacterContorl : MonoBehaviour
     private float lastStunTime;
     private float ElapsedRollTime; //过去了的时间
     private float TargetRollTime; //目标时间
-    private float lastLeaveWaterTime; //回到岸上过去了的时间
     private float lastInWaterTime; //上次入水时间
     private float lastCollisionTime; //上次碰撞时间
     private float lastHPSubtractTime = 0; //上次扣血时间
@@ -219,8 +217,8 @@ public class CharacterContorl : MonoBehaviour
     private float recoveryTime = 1;
     [Header("回血间隔时间")]
     public float hpRecoveryFrequency = 1;
-    [Header("回岸回血延时时间")]
-    public float leaveWaterRecoveryFrequency = 5;
+    [Header("回血延时时间")]
+    public float damageRecoveryFrequency = 5;
     [Header("回血量")]
     public float HPRecoveryRate = 2;
     [Header("扣血量")]
@@ -258,6 +256,8 @@ public class CharacterContorl : MonoBehaviour
 
         smokeEffect.gameObject.SetActive(true);
         particle.Stop();
+
+        ragdollController.Ragdoll(false);
     }
 
     private void Start()
@@ -310,15 +310,27 @@ public class CharacterContorl : MonoBehaviour
     {
         isDead = true;
         anima.enabled = false;
+        ragdollController.Ragdoll(true);
         Dead();
     }
 
-    public void TakeDamage(int number)
+    public void TakeStun(int number)
     {
         if (isStun)
             return;
         currentStunValue = Math.Max(0, currentStunValue - number);
         CheckStun();
+    }
+
+    public void TakeDamage(float number)
+    {
+        currentHPValue -= number;
+        currentHPValue = Math.Max(currentHPValue, 0);
+        lastHPSubtractTime = 0;
+        if (currentHPValue == 0)
+        {
+            SetDead();
+        }
     }
 
     private void UpdateBuff()
@@ -375,13 +387,8 @@ public class CharacterContorl : MonoBehaviour
             {
                 if (lastHPSubtractTime > hpSubtractFrequency)
                 {
-                    currentHPValue -= HPSubtractRate;
-                    currentHPValue = Math.Max(currentHPValue, 0);
-                    lastHPSubtractTime = 0;
-                    if (currentHPValue == 0)
-                    {
-                        SetDead();
-                    }
+                    TakeDamage(HPSubtractRate);
+
                 }
                 else
                 {
@@ -391,7 +398,7 @@ public class CharacterContorl : MonoBehaviour
         }
         else
         {
-            if (lastLeaveWaterTime > leaveWaterRecoveryFrequency)
+            if (lastHPSubtractTime > damageRecoveryFrequency)
             {
                 if (currentHPValue < maxHPValue)
                 {
@@ -875,13 +882,6 @@ public class CharacterContorl : MonoBehaviour
         {
             //入水判定
             lastInWaterTime = 0;
-
-        }
-
-        if (!floatObj.InWater && isInWater)
-        {
-            //出水判定
-            lastLeaveWaterTime = 0;
         }
 
         isInWater = floatObj.InWater;
@@ -890,10 +890,7 @@ public class CharacterContorl : MonoBehaviour
         {
             lastInWaterTime += Time.fixedDeltaTime;
         }
-        else
-        {
-            lastLeaveWaterTime += Time.fixedDeltaTime;
-        }
+
     }
 
     private void CheckIsGrounded()
@@ -1213,8 +1210,8 @@ public class CharacterContorl : MonoBehaviour
             }
 
             //打击眩晕和血量
-            TakeDamage((int)(hitKnockbackCurve.Evaluate(momentumOther * hasBuff) * 10));
-
+            TakeStun((int)(hitKnockbackCurve.Evaluate(momentumOther * hasBuff) * 10));
+            TakeDamage((int)(hitKnockbackCurve.Evaluate(momentumOther * hasBuff) * 5));
             ridbody.AddForce((force)* hitDir, ForceMode.Force);
 
             //施加转角力 正值顺时针转动，负值逆时针转动
