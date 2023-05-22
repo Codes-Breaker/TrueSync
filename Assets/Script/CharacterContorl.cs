@@ -607,6 +607,18 @@ public class CharacterContorl : MonoBehaviour
         }
     }
 
+    private void MoveRoll()
+    {
+        if (isStun)
+        {
+            Vector3 rotationAxis = - Vector3.Cross(groundNormal, ridbody.velocity);
+            var rotationAmount = Vector3.ProjectOnPlane(ridbody.velocity,groundNormal).magnitude * velocityToRollAngleArgument;
+            Debug.LogError($"===> rotation amount {rotationAmount}");
+
+            IKObject.transform.Rotate(rotationAxis, -rotationAmount, Space.Self);
+        }
+    }
+
     #endregion
 
     #region Check
@@ -756,8 +768,8 @@ public class CharacterContorl : MonoBehaviour
         canvas.transform.forward = Camera.main.transform.forward;
         gpSlider.transform.position = bodyCollider.transform.position;
         stunSlider.transform.position = bodyCollider.transform.position;
-        gpSlider.transform.localPosition = gpSlider.transform.localPosition + new Vector3(0, 1.7f + (bodyCollider.transform.localScale.x - 1) * 1.2f, 0);
-        stunSlider.transform.localPosition = hpSlider.transform.localPosition + new Vector3(0, 1.9f + (bodyCollider.transform.localScale.x - 1) * 1.2f, 0);
+        gpSlider.transform.localPosition = gpSlider.transform.localPosition + new Vector3(0, 1.25f + (bodyCollider.transform.localScale.x - 1) * 1.2f, 0);
+        stunSlider.transform.localPosition = stunSlider.transform.localPosition + new Vector3(0, 1.5f + (bodyCollider.transform.localScale.x - 1) * 1.2f, 0);
 
     }
     private void SetRingColor()
@@ -781,17 +793,6 @@ public class CharacterContorl : MonoBehaviour
     #endregion
 
     #region Render
-    private void MoveRoll()
-    {
-        if (isStun)
-        {
-            Vector3 rotationAxis = - Vector3.Cross(groundNormal, ridbody.velocity);
-            var rotationAmount = Vector3.ProjectOnPlane(ridbody.velocity,groundNormal).magnitude * velocityToRollAngleArgument;
-            Debug.LogError($"===> rotation amount {rotationAmount}");
-
-            IKObject.transform.Rotate(rotationAxis, -rotationAmount, Space.Self);
-        }
-    }
 
     #endregion
 
