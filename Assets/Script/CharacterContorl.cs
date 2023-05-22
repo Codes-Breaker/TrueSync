@@ -74,6 +74,8 @@ public class CharacterContorl : MonoBehaviour
     [Header("眩晕槽相关设置")]
     [Header("眩晕槽最大值")]
     public float maxStunValue = 100;
+    [Header("血量最大值")]
+    private float maxHPValue = 100;
     [Header("撞击力映射打击数值的曲线")]
     public AnimationCurve forceToHuntCurve;
     [Header("打击恢复时间")]
@@ -149,6 +151,7 @@ public class CharacterContorl : MonoBehaviour
     public float targetAngle;
     [HideInInspector]
     public float currentStunValue;
+    public float currentHPValue;
     private float lastHPValue;
     private float maxActorGas = 100;
     [HideInInspector]
@@ -192,6 +195,7 @@ public class CharacterContorl : MonoBehaviour
 
 
     public bool isInWater = false;
+    private bool hasInWater = false;
 
     //刹车时的朝向
     private Vector3 initialBrakeTarget = Vector3.zero;
@@ -214,6 +218,7 @@ public class CharacterContorl : MonoBehaviour
     {
         speedUpGas = maxSpeedUpGas;
         currentStunValue = maxStunValue;
+        currentHPValue = maxHPValue;
         isGrounded = true;
         //originalRadius = (bodyCollider as SphereCollider).radius;
         //originalCenter = (bodyCollider as SphereCollider).center;
@@ -317,6 +322,16 @@ public class CharacterContorl : MonoBehaviour
         anima.SetFloat("playSpeed", runAnimPlayCurve.Evaluate(speed));
         anima.SetFloat("velocityY", ridbody.velocity.y);
         anima.SetBool("Releasing", releasing);
+        if (isInWater && !hasInWater)
+        {
+            anima.SetTrigger("isInWater");
+            hasInWater = true;
+        }
+        else if (!isInWater && hasInWater)
+        {
+            hasInWater = false;
+        }
+        anima.SetBool("inWater", isInWater);
         anima.SetBool("isDrift", isDrift);
         anima.SetFloat("driftAngle", driftAngle);
     }
@@ -498,11 +513,26 @@ public class CharacterContorl : MonoBehaviour
 
     private void MoveBrake(bool brake)
     {
-        if (isStun)
+        if (isStun || isInWater)
+        {
+            if (hasBrake)
+            {
+                anima.SetBool("isBrake", false);
+                hasBrake = false;
+            }
             return;
+        }
         //只有地面能刹车
         if (!isGrounded && !isTouchingSlope)
+        {
+            if (hasBrake)
+            {
+                anima.SetBool("isBrake", false);
+                hasBrake = false;
+            }
             return;
+        }
+
         if (brake)
         {
             ridbody.AddForce(-ridbody.velocity * decelerationForceArgument);
@@ -707,21 +737,22 @@ public class CharacterContorl : MonoBehaviour
 
     private void SetIK()
     {
-        var targetIK = isInWater || isStun ? 0 : 1;
+        var targetIK = isInWater || isStun ? 1 : 1;
 
         if (grounderQuadruped.weight != targetIK)
         {
-            var speed = Time.deltaTime;
-            if (targetIK > grounderQuadruped.weight)
-            {
-                grounderQuadruped.weight += speed;
-                grounderQuadruped.weight = Mathf.Min(1, grounderQuadruped.weight);
-            }
-            else
-            {
-                grounderQuadruped.weight -= speed;
-                grounderQuadruped.weight = Mathf.Max(0, grounderQuadruped.weight);
-            }
+            //var speed = Time.deltaTime;
+            grounderQuadruped.weight = targetIK;
+            //if (targetIK > grounderQuadruped.weight)
+            //{
+            //    grounderQuadruped.weight += speed;
+            //    grounderQuadruped.weight = Mathf.Min(1, grounderQuadruped.weight);
+            //}
+            //else
+            //{
+            //    grounderQuadruped.weight -= speed;
+            //    grounderQuadruped.weight = Mathf.Max(0, grounderQuadruped.weight);
+            //}
         }
     }
 
@@ -771,15 +802,16 @@ public class CharacterContorl : MonoBehaviour
     #region SetUI
     private void SetSlider()
     {
-
         gpSlider.value = (float)(currentGas / maxActorGas);
         stunSlider.value = (float)(currentStunValue / maxStunValue);
+        hpSlider.value = (float)(currentHPValue / maxHPValue);
         canvas.transform.forward = Camera.main.transform.forward;
         gpSlider.transform.position = bodyCollider.transform.position;
         stunSlider.transform.position = bodyCollider.transform.position;
+        hpSlider.transform.position = bodyCollider.transform.position;
         gpSlider.transform.localPosition = gpSlider.transform.localPosition + new Vector3(0, 1.25f + (bodyCollider.transform.localScale.x - 1) * 1.2f, 0);
         stunSlider.transform.localPosition = stunSlider.transform.localPosition + new Vector3(0, 1.5f + (bodyCollider.transform.localScale.x - 1) * 1.2f, 0);
-
+        hpSlider.transform.localPosition = hpSlider.transform.localPosition + new Vector3(0, 1.75f + (bodyCollider.transform.localScale.x - 1) * 1.2f, 0);
     }
     private void SetRingColor()
     {
