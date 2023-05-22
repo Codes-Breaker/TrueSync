@@ -27187,6 +27187,7 @@ MonoBehaviour:
   slopeCheckerForwardOffset: 0.51
   miniClimbableSlopeAngle: -45
   maxClimbableSlopeAngle: 40
+  maxStunValue: 100
   forceToHuntCurve:
     serializedVersion: 2
     m_Curve: []
@@ -27319,6 +27320,15 @@ MonoBehaviour:
   currentGravity: {x: 0, y: 0, z: 0}
   playerIndex: 0
   isInWater: 0
+  hpRecoveryFrequency: 1
+  leaveWaterRecoveryFrequency: 5
+  HPRecoveryRate: 1
+  HPSubtractRate: 5
+  hpSubtractFrequency: 1
+  inWaterSubtractFrequency: 5
+  stunRecoveryFrequency: 1
+  stunRecoveryRate: 2
+  withoutCollidingRecoveryFrequency: 3
 --- !u!114 &4147182195015774368
 MonoBehaviour:
   m_ObjectHideFlags: 0
