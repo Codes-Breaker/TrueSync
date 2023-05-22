@@ -73,7 +73,7 @@ public class CharacterContorl : MonoBehaviour
     [Space(10)]
     [Header("眩晕槽相关设置")]
     [Header("眩晕槽最大值")]
-    private float maxStunValue = 100;
+    public float maxStunValue = 100;
     [Header("撞击力映射打击数值的曲线")]
     public AnimationCurve forceToHuntCurve;
     [Header("打击恢复时间")]
@@ -129,6 +129,7 @@ public class CharacterContorl : MonoBehaviour
     private Vector3 groundNormal;
     public bool isDead = false;
     private bool hasJump = false;
+    private bool isJumpFrequency = false;
     private bool hasBrake = false;
     private bool isDrift;
     private bool isWalk;
@@ -219,6 +220,7 @@ public class CharacterContorl : MonoBehaviour
         defaultLayer = this.gameObject.layer;
         initialRotation = ridbody.transform.rotation.eulerAngles;
         initialRot = ridbody.transform.rotation;
+        lastJumpLandTime = jumpFrequency;
 
         gameController = GameObject.Find("GameManager")?.GetComponent<GameController>();
 
@@ -230,7 +232,8 @@ public class CharacterContorl : MonoBehaviour
     private void Start()
     {
         this.ridbody.useGravity = false;
-        SetControlSelf();
+        if(inputReader != null)
+            SetControlSelf();
         SetRingColor();
     }
 
@@ -529,30 +532,36 @@ public class CharacterContorl : MonoBehaviour
             return;
         if (buffs.Any(x => x is HitBuff))
             return;
-        //if (isGrounded || isTouchingSlope) //touching slope bug
+
         if ((isGrounded || isTouchingSlope) && ridbody.velocity.y <= 0)
         {
             anima.SetBool("OnGround", true);
             anima.SetBool("Jump", false);
         }
 
-        if (hasJump)
+        if (isJumpFrequency)
             lastJumpLandTime += Time.deltaTime;
 
         if (jump && (isGrounded || isTouchingSlope || isInWater) && !hasJump && lastJumpLandTime >= jumpFrequency)
         {
             ridbody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             hasJump = true;
+            isJumpFrequency = false;
             anima.SetBool("OnGround", false);
             anima.SetBool("Jump", true);
             if (isAtMaxSpeed)
                 currentGas = 0;
         }
 
-        if (!jump && (isGrounded || isTouchingSlope || isInWater) && hasJump && ridbody.velocity.y <= 0)
+        if (!jump && (isGrounded || isTouchingSlope || isInWater) && ridbody.velocity.y <= 0)
         {
-            hasJump = false;
-            lastJumpLandTime = 0f;
+            if(!isJumpFrequency)
+                lastJumpLandTime = 0f;
+
+            isJumpFrequency = true;
+            if (hasJump)
+                hasJump = false;
+
         }
 
     }
@@ -613,7 +622,7 @@ public class CharacterContorl : MonoBehaviour
         {
             Vector3 rotationAxis = - Vector3.Cross(groundNormal, ridbody.velocity);
             var rotationAmount = Vector3.ProjectOnPlane(ridbody.velocity,groundNormal).magnitude * velocityToRollAngleArgument;
-            Debug.LogError($"===> rotation amount {rotationAmount}");
+            
 
             IKObject.transform.Rotate(rotationAxis, -rotationAmount, Space.Self);
         }
