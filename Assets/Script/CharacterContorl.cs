@@ -306,6 +306,13 @@ public class CharacterContorl : MonoBehaviour
         inputReader.brakeAciton = MoveBrake;
     }
 
+    private void SetDead()
+    {
+        isDead = true;
+        anima.enabled = false;
+        Dead();
+    }
+
     public void TakeDamage(int number)
     {
         if (isStun)
@@ -373,7 +380,7 @@ public class CharacterContorl : MonoBehaviour
                     lastHPSubtractTime = 0;
                     if (currentHPValue == 0)
                     {
-                        isDead = true;
+                        SetDead();
                     }
                 }
                 else
@@ -482,7 +489,7 @@ public class CharacterContorl : MonoBehaviour
     {
         var cinemachineTargetGroup = GameObject.FindObjectOfType<CinemachineTargetGroup>();
         cinemachineTargetGroup.RemoveMember(transform);
-        this.gameObject.SetActive(false);
+        //this.gameObject.SetActive(false);
         this.canvas.gameObject.SetActive(false);
         gameController.CheckGameState();
     }
