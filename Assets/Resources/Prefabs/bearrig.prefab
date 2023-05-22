@@ -27134,10 +27134,10 @@ Rigidbody:
   m_Mass: 8
   m_Drag: 0
   m_AngularDrag: 1
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 112
+  m_Constraints: 80
   m_CollisionDetection: 2
 --- !u!135 &6524800512801151548
 SphereCollider:
@@ -27187,6 +27187,7 @@ MonoBehaviour:
   slopeCheckerForwardOffset: 0.51
   miniClimbableSlopeAngle: -45
   maxClimbableSlopeAngle: 40
+  maxStunValue: 100
   forceToHuntCurve:
     serializedVersion: 2
     m_Curve: []
@@ -27196,6 +27197,9 @@ MonoBehaviour:
   cureTime: 20
   stunRecoverTime: 50
   velocityToRollAngleArgument: 1
+  stunStopRollMaxAngle: 30
+  stunStopRollMinAngle: 40
+  stunStopRollMinVelocity: 2
   isAtMaxSpeed: 0
   runAnimCurve:
     serializedVersion: 2
@@ -27290,7 +27294,7 @@ MonoBehaviour:
   bodyCollider: {fileID: 6524800512801151548}
   ringRenderer: {fileID: 4593504488590950071}
   anima: {fileID: 4382902077929413651}
-  IKObject: {fileID: 0}
+  IKObject: {fileID: 6218862707472767270}
   stunEffect: {fileID: 0}
   smokeEffect: {fileID: 87053686309883449}
   particle: {fileID: 2839387257817813285}
