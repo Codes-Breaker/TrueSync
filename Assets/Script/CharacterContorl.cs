@@ -625,7 +625,6 @@ public class CharacterContorl : MonoBehaviour
                 //如果刹车走路状态不在施加推进力
                 if(!hasBrake)
                 {
-
                     ridbody.AddForce(moveTarget * forceMagnitude - gravityDivide, ForceMode.Force);
                     transform.rotation = Quaternion.Slerp(this.ridbody.rotation, Quaternion.Euler(new Vector3(0, targetAngle, 0) + initialRotation), movementRotationRate);
                 }
@@ -1258,22 +1257,22 @@ public class CharacterContorl : MonoBehaviour
             //打击眩晕和血量
             TakeDamage((int)(hitKnockbackCurve.Evaluate(momentumOther * hasBuff) * 10));
 
+            var buff = new HitBuff(this,forceData.hitTime);
             ridbody.AddForce((forceData.force) * hitDir, ForceMode.Force);
 
             //施加转角力 正值顺时针转动，负值逆时针转动
             var torgueAngle = Vector3.SignedAngle(velocityOther, contactToOther, groundNormal);
             if (torgueAngle >= 0)
             {
-                ridbody.AddRelativeTorque(Vector3.right * velocityOther.magnitude * Mathf.Cos(torgueAngle * Mathf.Deg2Rad), ForceMode.Force);
+                ridbody.AddRelativeTorque(Vector3.right * velocityOther.magnitude * Mathf.Cos(torgueAngle * Mathf.Deg2Rad)  , ForceMode.Force);
             }
             else
             {
-                ridbody.AddRelativeTorque(Vector3.left * velocityOther.magnitude * Mathf.Cos(torgueAngle * Mathf.Deg2Rad), ForceMode.Force);
+                ridbody.AddRelativeTorque(Vector3.left * velocityOther.magnitude * Mathf.Cos(torgueAngle * Mathf.Deg2Rad) , ForceMode.Force);
             }
 
             //Debug.LogError($"结算 {otherCollision.gameObject.name} force {force} hit Dir {hitDir}");
 
-            var buff = new HitBuff(this,forceData.hitTime);
             this.buffs.Add(buff);
 
             //如果对方在施法过程里打断施法

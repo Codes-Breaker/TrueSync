@@ -27137,7 +27137,7 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 80
+  m_Constraints: 112
   m_CollisionDetection: 2
 --- !u!135 &6524800512801151548
 SphereCollider:
@@ -27174,6 +27174,7 @@ MonoBehaviour:
   runSpeedUpTime: 2
   runSpeedUpRotationRate: 0.02
   runMaxSpeedRotationRate: 0.01
+  breakRotationRate: 0.02
   chargeTime: 3
   releaseTime: 10
   decelerationForceArgument: 10
