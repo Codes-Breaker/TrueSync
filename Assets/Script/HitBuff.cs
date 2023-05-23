@@ -13,6 +13,11 @@ public class HitBuff : StunBuff
         buffTimes = 0.1f;
     }
 
+    public HitBuff(CharacterContorl target, float buffTime) : base(target, buffTime)
+    {
+
+    }
+
     public override void OnBuffUpdate()
     {
         base.OnBuffUpdate();

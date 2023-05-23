@@ -12,6 +12,11 @@ public class Buff
         this.character = target;
     }
 
+    public Buff(CharacterContorl target,float buffTime)
+    {
+
+    }
+
     public virtual void OnBuffApply()
     {
 
