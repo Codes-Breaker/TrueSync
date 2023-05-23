@@ -10,27 +10,54 @@ public class RagdollActivator : MonoBehaviour
     public Animator animator;
     public List<Collider> ragdollCollider;
     public GrounderQuadruped groundIK;
+    public Rigidbody mainRag;
     void Start()
     {
 
     }
 
-    public void Ragdoll(bool isRagdoll)
+    public void Ragdoll(bool isRagdoll, Vector3 hitDir)
     {
         groundIK.weight = isRagdoll ? 0 : 1;
         animator.enabled = !isRagdoll;
-        body.detectCollisions = !isRagdoll;
-        foreach(var col in ragdollCollider)
+        if (isRagdoll)
+        {
+            //StartCoroutine(disableMainCollider());
+            //Destroy(body.GetComponent<Collider>());
+            //Destroy(body);
+            body.detectCollisions = false;
+            body.isKinematic = true;
+
+        }
+        foreach (var col in ragdollCollider)
         {
             Physics.IgnoreCollision(body.GetComponent<Collider>(), col);
             col.GetComponent<Rigidbody>().isKinematic = !isRagdoll;
             col.GetComponent<Rigidbody>().detectCollisions = isRagdoll;
+            //foreach(var col1 in ragdollCollider)
+            //{
+            //    Physics.IgnoreCollision(col1, col);
+            //}
+        }
+
+        if (isRagdoll)
+        {
+            mainRag.AddForce(hitDir * 5000f);
         }
     }
+
+    IEnumerator disableMainCollider()
+    {
+        yield return new WaitForSeconds(0.5f);
+        body.isKinematic = true;
+        body.useGravity = false;
+        body.detectCollisions = false;
+    }
+
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 }
