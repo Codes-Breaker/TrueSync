@@ -40,6 +40,8 @@ public class CharacterContorl : MonoBehaviour
     public float runSpeedUpRotationRate;
     [Header("跑步最大速度时转向Lerp系数")]
     public float runMaxSpeedRotationRate;
+    [Header("刹车时的转向Lerp系数")]
+    public float breakRotationRate = 0.02f;
     [Header("跑步充能时间")]
     public float chargeTime;
     [Header("最大跑步时间")]
@@ -599,7 +601,10 @@ public class CharacterContorl : MonoBehaviour
                 if (axisInput.magnitude > movementThrashold)
                 {
                     targetAngle = Mathf.Atan2(axisInput.x, axisInput.y) * Mathf.Rad2Deg + Camera.main.transform.eulerAngles.y;
-                    transform.rotation = Quaternion.Slerp(this.ridbody.rotation, Quaternion.Euler(new Vector3(0, targetAngle, 0) + initialRotation), runSpeedUpRotationRate);
+                    if(hasBrake)
+                        transform.rotation = Quaternion.Slerp(this.ridbody.rotation, Quaternion.Euler(new Vector3(0, targetAngle, 0) + initialRotation), breakRotationRate);
+                    else
+                        transform.rotation = Quaternion.Slerp(this.ridbody.rotation, Quaternion.Euler(new Vector3(0, targetAngle, 0) + initialRotation), runSpeedUpRotationRate);
                 }
             }
             else
@@ -608,7 +613,10 @@ public class CharacterContorl : MonoBehaviour
                 if (axisInput.magnitude > movementThrashold)
                 {
                     targetAngle = Mathf.Atan2(axisInput.x, axisInput.y) * Mathf.Rad2Deg + Camera.main.transform.eulerAngles.y;
-                    transform.rotation = Quaternion.Slerp(this.ridbody.rotation, Quaternion.Euler(new Vector3(0, targetAngle, 0) + initialRotation), runMaxSpeedRotationRate);
+                    if(hasBrake)
+                        transform.rotation = Quaternion.Slerp(this.ridbody.rotation, Quaternion.Euler(new Vector3(0, targetAngle, 0) + initialRotation), breakRotationRate);
+                    else
+                        transform.rotation = Quaternion.Slerp(this.ridbody.rotation, Quaternion.Euler(new Vector3(0, targetAngle, 0) + initialRotation), runMaxSpeedRotationRate);
                 }
                // Debug.Log($"isTouchingSlope || isGrounded {isTouchingSlope || isGrounded} velocity {ridbody.velocity} velocityMagnitude {ridbody.velocity.magnitude}");
             }
@@ -638,7 +646,6 @@ public class CharacterContorl : MonoBehaviour
                 //如果刹车走路状态不在施加推进力
                 if(!hasBrake)
                 {
-
                     ridbody.AddForce(moveTarget * forceMagnitude - gravityDivide, ForceMode.Force);
                     transform.rotation = Quaternion.Slerp(this.ridbody.rotation, Quaternion.Euler(new Vector3(0, targetAngle, 0) + initialRotation), movementRotationRate);
                 }
@@ -1083,7 +1090,7 @@ public class CharacterContorl : MonoBehaviour
 
             var hitDir = Vector3.ProjectOnPlane((ridbody.position - collision.contacts[0].point), Vector3.up).normalized;
             if (otherCollision.releasing)
-                ridbody.AddForce((force) * hitDir, ForceMode.Force);
+                ridbody.AddForce((force.force) * hitDir, ForceMode.Force);
             //var attackForce = attackForceFeedback.Evaluate(m2);
             //var hitForce = hitForceFeedback.Evaluate(m1);
             //ridbody.AddExplosionForce((attackForce * bodyCollider.material.staticFriction * ridbody.mass + hitForce * bodyCollider.material.staticFriction * ridbody.mass) * 0.1f, collision.contacts[0].point, 2, 0f, ForceMode.Force);
@@ -1105,12 +1112,18 @@ public class CharacterContorl : MonoBehaviour
         isCollidingCharacter = false;
     }
 
+    private struct KnockBackForceStruct
+    {
+        public float force;
+        public float hitTime;
+    }
+
     /// <summary>
     /// 结算击退距离
     /// </summary>
     /// <param name="distance"></param>
     /// <returns></returns>
-    private float KnockBackForce(float distance)
+    private KnockBackForceStruct KnockBackForce(float distance)
     {
         var gravityDivide = Vector3.ProjectOnPlane(Physics.gravity, groundNormal) * ridbody.mass;
         var gravityFrictionDivide = Physics.gravity - gravityDivide;
@@ -1119,7 +1132,10 @@ public class CharacterContorl : MonoBehaviour
         var desiredV0 = (float)Math.Sqrt((2 * frictionForceAcceleration * distance));
         var acceleration = desiredV0 / Time.fixedDeltaTime;
 
-        return acceleration * ridbody.mass;
+        return new KnockBackForceStruct { 
+            force = acceleration * ridbody.mass,
+            hitTime = desiredV0 / frictionForceAcceleration
+        };
     }
 
     /// <summary>
@@ -1127,10 +1143,11 @@ public class CharacterContorl : MonoBehaviour
     /// </summary>
     /// <param name="distance"></param>
     /// <returns></returns>
-    private float KnockBackOnAirForce(float distance)
+    private KnockBackForceStruct KnockBackOnAirForce(float distance)
     {
         var currentVelocity = ridbody.velocity;
         float forceMagnitude = 0f;
+        float hitTime = 0f;
         if(currentVelocity.y > 0)
         {
             //上升状态处理
@@ -1139,6 +1156,7 @@ public class CharacterContorl : MonoBehaviour
             var dropTime = Mathf.Sqrt(2 * currentGravity.magnitude * dropHeight);
             var initialVelocity = distance / (dropTime+ riseTime);
             var acceleration = initialVelocity / Time.fixedDeltaTime;
+            hitTime = riseTime + dropTime;
             forceMagnitude = acceleration * ridbody.mass;
 
         }
@@ -1156,11 +1174,12 @@ public class CharacterContorl : MonoBehaviour
             var frictionForceAcceleration = bodyCollider.material.dynamicFriction * gravityFrictionDivide.magnitude;
 
             var initialVelocity = (float)(((distance) + frictionForceAcceleration * Mathf.Pow(riseTime, 2)/2)/(0.4 * dropTime + 0.6 * riseTime));
+            hitTime = dropMaxTime;
             forceMagnitude = initialVelocity / Time.fixedDeltaTime * ridbody.mass;
         }
-        return forceMagnitude;
+        return new KnockBackForceStruct { force = forceMagnitude, hitTime = hitTime };
     }
-    Vector3 knockingPosition = Vector3.zero;
+
 
     private void OnCollisionEnter(Collision collision)
     {
@@ -1241,12 +1260,12 @@ public class CharacterContorl : MonoBehaviour
             var otherHitKnockback = hitKnockbackCurve.Evaluate(momentumOther * hasBuff);
             var hitDistance = Math.Min(hitMaxDistance, otherHitKnockback + myHitKnockback);
 
-            float force = 0f;
+            KnockBackForceStruct forceData ;
             //施加水平推力
             if (isGrounded || isTouchingSlope)
-				force = KnockBackForce(Math.Min(hitMaxDistance, hitKnockbackCurve.Evaluate(momentumOther * hasBuff) + hitKnockbackCurve.Evaluate(momentumSelf * myBuff + 2)));
+                forceData = KnockBackForce(Math.Min(hitMaxDistance, hitKnockbackCurve.Evaluate(momentumOther * hasBuff) + hitKnockbackCurve.Evaluate(momentumSelf * myBuff + 2)));
             else
-                force = KnockBackOnAirForce(Math.Min(hitMaxDistance, hitKnockbackCurve.Evaluate(momentumOther * hasBuff) + hitKnockbackCurve.Evaluate(momentumSelf * myBuff + 2)));
+                forceData = KnockBackOnAirForce(Math.Min(hitMaxDistance, hitKnockbackCurve.Evaluate(momentumOther * hasBuff) + hitKnockbackCurve.Evaluate(momentumSelf * myBuff + 2)));
            
             var hitOnPlane = Vector3.ProjectOnPlane((collision.contacts[0].point - ridbody.position), groundNormal).normalized;
             var forwardOnPlane = Vector3.ProjectOnPlane(ridbody.transform.forward, groundNormal).normalized;
@@ -1261,22 +1280,22 @@ public class CharacterContorl : MonoBehaviour
             TakeStun((int)(hitKnockbackCurve.Evaluate(momentumOther * hasBuff) * 10));
             TakeDamage((int)(hitKnockbackCurve.Evaluate(momentumOther * hasBuff) * 5), hitDir);
             //TakeDamage(100, hitDir);//测试
-            ridbody.AddForce((force)* hitDir, ForceMode.Force);
+            var buff = new HitBuff(this,forceData.hitTime);
+            ridbody.AddForce((forceData.force) * hitDir, ForceMode.Force);
 
             //施加转角力 正值顺时针转动，负值逆时针转动
             var torgueAngle = Vector3.SignedAngle(velocityOther, contactToOther, groundNormal);
             if (torgueAngle >= 0)
             {
-                ridbody.AddRelativeTorque(Vector3.right * velocityOther.magnitude * Mathf.Cos(torgueAngle * Mathf.Deg2Rad), ForceMode.Force);
+                ridbody.AddRelativeTorque(Vector3.up * velocityOther.magnitude * Mathf.Cos(torgueAngle * Mathf.Deg2Rad)*50  , ForceMode.Force);
             }
             else
             {
-                ridbody.AddRelativeTorque(Vector3.left * velocityOther.magnitude * Mathf.Cos(torgueAngle * Mathf.Deg2Rad), ForceMode.Force);
+                ridbody.AddRelativeTorque(Vector3.down * velocityOther.magnitude * Mathf.Cos(torgueAngle * Mathf.Deg2Rad)*50 , ForceMode.Force);
             }
 
             //Debug.LogError($"结算 {otherCollision.gameObject.name} force {force} hit Dir {hitDir}");
-            knockingPosition = this.transform.position;
-            var buff = new HitBuff(this);
+
             this.buffs.Add(buff);
 
             //如果对方在施法过程里打断施法

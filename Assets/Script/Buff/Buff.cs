@@ -6,10 +6,18 @@ public class Buff
 {
     public CharacterContorl character;
     public bool isEnd = false;
-    public float buffTimes = -1;
+    public float buffTime = -1;
     public Buff(CharacterContorl target)
     {
         this.character = target;
+        OnBuffApply();
+    }
+
+    public Buff(CharacterContorl target,float buffTime)
+    {
+        this.character = target;
+        this.buffTime = buffTime;
+        OnBuffApply();
     }
 
     public virtual void OnBuffApply()
@@ -24,10 +32,10 @@ public class Buff
 
     public virtual void OnBuffUpdate()
     {
-        if (buffTimes != -1)
+        if (buffTime != -1)
         {
-            buffTimes = buffTimes - Time.fixedDeltaTime;
-            if (buffTimes <= 0)
+            buffTime = buffTime - Time.deltaTime;
+            if (buffTime <= 0)
             {
                 Finish();
             }

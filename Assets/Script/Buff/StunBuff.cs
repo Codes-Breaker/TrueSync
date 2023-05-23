@@ -8,4 +8,9 @@ public class StunBuff : Buff
     {
 
     }
+
+    public StunBuff(CharacterContorl target, float buffTime) : base(target, buffTime)
+    {
+
+    }
 }
