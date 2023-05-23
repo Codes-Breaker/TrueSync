@@ -1264,11 +1264,11 @@ public class CharacterContorl : MonoBehaviour
             var torgueAngle = Vector3.SignedAngle(velocityOther, contactToOther, groundNormal);
             if (torgueAngle >= 0)
             {
-                ridbody.AddRelativeTorque(Vector3.right * velocityOther.magnitude * Mathf.Cos(torgueAngle * Mathf.Deg2Rad)  , ForceMode.Force);
+                ridbody.AddRelativeTorque(Vector3.up * velocityOther.magnitude * Mathf.Cos(torgueAngle * Mathf.Deg2Rad)*50  , ForceMode.Force);
             }
             else
             {
-                ridbody.AddRelativeTorque(Vector3.left * velocityOther.magnitude * Mathf.Cos(torgueAngle * Mathf.Deg2Rad) , ForceMode.Force);
+                ridbody.AddRelativeTorque(Vector3.down * velocityOther.magnitude * Mathf.Cos(torgueAngle * Mathf.Deg2Rad)*50 , ForceMode.Force);
             }
 
             //Debug.LogError($"Ω·À„ {otherCollision.gameObject.name} force {force} hit Dir {hitDir}");

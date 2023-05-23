@@ -33,7 +33,7 @@ public class HitBuff : StunBuff
     public override void OnBuffRemove()
     {
         base.OnBuffRemove();
-        //character.ridbody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
+        character.ridbody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
     }
 }
 
