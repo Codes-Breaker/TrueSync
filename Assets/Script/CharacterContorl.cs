@@ -40,6 +40,8 @@ public class CharacterContorl : MonoBehaviour
     public float runSpeedUpRotationRate;
     [Header("跑步最大速度时转向Lerp系数")]
     public float runMaxSpeedRotationRate;
+    [Header("刹车时的转向Lerp系数")]
+    public float breakRotationRate = 0.02f;
     [Header("跑步充能时间")]
     public float chargeTime;
     [Header("最大跑步时间")]
@@ -578,7 +580,10 @@ public class CharacterContorl : MonoBehaviour
                 if (axisInput.magnitude > movementThrashold)
                 {
                     targetAngle = Mathf.Atan2(axisInput.x, axisInput.y) * Mathf.Rad2Deg + Camera.main.transform.eulerAngles.y;
-                    transform.rotation = Quaternion.Slerp(this.ridbody.rotation, Quaternion.Euler(new Vector3(0, targetAngle, 0) + initialRotation), runSpeedUpRotationRate);
+                    if(hasBrake)
+                        transform.rotation = Quaternion.Slerp(this.ridbody.rotation, Quaternion.Euler(new Vector3(0, targetAngle, 0) + initialRotation), breakRotationRate);
+                    else
+                        transform.rotation = Quaternion.Slerp(this.ridbody.rotation, Quaternion.Euler(new Vector3(0, targetAngle, 0) + initialRotation), runSpeedUpRotationRate);
                 }
             }
             else
@@ -587,7 +592,10 @@ public class CharacterContorl : MonoBehaviour
                 if (axisInput.magnitude > movementThrashold)
                 {
                     targetAngle = Mathf.Atan2(axisInput.x, axisInput.y) * Mathf.Rad2Deg + Camera.main.transform.eulerAngles.y;
-                    transform.rotation = Quaternion.Slerp(this.ridbody.rotation, Quaternion.Euler(new Vector3(0, targetAngle, 0) + initialRotation), runMaxSpeedRotationRate);
+                    if(hasBrake)
+                        transform.rotation = Quaternion.Slerp(this.ridbody.rotation, Quaternion.Euler(new Vector3(0, targetAngle, 0) + initialRotation), breakRotationRate);
+                    else
+                        transform.rotation = Quaternion.Slerp(this.ridbody.rotation, Quaternion.Euler(new Vector3(0, targetAngle, 0) + initialRotation), runMaxSpeedRotationRate);
                 }
                // Debug.Log($"isTouchingSlope || isGrounded {isTouchingSlope || isGrounded} velocity {ridbody.velocity} velocityMagnitude {ridbody.velocity.magnitude}");
             }
