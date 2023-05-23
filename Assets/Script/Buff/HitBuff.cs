@@ -10,12 +10,18 @@ public class HitBuff : StunBuff
 {
     public HitBuff(CharacterContorl target) : base(target)
     {
-        buffTimes = 0.1f;
+        buffTime = 0.1f;
     }
 
     public HitBuff(CharacterContorl target, float buffTime) : base(target, buffTime)
     {
 
+    }
+
+    public override void OnBuffApply()
+    {
+        base.OnBuffApply();
+        character.ridbody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
     }
 
     public override void OnBuffUpdate()
@@ -27,6 +33,7 @@ public class HitBuff : StunBuff
     public override void OnBuffRemove()
     {
         base.OnBuffRemove();
+        //character.ridbody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
     }
 }
 

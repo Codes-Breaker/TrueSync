@@ -7,7 +7,7 @@ public class LglooBuff : StunBuff
     private float maxSpeed = 10;
     public LglooBuff(CharacterContorl target) : base(target)
     {
-        buffTimes = 1.5f;
+        buffTime = 1.5f;
     }
 
     public override void OnBuffUpdate()
