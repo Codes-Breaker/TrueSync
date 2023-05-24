@@ -20,6 +20,7 @@ public class RagdollActivator : MonoBehaviour
     {
         groundIK.weight = isRagdoll ? 0 : 1;
         animator.enabled = !isRagdoll;
+
         if (isRagdoll)
         {
             //StartCoroutine(disableMainCollider());
