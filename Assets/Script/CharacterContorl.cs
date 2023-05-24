@@ -29,6 +29,8 @@ public class CharacterContorl : MonoBehaviour
     public float jumpForce;
     [Header("跳跃间隔")]
     public float jumpFrequency = 1f;
+    [Header("跳跃加成")]
+    public float jumpBonusToVelocity = 1.4f;
 
     [Space(10)]
     [Header("跑步状态相关参数")]
@@ -741,7 +743,13 @@ public class CharacterContorl : MonoBehaviour
             isJumpFrequency = false;
             anima.SetBool("Jump", true);
             if (isAtMaxSpeed)
+            {
                 currentGas = 0;
+                var addVelocityValue = (jumpBonusToVelocity - 1) * ridbody.velocity.magnitude;
+                var addVelocityDir = ridbody.velocity.normalized;
+                var addForceValue = ridbody.mass * addVelocityValue / Time.fixedDeltaTime;
+                ridbody.AddForce(addVelocityDir*addForceValue,ForceMode.Force);
+            }
         }
 
         if (!jump && (isGrounded || isTouchingSlope || isInWater) && ridbody.velocity.y <= 0)
@@ -863,6 +871,7 @@ public class CharacterContorl : MonoBehaviour
             if (lastStunTime >= stunRecoverTime)
             {
                 currentStunValue = maxStunValue;
+                currentGas = 0f;
 
                 IKObject.transform.DOLocalRotate(new Vector3(0, 0, 0), 0.5f).onComplete += () =>
                 {
