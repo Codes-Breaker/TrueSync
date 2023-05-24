@@ -111,6 +111,13 @@ public class CharacterContorl : MonoBehaviour
     public float fallingGravityScale = 1;
     public float ascendingGravityScale = 1;
 
+    [Header("出招加成")]
+    public float buffAttack = 2f;
+    [Header("打击距离换算眩晕")]
+    public float distanceToStunCoef = 10f;
+    [Header("打击距离换算血量")]
+    public float distanceToHPCoef = 2.5f;
+
     [Space(10)]
     [Header("相关需要关联组件")]
     public Slider gpSlider;
@@ -128,6 +135,8 @@ public class CharacterContorl : MonoBehaviour
     public SimpleFloatingObject floatObj;
     public GrounderQuadruped grounderQuadruped;
     public RagdollActivator ragdollController;
+    public GameObject playerIndicator;
+    public TMPro.TMP_Text playerIndexText;
     //攻击力
     public float forceArgument;
     //防御力系数
@@ -311,6 +320,9 @@ public class CharacterContorl : MonoBehaviour
         UpdateHP();
         UpdateStunRecovery();
         SetGravity();
+
+        RecordCollisionVelocity();
+
     }
 
     public void SetControlSelf()
@@ -710,17 +722,15 @@ public class CharacterContorl : MonoBehaviour
 
     private void MoveJump(bool jump)
     {
-        if (isStun || isDead)
-            return;
-        if (buffs.Any(x => x is HitBuff))
-            return;
-
         if ((isGrounded || isTouchingSlope) && ridbody.velocity.y <= 0)
         {
-            anima.SetBool("OnGround", true);
             anima.SetBool("Jump", false);
         }
+        if (isStun || isDead)
+            return;
 
+        if (buffs.Any(x => x is HitBuff))
+            return;
         if (isJumpFrequency)
             lastJumpLandTime += Time.deltaTime;
 
@@ -729,7 +739,6 @@ public class CharacterContorl : MonoBehaviour
             ridbody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             hasJump = true;
             isJumpFrequency = false;
-            anima.SetBool("OnGround", false);
             anima.SetBool("Jump", true);
             if (isAtMaxSpeed)
                 currentGas = 0;
@@ -951,7 +960,7 @@ public class CharacterContorl : MonoBehaviour
     private void CheckIsGrounded()
     {
         isGrounded = Physics.CheckSphere(bodyCollider.transform.position + (bodyCollider as SphereCollider).center - new Vector3(0, (bodyCollider as SphereCollider).radius, 0), 0.02f, groundMask);
-
+        anima.SetBool("OnGround", isGrounded || isTouchingSlope);
     }
 
     private void CheckSlopeAndDirections()
@@ -999,22 +1008,25 @@ public class CharacterContorl : MonoBehaviour
         gpSlider.transform.localPosition = gpSlider.transform.localPosition + new Vector3(0, 1.25f + (this.transform.localScale.x - 1) * 1.2f, 0);
         stunSlider.transform.localPosition = stunSlider.transform.localPosition + new Vector3(0, 1.5f + (this.transform.localScale.x - 1) * 1.2f, 0);
         hpSlider.transform.localPosition = hpSlider.transform.localPosition + new Vector3(0, 1.75f + (this.transform.localScale.x - 1) * 1.2f, 0);
+        playerIndicator.transform.position = this.transform.position;
+        playerIndicator.transform.localPosition = playerIndicator.transform.localPosition + new Vector3(0, 1.75f + (this.transform.localScale.x - 1) * 1.5f, 0);
     }
     private void SetRingColor()
     {
-        var rendererBlock = new MaterialPropertyBlock();
-        ringRenderer.GetPropertyBlock(rendererBlock, 0);
-        rendererBlock.SetColor("_Color", InputReadManager.Instance.playerColors[playerIndex]);
-        ringRenderer.SetPropertyBlock(rendererBlock, 0);
+        //var rendererBlock = new MaterialPropertyBlock();
+        //ringRenderer.GetPropertyBlock(rendererBlock, 0);
+        //rendererBlock.SetColor("_Color", InputReadManager.Instance.playerColors[playerIndex]);
+        //ringRenderer.SetPropertyBlock(rendererBlock, 0);
+        playerIndexText.text = $"P{playerIndex}";
     }
 
     // temp, 告诉用户到达最大速
     private void SetRingMaxColor()
     {
-        var rendererBlock = new MaterialPropertyBlock();
-        ringRenderer.GetPropertyBlock(rendererBlock, 0);
-        rendererBlock.SetColor("_Color", Color.red);
-        ringRenderer.SetPropertyBlock(rendererBlock, 0);
+        //var rendererBlock = new MaterialPropertyBlock();
+        //ringRenderer.GetPropertyBlock(rendererBlock, 0);
+        //rendererBlock.SetColor("_Color", Color.red);
+        //ringRenderer.SetPropertyBlock(rendererBlock, 0);
     }
 
 
@@ -1086,21 +1098,14 @@ public class CharacterContorl : MonoBehaviour
             {
                 lglooNerfRate = 0.5f;
             }
-            var force = KnockBackForce(1);
 
-            var hitDir = Vector3.ProjectOnPlane((ridbody.position - collision.contacts[0].point), Vector3.up).normalized;
-            if (otherCollision.releasing)
-                ridbody.AddForce((force.force) * hitDir, ForceMode.Force);
-            //var attackForce = attackForceFeedback.Evaluate(m2);
-            //var hitForce = hitForceFeedback.Evaluate(m1);
-            //ridbody.AddExplosionForce((attackForce * bodyCollider.material.staticFriction * ridbody.mass + hitForce * bodyCollider.material.staticFriction * ridbody.mass) * 0.1f, collision.contacts[0].point, 2, 0f, ForceMode.Force);
+            //var hitDir = Vector3.ProjectOnPlane((ridbody.position - collision.contacts[0].point), Vector3.up).normalized;
+            //var force = KnockBackForce(0.5f, hitDir);
 
-            //Debug.LogError($"结算m1 : {m1} m2 : {m2} attackForce {attackForce} hitForce {hitForce}");
-            //ridbody.AddExplosionForce((otherCollision.forceArgument + m2) * continueReceivedForceRate + 200 * lglooNerfRate, collision.contacts[0].point, 4);
-            //collision.collider.gameObject.GetComponent<Rigidbody>().AddExplosionForce((forceArgument + m1) * otherCollision.continueReceivedForceRate + 50, collision.contacts[0].point, 4);
 
-            //ridbody.AddExplosionForce((m1 + m2) * 300f, collision.contacts[0].point, 2, 0f, ForceMode.Force);
-            //collision.collider.gameObject.GetComponent<Rigidbody>().AddExplosionForce((m1 + m2 * 0.25f) * 0.1f, collision.contacts[0].point, 2, 0f, ForceMode.VelocityChange);
+            //if (otherCollision.releasing)
+            //    ridbody.AddForce((force.force) * hitDir, ForceMode.Force);
+
         }
 
        
@@ -1118,20 +1123,55 @@ public class CharacterContorl : MonoBehaviour
         public float hitTime;
     }
 
+
+    bool isRecordingHit = false;
+    bool isFirstFrame = false;
+    Vector3 hitPosition;
+    DateTime hitTime;
+    float hitDistance = 0;
+    bool hasPrint = false;
+    private void RecordCollisionVelocity()
+    {
+        if (isRecordingHit)
+        {        
+            if (isFirstFrame && !hasPrint)
+            {
+                Debug.LogError($" ===> {this.gameObject.name} === > 第一帧 实际距离：{(this.transform.position - hitPosition).magnitude} 当前速度:{this.ridbody.velocity.magnitude} 目标距离：{hitDistance} 用时: {((DateTime.Now - hitTime).TotalSeconds)}");
+                isFirstFrame = false;
+                hasPrint = true;
+            }
+            isFirstFrame = true;
+            if ((DateTime.Now - hitTime).TotalSeconds > 0.2f && this.ridbody.velocity.magnitude < 0.1f)
+            {
+                Debug.LogError($" ===> {this.gameObject.name} === > 实际距离：{(this.transform.position - hitPosition).magnitude} 当前速度:{this.ridbody.velocity.magnitude} 目标距离：{hitDistance} 用时: {((DateTime.Now - hitTime).TotalSeconds)}");
+                isRecordingHit = false;
+            }
+        }
+    }
+
     /// <summary>
     /// 结算击退距离
     /// </summary>
     /// <param name="distance"></param>
     /// <returns></returns>
-    private KnockBackForceStruct KnockBackForce(float distance)
+    private KnockBackForceStruct KnockBackForce(float distance, Vector3 hitDir)
     {
+        isRecordingHit = true;
+        hasPrint = false;
+        hitDistance = distance;
+        hitPosition = this.transform.position;
+        hitTime = DateTime.Now;
         var gravityDivide = Vector3.ProjectOnPlane(Physics.gravity, groundNormal) * ridbody.mass;
         var gravityFrictionDivide = Physics.gravity - gravityDivide;
         var frictionForceAcceleration =  bodyCollider.material.dynamicFriction * gravityFrictionDivide.magnitude;
 
-        var desiredV0 = (float)Math.Sqrt((2 * frictionForceAcceleration * distance));
-        var acceleration = desiredV0 / Time.fixedDeltaTime;
 
+        var deltaV = (this.ridbody.velocity - velocityBeforeCollision);
+        var magnitudeDeltaV = Vector3.Dot(deltaV, hitDir.normalized);
+
+        var desiredV0 = (float)Math.Sqrt((2 * frictionForceAcceleration * distance)) - magnitudeDeltaV;
+        var acceleration = desiredV0 / Time.fixedDeltaTime;
+        Debug.LogError($"====> {this.gameObject.name} === > 距离:{distance} 当前速度:{this.ridbody.velocity.magnitude} 理论VO：{desiredV0}");
         return new KnockBackForceStruct { 
             force = acceleration * ridbody.mass,
             hitTime = desiredV0 / frictionForceAcceleration
@@ -1143,18 +1183,21 @@ public class CharacterContorl : MonoBehaviour
     /// </summary>
     /// <param name="distance"></param>
     /// <returns></returns>
-    private KnockBackForceStruct KnockBackOnAirForce(float distance)
+    private KnockBackForceStruct KnockBackOnAirForce(float distance, Vector3 hitDir)
     {
         var currentVelocity = ridbody.velocity;
         float forceMagnitude = 0f;
         float hitTime = 0f;
-        if(currentVelocity.y > 0)
+        var deltaV = (this.ridbody.velocity - velocityBeforeCollision);
+        var magnitudeDeltaV = Vector3.Dot(deltaV, hitDir.normalized);
+        if (currentVelocity.y > 0)
         {
             //上升状态处理
             var riseTime = currentVelocity.y / currentGravity.magnitude;
             var dropHeight = ridbody.transform.position.y + (bodyCollider as SphereCollider).center.y + currentGravity.magnitude * Mathf.Pow(riseTime, 2.0f);
             var dropTime = Mathf.Sqrt(2 * currentGravity.magnitude * dropHeight);
-            var initialVelocity = distance / (dropTime+ riseTime);
+
+            var initialVelocity = distance / (dropTime+ riseTime) - magnitudeDeltaV;
             var acceleration = initialVelocity / Time.fixedDeltaTime;
             hitTime = riseTime + dropTime;
             forceMagnitude = acceleration * ridbody.mass;
@@ -1173,13 +1216,12 @@ public class CharacterContorl : MonoBehaviour
             var gravityFrictionDivide = Physics.gravity - gravityDivide;
             var frictionForceAcceleration = bodyCollider.material.dynamicFriction * gravityFrictionDivide.magnitude;
 
-            var initialVelocity = (float)(((distance) + frictionForceAcceleration * Mathf.Pow(riseTime, 2)/2)/(0.4 * dropTime + 0.6 * riseTime));
+            var initialVelocity = (float)(((distance) + frictionForceAcceleration * Mathf.Pow(riseTime, 2)/2)/(0.4 * dropTime + 0.6 * riseTime)) - magnitudeDeltaV;
             hitTime = dropMaxTime;
             forceMagnitude = initialVelocity / Time.fixedDeltaTime * ridbody.mass;
         }
         return new KnockBackForceStruct { force = forceMagnitude, hitTime = hitTime };
     }
-
 
     private void OnCollisionEnter(Collision collision)
     {
@@ -1252,20 +1294,22 @@ public class CharacterContorl : MonoBehaviour
                 lglooNerfRate = 0.5f;
             }
             //出招加成
-            var hasBuff = (otherCollision.isAtMaxSpeed && !otherCollision.isGrounded) ? 1.1f : 1;
-            var myBuff = isAtMaxSpeed && !otherCollision.isGrounded ? 1.1f : 1;
+            var hasBuff = (otherCollision.isAtMaxSpeed && !otherCollision.isGrounded) ? buffAttack : 1;
+            var myBuff = isAtMaxSpeed && !otherCollision.isGrounded ? buffAttack : 1;
 
             var hitDir = Vector3.ProjectOnPlane((ridbody.position - collision.contacts[0].point), groundNormal).normalized;
             var myHitKnockback = hitKnockbackCurve.Evaluate(momentumSelf * myBuff + 2);
             var otherHitKnockback = hitKnockbackCurve.Evaluate(momentumOther * hasBuff);
-            var hitDistance = Math.Min(hitMaxDistance, otherHitKnockback + myHitKnockback);
 
-            KnockBackForceStruct forceData ;
+            KnockBackForceStruct forceData;
+
+            var targetDistance = Math.Min(hitMaxDistance, hitKnockbackCurve.Evaluate(momentumOther * hasBuff) + hitKnockbackCurve.Evaluate(momentumSelf * myBuff + 2));
+
             //施加水平推力
             if (isGrounded || isTouchingSlope)
-                forceData = KnockBackForce(Math.Min(hitMaxDistance, hitKnockbackCurve.Evaluate(momentumOther * hasBuff) + hitKnockbackCurve.Evaluate(momentumSelf * myBuff + 2)));
+                forceData = KnockBackForce(targetDistance, hitDir);
             else
-                forceData = KnockBackOnAirForce(Math.Min(hitMaxDistance, hitKnockbackCurve.Evaluate(momentumOther * hasBuff) + hitKnockbackCurve.Evaluate(momentumSelf * myBuff + 2)));
+                forceData = KnockBackOnAirForce(targetDistance, hitDir);
            
             var hitOnPlane = Vector3.ProjectOnPlane((collision.contacts[0].point - ridbody.position), groundNormal).normalized;
             var forwardOnPlane = Vector3.ProjectOnPlane(ridbody.transform.forward, groundNormal).normalized;
@@ -1275,10 +1319,10 @@ public class CharacterContorl : MonoBehaviour
             {
                 anima.SetBool("isHit", true);
             }
-
+            Debug.LogError($"==> {this.gameObject.name} ===> 打击距离 {targetDistance} otherAtMaxSpeed? {otherCollision.isAtMaxSpeed} ");
             //打击眩晕和血量
-            TakeStun((int)(hitKnockbackCurve.Evaluate(momentumOther * hasBuff) * 10));
-            TakeDamage((int)(hitKnockbackCurve.Evaluate(momentumOther * hasBuff) * 5), hitDir);
+            TakeStun((int)(hitKnockbackCurve.Evaluate(momentumOther * hasBuff) * distanceToStunCoef));
+            TakeDamage((int)(hitKnockbackCurve.Evaluate(momentumOther * hasBuff) * distanceToHPCoef), hitDir);
             //TakeDamage(100, hitDir);//测试
             var buff = new HitBuff(this,forceData.hitTime);
             ridbody.AddForce((forceData.force) * hitDir, ForceMode.Force);
