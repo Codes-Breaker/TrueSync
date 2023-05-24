@@ -125,12 +125,11 @@ public class CharacterContorl : MonoBehaviour
     private GameController gameController;
     public Animator anima;
     public GameObject IKObject;
-    public GameObject stunEffect;
     public GameObject smokeEffect;
     public ParticleSystem particle;
     public SimpleFloatingObject floatObj;
     public GrounderQuadruped grounderQuadruped;
-
+    public RagdollActivator ragdollController;
     //攻击力
     public float forceArgument;
     //防御力系数
@@ -221,7 +220,6 @@ public class CharacterContorl : MonoBehaviour
     private float lastStunTime;
     private float ElapsedRollTime; //过去了的时间
     private float TargetRollTime; //目标时间
-    private float lastLeaveWaterTime; //回到岸上过去了的时间
     private float lastInWaterTime; //上次入水时间
     private float lastCollisionTime; //上次碰撞时间
     private float lastHPSubtractTime = 0; //上次扣血时间
@@ -234,8 +232,8 @@ public class CharacterContorl : MonoBehaviour
     private float recoveryTime = 1;
     [Header("回血间隔时间")]
     public float hpRecoveryFrequency = 1;
-    [Header("回岸回血延时时间")]
-    public float leaveWaterRecoveryFrequency = 5;
+    [Header("回血延时时间")]
+    public float damageRecoveryFrequency = 5;
     [Header("回血量")]
     public float HPRecoveryRate = 2;
     [Header("扣血量")]
@@ -273,6 +271,8 @@ public class CharacterContorl : MonoBehaviour
 
         smokeEffect.gameObject.SetActive(true);
         particle.Stop();
+
+        ragdollController.Ragdoll(false, Vector3.zero);
     }
 
     private void Start()
@@ -297,8 +297,12 @@ public class CharacterContorl : MonoBehaviour
 
     private void FixedUpdate()
     {
-        velocityBeforeCollision = GetComponent<Rigidbody>().velocity;
-        positionBeforeCollision = GetComponent<Rigidbody>().position;
+        if (!isDead)
+        {
+            velocityBeforeCollision = GetComponent<Rigidbody>().velocity;
+            positionBeforeCollision = GetComponent<Rigidbody>().position;
+        }
+           
         CheckStun();
         CheckSpeed();
         CheckInVulernable();
@@ -321,19 +325,32 @@ public class CharacterContorl : MonoBehaviour
         inputReader.brakeAciton = MoveBrake;
     }
 
-    private void SetDead()
+    private void SetDead(Vector3 hitDir)
     {
         isDead = true;
         anima.enabled = false;
+        ragdollController.Ragdoll(true, hitDir);
+        Destroy(floatObj);
         Dead();
     }
 
-    public void TakeDamage(int number)
+    public void TakeStun(int number)
     {
         if (isStun)
             return;
         currentStunValue = Math.Max(0, currentStunValue - number);
         CheckStun();
+    }
+
+    public void TakeDamage(float number, Vector3 hitDir)
+    {
+        currentHPValue -= number;
+        currentHPValue = Math.Max(currentHPValue, 0);
+        lastHPSubtractTime = 0;
+        if (currentHPValue == 0)
+        {
+            SetDead(hitDir);
+        }
     }
 
     private void UpdateBuff()
@@ -390,13 +407,8 @@ public class CharacterContorl : MonoBehaviour
             {
                 if (lastHPSubtractTime > hpSubtractFrequency)
                 {
-                    currentHPValue -= HPSubtractRate;
-                    currentHPValue = Math.Max(currentHPValue, 0);
-                    lastHPSubtractTime = 0;
-                    if (currentHPValue == 0)
-                    {
-                        SetDead();
-                    }
+                    TakeDamage(HPSubtractRate, Vector3.zero);
+
                 }
                 else
                 {
@@ -406,7 +418,7 @@ public class CharacterContorl : MonoBehaviour
         }
         else
         {
-            if (lastLeaveWaterTime > leaveWaterRecoveryFrequency)
+            if (lastHPSubtractTime > damageRecoveryFrequency)
             {
                 if (currentHPValue < maxHPValue)
                 {
@@ -421,6 +433,10 @@ public class CharacterContorl : MonoBehaviour
                         lastHPRecoveryTime += Time.fixedDeltaTime;
                     }
                 }
+            }
+            else
+            {
+                lastHPSubtractTime += Time.fixedDeltaTime;
             }
         }
     }
@@ -443,11 +459,14 @@ public class CharacterContorl : MonoBehaviour
 
     private void SetAnimatorArgument()
     {
+        if (isDead)
+            return;
         var speed = new Vector3(ridbody.velocity.x, 0, ridbody.velocity.z).magnitude;
         anima.SetFloat("Speed", runAnimCurve.Evaluate(speed));
         anima.SetFloat("playSpeed", runAnimPlayCurve.Evaluate(speed));
         anima.SetFloat("velocityY", ridbody.velocity.y);
         anima.SetBool("Releasing", releasing);
+        anima.SetBool("isStun", isStun);
         if (isInWater && !hasInWater)
         {
             anima.SetTrigger("isInWater");
@@ -503,7 +522,7 @@ public class CharacterContorl : MonoBehaviour
     private void Dead()
     {
         var cinemachineTargetGroup = GameObject.FindObjectOfType<CinemachineTargetGroup>();
-        cinemachineTargetGroup.RemoveMember(transform);
+        //cinemachineTargetGroup.RemoveMember(transform);
         //this.gameObject.SetActive(false);
         this.canvas.gameObject.SetActive(false);
         gameController.CheckGameState();
@@ -511,6 +530,8 @@ public class CharacterContorl : MonoBehaviour
 
     private void SetGravity()
     {
+        if (isDead)
+            return;
         if (ridbody.velocity.y >= 0)
         {
             gravityScale = ascendingGravityScale;
@@ -787,6 +808,8 @@ public class CharacterContorl : MonoBehaviour
 
     private void MoveRoll()
     {
+        if (isDead)
+            return;
         if (isStun)
         {
             if(ridbody.velocity.magnitude > stunStopRollMinVelocity)
@@ -831,6 +854,8 @@ public class CharacterContorl : MonoBehaviour
 
     private void CheckStun()
     {
+        if (isDead)
+            return;
         if (isStun)
         {
             lastStunTime += Time.fixedDeltaTime;
@@ -890,6 +915,11 @@ public class CharacterContorl : MonoBehaviour
 
     private void SetIK()
     {
+        if (isDead)
+        {
+            grounderQuadruped.weight = 0;
+            return;
+        }
         var targetIK = isStun ? 0 : 1;
 
         if (grounderQuadruped.weight != targetIK)
@@ -910,17 +940,12 @@ public class CharacterContorl : MonoBehaviour
 
     private void CheckIsInWater()
     {
+        if (isDead)
+            return;
         if (floatObj.InWater && !isInWater)
         {
             //入水判定
             lastInWaterTime = 0;
-
-        }
-
-        if (!floatObj.InWater && isInWater)
-        {
-            //出水判定
-            lastLeaveWaterTime = 0;
         }
 
         isInWater = floatObj.InWater;
@@ -929,10 +954,7 @@ public class CharacterContorl : MonoBehaviour
         {
             lastInWaterTime += Time.fixedDeltaTime;
         }
-        else
-        {
-            lastLeaveWaterTime += Time.fixedDeltaTime;
-        }
+
     }
 
     private void CheckIsGrounded()
@@ -980,12 +1002,12 @@ public class CharacterContorl : MonoBehaviour
         stunSlider.value = (float)(currentStunValue / maxStunValue);
         hpSlider.value = (float)(currentHPValue / maxHPValue);
         canvas.transform.forward = Camera.main.transform.forward;
-        gpSlider.transform.position = bodyCollider.transform.position;
-        stunSlider.transform.position = bodyCollider.transform.position;
-        hpSlider.transform.position = bodyCollider.transform.position;
-        gpSlider.transform.localPosition = gpSlider.transform.localPosition + new Vector3(0, 1.25f + (bodyCollider.transform.localScale.x - 1) * 1.2f, 0);
-        stunSlider.transform.localPosition = stunSlider.transform.localPosition + new Vector3(0, 1.5f + (bodyCollider.transform.localScale.x - 1) * 1.2f, 0);
-        hpSlider.transform.localPosition = hpSlider.transform.localPosition + new Vector3(0, 1.75f + (bodyCollider.transform.localScale.x - 1) * 1.2f, 0);
+        gpSlider.transform.position = this.transform.position;
+        stunSlider.transform.position = this.transform.position;
+        hpSlider.transform.position = this.transform.position;
+        gpSlider.transform.localPosition = gpSlider.transform.localPosition + new Vector3(0, 1.25f + (this.transform.localScale.x - 1) * 1.2f, 0);
+        stunSlider.transform.localPosition = stunSlider.transform.localPosition + new Vector3(0, 1.5f + (this.transform.localScale.x - 1) * 1.2f, 0);
+        hpSlider.transform.localPosition = hpSlider.transform.localPosition + new Vector3(0, 1.75f + (this.transform.localScale.x - 1) * 1.2f, 0);
     }
     private void SetRingColor()
     {
@@ -1256,7 +1278,7 @@ public class CharacterContorl : MonoBehaviour
            
             var hitOnPlane = Vector3.ProjectOnPlane((collision.contacts[0].point - ridbody.position), groundNormal).normalized;
             var forwardOnPlane = Vector3.ProjectOnPlane(ridbody.transform.forward, groundNormal).normalized;
-            var hitAngle = Vector3.Angle(forwardOnPlane, hitOnPlane);
+            var hitAngle = Vector3.SignedAngle(forwardOnPlane, hitOnPlane, groundNormal);
             anima.SetFloat("hitAngle", hitAngle);
             if (myHitKnockback > 1 || otherHitKnockback > 1)
             {
@@ -1264,8 +1286,9 @@ public class CharacterContorl : MonoBehaviour
             }
 
             //打击眩晕和血量
-            TakeDamage((int)(hitKnockbackCurve.Evaluate(momentumOther * hasBuff) * 10));
-
+            TakeStun((int)(hitKnockbackCurve.Evaluate(momentumOther * hasBuff) * 10));
+            TakeDamage((int)(hitKnockbackCurve.Evaluate(momentumOther * hasBuff) * 5), hitDir);
+            //TakeDamage(100, hitDir);//测试
             var buff = new HitBuff(this,forceData.hitTime);
             ridbody.AddForce((forceData.force) * hitDir, ForceMode.Force);
 
