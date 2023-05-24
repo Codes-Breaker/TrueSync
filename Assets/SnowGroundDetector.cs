@@ -8,6 +8,12 @@ public class SnowGroundDetector : MonoBehaviour
 
     public LayerMask GroundMask;
     public ParticleSystem particleEffect;
+    public Transform targetTransform;
+
+    private void LateUpdate()
+    {
+        this.transform.position = targetTransform.position;   
+    }
 
     private void OnTriggerEnter(Collider other)
     {
