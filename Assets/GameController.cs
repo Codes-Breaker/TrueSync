@@ -74,7 +74,7 @@ public class GameController : MonoBehaviour
 
     IEnumerator DelayOpen()
     {
-        yield return new WaitForSeconds(3);
+        yield return new WaitForSeconds(4);
         GameOverText?.gameObject.SetActive(true);
     }
 
