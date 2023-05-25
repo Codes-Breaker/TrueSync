@@ -133,6 +133,7 @@ public class CharacterContorl : MonoBehaviour
     public Animator anima;
     public GameObject IKObject;
     public GameObject smokeEffect;
+    public GameObject impactEffect;
     public ParticleSystem particle;
     public SimpleFloatingObject floatObj;
     public GrounderQuadruped grounderQuadruped;
@@ -287,7 +288,7 @@ public class CharacterContorl : MonoBehaviour
 
         gameController = GameObject.Find("GameManager")?.GetComponent<GameController>();
 
-
+        impactEffect.gameObject.SetActive(false);
         smokeEffect.gameObject.SetActive(true);
         particle.Stop();
 
@@ -300,12 +301,14 @@ public class CharacterContorl : MonoBehaviour
         if(inputReader != null)
             SetControlSelf();
         SetRingColor();
+
     }
 
     private void LateUpdate()
     {
         SetSlider();
         MoveRoll();
+        SetEffect();
     }
 
     private void Update()
@@ -463,7 +466,18 @@ public class CharacterContorl : MonoBehaviour
         }
     }
 
-
+    private void SetEffect()
+    {
+        if (isAtMaxSpeed)
+        {
+            impactEffect.gameObject.SetActive(true);
+            impactEffect.transform.forward = ridbody.velocity.normalized;
+        }
+        else
+        {
+            impactEffect.gameObject.SetActive(false);
+        }
+    }
 
     private void SetGameLayerRecursive(GameObject _go, int _layer)
     {
