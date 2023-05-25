@@ -27900,11 +27900,12 @@ MonoBehaviour:
   movementMaxVelocity: 3
   jumpForce: 30
   jumpFrequency: 0.25
+  jumpBonusToVelocity: 1.4
   runMaxVelocity: 8
   runSpeedUpTime: 2
-  runSpeedUpRotationRate: 0.02
-  runMaxSpeedRotationRate: 0.01
-  breakRotationRate: 0.02
+  runSpeedUpRotationRate: 0.03
+  runMaxSpeedRotationRate: 0.02
+  breakRotationRate: 0.03
   chargeTime: 3
   releaseTime: 10
   decelerationForceArgument: 10
@@ -27995,25 +27996,25 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0
       value: 0
-      inSlope: 1.8978614
-      outSlope: 1.8978614
+      inSlope: 0.6245889
+      outSlope: 0.6245889
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0.029993044
+      outWeight: 0.06049149
     - serializedVersion: 3
-      time: 9.935671
-      value: 5.937103
-      inSlope: -0.008296206
-      outSlope: -0.008296206
+      time: 9.954287
+      value: 3.9734797
+      inSlope: 0.1786244
+      outSlope: 0.1786244
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.19319521
+      inWeight: 0.08918661
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  hitMaxDistance: 9
+  hitMaxDistance: 7
   gravityScale: 1
   fallingGravityScale: 1
   ascendingGravityScale: 1
@@ -28061,13 +28062,50 @@ MonoBehaviour:
   isInWater: 0
   hpRecoveryFrequency: 1
   damageRecoveryFrequency: 5
-  HPRecoveryRate: 5
+  HPRecoveryRate: 1
   HPSubtractRate: 5
-  hpSubtractFrequency: 1
-  inWaterSubtractFrequency: 2
+  hpSubtractFrequency: 0.1
+  inWaterSubtractFrequency: 0
   stunRecoveryFrequency: 1
   stunRecoveryRate: 5
   withoutCollidingRecoveryFrequency: 2
+  stunDecreaseRate: 10
+  stunMinValue: 20
+  InteractiveDistanceCoef: 1
+  InteractiveStunDistanceCoef: 1
+  speedToInteractiveEffect:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: -0
+      outSlope: -0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.25897923
+    - serializedVersion: 3
+      time: 5.0123806
+      value: 0.0034102052
+      inSlope: 0.0015338372
+      outSlope: 0.0015338372
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.21799451
+    - serializedVersion: 3
+      time: 9.936347
+      value: 1.072004
+      inSlope: 0.10093129
+      outSlope: 0.10093129
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.1134924
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!114 &4147182195015774368
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -30,7 +30,7 @@ public class InputReadManager : MonoBehaviour
     public List<int> ExistingIndex = new List<int>();
     public static InputReadManager Instance { get; protected set; }
     public List<Color> playerColors = new List<Color>();
-
+    public GameController gameController;
     //Ô¤ÖÆÌåPath
     private string sealPath = "Prefabs/bearrig";
     private string polarBearPath = "Prefabs/°×ÐÜ";
@@ -54,6 +54,7 @@ public class InputReadManager : MonoBehaviour
         else
         {
             CreatCharacter();
+            gameController.StartGame();
             //randomEventsControl.startCountdown = true;
             m_ButtonPressListener?.Dispose();
             Destroy(chooseCharactersPanel.gameObject);

@@ -12,6 +12,11 @@ public class GameController : MonoBehaviour
     public GameObject windIndicator;
     public GameObject infoBg;
     public VisualEffect windEffect;
+    public OceanController oceanController;
+    public float RiseSeaLevelTime = 180;
+    private float gameTime = 0;
+    private bool hasRiseSea = false;
+    public bool startGame = false;
     // Start is called before the first frame update
     void Awake()
     {
@@ -20,6 +25,32 @@ public class GameController : MonoBehaviour
         infoBg?.gameObject.SetActive(false);
         windIndicator?.gameObject.SetActive(false);
         windEffect.SetFloat("ParticlesRate", 0);
+        gameTime = 0;
+        hasRiseSea = false;
+    }
+
+    private void FixedUpdate()
+    {
+        if (startGame)
+        {
+            gameTime = gameTime += Time.fixedDeltaTime;
+            CheckSeaLevelRise();
+        }
+
+    }
+
+    private void CheckSeaLevelRise()
+    {
+        if (!hasRiseSea)
+        {
+            if (gameTime >= RiseSeaLevelTime)
+            {
+                //强制结束游戏
+                hasRiseSea = true;
+                oceanController.StartRising();
+            }
+        }
+
     }
 
     public void CheckGameState()
@@ -30,6 +61,11 @@ public class GameController : MonoBehaviour
             GameOver();
         }
 
+    }
+
+    public void StartGame()
+    {
+        startGame = true;
     }
 
     private void GameOver()

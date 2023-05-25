@@ -260,7 +260,17 @@ public class CharacterContorl : MonoBehaviour
 
     //是否处于碰撞角色
     private bool isCollidingCharacter = false;
-
+    [Header("眩晕上限减少")]
+    public float stunDecreaseRate = 10;
+    [Header("眩晕最小值")]
+    public float stunMinValue = 50;
+    [Header("场景物体距离衰减系数")]
+    [Range(0, 1)]
+    public float InteractiveDistanceCoef = 1f;
+    [Range(0, 1)]
+    public float InteractiveStunDistanceCoef = 1f;
+    [Header("场景物体反馈速度根据角色撞击速度")]
+    public AnimationCurve speedToInteractiveEffect;
 
     private void Awake()
     {
@@ -530,11 +540,16 @@ public class CharacterContorl : MonoBehaviour
         this.ridbody.gameObject.GetComponent<Collider>().enabled = !set;
     }
 
+    IEnumerator DelayRemove()
+    {
+        yield return new WaitForSeconds(3);
+        var cinemachineTargetGroup = GameObject.FindObjectOfType<CinemachineTargetGroup>();
+        cinemachineTargetGroup.RemoveMember(transform);
+    }
 
     private void Dead()
     {
-        var cinemachineTargetGroup = GameObject.FindObjectOfType<CinemachineTargetGroup>();
-        //cinemachineTargetGroup.RemoveMember(transform);
+        StartCoroutine(DelayRemove());
         //this.gameObject.SetActive(false);
         this.canvas.gameObject.SetActive(false);
         gameController.CheckGameState();
@@ -870,11 +885,13 @@ public class CharacterContorl : MonoBehaviour
             lastStunTime += Time.fixedDeltaTime;
             if (lastStunTime >= stunRecoverTime)
             {
+                maxStunValue = Math.Max(stunMinValue, maxStunValue - stunDecreaseRate);
                 currentStunValue = maxStunValue;
                 currentGas = 0f;
 
                 IKObject.transform.DOLocalRotate(new Vector3(0, 0, 0), 0.5f).onComplete += () =>
                 {
+
                     isStun = false;
                 };
             }
@@ -1194,30 +1211,36 @@ public class CharacterContorl : MonoBehaviour
     /// <returns></returns>
     private KnockBackForceStruct KnockBackOnAirForce(float distance, Vector3 hitDir)
     {
+        isRecordingHit = true;
+        hasPrint = false;
+        hitDistance = distance;
+        hitPosition = this.transform.position;
+        this.hitTime = DateTime.Now;
         var currentVelocity = ridbody.velocity;
         float forceMagnitude = 0f;
         float hitTime = 0f;
-        var deltaV = (this.ridbody.velocity - velocityBeforeCollision);
-        var magnitudeDeltaV = Vector3.Dot(deltaV, hitDir.normalized);
+
+        //var deltaV = (this.ridbody.velocity - velocityBeforeCollision);
+        //var magnitudeDeltaV = Vector3.Dot(deltaV, hitDir.normalized);
         if (currentVelocity.y > 0)
         {
             //上升状态处理
             var riseTime = currentVelocity.y / currentGravity.magnitude;
             var dropHeight = ridbody.transform.position.y + (bodyCollider as SphereCollider).center.y + currentGravity.magnitude * Mathf.Pow(riseTime, 2.0f);
-            var dropTime = Mathf.Sqrt(2 * currentGravity.magnitude * dropHeight);
+            var dropTime = Mathf.Sqrt(2 * dropHeight / currentGravity.magnitude);
 
-            var initialVelocity = distance / (dropTime+ riseTime) - magnitudeDeltaV;
+            var initialVelocity = distance / (dropTime+ riseTime);
             var acceleration = initialVelocity / Time.fixedDeltaTime;
             hitTime = riseTime + dropTime;
             forceMagnitude = acceleration * ridbody.mass;
-
+            Debug.LogError($"====>上升 {this.gameObject.name} === > 距离:{distance} 当前速度:{this.ridbody.velocity.magnitude} 理论VO：{initialVelocity}");
         }
         else
         {
             //下降状态处理
             var riseTime = Mathf.Abs(currentVelocity.y) / currentGravity.magnitude;
             var dropHeight = ridbody.transform.position.y + (bodyCollider as SphereCollider).center.y + currentGravity.magnitude * Mathf.Pow(riseTime, 2.0f);
-            var dropMaxTime = Mathf.Sqrt(2 * currentGravity.magnitude * dropHeight);
+            var dropMaxTime = Mathf.Sqrt(2 * dropHeight / currentGravity.magnitude);
             var dropTime = dropMaxTime - riseTime;
 
 
@@ -1225,10 +1248,12 @@ public class CharacterContorl : MonoBehaviour
             var gravityFrictionDivide = Physics.gravity - gravityDivide;
             var frictionForceAcceleration = bodyCollider.material.dynamicFriction * gravityFrictionDivide.magnitude;
 
-            var initialVelocity = (float)(((distance) + frictionForceAcceleration * Mathf.Pow(riseTime, 2)/2)/(0.4 * dropTime + 0.6 * riseTime)) - magnitudeDeltaV;
+            var initialVelocity = (float)(((distance) + frictionForceAcceleration * Mathf.Pow(riseTime, 2)/2)/(0.4 * dropTime + 0.6 * riseTime));
             hitTime = dropMaxTime;
             forceMagnitude = initialVelocity / Time.fixedDeltaTime * ridbody.mass;
+            Debug.LogError($"====>下降 {this.gameObject.name} === > 距离:{distance} 当前速度:{this.ridbody.velocity.magnitude} 理论VO：{initialVelocity}");
         }
+
         return new KnockBackForceStruct { force = forceMagnitude, hitTime = hitTime };
     }
 
@@ -1239,34 +1264,44 @@ public class CharacterContorl : MonoBehaviour
             buff.OnCollide(collision);
         }
 
-        if (collision.gameObject.GetComponent<TimeLapseBombSkill>())
+        if (collision.gameObject.GetComponent<InteractiveObject>())
         {
-            //推炸弹
-            var eventObjectPrefab = Resources.Load<GameObject>("MediumHit");
-            var eventObjectGameObject = Instantiate(eventObjectPrefab, collision.contacts[0].point, Quaternion.Euler(new Vector3(0, 0, 0)));
 
-            var otherCollision = collision.gameObject.GetComponent<TimeLapseBombSkill>();
+            //自身速度
+            Vector3 velocitySelf = new Vector3(velocityBeforeCollision.x, velocityBeforeCollision.y, velocityBeforeCollision.z);
+            velocitySelf = Vector3.ProjectOnPlane(velocitySelf, groundNormal).normalized * velocitySelf.magnitude;
 
-            Vector3 vel1 = velocityBeforeCollision;
-            Vector3 vel2 = otherCollision.velocityBeforeCollision;
 
             Vector3 cPoint = collision.contacts[0].point;
             Vector3 contactToMe = cPoint - positionBeforeCollision;
-            Vector3 contactToOther = cPoint - otherCollision.positionBeforeCollision;
 
-            var d1 = Vector3.Angle(vel1, contactToMe);
-            var d2 = Vector3.Angle(vel1, contactToOther);
+            var angleSelf = Vector3.Angle(velocitySelf, contactToMe);
+            var degreeSelf = angleSelf * Mathf.Deg2Rad;
 
-            var degree1 = d1 * Mathf.Deg2Rad;
-            var degree2 = d2 * Mathf.Deg2Rad;
 
-            Vector3 impactVelocity = collision.relativeVelocity;
+            var momentumSelf = (Mathf.Cos(degreeSelf) * velocitySelf).magnitude;
+            var myBuff = isAtMaxSpeed && !isGrounded ? buffAttack : 1;
 
-            var m1 = (Mathf.Cos(degree1) * vel1).magnitude;
-            var m2 = (Mathf.Cos(degree2) * vel2).magnitude;
 
-            ridbody.AddExplosionForce(m2 * 2.5f + 600, collision.contacts[0].point, 4);
-            collision.collider.gameObject.GetComponent<Rigidbody>().AddExplosionForce((forceArgument + m1) * 2f + 250, collision.contacts[0].point, 4);
+            var myHitKnockbackCoef = speedToInteractiveEffect.Evaluate(momentumSelf * myBuff);
+
+            var eventObjectPrefab = Resources.Load<GameObject>("MediumHit");
+            var eventObjectGameObject = Instantiate(eventObjectPrefab, collision.contacts[0].point, Quaternion.Euler(new Vector3(0, 0, 0)));
+            var hitDir = Vector3.ProjectOnPlane((ridbody.position - collision.contacts[0].point), groundNormal).normalized;
+            var targetDistance = Math.Min(hitMaxDistance, collision.gameObject.GetComponent<InteractiveObject>().knockbackDistance * myHitKnockbackCoef) * InteractiveDistanceCoef;
+            var forceData = KnockBackForce(targetDistance, hitDir);
+            var targetStun = targetDistance * distanceToStunCoef * InteractiveStunDistanceCoef;
+            TakeStun((int)(targetStun));
+            var buff = new HitBuff(this, forceData.hitTime);
+            ridbody.AddForce((forceData.force) * hitDir, ForceMode.Force);
+            this.buffs.Add(buff);
+            var hitOnPlane = Vector3.ProjectOnPlane((collision.contacts[0].point - ridbody.position), groundNormal).normalized;
+            var forwardOnPlane = Vector3.ProjectOnPlane(ridbody.transform.forward, groundNormal).normalized;
+            var hitAngle = Vector3.SignedAngle(forwardOnPlane, hitOnPlane, groundNormal);
+            anima.SetFloat("hitAngle", hitAngle);
+            if (targetStun > 0)
+                anima.SetBool("isHit", true);
+            
         }
 
         if (collision.gameObject.GetComponent<CharacterContorl>())
@@ -1304,10 +1339,10 @@ public class CharacterContorl : MonoBehaviour
             }
             //出招加成
             var hasBuff = (otherCollision.isAtMaxSpeed && !otherCollision.isGrounded) ? buffAttack : 1;
-            var myBuff = isAtMaxSpeed && !otherCollision.isGrounded ? buffAttack : 1;
+            var myBuff = isAtMaxSpeed && !isGrounded ? buffAttack : 1;
 
             var hitDir = Vector3.ProjectOnPlane((ridbody.position - collision.contacts[0].point), groundNormal).normalized;
-            var myHitKnockback = hitKnockbackCurve.Evaluate(momentumSelf * myBuff + 2);
+            var myHitKnockback = hitKnockbackCurve.Evaluate(momentumSelf * myBuff);
             var otherHitKnockback = hitKnockbackCurve.Evaluate(momentumOther * hasBuff);
 
             KnockBackForceStruct forceData;
@@ -1318,7 +1353,7 @@ public class CharacterContorl : MonoBehaviour
             if (isGrounded || isTouchingSlope)
                 forceData = KnockBackForce(targetDistance, hitDir);
             else
-                forceData = KnockBackOnAirForce(targetDistance, hitDir);
+                forceData = KnockBackForce(targetDistance, hitDir);
            
             var hitOnPlane = Vector3.ProjectOnPlane((collision.contacts[0].point - ridbody.position), groundNormal).normalized;
             var forwardOnPlane = Vector3.ProjectOnPlane(ridbody.transform.forward, groundNormal).normalized;
