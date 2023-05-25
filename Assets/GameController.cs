@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Linq;
 using UnityEngine.VFX;
+using UnityEngine.Playables;
+using Cinemachine;
 
 public class GameController : MonoBehaviour
 {
@@ -18,6 +20,8 @@ public class GameController : MonoBehaviour
     private bool hasRiseSea = false;
     public bool startGame = false;
     public bool debug = false;
+    public PlayableDirector director;
+    public CinemachineVirtualCamera winVM;
     // Start is called before the first frame update
     void Awake()
     {
@@ -59,10 +63,19 @@ public class GameController : MonoBehaviour
         List<CharacterContorl> characters = GameObject.FindObjectsOfType<CharacterContorl>().ToList();
         if (characters.Count <= 1 || characters.Sum(x => x.isDead ? 0: 1) == 1)
         {
-            characters.FirstOrDefault(x => !x.isDead)?.SetWin();
+            var winCharacter = characters.FirstOrDefault(x => !x.isDead);
+            winCharacter?.SetWin();
+            winVM.LookAt = winCharacter.transform;
+            winVM.Follow = winCharacter.transform;
             GameOver();
         }
 
+    }
+
+    IEnumerator DelayOpen()
+    {
+        yield return new WaitForSeconds(3);
+        GameOverText?.gameObject.SetActive(true);
     }
 
     public void StartGame()
@@ -72,7 +85,8 @@ public class GameController : MonoBehaviour
 
     private void GameOver()
     {
-        GameOverText?.gameObject.SetActive(true);
+        director?.Play();
+        StartCoroutine(DelayOpen());
     }
 
     // Update is called once per frame
@@ -82,6 +96,11 @@ public class GameController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.R))
         {
             Scene scene = SceneManager.GetActiveScene(); SceneManager.LoadScene(scene.name);
+        }
+
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            debug = !debug;
         }
         
     }
