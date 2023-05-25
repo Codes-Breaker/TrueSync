@@ -17,6 +17,7 @@ public class GameController : MonoBehaviour
     private float gameTime = 0;
     private bool hasRiseSea = false;
     public bool startGame = false;
+    public bool debug = false;
     // Start is called before the first frame update
     void Awake()
     {
@@ -58,6 +59,7 @@ public class GameController : MonoBehaviour
         List<CharacterContorl> characters = GameObject.FindObjectsOfType<CharacterContorl>().ToList();
         if (characters.Count <= 1 || characters.Sum(x => x.isDead ? 0: 1) == 1)
         {
+            characters.FirstOrDefault(x => !x.isDead)?.SetWin();
             GameOver();
         }
 

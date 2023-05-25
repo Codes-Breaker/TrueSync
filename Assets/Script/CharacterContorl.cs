@@ -272,6 +272,8 @@ public class CharacterContorl : MonoBehaviour
     [Header("场景物体反馈速度根据角色撞击速度")]
     public AnimationCurve speedToInteractiveEffect;
 
+    public GameObject crown;
+
     private void Awake()
     {
         speedUpGas = maxSpeedUpGas;
@@ -286,11 +288,11 @@ public class CharacterContorl : MonoBehaviour
         lastJumpLandTime = jumpFrequency;
 
         gameController = GameObject.Find("GameManager")?.GetComponent<GameController>();
-
+        crown.gameObject.SetActive(false);
 
         smokeEffect.gameObject.SetActive(true);
         particle.Stop();
-
+        crown.gameObject.SetActive(false);
         ragdollController.Ragdoll(false, Vector3.zero);
     }
 
@@ -354,6 +356,11 @@ public class CharacterContorl : MonoBehaviour
         ragdollController.Ragdoll(true, hitDir);
         Destroy(floatObj);
         Dead();
+    }
+
+    public void SetWin()
+    {
+        crown.gameObject.SetActive(true);
     }
 
     public void TakeStun(int number)
@@ -911,7 +918,6 @@ public class CharacterContorl : MonoBehaviour
         //Debug.LogError($"current speed: {velocityBeforeCollision.magnitude} ---> {(velocityBeforeCollision.magnitude / runMaxVelocity) * 100}% {(DateTime.Now - releaseDateTime).TotalSeconds} seconds");
         if (velocityBeforeCollision.magnitude >= runMaxVelocity * 0.9f)
         {
-            SetRingMaxColor();
             isAtMaxSpeed = true;
             anima.SetBool("isAtMaxSpeed", isAtMaxSpeed);
             if ((isGrounded || isTouchingSlope) && releasing)
@@ -919,7 +925,6 @@ public class CharacterContorl : MonoBehaviour
         }
         else
         {
-            SetRingColor();
             isAtMaxSpeed = false;
             anima.SetBool("isAtMaxSpeed", isAtMaxSpeed);
             particle.Stop();
@@ -1024,6 +1029,16 @@ public class CharacterContorl : MonoBehaviour
     #region SetUI
     private void SetSlider()
     {
+        if (!gameController.debug)
+        {
+            stunSlider.gameObject.SetActive(false);
+            hpSlider.gameObject.SetActive(false);
+        }
+        else
+        {
+            stunSlider.gameObject.SetActive(true);
+            hpSlider.gameObject.SetActive(true);
+        }
         gpSlider.value = (float)(currentGas / maxActorGas);
         stunSlider.value = (float)(currentStunValue / maxStunValue);
         hpSlider.value = (float)(currentHPValue / maxHPValue);
@@ -1043,7 +1058,8 @@ public class CharacterContorl : MonoBehaviour
         //ringRenderer.GetPropertyBlock(rendererBlock, 0);
         //rendererBlock.SetColor("_Color", InputReadManager.Instance.playerColors[playerIndex]);
         //ringRenderer.SetPropertyBlock(rendererBlock, 0);
-        playerIndexText.text = $"P{playerIndex}";
+        playerIndexText.text = $"P{playerIndex+1}";
+        playerIndicator.GetComponent<Image>().sprite = InputReadManager.Instance.playerIndicatorSprites[playerIndex];
     }
 
     // temp, 告诉用户到达最大速
