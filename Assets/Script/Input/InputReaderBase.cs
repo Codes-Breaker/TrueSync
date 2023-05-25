@@ -227,7 +227,7 @@ public class InputReaderBase : MonoBehaviour
     //DISABLE if using old input system
     private void OnDisable()
     {
-        movementActions.Disable();
+        //movementActions.Disable();
     }
 
     #endregion

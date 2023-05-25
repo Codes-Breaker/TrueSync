@@ -1285,10 +1285,13 @@ public class CharacterContorl : MonoBehaviour
 
             var myHitKnockbackCoef = speedToInteractiveEffect.Evaluate(momentumSelf * myBuff);
 
+            if (myHitKnockbackCoef < 0.1f)
+                return;
+
             var eventObjectPrefab = Resources.Load<GameObject>("MediumHit");
             var eventObjectGameObject = Instantiate(eventObjectPrefab, collision.contacts[0].point, Quaternion.Euler(new Vector3(0, 0, 0)));
             var hitDir = Vector3.ProjectOnPlane((ridbody.position - collision.contacts[0].point), groundNormal).normalized;
-            var targetDistance = Math.Min(hitMaxDistance, collision.gameObject.GetComponent<InteractiveObject>().knockbackDistance * myHitKnockbackCoef) * InteractiveDistanceCoef;
+            var targetDistance = Math.Min(hitMaxDistance, collision.gameObject.GetComponent<InteractiveObject>().knockbackDistance * myHitKnockbackCoef + hitKnockbackCurve.Evaluate(momentumSelf * myBuff + 2)) * InteractiveDistanceCoef;
             var forceData = KnockBackForce(targetDistance, hitDir);
             var targetStun = targetDistance * distanceToStunCoef * InteractiveStunDistanceCoef;
             TakeStun((int)(targetStun));
@@ -1299,8 +1302,7 @@ public class CharacterContorl : MonoBehaviour
             var forwardOnPlane = Vector3.ProjectOnPlane(ridbody.transform.forward, groundNormal).normalized;
             var hitAngle = Vector3.SignedAngle(forwardOnPlane, hitOnPlane, groundNormal);
             anima.SetFloat("hitAngle", hitAngle);
-            if (targetStun > 0)
-                anima.SetBool("isHit", true);
+            anima.SetBool("isHit", true);
             
         }
 

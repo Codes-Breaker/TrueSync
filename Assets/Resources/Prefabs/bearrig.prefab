@@ -28063,7 +28063,7 @@ MonoBehaviour:
   hpRecoveryFrequency: 1
   damageRecoveryFrequency: 5
   HPRecoveryRate: 1
-  HPSubtractRate: 5
+  HPSubtractRate: 2
   hpSubtractFrequency: 0.1
   inWaterSubtractFrequency: 0
   stunRecoveryFrequency: 1
@@ -28072,7 +28072,7 @@ MonoBehaviour:
   stunDecreaseRate: 10
   stunMinValue: 20
   InteractiveDistanceCoef: 1
-  InteractiveStunDistanceCoef: 1
+  InteractiveStunDistanceCoef: 0.8
   speedToInteractiveEffect:
     serializedVersion: 2
     m_Curve:
@@ -28086,22 +28086,31 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0.25897923
     - serializedVersion: 3
-      time: 5.0123806
-      value: 0.0034102052
-      inSlope: 0.0015338372
-      outSlope: 0.0015338372
+      time: 2.9637187
+      value: 0.0032565296
+      inSlope: 0.010412121
+      outSlope: 0.010412121
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.21799451
+      inWeight: 0.2697816
+      outWeight: 0.70786256
     - serializedVersion: 3
-      time: 9.936347
-      value: 1.072004
-      inSlope: 0.10093129
-      outSlope: 0.10093129
+      time: 3.2936792
+      value: 0.96146417
+      inSlope: 0.0018029127
+      outSlope: 0.0018029127
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.1134924
+      inWeight: 0.6371558
+      outWeight: 0.18193616
+    - serializedVersion: 3
+      time: 9.955146
+      value: 1.0745331
+      inSlope: 0.023556406
+      outSlope: 0.023556406
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.14954484
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
