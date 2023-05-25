@@ -30,6 +30,7 @@ public class InputReadManager : MonoBehaviour
     public List<int> ExistingIndex = new List<int>();
     public static InputReadManager Instance { get; protected set; }
     public List<Color> playerColors = new List<Color>();
+    public List<Sprite> playerIndicatorSprites = new List<Sprite>();
     public GameController gameController;
     //‘§÷∆ÃÂPath
     private string sealPath = "Prefabs/bearrig";
