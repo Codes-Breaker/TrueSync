@@ -275,6 +275,11 @@ public class CharacterContorl : MonoBehaviour
 
     public GameObject crown;
 
+    [Header("±ôËÀ×´Ì¬ÌáÊ¾ÑªÁ¿")]
+    public float dangerHpTip = 30f;
+    public SkinnedMeshRenderer skinnedMeshRenderer;
+    public AnimationCurve blinkCurve;
+
     private void Awake()
     {
         speedUpGas = maxSpeedUpGas;
@@ -311,6 +316,7 @@ public class CharacterContorl : MonoBehaviour
     {
         SetSlider();
         MoveRoll();
+        CheckHP();
         //SetEffect();
     }
 
@@ -365,6 +371,16 @@ public class CharacterContorl : MonoBehaviour
     public void SetWin()
     {
         crown.gameObject.SetActive(true);
+        inputReader.moveAciotn = null;
+        inputReader.chargeAction = null;
+        inputReader.releaseAciton = null;
+        inputReader.interactWeaponAction = null;
+        inputReader.jumpAction = null;
+        inputReader.brakeAciton = null;
+        currentGas = 0;
+        crown.transform.DOLocalRotate(new Vector3(crown.transform.localRotation.eulerAngles.x, 360, 0), 1f, RotateMode.FastBeyond360)
+            .SetLoops(-1, LoopType.Restart)
+            .SetEase(Ease.Linear);
     }
 
     public void TakeStun(int number)
@@ -430,6 +446,8 @@ public class CharacterContorl : MonoBehaviour
 
     private void UpdateHP()
     {
+        if (gameController.isGameOver)
+            return;
         if (isDead)
             return;
 
@@ -849,6 +867,28 @@ public class CharacterContorl : MonoBehaviour
                 currentGas = Mathf.Max(0, currentGas);
                 releasing = true;
             }
+        }
+    }
+
+    private void CheckHP()
+    {
+        if (currentHPValue < dangerHpTip)
+        {
+            var rendererBlock = new MaterialPropertyBlock();
+            skinnedMeshRenderer.GetPropertyBlock(rendererBlock, 1);
+            rendererBlock.SetFloat("_TintAmount", blinkCurve.Evaluate(Time.time));
+            skinnedMeshRenderer.SetPropertyBlock(rendererBlock, 1);
+        }
+        else
+        {
+            var rendererBlock = new MaterialPropertyBlock();
+            skinnedMeshRenderer.GetPropertyBlock(rendererBlock, 1);
+            if (rendererBlock.GetFloat("_TintAmount") != 0)
+            {
+                rendererBlock.SetFloat("_TintAmount", 0f);
+                skinnedMeshRenderer.SetPropertyBlock(rendererBlock, 1);
+            }
+
         }
     }
 
