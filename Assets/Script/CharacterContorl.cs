@@ -1316,7 +1316,7 @@ public class CharacterContorl : MonoBehaviour
                 var dropTime = Mathf.Sqrt(2 * dropHeight / currentGravity.magnitude);
 
 
-                var initialVelocity =( Mathf.Sqrt( 2 * frictionForceAcceleration * distance + Mathf.Pow(dropTime+ riseTime,2))-(dropTime + riseTime))/ frictionForceAcceleration;
+                var initialVelocity =Mathf.Sqrt(frictionForceAcceleration*(frictionForceAcceleration * (Mathf.Pow (dropTime + riseTime,2)+ 2 * distance))) -(dropTime + riseTime)* frictionForceAcceleration;
                 var initialVelocityDelta = initialVelocity + magnitudeDeltaV;
 
                 var acceleration = initialVelocityDelta / Time.fixedDeltaTime;
@@ -1331,8 +1331,7 @@ public class CharacterContorl : MonoBehaviour
                 var dropHeight = hit.distance + currentGravity.magnitude * Mathf.Pow(riseTime, 2.0f);
                 var dropMaxTime = Mathf.Sqrt(2 * dropHeight / currentGravity.magnitude);
                 var dropTime = dropMaxTime - riseTime;
-
-                var initialVelocity = (Mathf.Sqrt(2 * frictionForceAcceleration * distance + Mathf.Pow(dropTime, 2)) - (dropTime)) / frictionForceAcceleration;
+                var initialVelocity = Mathf.Sqrt(frictionForceAcceleration * (frictionForceAcceleration * (Mathf.Pow(dropTime, 2) + 2 * distance))) - (dropTime) * frictionForceAcceleration;
                 var initialVelocityDelta = initialVelocity + magnitudeDeltaV;
 
 
