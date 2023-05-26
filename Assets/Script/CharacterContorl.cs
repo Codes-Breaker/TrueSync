@@ -103,6 +103,8 @@ public class CharacterContorl : MonoBehaviour
     public AnimationCurve runAnimPlayCurve;
     [Header("速度击退曲线")]
     public AnimationCurve hitKnockbackCurve;
+    [Header("自身速度击退取消")]
+    public AnimationCurve hitKnockbackSelfCurve;
     [Header("击退范围上限")]
     public float hitMaxDistance = 5;
 
@@ -1377,7 +1379,7 @@ public class CharacterContorl : MonoBehaviour
             var eventObjectPrefab = Resources.Load<GameObject>("MediumHit");
             var eventObjectGameObject = Instantiate(eventObjectPrefab, collision.contacts[0].point, Quaternion.Euler(new Vector3(0, 0, 0)));
             var hitDir = Vector3.ProjectOnPlane((ridbody.position - collision.contacts[0].point), groundNormal).normalized;
-            var targetDistance = Math.Min(hitMaxDistance, collision.gameObject.GetComponent<InteractiveObject>().knockbackDistance * myHitKnockbackCoef + hitKnockbackCurve.Evaluate(momentumSelf * myBuff + 2)) * InteractiveDistanceCoef;
+            var targetDistance = Math.Min(hitMaxDistance, collision.gameObject.GetComponent<InteractiveObject>().knockbackDistance * myHitKnockbackCoef + hitKnockbackSelfCurve.Evaluate(momentumSelf * myBuff + 2)) * InteractiveDistanceCoef;
             var forceData = KnockBackForce(targetDistance, hitDir);
             var targetStun = targetDistance * distanceToStunCoef * InteractiveStunDistanceCoef;
             TakeStun((int)(targetStun));
@@ -1436,7 +1438,7 @@ public class CharacterContorl : MonoBehaviour
 
             KnockBackForceStruct forceData;
 
-            var targetDistance = Math.Min(hitMaxDistance, hitKnockbackCurve.Evaluate(momentumOther * hasBuff) + hitKnockbackCurve.Evaluate(momentumSelf ));
+            var targetDistance = Math.Min(hitMaxDistance, hitKnockbackCurve.Evaluate(momentumOther * hasBuff) + hitKnockbackSelfCurve.Evaluate(momentumSelf ));
 
             //施加水平推力
             if (isGrounded || isTouchingSlope)
