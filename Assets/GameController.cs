@@ -6,10 +6,12 @@ using System.Linq;
 using UnityEngine.VFX;
 using UnityEngine.Playables;
 using Cinemachine;
+using TMPro;
 
 public class GameController : MonoBehaviour
 {
-    public GameObject GameOverText;
+    public GameObject GameOverGO;
+    public TMP_Text GameOverText;
     public GameObject windText;
     public GameObject windIndicator;
     public GameObject infoBg;
@@ -20,18 +22,21 @@ public class GameController : MonoBehaviour
     private bool hasRiseSea = false;
     public bool startGame = false;
     public bool debug = false;
+    public bool isGameOver = false;
     public PlayableDirector director;
+    private int winIndex = -1;
     public CinemachineVirtualCamera winVM;
     // Start is called before the first frame update
     void Awake()
     {
-        GameOverText?.gameObject.SetActive(false);
+        GameOverGO?.gameObject.SetActive(false);
         windText?.gameObject.SetActive(false);
         infoBg?.gameObject.SetActive(false);
         windIndicator?.gameObject.SetActive(false);
         windEffect.SetFloat("ParticlesRate", 0);
         gameTime = 0;
         hasRiseSea = false;
+        isGameOver = false;
     }
 
     private void FixedUpdate()
@@ -64,7 +69,9 @@ public class GameController : MonoBehaviour
         if (characters.Count <= 1 || characters.Sum(x => x.isDead ? 0: 1) == 1)
         {
             var winCharacter = characters.FirstOrDefault(x => !x.isDead);
+            isGameOver = true;
             winCharacter?.SetWin();
+            winIndex = winCharacter.playerIndex;
             winVM.LookAt = winCharacter.transform;
             winVM.Follow = winCharacter.transform;
             GameOver();
@@ -75,7 +82,8 @@ public class GameController : MonoBehaviour
     IEnumerator DelayOpen()
     {
         yield return new WaitForSeconds(4);
-        GameOverText?.gameObject.SetActive(true);
+        GameOverGO.SetActive(true);
+        GameOverText.text = $"P{winIndex + 1} Win!\nPress R to Restart";
     }
 
     public void StartGame()
