@@ -882,14 +882,7 @@ public class CharacterContorl : MonoBehaviour
 
     private void CheckHP()
     {
-        if (currentHPValue < dangerHpTip)
-        {
-            var rendererBlock = new MaterialPropertyBlock();
-            skinnedMeshRenderer.GetPropertyBlock(rendererBlock, 1);
-            rendererBlock.SetFloat("_TintAmount", blinkCurve.Evaluate(Time.time));
-            skinnedMeshRenderer.SetPropertyBlock(rendererBlock, 1);
-        }
-        else
+        if (isDead)
         {
             var rendererBlock = new MaterialPropertyBlock();
             skinnedMeshRenderer.GetPropertyBlock(rendererBlock, 1);
@@ -898,8 +891,29 @@ public class CharacterContorl : MonoBehaviour
                 rendererBlock.SetFloat("_TintAmount", 0f);
                 skinnedMeshRenderer.SetPropertyBlock(rendererBlock, 1);
             }
-
         }
+        else
+        {
+            if (currentHPValue < dangerHpTip)
+            {
+                var rendererBlock = new MaterialPropertyBlock();
+                skinnedMeshRenderer.GetPropertyBlock(rendererBlock, 1);
+                rendererBlock.SetFloat("_TintAmount", blinkCurve.Evaluate(Time.time));
+                skinnedMeshRenderer.SetPropertyBlock(rendererBlock, 1);
+            }
+            else
+            {
+                var rendererBlock = new MaterialPropertyBlock();
+                skinnedMeshRenderer.GetPropertyBlock(rendererBlock, 1);
+                if (rendererBlock.GetFloat("_TintAmount") != 0)
+                {
+                    rendererBlock.SetFloat("_TintAmount", 0f);
+                    skinnedMeshRenderer.SetPropertyBlock(rendererBlock, 1);
+                }
+
+            }
+        }
+
     }
 
     private void MoveRoll()
@@ -1434,7 +1448,7 @@ public class CharacterContorl : MonoBehaviour
                 lglooNerfRate = 0.5f;
             }
             //³öÕÐ¼Ó³É
-            var hasBuff = (otherCollision.isAtMaxSpeed && !otherCollision.isGrounded) ? buffAttack : 1;
+            var hasBuff = (otherCollision.isAtMaxSpeed && (!otherCollision.isGrounded && !otherCollision.isTouchingSlope)) ? buffAttack : 1;
             var myBuff = isAtMaxSpeed && !isGrounded ? buffAttack : 1;
 
             var hitDir = Vector3.ProjectOnPlane((ridbody.position - collision.contacts[0].point), groundNormal).normalized;
