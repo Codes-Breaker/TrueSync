@@ -90,39 +90,39 @@ public class InputReadManager : MonoBehaviour
         playerDatas = chooseCharactersPanel.GetCharactersData();
         cinemachineTargetGroup = GameObject.FindObjectOfType<CinemachineTargetGroup>();
         int index = 0;
-        var padding = 20f / (playerDatas.Count + 1);
+        var randomPointIndex = new List<int>();
+        for (int i = 0; i < gameController.bornPointsParent.transform.childCount; i++)
+        {
+            randomPointIndex.Add(i);
+        }
         foreach (var item in playerDatas)
         {
-            GameObject characterGameObject;
-
+            GameObject characterGameObject = null;
+            var posRandIndex = randomPointIndex[UnityEngine.Random.Range(0, randomPointIndex.Count)];
+            randomPointIndex.Remove(posRandIndex);
+            var pos = gameController.bornPointsParent.transform.GetChild(posRandIndex).position;
             switch (item.characterType)
             {
                 case CharacterType.Seal:
                     characterGameObject = Instantiate((GameObject)Resources.Load(sealPath));
-                    characterGameObject.GetComponent<CharacterContorl>().inputReader = item.inputReader;
-                    cinemachineTargetGroup.AddMember(characterGameObject.transform, 2, 4);
-                    characterGameObject.transform.position = new Vector3(-10 + padding*(index+1), 10, 0);
-                    characterGameObject.GetComponent<CharacterContorl>().playerIndex = index;
                     index++;
                     break;
                 case CharacterType.PolarBear:
                     characterGameObject = Instantiate((GameObject)Resources.Load(polarBearPath));
-                    characterGameObject.GetComponent<CharacterContorl>().inputReader = item.inputReader;
-                    cinemachineTargetGroup.AddMember(characterGameObject.transform, 2, 4);
-                    characterGameObject.transform.position = new Vector3(-10 + padding * (index + 1), 6, 0);
-                    characterGameObject.GetComponent<CharacterContorl>().playerIndex = index;
                     index++;
                     break;
                 case CharacterType.SnowFox:
                     characterGameObject = Instantiate((GameObject)Resources.Load(snowFoxPath));
-                    characterGameObject.GetComponent<CharacterContorl>().inputReader = item.inputReader;
-                    cinemachineTargetGroup.AddMember(characterGameObject.transform, 2, 4);
-                    characterGameObject.transform.position = new Vector3(-10 + padding * (index + 1), 6, 0);
-                    characterGameObject.GetComponent<CharacterContorl>().playerIndex = index;
                     index++;
                     break;
             }
-
+            if (characterGameObject != null)
+            {
+                characterGameObject.GetComponent<CharacterContorl>().inputReader = item.inputReader;
+                cinemachineTargetGroup.AddMember(characterGameObject.transform, 2, 4);
+                characterGameObject.transform.position = pos;
+                characterGameObject.GetComponent<CharacterContorl>().playerIndex = index;
+            }
 
         }
     }

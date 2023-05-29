@@ -7,6 +7,7 @@ using UnityEngine.VFX;
 using UnityEngine.Playables;
 using Cinemachine;
 using TMPro;
+using System;
 
 public class GameController : MonoBehaviour
 {
@@ -26,6 +27,7 @@ public class GameController : MonoBehaviour
     public PlayableDirector director;
     private int winIndex = -1;
     public CinemachineVirtualCamera winVM;
+    public GameObject bornPointsParent;
     // Start is called before the first frame update
     void Awake()
     {
@@ -37,6 +39,7 @@ public class GameController : MonoBehaviour
         gameTime = 0;
         hasRiseSea = false;
         isGameOver = false;
+        UnityEngine.Random.InitState(System.DateTime.Now.Millisecond);
     }
 
     private void FixedUpdate()
