@@ -94,6 +94,12 @@ public class CharacterContorl : MonoBehaviour
     public float stunStopRollMinAngle;
     [Header("眩晕时停止转动的最小速度阈值")]
     public float stunStopRollMinVelocity;
+    [Header("正面受击补偿")]
+    public float hitBonusToHead = 1f;
+    [Header("侧面受击补偿")]
+    public float hitBonusToSide = 1f;
+    [Header("后面受击补偿")]
+    public float hitBonusToBack = 1f;
 
     [Header("是否达到最大速度")]
     public bool isAtMaxSpeed = false;
@@ -1322,7 +1328,7 @@ public class CharacterContorl : MonoBehaviour
                 var acceleration = initialVelocityDelta / Time.fixedDeltaTime;
                 hitTime = riseTime + dropTime + Mathf.Abs(initialVelocity / frictionForceAcceleration);
                 forceMagnitude = acceleration * ridbody.mass;
-                Debug.LogError($"====>上升 {this.gameObject.name} === > 距离:{distance} 当前速度:{this.ridbody.velocity.magnitude} 理论VO：{initialVelocity} 实际施加速度 {initialVelocityDelta}");
+                //Debug.LogError($"====>上升 {this.gameObject.name} === > 距离:{distance} 当前速度:{this.ridbody.velocity.magnitude} 理论VO：{initialVelocity} 实际施加速度 {initialVelocityDelta}");
             }
             else
             {
@@ -1337,7 +1343,7 @@ public class CharacterContorl : MonoBehaviour
 
                 hitTime = dropTime + Mathf.Abs(initialVelocity / frictionForceAcceleration);
                 forceMagnitude = initialVelocityDelta / Time.fixedDeltaTime * ridbody.mass;
-                Debug.LogError($"====>下降 {this.gameObject.name} === > 距离:{distance} 当前速度:{this.ridbody.velocity.magnitude} 理论VO：{initialVelocity} 实际施加速度 {initialVelocityDelta}");
+                //Debug.LogError($"====>下降 {this.gameObject.name} === > 距离:{distance} 当前速度:{this.ridbody.velocity.magnitude} 理论VO：{initialVelocity} 实际施加速度 {initialVelocityDelta}");
             }
         };
 
@@ -1436,8 +1442,28 @@ public class CharacterContorl : MonoBehaviour
             var otherHitKnockback = hitKnockbackCurve.Evaluate(momentumOther * hasBuff);
 
             KnockBackForceStruct forceData;
+            //打击角度计算
+            var hitOnPlane = Vector3.ProjectOnPlane((collision.contacts[0].point - ridbody.position), groundNormal).normalized;
+            var forwardOnPlane = Vector3.ProjectOnPlane(ridbody.transform.forward, groundNormal).normalized;
+            var hitAngle = Vector3.SignedAngle(forwardOnPlane, hitOnPlane, groundNormal);
+            anima.SetFloat("hitAngle", hitAngle);
 
-            var targetDistance = Math.Min(hitMaxDistance, hitKnockbackCurve.Evaluate(momentumOther * hasBuff) + hitKnockbackCurve.Evaluate(momentumSelf ));
+            if (Mathf.Abs(hitAngle) <= 45)
+            {
+                momentumOther = momentumOther * hitBonusToHead;
+            }
+            else if (Mathf.Abs(hitAngle) > 45 && Mathf.Abs(hitAngle) < 135)
+            {
+                momentumOther = momentumOther * hitBonusToSide;
+
+            }
+            else
+            {
+                momentumOther = momentumOther * hitBonusToBack;
+
+            }
+
+            var targetDistance = Math.Min(hitMaxDistance, hitKnockbackCurve.Evaluate(momentumOther * hasBuff) + hitKnockbackSelfCurve.Evaluate(momentumSelf ));
 
             //施加水平推力
             if (isGrounded || isTouchingSlope)
@@ -1445,10 +1471,6 @@ public class CharacterContorl : MonoBehaviour
             else
                 forceData = KnockBackOnAirForce(targetDistance, hitDir);
            
-            var hitOnPlane = Vector3.ProjectOnPlane((collision.contacts[0].point - ridbody.position), groundNormal).normalized;
-            var forwardOnPlane = Vector3.ProjectOnPlane(ridbody.transform.forward, groundNormal).normalized;
-            var hitAngle = Vector3.SignedAngle(forwardOnPlane, hitOnPlane, groundNormal);
-            anima.SetFloat("hitAngle", hitAngle);
             if (myHitKnockback > 1 || otherHitKnockback > 1)
             {
                 anima.SetBool("isHit", true);
