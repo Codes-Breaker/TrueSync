@@ -27,11 +27,12 @@ public class ItemBase : MonoBehaviour
         if (collision.gameObject.GetComponent<CharacterContorl>())
         {
             var otherCollision = collision.gameObject.GetComponent<CharacterContorl>();
-            otherCollision.buffs.Add(CreatItemBuff());
+            var itemBuff = CreatItemBuff(collision.gameObject.GetComponent<CharacterContorl>());
+            otherCollision.buffs.Add(itemBuff);
         }
     }
 
-    protected virtual ItemBuffBase CreatItemBuff()
+    protected virtual ItemBuffBase CreatItemBuff(CharacterContorl target)
     {
         return null;
     }
