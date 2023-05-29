@@ -27933,6 +27933,9 @@ MonoBehaviour:
   stunStopRollMaxAngle: 40
   stunStopRollMinAngle: 10
   stunStopRollMinVelocity: 2
+  hitBonusToHead: 1
+  hitBonusToSide: 1.2
+  hitBonusToBack: 1.5
   isAtMaxSpeed: 0
   runAnimCurve:
     serializedVersion: 2
@@ -28004,8 +28007,8 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0.06049149
     - serializedVersion: 3
-      time: 9.954287
-      value: 3.9734797
+      time: 10.060122
+      value: 6.051876
       inSlope: 0.1786244
       outSlope: 0.1786244
       tangentMode: 0
@@ -28028,17 +28031,17 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0.25973418
     - serializedVersion: 3
-      time: 3.8217072
-      value: 0.2848174
-      inSlope: 0.090570316
-      outSlope: 0.090570316
+      time: 4.086966
+      value: 0.017666534
+      inSlope: 0.022457723
+      outSlope: 0.022457723
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.1254783
+      inWeight: 0.33333334
       outWeight: 0.11378044
     - serializedVersion: 3
-      time: 9.973452
-      value: 0.9936633
+      time: 10.103701
+      value: 4.0081286
       inSlope: 0.013935757
       outSlope: 0.013935757
       tangentMode: 0
@@ -28048,11 +28051,11 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  hitMaxDistance: 7
+  hitMaxDistance: 14
   gravityScale: 1
   fallingGravityScale: 1
   ascendingGravityScale: 1
-  buffAttack: 2
+  buffAttack: 1.5
   distanceToStunCoef: 5
   distanceToHPCoef: 3
   gpSlider: {fileID: 4121841322639874642}
