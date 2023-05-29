@@ -283,10 +283,14 @@ public class CharacterContorl : MonoBehaviour
 
     public GameObject crown;
 
+    public GameObject stun;
+
     [Header("濒死状态提示血量")]
     public float dangerHpTip = 30f;
     public SkinnedMeshRenderer skinnedMeshRenderer;
     public AnimationCurve blinkCurve;
+
+    private bool isRecoveringFromStun = false;
 
     private void Awake()
     {
@@ -369,6 +373,7 @@ public class CharacterContorl : MonoBehaviour
 
     private void SetDead(Vector3 hitDir)
     {
+        stun.gameObject.SetActive(false);
         isDead = true;
         anima.enabled = false;
         ragdollController.Ragdoll(true, hitDir);
@@ -969,16 +974,18 @@ public class CharacterContorl : MonoBehaviour
         if (isStun)
         {
             lastStunTime += Time.fixedDeltaTime;
-            if (lastStunTime >= stunRecoverTime)
+            if (lastStunTime >= stunRecoverTime && !isRecoveringFromStun)
             {
+                isRecoveringFromStun = true;
                 maxStunValue = Math.Max(stunMinValue, maxStunValue - stunDecreaseRate);
                 currentStunValue = maxStunValue;
                 currentGas = 0f;
 
                 IKObject.transform.DOLocalRotate(new Vector3(0, 0, 0), 0.5f).onComplete += () =>
                 {
-
+                    stun.gameObject.SetActive(false);
                     isStun = false;
+                    isRecoveringFromStun = false;
                 };
             }
         }
@@ -986,8 +993,9 @@ public class CharacterContorl : MonoBehaviour
         {
             if (currentStunValue <= 0)
             {
+                stun.gameObject.SetActive(true);
                 isStun = true;
-                lastStunTime = 0 ;
+                lastStunTime = 0;
             }
         }
     }
@@ -1257,14 +1265,14 @@ public class CharacterContorl : MonoBehaviour
         {        
             if (isFirstFrame && !hasPrint)
             {
-                //Debug.LogError($" ===> {this.gameObject.name} === > 第一帧 实际距离：{(this.transform.position - hitPosition).magnitude} 当前速度:{this.ridbody.velocity.magnitude} 目标距离：{hitDistance} 用时: {((DateTime.Now - hitTime).TotalSeconds)}");
+                Debug.LogError($" ===> {this.gameObject.name} === > 第一帧 实际距离：{(this.transform.position - hitPosition).magnitude} 当前速度:{this.ridbody.velocity.magnitude} 目标距离：{hitDistance} 用时: {((DateTime.Now - hitTime).TotalSeconds)}");
                 isFirstFrame = false;
                 hasPrint = true;
             }
             isFirstFrame = true;
             if ((DateTime.Now - hitTime).TotalSeconds > 0.2f && this.ridbody.velocity.magnitude < 0.1f)
             {
-                //Debug.LogError($" ===> {this.gameObject.name} === > 实际距离：{(this.transform.position - hitPosition).magnitude} 当前速度:{this.ridbody.velocity.magnitude} 目标距离：{hitDistance} 用时: {((DateTime.Now - hitTime).TotalSeconds)}");
+                Debug.LogError($" ===> {this.gameObject.name} === > 实际距离：{(this.transform.position - hitPosition).magnitude} 当前速度:{this.ridbody.velocity.magnitude} 目标距离：{hitDistance} 用时: {((DateTime.Now - hitTime).TotalSeconds)}");
                 isRecordingHit = false;
             }
         }
@@ -1395,7 +1403,7 @@ public class CharacterContorl : MonoBehaviour
             if (myHitKnockbackCoef < 0.1f)
                 return;
 
-            var eventObjectPrefab = Resources.Load<GameObject>("MediumHit");
+            var eventObjectPrefab = Resources.Load<GameObject>("Prefabs/Effect/StunHit");
             var eventObjectGameObject = Instantiate(eventObjectPrefab, collision.contacts[0].point, Quaternion.Euler(new Vector3(0, 0, 0)));
             var hitDir = Vector3.ProjectOnPlane((ridbody.position - collision.contacts[0].point), groundNormal).normalized;
             var targetDistance = Math.Min(hitMaxDistance, collision.gameObject.GetComponent<InteractiveObject>().knockbackDistance * myHitKnockbackCoef + hitKnockbackSelfCurve.Evaluate(momentumSelf * myBuff + 2)) * InteractiveDistanceCoef;
