@@ -34,7 +34,7 @@ public class InputReadManager : MonoBehaviour
     public GameController gameController;
     //预制体Path
     private string sealPath = "Prefabs/bearrig";
-    private string polarBearPath = "Prefabs/白熊";
+    private string polarBearPath = "Prefabs/bearrig";
     private string snowFoxPath = "Prefabs/狐狸";
 
     //现有注册的控制器

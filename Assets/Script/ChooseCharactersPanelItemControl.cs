@@ -13,7 +13,7 @@ public class ChooseCharactersPanelItemControl : MonoBehaviour
     private bool isButtonDown;
     private int playerIndex;
     public Image background;
-    public CharacterType characterType = CharacterType.Seal;
+    public CharacterType characterType = CharacterType.PolarBear;
     public List<Sprite> images = new List<Sprite>();
     public Image avatar;
 
@@ -37,21 +37,21 @@ public class ChooseCharactersPanelItemControl : MonoBehaviour
     {
         if(inputReader.interact && !isButtonDown)
         {
-            var index = (int)characterType;
-            index = index + 1;
-            if (index > 3)
-                index = 1;
-            characterType = (CharacterType)index;
-            isButtonDown = true;
+            //var index = (int)characterType;
+            //index = index + 1;
+            //if (index > 3)
+            //    index = 1;
+            //characterType = (CharacterType)index;
+            //isButtonDown = true;
         }
         if (!inputReader.interact)
             isButtonDown = false;
         if (characterType == CharacterType.Seal)
-            characterNameText.text = "Seal";
+            characterNameText.text = "PolarBear";
         else if (characterType == CharacterType.PolarBear)
             characterNameText.text = "PolarBear";
         else if (characterType == CharacterType.SnowFox)
             characterNameText.text = "SnowFox";
-        avatar.sprite = images[(int)characterType - 1];
+        avatar.sprite = images[(int)characterType];
     }
 }
