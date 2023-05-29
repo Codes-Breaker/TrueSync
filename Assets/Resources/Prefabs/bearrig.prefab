@@ -28015,6 +28015,39 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  hitKnockbackSelfCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0.0067102714
+      outSlope: 0.0067102714
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.25973418
+    - serializedVersion: 3
+      time: 3.8217072
+      value: 0.2848174
+      inSlope: 0.090570316
+      outSlope: 0.090570316
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.1254783
+      outWeight: 0.11378044
+    - serializedVersion: 3
+      time: 9.973452
+      value: 0.9936633
+      inSlope: 0.013935757
+      outSlope: 0.013935757
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.09239771
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   hitMaxDistance: 7
   gravityScale: 1
   fallingGravityScale: 1
@@ -35095,6 +35128,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: crown
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: b37e9bedd17b82641ac7153b51dd6c26,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b37e9bedd17b82641ac7153b51dd6c26, type: 3}
