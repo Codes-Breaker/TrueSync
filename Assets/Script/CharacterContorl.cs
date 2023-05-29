@@ -1312,32 +1312,32 @@ public class CharacterContorl : MonoBehaviour
             {
                 //上升状态处理
                 var riseTime = currentVelocity.y / currentGravity.magnitude;
-                var dropHeight = hit.distance + currentGravity.magnitude * Mathf.Pow(riseTime, 2.0f);
+                var dropHeight = hit.distance + currentGravity.magnitude * Mathf.Pow(riseTime, 2.0f)/2;
                 var dropTime = Mathf.Sqrt(2 * dropHeight / currentGravity.magnitude);
 
 
-                var initialVelocity =Mathf.Sqrt(frictionForceAcceleration*(frictionForceAcceleration * (Mathf.Pow (dropTime + riseTime,2)+ 2 * distance))) -(dropTime + riseTime)* frictionForceAcceleration;
-                var initialVelocityDelta = initialVelocity + magnitudeDeltaV;
+                var initialVelocity =Mathf.Sqrt(frictionForceAcceleration*(frictionForceAcceleration * (Mathf.Pow (dropTime + riseTime,2))+ 2 * distance)) -(dropTime + riseTime)* frictionForceAcceleration;
+                var initialVelocityDelta = initialVelocity - magnitudeDeltaV;
 
                 var acceleration = initialVelocityDelta / Time.fixedDeltaTime;
                 hitTime = riseTime + dropTime + Mathf.Abs(initialVelocity / frictionForceAcceleration);
                 forceMagnitude = acceleration * ridbody.mass;
-                //Debug.LogError($"====>上升 {this.gameObject.name} === > 距离:{distance} 当前速度:{this.ridbody.velocity.magnitude} 理论VO：{initialVelocity}");
+                Debug.LogError($"====>上升 {this.gameObject.name} === > 距离:{distance} 当前速度:{this.ridbody.velocity.magnitude} 理论VO：{initialVelocity} 实际施加速度 {initialVelocityDelta}");
             }
             else
             {
                 //下降状态处理
                 var riseTime = Mathf.Abs(currentVelocity.y) / currentGravity.magnitude;
-                var dropHeight = hit.distance + currentGravity.magnitude * Mathf.Pow(riseTime, 2.0f);
+                var dropHeight = hit.distance + currentGravity.magnitude * Mathf.Pow(riseTime, 2.0f)/2;
                 var dropMaxTime = Mathf.Sqrt(2 * dropHeight / currentGravity.magnitude);
                 var dropTime = dropMaxTime - riseTime;
-                var initialVelocity = Mathf.Sqrt(frictionForceAcceleration * (frictionForceAcceleration * (Mathf.Pow(dropTime, 2) + 2 * distance))) - (dropTime) * frictionForceAcceleration;
-                var initialVelocityDelta = initialVelocity + magnitudeDeltaV;
+                var initialVelocity = Mathf.Sqrt(frictionForceAcceleration * (frictionForceAcceleration * (Mathf.Pow(dropTime, 2)) + 2 * distance)) - (dropTime) * frictionForceAcceleration;
+                var initialVelocityDelta = initialVelocity - magnitudeDeltaV;
 
 
                 hitTime = dropTime + Mathf.Abs(initialVelocity / frictionForceAcceleration);
                 forceMagnitude = initialVelocityDelta / Time.fixedDeltaTime * ridbody.mass;
-                //Debug.LogError($"====>下降 {this.gameObject.name} === > 距离:{distance} 当前速度:{this.ridbody.velocity.magnitude} 理论VO：{initialVelocity}");
+                Debug.LogError($"====>下降 {this.gameObject.name} === > 距离:{distance} 当前速度:{this.ridbody.velocity.magnitude} 理论VO：{initialVelocity} 实际施加速度 {initialVelocityDelta}");
             }
         };
 
@@ -1437,7 +1437,7 @@ public class CharacterContorl : MonoBehaviour
 
             KnockBackForceStruct forceData;
 
-            var targetDistance = Math.Min(hitMaxDistance, hitKnockbackCurve.Evaluate(momentumOther * hasBuff) + hitKnockbackSelfCurve.Evaluate(momentumSelf ));
+            var targetDistance = Math.Min(hitMaxDistance, hitKnockbackCurve.Evaluate(momentumOther * hasBuff) + hitKnockbackCurve.Evaluate(momentumSelf ));
 
             //施加水平推力
             if (isGrounded || isTouchingSlope)
