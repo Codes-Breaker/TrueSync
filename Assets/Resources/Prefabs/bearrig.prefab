@@ -16607,6 +16607,7 @@ Transform:
   - {fileID: 3045562015660580772}
   - {fileID: 5161750048691219668}
   - {fileID: 5316805779062575211}
+  - {fileID: 1433856838429670772}
   - {fileID: 8335224010024162888}
   m_Father: {fileID: 2155099488740267518}
   m_RootOrder: 0
@@ -27935,7 +27936,7 @@ MonoBehaviour:
   stunStopRollMinVelocity: 2
   hitBonusToHead: 1
   hitBonusToSide: 1.2
-  hitBonusToBack: 1.5
+  hitBonusToBack: 1.35
   isAtMaxSpeed: 0
   runAnimCurve:
     serializedVersion: 2
@@ -27999,16 +28000,25 @@ MonoBehaviour:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
-      inSlope: 0.6245889
-      outSlope: 0.6245889
+      value: 0.3
+      inSlope: 0
+      outSlope: 0
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
       outWeight: 0.06049149
     - serializedVersion: 3
-      time: 10.060122
-      value: 6.051876
+      time: 3
+      value: 0.3
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.5473411
+    - serializedVersion: 3
+      time: 8.958181
+      value: 6.1738467
       inSlope: 0.1786244
       outSlope: 0.1786244
       tangentMode: 0
@@ -28024,26 +28034,26 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0
       value: 0
-      inSlope: 0.0067102714
-      outSlope: 0.0067102714
+      inSlope: 0
+      outSlope: 0
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
       outWeight: 0.25973418
     - serializedVersion: 3
-      time: 4.086966
-      value: 0.017666534
-      inSlope: 0.022457723
-      outSlope: 0.022457723
-      tangentMode: 0
+      time: 3
+      value: 0
+      inSlope: -0
+      outSlope: 1.1454109
+      tangentMode: 5
       weightedMode: 0
       inWeight: 0.33333334
-      outWeight: 0.11378044
+      outWeight: 0.052310705
     - serializedVersion: 3
-      time: 10.103701
-      value: 4.0081286
-      inSlope: 0.013935757
-      outSlope: 0.013935757
+      time: 8
+      value: 2.5276947
+      inSlope: 0
+      outSlope: 0
       tangentMode: 0
       weightedMode: 0
       inWeight: 0.09239771
@@ -28051,13 +28061,13 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  hitMaxDistance: 14
+  hitMaxDistance: 7
   gravityScale: 1
   fallingGravityScale: 1
   ascendingGravityScale: 1
-  buffAttack: 1.5
-  distanceToStunCoef: 5
-  distanceToHPCoef: 3
+  buffAttack: 2
+  distanceToStunCoef: 6
+  distanceToHPCoef: 2
   gpSlider: {fileID: 4121841322639874642}
   hpSlider: {fileID: 2827711392416063840}
   stunSlider: {fileID: 3323950262081022655}
@@ -28078,26 +28088,26 @@ MonoBehaviour:
   forceArgument: 100
   receivedForceRate: 1
   isDead: 0
-  isGrounded: 0
+  isGrounded: 1
   sensitivity: 1
   targetAngle: 0
-  currentStunValue: 0
-  currentHPValue: 0
+  currentStunValue: 100
+  currentHPValue: 43
   currentGas: 0
   releasing: 0
   HPtimer: 0
   skill: {fileID: 0}
   isUseSkill: 0
   maxSpeedUpGas: 5
-  velocityBeforeCollision: {x: 0, y: 0, z: 0}
-  positionBeforeCollision: {x: 0, y: 0, z: 0}
+  velocityBeforeCollision: {x: 0.0019085407, y: -0.00041620433, z: -0.0055051753}
+  positionBeforeCollision: {x: -8.079711, y: 4.7962174, z: -5.2694073}
   continueReceivedForceRate: 1
   invulernableTime: 0
   invulernable: 0
   isTouchingSlope: 0
-  currentGravity: {x: 0, y: 0, z: 0}
+  currentGravity: {x: 0, y: -9.81, z: 0}
   playerIndex: 0
-  isInWater: 0
+  isInWater: 1
   hpRecoveryFrequency: 1
   damageRecoveryFrequency: 5
   HPRecoveryRate: 1
@@ -28105,10 +28115,10 @@ MonoBehaviour:
   hpSubtractFrequency: 0.1
   inWaterSubtractFrequency: 0
   stunRecoveryFrequency: 1
-  stunRecoveryRate: 5
+  stunRecoveryRate: 2
   withoutCollidingRecoveryFrequency: 2
   stunDecreaseRate: 10
-  stunMinValue: 20
+  stunMinValue: 40
   InteractiveDistanceCoef: 1
   InteractiveStunDistanceCoef: 0.8
   speedToInteractiveEffect:
@@ -28154,6 +28164,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   crown: {fileID: 8712066968594435314}
+  stun: {fileID: 1433856838429670731}
   dangerHpTip: 30
   skinnedMeshRenderer: {fileID: 8710850407254142023}
   blinkCurve:
@@ -35045,6 +35056,107 @@ ParticleSystem:
     type: 3}
   m_PrefabInstance: {fileID: 4222518662676566903}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &6736335097343088337
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 7494583762492344273}
+    m_Modifications:
+    - target: {fileID: 5663927605720312730, guid: 8dbab8fb0b777164e8f58b48c3ac7efb,
+        type: 3}
+      propertyPath: m_Name
+      value: HCFX_Stun
+      objectReference: {fileID: 0}
+    - target: {fileID: 5663927605720312730, guid: 8dbab8fb0b777164e8f58b48c3ac7efb,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5663927605720312741, guid: 8dbab8fb0b777164e8f58b48c3ac7efb,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5663927605720312741, guid: 8dbab8fb0b777164e8f58b48c3ac7efb,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5663927605720312741, guid: 8dbab8fb0b777164e8f58b48c3ac7efb,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5663927605720312741, guid: 8dbab8fb0b777164e8f58b48c3ac7efb,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5663927605720312741, guid: 8dbab8fb0b777164e8f58b48c3ac7efb,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 5663927605720312741, guid: 8dbab8fb0b777164e8f58b48c3ac7efb,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.54
+      objectReference: {fileID: 0}
+    - target: {fileID: 5663927605720312741, guid: 8dbab8fb0b777164e8f58b48c3ac7efb,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5663927605720312741, guid: 8dbab8fb0b777164e8f58b48c3ac7efb,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5663927605720312741, guid: 8dbab8fb0b777164e8f58b48c3ac7efb,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5663927605720312741, guid: 8dbab8fb0b777164e8f58b48c3ac7efb,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5663927605720312741, guid: 8dbab8fb0b777164e8f58b48c3ac7efb,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5663927605720312741, guid: 8dbab8fb0b777164e8f58b48c3ac7efb,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5663927605720312741, guid: 8dbab8fb0b777164e8f58b48c3ac7efb,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5663927605720312741, guid: 8dbab8fb0b777164e8f58b48c3ac7efb,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 8dbab8fb0b777164e8f58b48c3ac7efb, type: 3}
+--- !u!1 &1433856838429670731 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5663927605720312730, guid: 8dbab8fb0b777164e8f58b48c3ac7efb,
+    type: 3}
+  m_PrefabInstance: {fileID: 6736335097343088337}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1433856838429670772 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5663927605720312741, guid: 8dbab8fb0b777164e8f58b48c3ac7efb,
+    type: 3}
+  m_PrefabInstance: {fileID: 6736335097343088337}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8369398321729597859
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -35055,7 +35167,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: b37e9bedd17b82641ac7153b51dd6c26,
         type: 3}
       propertyPath: m_RootOrder
-      value: 5
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: b37e9bedd17b82641ac7153b51dd6c26,
         type: 3}
