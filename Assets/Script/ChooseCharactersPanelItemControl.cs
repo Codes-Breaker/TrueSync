@@ -14,6 +14,7 @@ public class ChooseCharactersPanelItemControl : MonoBehaviour
     private int playerIndex;
     public Image background;
     public CharacterType characterType = CharacterType.PolarBear;
+    public bool isReady = false;
     public List<Sprite> images = new List<Sprite>();
     public Image avatar;
 
@@ -42,16 +43,19 @@ public class ChooseCharactersPanelItemControl : MonoBehaviour
             //if (index > 3)
             //    index = 1;
             //characterType = (CharacterType)index;
-            //isButtonDown = true;
+            isReady = !isReady;
+            isButtonDown = true;
         }
         if (!inputReader.interact)
             isButtonDown = false;
-        if (characterType == CharacterType.Seal)
-            characterNameText.text = "PolarBear";
-        else if (characterType == CharacterType.PolarBear)
-            characterNameText.text = "PolarBear";
-        else if (characterType == CharacterType.SnowFox)
-            characterNameText.text = "SnowFox";
+        //if (characterType == CharacterType.Seal)
+        //    characterNameText.text = "PolarBear";
+        //else if (characterType == CharacterType.PolarBear)
+        //    characterNameText.text = "PolarBear";
+        //else if (characterType == CharacterType.SnowFox)
+        //    characterNameText.text = "SnowFox";
+
+        characterNameText.text = isReady ? "READY" : "NOT READY";
         avatar.sprite = images[(int)characterType];
     }
 }

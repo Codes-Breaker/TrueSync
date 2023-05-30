@@ -42,24 +42,45 @@ public class InputReadManager : MonoBehaviour
 
     private IDisposable m_ButtonPressListener;
     public float timeLeft = 0;
+    private float currentTimeLeft;
+    private bool isAllReady = false;
     public TextMeshProUGUI countdownText;
 
     void Update()
     {
-        if (timeLeft > 0)
+        if (chooseCharactersPanel.chooseCharactersPanelItemControls.Count > 0)
+            isAllReady = true;
+        else
+            isAllReady = false;
+        foreach(var item in chooseCharactersPanel.chooseCharactersPanelItemControls)
         {
-            timeLeft -= Time.deltaTime;
-            string formattedSeconds = Convert.ToInt32(timeLeft).ToString("D2");
-            countdownText.text = formattedSeconds;
+            isAllReady = isAllReady && item.isReady;
+        }
+        if (isAllReady)
+        {
+           // countdownText.gameObject.SetActive(true);
+            if (currentTimeLeft > 0)
+            {
+                currentTimeLeft -= Time.deltaTime;
+                string formattedSeconds = Convert.ToInt32(currentTimeLeft).ToString("D2");
+                countdownText.text = formattedSeconds;
+            }
+            else
+            {
+                CreatCharacter();
+                gameController.StartGame();
+                //randomEventsControl.startCountdown = true;
+                m_ButtonPressListener?.Dispose();
+                Destroy(chooseCharactersPanel.gameObject);
+                Destroy(gameObject);
+            }
         }
         else
         {
-            CreatCharacter();
-            gameController.StartGame();
-            //randomEventsControl.startCountdown = true;
-            m_ButtonPressListener?.Dispose();
-            Destroy(chooseCharactersPanel.gameObject);
-            Destroy(gameObject);
+            currentTimeLeft = timeLeft;
+            string formattedSeconds = Convert.ToInt32(currentTimeLeft).ToString("D2");
+            countdownText.text = formattedSeconds;
+            // countdownText.gameObject.SetActive(false);
         }
     }
     private void Awake()
@@ -82,8 +103,6 @@ public class InputReadManager : MonoBehaviour
         controlDevices.Add(device);
         if(chooseCharactersPanel.gameObject.activeSelf)
             chooseCharactersPanel.AddCharacterItem(device, chooseCharactersPanel.chooseCharactersPanelItemControls.Count + 1);
-
-
     }
     public void CreatCharacter()
     {
