@@ -1265,14 +1265,14 @@ public class CharacterContorl : MonoBehaviour
         {        
             if (isFirstFrame && !hasPrint)
             {
-                Debug.LogError($" ===> {this.gameObject.name} === > 第一帧 实际距离：{(this.transform.position - hitPosition).magnitude} 当前速度:{this.ridbody.velocity.magnitude} 目标距离：{hitDistance} 用时: {((DateTime.Now - hitTime).TotalSeconds)}");
+                //Debug.LogError($" ===> {this.gameObject.name} === > 第一帧 实际距离：{(this.transform.position - hitPosition).magnitude} 当前速度:{this.ridbody.velocity.magnitude} 目标距离：{hitDistance} 用时: {((DateTime.Now - hitTime).TotalSeconds)}");
                 isFirstFrame = false;
                 hasPrint = true;
             }
             isFirstFrame = true;
             if ((DateTime.Now - hitTime).TotalSeconds > 0.2f && this.ridbody.velocity.magnitude < 0.1f)
             {
-                Debug.LogError($" ===> {this.gameObject.name} === > 实际距离：{(this.transform.position - hitPosition).magnitude} 当前速度:{this.ridbody.velocity.magnitude} 目标距离：{hitDistance} 用时: {((DateTime.Now - hitTime).TotalSeconds)}");
+                //Debug.LogError($" ===> {this.gameObject.name} === > 实际距离：{(this.transform.position - hitPosition).magnitude} 当前速度:{this.ridbody.velocity.magnitude} 目标距离：{hitDistance} 用时: {((DateTime.Now - hitTime).TotalSeconds)}");
                 isRecordingHit = false;
             }
         }
@@ -1409,7 +1409,8 @@ public class CharacterContorl : MonoBehaviour
             var targetDistance = Math.Min(hitMaxDistance, collision.gameObject.GetComponent<InteractiveObject>().knockbackDistance * myHitKnockbackCoef + hitKnockbackSelfCurve.Evaluate(momentumSelf * myBuff + 2)) * InteractiveDistanceCoef;
             var forceData = KnockBackForce(targetDistance, hitDir);
             var targetStun = targetDistance * distanceToStunCoef * InteractiveStunDistanceCoef;
-            TakeStun((int)(targetStun));
+            if (collision.gameObject.GetComponent<InteractiveObject>().canStun)
+                TakeStun((int)(targetStun));
             var buff = new HitBuff(this, forceData.hitTime);
             ridbody.AddForce((forceData.force) * hitDir, ForceMode.Force);
             this.buffs.Add(buff);
