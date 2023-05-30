@@ -13,4 +13,24 @@ public class LargementPotionBuff : ItemBuffBase
     {
 
     }
+
+    public override void OnBuffApply()
+    {
+        base.OnBuffApply();
+    }
+
+    public override void OnBuffRemove()
+    {
+        base.OnBuffRemove();
+    }
+
+    public override void OnBuffUpdate()
+    {
+        base.OnBuffUpdate();
+    }
+
+    public override void OnCollide(Collision collision)
+    {
+        base.OnCollide(collision);
+    }
 }
