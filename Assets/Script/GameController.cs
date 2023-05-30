@@ -86,7 +86,7 @@ public class GameController : MonoBehaviour
     {
         yield return new WaitForSeconds(4);
         GameOverGO.SetActive(true);
-        GameOverText.text = $"P{winIndex + 1} Win!\nPress R to Restart";
+        GameOverText.text = $"P{winIndex} Win!\nPress R to Restart";
     }
 
     public void StartGame()

@@ -219,7 +219,7 @@ public class CharacterContorl : MonoBehaviour
 
     public List<Buff> buffs = new List<Buff>();
 
-    public int playerIndex = 0;
+    public int playerIndex = 1;
 
     //眩晕旋转状态相关
     Vector3 rollRotationAxis = Vector3.zero;
@@ -1145,8 +1145,8 @@ public class CharacterContorl : MonoBehaviour
         //ringRenderer.GetPropertyBlock(rendererBlock, 0);
         //rendererBlock.SetColor("_Color", InputReadManager.Instance.playerColors[playerIndex]);
         //ringRenderer.SetPropertyBlock(rendererBlock, 0);
-        playerIndexText.text = $"P{playerIndex+1}";
-        playerIndicator.GetComponent<Image>().sprite = InputReadManager.Instance.playerIndicatorSprites[playerIndex];
+        playerIndexText.text = $"P{playerIndex}";
+        playerIndicator.GetComponent<Image>().sprite = InputReadManager.Instance.playerIndicatorSprites[playerIndex - 1];
     }
 
     // temp, 告诉用户到达最大速
