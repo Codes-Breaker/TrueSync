@@ -36,7 +36,7 @@ public class ChooseCharactersPanelItemControl : MonoBehaviour
 
     private void LateUpdate()
     {
-        if(inputReader.interact && !isButtonDown)
+        if(inputReader.jump && !isButtonDown)
         {
             //var index = (int)characterType;
             //index = index + 1;
@@ -46,7 +46,7 @@ public class ChooseCharactersPanelItemControl : MonoBehaviour
             isReady = !isReady;
             isButtonDown = true;
         }
-        if (!inputReader.interact)
+        if (!inputReader.jump)
             isButtonDown = false;
         //if (characterType == CharacterType.Seal)
         //    characterNameText.text = "PolarBear";
