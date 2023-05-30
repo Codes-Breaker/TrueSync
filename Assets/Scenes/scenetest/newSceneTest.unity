@@ -173,6 +173,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   knockbackDistance: 4
+  canStun: 0
 --- !u!64 &36898304
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -383,15 +384,15 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 67670406}
-  m_LocalRotation: {x: 0, y: -0.9265482, z: 0.37617624, w: 0}
-  m_LocalPosition: {x: -3.6387804, y: 47.973488, z: 60.0864}
+  m_LocalRotation: {x: 0, y: -0.91722786, z: 0.398363, w: 0}
+  m_LocalPosition: {x: -5.2972302, y: 52.256187, z: 60.32102}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1834101621}
   m_Father: {fileID: 0}
   m_RootOrder: 8
-  m_LocalEulerAnglesHint: {x: 40, y: -180, z: 0}
+  m_LocalEulerAnglesHint: {x: 44, y: -180, z: 0}
 --- !u!114 &67670412
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1317,6 +1318,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   knockbackDistance: 0
+  canStun: 1
 --- !u!64 &215510427
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -13952,6 +13954,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   knockbackDistance: 0
+  canStun: 1
 --- !u!64 &893802396
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -14525,6 +14528,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   knockbackDistance: 4
+  canStun: 0
 --- !u!64 &1121890441
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -14630,15 +14634,15 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1179497702}
-  m_LocalRotation: {x: -0, y: -0.9265482, z: 0.37617624, w: 0}
-  m_LocalPosition: {x: 9.761219, y: 2.8034897, z: 5.996399}
+  m_LocalRotation: {x: -0, y: -0.91722786, z: 0.398363, w: 0}
+  m_LocalPosition: {x: 8.10277, y: 7.0861893, z: 6.231018}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1826433327}
   m_Father: {fileID: 1009640048}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 44.194, y: -180, z: 0}
+  m_LocalEulerAnglesHint: {x: 46.952, y: -180, z: 0}
 --- !u!114 &1179497704
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15134,6 +15138,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   knockbackDistance: 0
+  canStun: 1
 --- !u!64 &1275120374
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -15518,6 +15523,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   knockbackDistance: 0
+  canStun: 1
 --- !u!64 &1295966022
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -15694,6 +15700,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   knockbackDistance: 0
+  canStun: 1
 --- !u!64 &1338461810
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -15805,6 +15812,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   knockbackDistance: 0
+  canStun: 1
 --- !u!1 &1374803912
 GameObject:
   m_ObjectHideFlags: 0
@@ -15903,6 +15911,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   knockbackDistance: 0
+  canStun: 1
 --- !u!64 &1374803917
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -16723,6 +16732,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   knockbackDistance: 0
+  canStun: 1
 --- !u!64 &1571745753
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -17458,7 +17468,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ad980451443d70438faac0bc6c235a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_TrackedObjectOffset: {x: 9.761221, y: 2.7965045, z: 5.9892025}
+  m_TrackedObjectOffset: {x: 8.102771, y: 4.8733525, z: 4.1640177}
   m_LookaheadTime: 0
   m_LookaheadSmoothing: 0
   m_LookaheadIgnoreY: 0
@@ -17468,7 +17478,7 @@ MonoBehaviour:
   m_TargetMovementOnly: 0
   m_ScreenX: 0.5
   m_ScreenY: 0.5
-  m_CameraDistance: 0.01
+  m_CameraDistance: 3.028046
   m_DeadZoneWidth: 0.07
   m_DeadZoneHeight: 0.07
   m_DeadZoneDepth: 0
@@ -17482,9 +17492,9 @@ MonoBehaviour:
   m_AdjustmentMode: 1
   m_GroupFramingSize: 1
   m_MaxDollyIn: 4
-  m_MaxDollyOut: 30
+  m_MaxDollyOut: 60
   m_MinimumDistance: 4
-  m_MaximumDistance: 30
+  m_MaximumDistance: 60
   m_MinimumFOV: 3
   m_MaximumFOV: 60
   m_MinimumOrthoSize: 1
@@ -17599,6 +17609,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   knockbackDistance: 0
+  canStun: 1
 --- !u!64 &1830534506
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -17633,12 +17644,12 @@ PrefabInstance:
     - target: {fileID: 8282781473227979367, guid: 8c88a45db87ca8b4d80bfbf7955aa24d,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.38917172
+      value: 0.36689287
       objectReference: {fileID: 0}
     - target: {fileID: 8282781473227979367, guid: 8c88a45db87ca8b4d80bfbf7955aa24d,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.9211652
+      value: -0.9302632
       objectReference: {fileID: 0}
     - target: {fileID: 8282781473453269640, guid: 8c88a45db87ca8b4d80bfbf7955aa24d,
         type: 3}
@@ -17653,12 +17664,12 @@ PrefabInstance:
     - target: {fileID: 8282781473453269640, guid: 8c88a45db87ca8b4d80bfbf7955aa24d,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.38917172
+      value: 0.36689287
       objectReference: {fileID: 0}
     - target: {fileID: 8282781473453269640, guid: 8c88a45db87ca8b4d80bfbf7955aa24d,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.9211652
+      value: -0.9302632
       objectReference: {fileID: 0}
     - target: {fileID: 8282781474161655912, guid: 8c88a45db87ca8b4d80bfbf7955aa24d,
         type: 3}
@@ -17831,6 +17842,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   knockbackDistance: 0
+  canStun: 1
 --- !u!64 &1919701247
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -18741,6 +18753,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   knockbackDistance: 0
+  canStun: 1
 --- !u!64 &2038146797
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -18899,6 +18912,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   knockbackDistance: 0
+  canStun: 1
 --- !u!23 &2054718359
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -19624,6 +19638,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   knockbackDistance: 0
+  canStun: 1
 --- !u!64 &6347393346523091132
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -19727,6 +19742,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   knockbackDistance: 0
+  canStun: 1
 --- !u!1 &7466427005005710378
 GameObject:
   m_ObjectHideFlags: 0
@@ -19759,3 +19775,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   knockbackDistance: 0
+  canStun: 1
