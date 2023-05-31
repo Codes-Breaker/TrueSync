@@ -209,7 +209,7 @@ public partial class @PlayerOneMovementActions : IInputActionCollection2, IDispo
                 {
                     ""name"": """",
                     ""id"": ""2a3b1e1b-b66d-471d-a936-97d0813687cd"",
-                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""GamePad"",
