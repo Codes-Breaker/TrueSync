@@ -26,7 +26,7 @@ public class SkillItemControllerBase : MonoBehaviour
 
     public virtual void UseSkillItem()
     {
-        user.isUseSkill = true;
+        //user.isUseSkill = true;
     }
 
     private void OnTriggerEnter(Collider collision)
@@ -34,13 +34,13 @@ public class SkillItemControllerBase : MonoBehaviour
         if (collision.gameObject.GetComponent<CharacterContorl>())
         {
             var otherCollision = collision.gameObject.GetComponent<CharacterContorl>();
-            if (otherCollision.skill == null && user == null)
-            {
-                user = otherCollision;
-                user.skill = this;
-                transform.GetComponent<MeshRenderer>().enabled = false;
-                Init();
-            }
+            //if (otherCollision.skill == null && user == null)
+            //{
+            //    user = otherCollision;
+            //    user.skill = this;
+            //    transform.GetComponent<MeshRenderer>().enabled = false;
+            //    Init();
+            //}
         }
     }
     protected virtual void Init()
@@ -81,7 +81,7 @@ public class SkillItemControllerBase : MonoBehaviour
 
     public virtual void ExitUseMode()
     {
-        user.isUseSkill = false;
+        //user.isUseSkill = false;
         DestoryIcon();
     }
 
@@ -95,7 +95,7 @@ public class SkillItemControllerBase : MonoBehaviour
     {
         if(user)
         {
-            user.isUseSkill = false;
+            //user.isUseSkill = false;
             user = null;
         }
         DestoryIcon();

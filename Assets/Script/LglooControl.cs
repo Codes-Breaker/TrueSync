@@ -146,10 +146,10 @@ public class LglooControl : MonoBehaviour,IRandomEventsObject
             {
                 user = collision.collider.GetComponent<CharacterContorl>();
 
-                if(user.skill && user.isUseSkill)
-                {
-                    user.skill.ExitUseMode();
-                }
+                //if(user.skill && user.isUseSkill)
+                //{
+                //    user.skill.ExitUseMode();
+                //}
 
                 SetContorlLgloo(user);
                 
