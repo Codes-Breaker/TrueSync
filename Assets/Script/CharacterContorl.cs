@@ -189,9 +189,11 @@ public class CharacterContorl : MonoBehaviour
     [HideInInspector]
     public float HPtimer;
     [HideInInspector]
-    public SkillItemControllerBase skill;
-    [HideInInspector]
-    public bool isUseSkill;
+    public ItemAbilityBase itemAbility;
+    //[HideInInspector]
+    //public SkillItemControllerBase skill;
+    //[HideInInspector]
+    //public bool isUseSkill;
 
     int speedUpGas = 0;
     public int maxSpeedUpGas = 5;
@@ -366,7 +368,7 @@ public class CharacterContorl : MonoBehaviour
         inputReader.moveAciotn = MoveWalk;
         inputReader.chargeAction = MoveCharge;
         inputReader.releaseAciton = MoveRelease;
-        inputReader.interactWeaponAction = UseWeapon;
+        inputReader.interactWeaponAction = UseItem;
         inputReader.jumpAction = MoveJump;
         inputReader.brakeAciton = MoveBrake;
     }
@@ -817,8 +819,13 @@ public class CharacterContorl : MonoBehaviour
                 currentGas = 0;
                 var addVelocityValue = (jumpBonusToVelocity - 1) * ridbody.velocity.magnitude;
                 var addVelocityDir = ridbody.velocity.normalized;
+                var angle = Vector3.Angle(addVelocityDir, new Vector3(0, targetAngle, 0));
+                if (angle < 45)
+                    addVelocityDir = new Vector3(0, targetAngle, 0);
+
                 var addForceValue = ridbody.mass * addVelocityValue / Time.fixedDeltaTime;
                 ridbody.AddForce(addVelocityDir*addForceValue,ForceMode.Force);
+                
             }
         }
 
@@ -835,11 +842,11 @@ public class CharacterContorl : MonoBehaviour
 
     }
 
-    private void UseWeapon(bool isUse)
+    private void UseItem(bool isUse)
     {
-        if (isUse && skill && currentGas == 0)
+        if (isUse)
         {
-            skill.UseSkillItem();
+            
         }
     }
 
@@ -1520,12 +1527,6 @@ public class CharacterContorl : MonoBehaviour
 
             //Debug.LogError($"结算 {otherCollision.gameObject.name} force {force} hit Dir {hitDir}");
 
-
-            //如果对方在施法过程里打断施法
-            if (otherCollision.skill && otherCollision.isUseSkill)
-            {
-                otherCollision.skill.ExitUseMode();
-            }
 
             //旋转
             if (isStun)
