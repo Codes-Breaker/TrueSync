@@ -20,6 +20,12 @@ public class SnowGroundDetector : MonoBehaviour
         particleEffect.Play();
     }
 
+    private void OnTriggerStay(Collider other)
+    {
+        if (particleEffect.isStopped)
+            particleEffect.Play();
+    }
+
     private void OnTriggerExit(Collider other)
     {
         particleEffect.Stop();
