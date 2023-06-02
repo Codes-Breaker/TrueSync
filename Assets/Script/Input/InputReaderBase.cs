@@ -130,7 +130,7 @@ public class InputReaderBase : MonoBehaviour
 
 
         if (oldInput != isMouseAndKeyboard && isMouseAndKeyboard) changedInputToMouseAndKeyboard?.Invoke();
-        else if (oldInput != isMouseAndKeyboard && !isMouseAndKeyboard) changedInputToGamepad?.Invoke();
+        else if (oldInput != isMouseAndKeyboard && !isMouseAndKeyboard) changedInputToGamepad?.Invoke(); 
     }
 
     #region Actions
