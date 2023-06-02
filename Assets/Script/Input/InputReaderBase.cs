@@ -44,7 +44,8 @@ public class InputReaderBase : MonoBehaviour
     public bool pull;
     [HideInInspector]
     public bool interact;
-
+    [HideInInspector]
+    public bool anykey;
 
     public ControlDeviceType controlDeviceType;
     public bool hasJumped = false;
@@ -66,7 +67,7 @@ public class InputReaderBase : MonoBehaviour
     public ReleaseAciton releaseAciton;
     public InteractWeaponAction interactWeaponAction;
 
-    private PlayerOneMovementActions movementActions;
+    public PlayerOneMovementActions movementActions;
 
 
     /**/
@@ -77,7 +78,7 @@ public class InputReaderBase : MonoBehaviour
         movementActions = new PlayerOneMovementActions();
 
         
-       
+     
         movementActions.Action.Movement.performed += ctx => OnMove(ctx);
 
         movementActions.Action.Charge.performed += ctx => OnCharge(ctx);
@@ -91,6 +92,7 @@ public class InputReaderBase : MonoBehaviour
         movementActions.Action.Brake.performed += ctx => OnBrake(ctx);
 
         movementActions.Action.Jump.performed += ctx => OnJump(ctx);
+
         movementActions.Action.Enable();
     }
 
@@ -128,7 +130,7 @@ public class InputReaderBase : MonoBehaviour
 
 
         if (oldInput != isMouseAndKeyboard && isMouseAndKeyboard) changedInputToMouseAndKeyboard?.Invoke();
-        else if (oldInput != isMouseAndKeyboard && !isMouseAndKeyboard) changedInputToGamepad?.Invoke();
+        else if (oldInput != isMouseAndKeyboard && !isMouseAndKeyboard) changedInputToGamepad?.Invoke(); 
     }
 
     #region Actions
