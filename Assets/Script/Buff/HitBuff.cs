@@ -22,12 +22,18 @@ public class HitBuff : StunBuff
     {
         base.OnBuffApply();
         character.ridbody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
+        foreach(var buff in character.buffs)
+        {
+            if (buff is SliperyBuff)
+            {
+                buff.Finish();
+            }
+        }
     }
 
     public override void OnBuffUpdate()
     {
         base.OnBuffUpdate();
-       // Debug.LogError($"isonground: {this.character.isGrounded} ==> {this.character.ridbody.velocity}");
     }
 
     public override void OnBuffRemove()

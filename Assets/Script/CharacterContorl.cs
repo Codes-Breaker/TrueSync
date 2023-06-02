@@ -31,7 +31,8 @@ public class CharacterContorl : MonoBehaviour
     public float jumpFrequency = 1f;
     [Header("跳跃加成")]
     public float jumpBonusToVelocity = 1.4f;
-
+    [Header("走路加成")]
+    public float jumpWalkBonusToVelocity = 1.2f;
     [Space(10)]
     [Header("跑步状态相关参数")]
     [Header("跑步最大速度")]
@@ -44,10 +45,10 @@ public class CharacterContorl : MonoBehaviour
     public float runMaxSpeedRotationRate;
     [Header("刹车时的转向Lerp系数")]
     public float breakRotationRate = 0.02f;
-    [Header("跑步充能时间")]
+    [Header("体力消耗时间")]
     public float chargeTime;
-    [Header("最大跑步时间")]
-    public float releaseTime;
+    [Header("体力回复时间")]
+    public float recoverTime;
 
     [Space(10)]
     [Header("刹车相关参数")]
@@ -103,6 +104,8 @@ public class CharacterContorl : MonoBehaviour
 
     [Header("是否达到最大速度")]
     public bool isAtMaxSpeed = false;
+    [Header("是否达到走路速度")]
+    public bool isAtWalkSpeed = false;
     [Header("动画速度曲线")]
     public AnimationCurve runAnimCurve;
     [Header("动画速度播放曲线")]
@@ -146,6 +149,7 @@ public class CharacterContorl : MonoBehaviour
     public SimpleFloatingObject floatObj;
     public GrounderQuadruped grounderQuadruped;
     public RagdollActivator ragdollController;
+    private Vector2 axisInput;
     public GameObject playerIndicator;
     public TMPro.TMP_Text playerIndexText;
     //攻击力
@@ -155,7 +159,7 @@ public class CharacterContorl : MonoBehaviour
     public float receivedForceRate = 1;
 
     //地面法线
-    private Vector3 groundNormal;
+    public Vector3 groundNormal;
     public bool isDead = false;
     private bool hasJump = false;
     private bool isJumpFrequency = false;
@@ -181,9 +185,9 @@ public class CharacterContorl : MonoBehaviour
     public float currentStunValue;
     public float currentHPValue;
     private float lastHPValue;
-    private float maxActorGas = 100;
+    private float maxActorStamina = 100;
     [HideInInspector]
-    public float currentGas;
+    public float currentStamina;
     [HideInInspector]
     public bool releasing = false;
     [HideInInspector]
@@ -232,7 +236,6 @@ public class CharacterContorl : MonoBehaviour
     //刹车时的朝向
     private Vector3 initialBrakeTarget = Vector3.zero;
 
-
     //本地计时器相关
     private float lastJumpLandTime;
     private float lastStunTime;
@@ -243,6 +246,8 @@ public class CharacterContorl : MonoBehaviour
     private float lastHPSubtractTime = 0; //上次扣血时间
     private float lastHPRecoveryTime = 0; //上次回血时间
     private float lastStunRecoveryTime = 0; //上次眩晕回复时间
+    private float lastSpeedUpTime = 0; //上次加速时间
+    private float elapsedChargeTime = 0; //已经加速了的时间
 
     //是否处于眩晕状态
     //起身时间
@@ -292,6 +297,19 @@ public class CharacterContorl : MonoBehaviour
 
     private bool isRecoveringFromStun = false;
 
+    //体力完全回复中
+    private bool fullyRecoveringStamina;
+
+    public Color staminaNormalColor;
+    public Color staminaRecoveringColorYellow;
+    public Color staminaRecoveringColorRed;
+    public Image staminaFillImage;
+
+    [Header("最小体力消耗值")]
+    public float minStaminaThreshold = 10f;
+    [Header("跳跃空中转角")]
+    public float jumpRotateAngle = 60f;
+   
     private void Awake()
     {
         speedUpGas = maxSpeedUpGas;
@@ -318,6 +336,7 @@ public class CharacterContorl : MonoBehaviour
     private void Start()
     {
         this.ridbody.useGravity = false;
+        currentStamina = maxActorStamina;
         if(inputReader != null)
             SetControlSelf();
         SetRingColor();
@@ -329,6 +348,7 @@ public class CharacterContorl : MonoBehaviour
         SetSlider();
         MoveRoll();
         CheckHP();
+        CheckGP();
         //SetEffect();
     }
 
@@ -356,7 +376,7 @@ public class CharacterContorl : MonoBehaviour
         UpdateHP();
         UpdateStunRecovery();
         SetGravity();
-
+        UpdateStamina();
         RecordCollisionVelocity();
 
     }
@@ -390,7 +410,6 @@ public class CharacterContorl : MonoBehaviour
         inputReader.interactWeaponAction = null;
         inputReader.jumpAction = null;
         inputReader.brakeAciton = null;
-        currentGas = 0;
         crown.transform.DOLocalRotate(new Vector3(crown.transform.localRotation.eulerAngles.x, 360, 0), 1f, RotateMode.FastBeyond360)
             .SetLoops(-1, LoopType.Restart)
             .SetEase(Ease.Linear);
@@ -455,6 +474,18 @@ public class CharacterContorl : MonoBehaviour
 
         }
 
+    }
+
+    private void UpdateStamina()
+    {
+        if (releasing)
+            return;
+        currentStamina = currentStamina + maxActorStamina / recoverTime * Time.fixedDeltaTime;
+        currentStamina = Math.Min(currentStamina, maxActorStamina);
+        if (currentStamina == maxActorStamina)
+        {
+            fullyRecoveringStamina = false;
+        }
     }
 
     private void UpdateHP()
@@ -628,16 +659,21 @@ public class CharacterContorl : MonoBehaviour
     #region Move
 
 
-    private bool hasLglooStun()
+    public bool hasStunBuff()
     {
-        foreach (var buff in buffs)
+        var hasStunBuff = buffs.Any(x => x is StunBuff);
+        return hasStunBuff;
+    }
+
+    public void RemoveSliperyBuff()
+    {
+        foreach(var buff in buffs)
         {
-            if (buff is LglooBuff)
+            if (buff is SliperyBuff)
             {
-                return true;
+                buff.Finish();
             }
         }
-        return false;
     }
 
     private void MoveWalk(Vector2 axisInput, ControlDeviceType controlDeviceType)
@@ -654,8 +690,10 @@ public class CharacterContorl : MonoBehaviour
         else
             axisInput = axisInput.normalized;
         //
+        this.axisInput = axisInput;
         if (releasing)
         {
+            anima.SetBool("isBrake", false);
             isWalk = false;
             if (ridbody.velocity.magnitude < runMaxVelocity * 0.96f)
             {
@@ -674,12 +712,10 @@ public class CharacterContorl : MonoBehaviour
                 var moveTarget = ridbody.transform.forward;
                 moveTarget = moveTarget.normalized;
                 moveTarget = Vector3.ProjectOnPlane(moveTarget, groundNormal).normalized;
-                if (!buffs.Any(x => x is HitBuff))
+                if (!hasStunBuff())
                     ridbody.AddForce(moveTarget * forceMagnitude - gravityDivide, ForceMode.Force);
                 //Debug.Log($"isTouchingSlope || isGrounded {isTouchingSlope || isGrounded} forceMagnitude {forceMagnitude} velocity {ridbody.velocity} velocityMagnitude {ridbody.velocity.magnitude}");
                 CheckisDrift();
-
-
 
                 if (axisInput.magnitude > movementThrashold)
                 {
@@ -706,7 +742,6 @@ public class CharacterContorl : MonoBehaviour
         }
         else
         {
-
             if (ridbody.velocity.magnitude < movementMaxVelocity && axisInput.magnitude > movementThrashold)
             {
                 isWalk = true;
@@ -725,21 +760,20 @@ public class CharacterContorl : MonoBehaviour
                 var moveTarget = ridbody.transform.forward;
                 moveTarget = moveTarget.normalized;
                 moveTarget = Vector3.ProjectOnPlane(moveTarget, groundNormal).normalized;
-                
+                RemoveSliperyBuff();
                 //如果刹车走路状态不在施加推进力
-                if(!hasBrake)
+                if (!hasBrake)
                 {
-                    if (!buffs.Any(x => x is HitBuff))
+                    if (!hasStunBuff())
                         ridbody.AddForce(moveTarget * forceMagnitude - gravityDivide, ForceMode.Force);
                     transform.rotation = Quaternion.Slerp(this.ridbody.rotation, Quaternion.Euler(new Vector3(0, targetAngle, 0) + initialRotation), movementRotationRate);
                 }
+                anima.SetBool("isBrake", false);
             }
             else
             {
                 isWalk = false;
             }
-
-
         }
 
     }
@@ -801,24 +835,47 @@ public class CharacterContorl : MonoBehaviour
         if (isStun || isDead)
             return;
 
-        if (buffs.Any(x => x is HitBuff))
+        if (hasStunBuff())
             return;
         if (isJumpFrequency)
             lastJumpLandTime += Time.deltaTime;
 
         if (jump && (isGrounded || isTouchingSlope || isInWater) && !hasJump && lastJumpLandTime >= jumpFrequency)
         {
+            anima.SetBool("isBrake", false);
             ridbody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             hasJump = true;
             isJumpFrequency = false;
             anima.SetBool("Jump", true);
+            targetAngle = Mathf.Atan2(axisInput.x, axisInput.y) * Mathf.Rad2Deg + Camera.main.transform.eulerAngles.y;
             if (isAtMaxSpeed)
             {
-                currentGas = 0;
+                //fullyRecoveringStamina = true;
                 var addVelocityValue = (jumpBonusToVelocity - 1) * ridbody.velocity.magnitude;
-                var addVelocityDir = ridbody.velocity.normalized;
-                var addForceValue = ridbody.mass * addVelocityValue / Time.fixedDeltaTime;
-                ridbody.AddForce(addVelocityDir*addForceValue,ForceMode.Force);
+                var addVelocityDir = transform.forward.normalized;
+                var target = Quaternion.Euler(new Vector3(0, targetAngle, 0) + initialRotation) * Vector3.forward;
+                var minVelocityDir = Quaternion.Euler(0, -jumpRotateAngle, 0) * addVelocityDir;
+                var maxVelocityDir = Quaternion.Euler(0, jumpRotateAngle, 0) * addVelocityDir;
+                //target = new Vector3(Mathf.Clamp(target.x, minVelocityDir.x, maxVelocityDir.x),
+                //    Mathf.Clamp(target.y, minVelocityDir.y, maxVelocityDir.y),
+                //    Mathf.Clamp(target.z, minVelocityDir.z, maxVelocityDir.z));
+                var force = addVelocityValue * target.normalized;
+                var addForceValue = ridbody.mass * force / Time.fixedDeltaTime;
+                ridbody.AddForce(addForceValue, ForceMode.Force);
+            }
+            else if (isAtWalkSpeed)
+            {
+                var addVelocityValue = (jumpWalkBonusToVelocity - 1) * ridbody.velocity.magnitude;
+                var addVelocityDir = transform.forward.normalized;
+                var target = Quaternion.Euler(new Vector3(0, targetAngle, 0) + initialRotation) * Vector3.forward;
+                var minVelocityDir = Quaternion.Euler(0, -jumpRotateAngle, 0) * addVelocityDir;
+                var maxVelocityDir = Quaternion.Euler(0, jumpRotateAngle, 0) * addVelocityDir;
+                //target = new Vector3(Mathf.Clamp(target.x, minVelocityDir.x, maxVelocityDir.x),
+                //    Mathf.Clamp(target.y, minVelocityDir.y, maxVelocityDir.y),
+                //    Mathf.Clamp(target.z, minVelocityDir.z, maxVelocityDir.z));
+                var force = addVelocityValue * target.normalized;
+                var addForceValue = ridbody.mass * force / Time.fixedDeltaTime;
+                ridbody.AddForce(addForceValue, ForceMode.Force);
             }
         }
 
@@ -837,50 +894,76 @@ public class CharacterContorl : MonoBehaviour
 
     private void UseWeapon(bool isUse)
     {
-        if (isUse && skill && currentGas == 0)
+        if (isUse && skill)
         {
             skill.UseSkillItem();
         }
     }
 
+    private void MoveRelease(bool charge)
+    {
+
+    }
+
     private void MoveCharge(bool charge)
     {
-        if (isStun || isDead)
+        if (isStun || isDead || hasStunBuff())
             return;
         if (charge)
         {
-            if (currentGas < maxActorGas && !releasing)
+            if (!releasing)
+            {
+                elapsedChargeTime = 0;
+            }
+            else
+            {
+                elapsedChargeTime += Time.fixedDeltaTime;
+            }
+            currentStamina = currentStamina - maxActorStamina / chargeTime * Time.fixedDeltaTime;
+            currentStamina = Mathf.Max(0, currentStamina);
+            if (currentStamina > minStaminaThreshold)
             {
                 // currentGas = currentGas + (maxActorGas - currentGas) / chargeTime * Time.fixedDeltaTime;
-                currentGas = currentGas + maxActorGas / chargeTime * Time.fixedDeltaTime;
-                currentGas = Mathf.Min(maxActorGas, currentGas);
-                releasing = false;
+                releasing = true;
+
+                lastSpeedUpTime = 0;
             }
-            anima.SetBool("Charge", true);
+            if (currentStamina <= 0)
+            {
+                releasing = false;
+                if (ridbody.velocity.magnitude >= runMaxVelocity * 0.85f && (isTouchingSlope || isGrounded))
+                {
+                    var buff = new SliperyBuff(this);
+                    buffs.Add(buff);
+                    anima.SetBool("isBrake", true);
+                }
+                //fullyRecoveringStamina = true;
+            }
         }
         else
         {
-            anima.SetBool("Charge", false);
+            if (releasing && ridbody.velocity.magnitude >= runMaxVelocity * 0.85f && (isTouchingSlope || isGrounded))
+            {
+                anima.SetBool("isBrake", true);
+                var buff = new SliperyBuff(this);
+                buffs.Add(buff);
+            }
+            releasing = false;
         }
     }
 
-    private void MoveRelease(bool charge)
+    private void CheckGP()
     {
-        if (isStun || isDead)
-            return;
-        if (!charge || releasing)
+        if (fullyRecoveringStamina)
         {
-            if (currentGas == 0)
+            Color color = Color.Lerp(staminaRecoveringColorRed, staminaRecoveringColorYellow, (Mathf.Sin(4*Time.time) + 1) / 2);
+            staminaFillImage.color = color;
+        }
+        else
+        {
+            if (staminaFillImage.color != staminaNormalColor)
             {
-                currentGas = 0;
-                releasing = false;
-                speedUpGas = maxSpeedUpGas;
-            }
-            else if (currentGas > 0)
-            {
-                currentGas = currentGas - (maxActorGas) / releaseTime * Time.fixedDeltaTime;
-                currentGas = Mathf.Max(0, currentGas);
-                releasing = true;
+                staminaFillImage.color = staminaNormalColor;
             }
         }
     }
@@ -970,7 +1053,8 @@ public class CharacterContorl : MonoBehaviour
     private void CheckStun()
     {
         if (isDead)
-            return;
+            return;        
+
         if (isStun)
         {
             lastStunTime += Time.fixedDeltaTime;
@@ -979,7 +1063,6 @@ public class CharacterContorl : MonoBehaviour
                 isRecoveringFromStun = true;
                 maxStunValue = Math.Max(stunMinValue, maxStunValue - stunDecreaseRate);
                 currentStunValue = maxStunValue;
-                currentGas = 0f;
 
                 IKObject.transform.DOLocalRotate(new Vector3(0, 0, 0), 0.5f).onComplete += () =>
                 {
@@ -1015,6 +1098,15 @@ public class CharacterContorl : MonoBehaviour
             isAtMaxSpeed = false;
             anima.SetBool("isAtMaxSpeed", isAtMaxSpeed);
             particle.Stop();
+        }
+
+        if (velocityBeforeCollision.magnitude >= movementMaxVelocity * 0.9f)
+        {
+            isAtWalkSpeed = true;
+        }
+        else
+        {
+            isAtWalkSpeed = false;
         }
         if (!isGrounded && !isTouchingSlope && !isStun)
             particle.Stop();
@@ -1126,7 +1218,7 @@ public class CharacterContorl : MonoBehaviour
             stunSlider.gameObject.SetActive(true);
             hpSlider.gameObject.SetActive(true);
         }
-        gpSlider.value = (float)(currentGas / maxActorGas);
+        gpSlider.value = (float)(currentStamina / maxActorStamina);
         stunSlider.value = (float)(currentStunValue / maxStunValue);
         hpSlider.value = (float)(currentHPValue / maxHPValue);
         canvas.transform.forward = Camera.main.transform.forward;
@@ -1221,12 +1313,6 @@ public class CharacterContorl : MonoBehaviour
             var m2 = (Mathf.Cos(degree2) * vel2).magnitude; //对方针对我的力
 
             var m = m1 + m2;
-
-            var lglooNerfRate = 1f;
-            if (hasLglooStun())
-            {
-                lglooNerfRate = 0.5f;
-            }
 
             //var hitDir = Vector3.ProjectOnPlane((ridbody.position - collision.contacts[0].point), Vector3.up).normalized;
             //var force = KnockBackForce(0.5f, hitDir);
@@ -1451,11 +1537,6 @@ public class CharacterContorl : MonoBehaviour
             var momentumOther = (Mathf.Cos(degreeOther) * velocityOther).magnitude;
             //Debug.Log($"{transform.name} velocitySelf:{velocitySelf} velocityOther:{velocityOther} angleSelf:{angleSelf} angleOther:{angleOther} momentumSelf:{momentumSelf}  momentumOther:{momentumOther}");
 
-            var lglooNerfRate = 1f;
-            if (hasLglooStun())
-            {
-                lglooNerfRate = 0.5f;
-            }
             //出招加成
             var hasBuff = (otherCollision.isAtMaxSpeed && (!otherCollision.isGrounded && !otherCollision.isTouchingSlope)) ? buffAttack : 1;
             var myBuff = isAtMaxSpeed && !isGrounded ? buffAttack : 1;

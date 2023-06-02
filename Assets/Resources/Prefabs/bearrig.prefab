@@ -5055,8 +5055,8 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.8783076
-  m_Center: {x: 0, y: -0.11912882, z: 0}
+  m_Radius: 0.9325932
+  m_Center: {x: 0, y: -0.17341447, z: 0}
 --- !u!1 &523756392914647224
 GameObject:
   m_ObjectHideFlags: 0
@@ -27902,14 +27902,15 @@ MonoBehaviour:
   movementMaxVelocity: 3
   jumpForce: 30
   jumpFrequency: 0.25
-  jumpBonusToVelocity: 1.4
+  jumpBonusToVelocity: 1.6
+  jumpWalkBonusToVelocity: 1.2
   runMaxVelocity: 8
   runSpeedUpTime: 2
   runSpeedUpRotationRate: 0.03
   runMaxSpeedRotationRate: 0.02
   breakRotationRate: 0.03
-  chargeTime: 3
-  releaseTime: 10
+  chargeTime: 10
+  recoverTime: 4
   decelerationForceArgument: 10
   decelerationTorqueArgument: 5
   maxBreakTime: 0
@@ -27938,6 +27939,7 @@ MonoBehaviour:
   hitBonusToSide: 1.2
   hitBonusToBack: 1.35
   isAtMaxSpeed: 0
+  isAtWalkSpeed: 0
   runAnimCurve:
     serializedVersion: 2
     m_Curve:
@@ -28087,13 +28089,14 @@ MonoBehaviour:
   playerIndexText: {fileID: 8524291645241451985}
   forceArgument: 100
   receivedForceRate: 1
+  groundNormal: {x: 0, y: 0, z: 0}
   isDead: 0
   isGrounded: 1
   sensitivity: 1
   targetAngle: 0
   currentStunValue: 100
   currentHPValue: 43
-  currentGas: 0
+  currentStamina: 0
   releasing: 0
   HPtimer: 0
   skill: {fileID: 0}
@@ -28110,7 +28113,7 @@ MonoBehaviour:
   isInWater: 1
   hpRecoveryFrequency: 1
   damageRecoveryFrequency: 5
-  HPRecoveryRate: 1
+  HPRecoveryRate: 2
   HPSubtractRate: 1
   hpSubtractFrequency: 0.1
   inWaterSubtractFrequency: 0
@@ -28200,6 +28203,12 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 1
     m_RotationOrder: 4
+  staminaNormalColor: {r: 0.043137256, g: 0.69803923, b: 0.91372555, a: 1}
+  staminaRecoveringColorYellow: {r: 0.89019614, g: 0.3254902, b: 0.43137258, a: 1}
+  staminaRecoveringColorRed: {r: 1, g: 0.81327903, b: 0.13679248, a: 1}
+  staminaFillImage: {fileID: 3889140368273599693}
+  minStaminaThreshold: 10
+  jumpRotateAngle: 60
 --- !u!114 &4147182195015774368
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -28839,14 +28848,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.043137256, g: 0.69803923, b: 0.91372555, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: c58ce10097106b84fa13756058d35b9e, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 4c5349bb5d7d7164195cbac02a04292e, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1

@@ -198,7 +198,7 @@ public partial class @PlayerOneMovementActions : IInputActionCollection2, IDispo
                 {
                     ""name"": """",
                     ""id"": ""d5272e57-ce24-4a4c-813b-e19de82d9065"",
-                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""GamePad"",
@@ -231,7 +231,7 @@ public partial class @PlayerOneMovementActions : IInputActionCollection2, IDispo
                 {
                     ""name"": """",
                     ""id"": ""e461a733-d73a-4321-a43a-60d9e1396128"",
-                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""GamePad"",
