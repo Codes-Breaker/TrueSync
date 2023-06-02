@@ -5055,8 +5055,8 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.8783076
-  m_Center: {x: 0, y: -0.11912882, z: 0}
+  m_Radius: 0.9325932
+  m_Center: {x: 0, y: -0.17341447, z: 0}
 --- !u!1 &523756392914647224
 GameObject:
   m_ObjectHideFlags: 0
@@ -10558,6 +10558,7 @@ RectTransform:
   - {fileID: 490049491485246582}
   - {fileID: 6939690111268544077}
   - {fileID: 1446278501243587126}
+  - {fileID: 2983626325230122317}
   m_Father: {fileID: 5892801591638802567}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -15779,6 +15780,103 @@ MonoBehaviour:
     m_Bits: 65
   particleEffect: {fileID: 8777239511242417730}
   targetTransform: {fileID: 2842814197572452617}
+--- !u!1 &3188856521659624442
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2983626325230122317}
+  - component: {fileID: 2160913713397172652}
+  - component: {fileID: 6015933891606774079}
+  - component: {fileID: 3606106168848368708}
+  m_Layer: 10
+  m_Name: ButtonHint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &2983626325230122317
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3188856521659624442}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5818184900119979405}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -0.302, y: 1.426}
+  m_SizeDelta: {x: 1, y: 1}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &2160913713397172652
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3188856521659624442}
+  m_CullTransparentMesh: 1
+--- !u!114 &6015933891606774079
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3188856521659624442}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: f7f34f9ac6f8f6f488c93b6cbd6226f4, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!95 &3606106168848368708
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3188856521659624442}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 969888b41af0f254e8574ad940d110dd, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &3358695587126725437
 GameObject:
   m_ObjectHideFlags: 0
@@ -26736,12 +26834,12 @@ GameObject:
   - component: {fileID: 6283635871812289535}
   - component: {fileID: 3386597691202627684}
   m_Layer: 10
-  m_Name: DrownProgress
+  m_Name: StunProgress
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &7456146114163275588
 RectTransform:
   m_ObjectHideFlags: 0
@@ -26783,7 +26881,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 0.43867922, b: 0.43867922, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -27902,14 +28000,15 @@ MonoBehaviour:
   movementMaxVelocity: 3
   jumpForce: 30
   jumpFrequency: 0.25
-  jumpBonusToVelocity: 1.4
+  jumpBonusToVelocity: 1.6
+  jumpWalkBonusToVelocity: 1.2
   runMaxVelocity: 8
   runSpeedUpTime: 2
   runSpeedUpRotationRate: 0.03
   runMaxSpeedRotationRate: 0.02
   breakRotationRate: 0.03
-  chargeTime: 3
-  releaseTime: 10
+  chargeTime: 10
+  recoverTime: 4
   decelerationForceArgument: 10
   decelerationTorqueArgument: 5
   maxBreakTime: 0
@@ -27938,6 +28037,7 @@ MonoBehaviour:
   hitBonusToSide: 1.2
   hitBonusToBack: 1.35
   isAtMaxSpeed: 0
+  isAtWalkSpeed: 0
   runAnimCurve:
     serializedVersion: 2
     m_Curve:
@@ -28087,13 +28187,14 @@ MonoBehaviour:
   playerIndexText: {fileID: 8524291645241451985}
   forceArgument: 100
   receivedForceRate: 1
+  groundNormal: {x: 0, y: 0, z: 0}
   isDead: 0
   isGrounded: 1
   sensitivity: 1
   targetAngle: 0
   currentStunValue: 100
   currentHPValue: 43
-  currentGas: 0
+  currentStamina: 0
   releasing: 0
   HPtimer: 0
   skill: {fileID: 0}
@@ -28110,7 +28211,7 @@ MonoBehaviour:
   isInWater: 1
   hpRecoveryFrequency: 1
   damageRecoveryFrequency: 5
-  HPRecoveryRate: 1
+  HPRecoveryRate: 2
   HPSubtractRate: 1
   hpSubtractFrequency: 0.1
   inWaterSubtractFrequency: 0
@@ -28200,6 +28301,14 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 1
     m_RotationOrder: 4
+  staminaNormalColor: {r: 0.043137256, g: 0.69803923, b: 0.91372555, a: 1}
+  staminaRecoveringColorYellow: {r: 0.89019614, g: 0.3254902, b: 0.43137258, a: 1}
+  staminaRecoveringColorRed: {r: 1, g: 0.81327903, b: 0.13679248, a: 1}
+  staminaFillImage: {fileID: 3889140368273599693}
+  stunButtonHint: {fileID: 3188856521659624442}
+  stunProgress: {fileID: 3386597691202627684}
+  minStaminaThreshold: 10
+  jumpRotateAngle: 60
 --- !u!114 &4147182195015774368
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -28839,14 +28948,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.043137256, g: 0.69803923, b: 0.91372555, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: c58ce10097106b84fa13756058d35b9e, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 4c5349bb5d7d7164195cbac02a04292e, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
