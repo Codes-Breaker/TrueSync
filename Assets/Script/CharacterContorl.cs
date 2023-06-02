@@ -304,6 +304,8 @@ public class CharacterContorl : MonoBehaviour
     public Color staminaRecoveringColorYellow;
     public Color staminaRecoveringColorRed;
     public Image staminaFillImage;
+    public GameObject stunButtonHint;
+    public Image stunProgress;
 
     [Header("最小体力消耗值")]
     public float minStaminaThreshold = 10f;
@@ -331,6 +333,8 @@ public class CharacterContorl : MonoBehaviour
         particle.Stop();
         crown.gameObject.SetActive(false);
         ragdollController.Ragdoll(false, Vector3.zero);
+        stunProgress.gameObject.SetActive(false);
+        stunButtonHint.gameObject.SetActive(false);
     }
 
     private void Start()
@@ -347,8 +351,8 @@ public class CharacterContorl : MonoBehaviour
     {
         SetSlider();
         MoveRoll();
-        CheckHP();
-        CheckGP();
+        SetHPHint();
+        SetGPHint();
         //SetEffect();
     }
 
@@ -394,6 +398,7 @@ public class CharacterContorl : MonoBehaviour
     private void SetDead(Vector3 hitDir)
     {
         stun.gameObject.SetActive(false);
+        //stunProgress.gameObject.SetActive(false);
         isDead = true;
         anima.enabled = false;
         ragdollController.Ragdoll(true, hitDir);
@@ -828,11 +833,21 @@ public class CharacterContorl : MonoBehaviour
 
     private void MoveJump(bool jump)
     {
+
         if ((isGrounded || isTouchingSlope) && ridbody.velocity.y <= 0)
         {
             anima.SetBool("Jump", false);
         }
-        if (isStun || isDead)
+        if (isStun)
+        {
+            if (jump)
+            {
+                lastStunTime += 0.05f;
+            }
+            return;
+        }
+
+        if (isDead)
             return;
 
         if (hasStunBuff())
@@ -952,7 +967,7 @@ public class CharacterContorl : MonoBehaviour
         }
     }
 
-    private void CheckGP()
+    private void SetGPHint()
     {
         if (fullyRecoveringStamina)
         {
@@ -968,7 +983,7 @@ public class CharacterContorl : MonoBehaviour
         }
     }
 
-    private void CheckHP()
+    private void SetHPHint()
     {
         if (isDead)
         {
@@ -1066,6 +1081,7 @@ public class CharacterContorl : MonoBehaviour
 
                 IKObject.transform.DOLocalRotate(new Vector3(0, 0, 0), 0.5f).onComplete += () =>
                 {
+                    //stunProgress.gameObject.SetActive(false);
                     stun.gameObject.SetActive(false);
                     isStun = false;
                     isRecoveringFromStun = false;
@@ -1076,6 +1092,7 @@ public class CharacterContorl : MonoBehaviour
         {
             if (currentStunValue <= 0)
             {
+                //stunProgress.gameObject.SetActive(true);
                 stun.gameObject.SetActive(true);
                 isStun = true;
                 lastStunTime = 0;
@@ -1211,10 +1228,12 @@ public class CharacterContorl : MonoBehaviour
         if (!gameController.debug)
         {
             stunSlider.gameObject.SetActive(false);
+            stunProgress.gameObject.SetActive(false);
             hpSlider.gameObject.SetActive(false);
         }
         else
         {
+            stunProgress.gameObject.SetActive(true);
             stunSlider.gameObject.SetActive(true);
             hpSlider.gameObject.SetActive(true);
         }
@@ -1230,6 +1249,32 @@ public class CharacterContorl : MonoBehaviour
         hpSlider.transform.localPosition = hpSlider.transform.localPosition + new Vector3(0, 1.75f + (this.transform.localScale.x - 1) * 1.2f, 0);
         playerIndicator.transform.position = this.transform.position;
         playerIndicator.transform.localPosition = playerIndicator.transform.localPosition + new Vector3(0, 1.75f + (this.transform.localScale.x - 1) * 1.5f, 0);
+
+
+        stunProgress.fillAmount = lastStunTime / stunRecoverTime;
+        stunProgress.transform.position = this.transform.position;
+        stunProgress.transform.localPosition = stunProgress.transform.localPosition + new Vector3(-1f, 1.5f + (this.transform.localScale.x - 1) * 1.2f, 0);
+
+        if (isStun)
+        {
+            if (!stunButtonHint.activeSelf)
+            {
+                stunButtonHint.SetActive(true);
+
+                gpSlider.gameObject.SetActive(false);
+            }
+            stunButtonHint.transform.position = this.transform.position;
+            stunButtonHint.transform.localPosition = stunButtonHint.transform.localPosition + new Vector3(0, 1.25f + (this.transform.localScale.x - 1) * 1.2f, 0);
+        }
+        else
+        {
+            if (!gpSlider.gameObject.activeSelf)
+            {
+                stunButtonHint.SetActive(false);
+
+                gpSlider.gameObject.SetActive(true);
+            }
+        }
     }
     private void SetRingColor()
     {
