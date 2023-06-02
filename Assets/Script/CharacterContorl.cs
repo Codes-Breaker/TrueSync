@@ -87,6 +87,8 @@ public class CharacterContorl : MonoBehaviour
     public float cureTime;
     [Header("眩晕回复时间")]
     public float stunRecoverTime = 50;
+    [Header("眩晕倍数")]
+    public float stunAccumulateTime = 1.2f;
     [Header("速度换算旋转速度参数")]
     public float velocityToRollAngleArgument = 1;
     [Header("眩晕旋转停止时最大角度")]
@@ -1076,7 +1078,8 @@ public class CharacterContorl : MonoBehaviour
             if (lastStunTime >= stunRecoverTime && !isRecoveringFromStun)
             {
                 isRecoveringFromStun = true;
-                maxStunValue = Math.Max(stunMinValue, maxStunValue - stunDecreaseRate);
+                stunRecoverTime *= stunAccumulateTime;
+                //maxStunValue = Math.Max(stunMinValue, maxStunValue - stunDecreaseRate);
                 currentStunValue = maxStunValue;
 
                 IKObject.transform.DOLocalRotate(new Vector3(0, 0, 0), 0.5f).onComplete += () =>
@@ -1566,7 +1569,7 @@ public class CharacterContorl : MonoBehaviour
             velocitySelf = Vector3.ProjectOnPlane(velocitySelf, groundNormal).normalized * velocitySelf.magnitude;
             //对方速度
             Vector3 velocityOther = new Vector3(otherCollision.velocityBeforeCollision.x, otherCollision.velocityBeforeCollision.y, otherCollision.velocityBeforeCollision.z);
-            velocityOther = Vector3.ProjectOnPlane(velocityOther, groundNormal).normalized * velocityOther.magnitude;
+            velocityOther = Vector3.ProjectOnPlane(velocityOther, otherCollision.groundNormal).normalized * velocityOther.magnitude;
 
             Vector3 cPoint = collision.contacts[0].point;
             Vector3 contactToMe = cPoint - positionBeforeCollision;
@@ -1580,7 +1583,11 @@ public class CharacterContorl : MonoBehaviour
             Vector3 impactVelocity = collision.relativeVelocity;
             var momentumSelf = (Mathf.Cos(degreeSelf) * velocitySelf).magnitude;
             var momentumOther = (Mathf.Cos(degreeOther) * velocityOther).magnitude;
-            //Debug.Log($"{transform.name} velocitySelf:{velocitySelf} velocityOther:{velocityOther} angleSelf:{angleSelf} angleOther:{angleOther} momentumSelf:{momentumSelf}  momentumOther:{momentumOther}");
+
+            if (angleOther > 90)
+                momentumOther = 0;
+
+            Debug.Log($"{transform.name} velocitySelf:{velocitySelf} velocityOther:{velocityOther} angleSelf:{angleSelf} angleOther:{angleOther} momentumSelf:{momentumSelf}  momentumOther:{momentumOther}");
 
             //出招加成
             var hasBuff = (otherCollision.isAtMaxSpeed && (!otherCollision.isGrounded && !otherCollision.isTouchingSlope)) ? buffAttack : 1;

@@ -137,6 +137,7 @@ public class InputReadManager : MonoBehaviour
             }
             if (characterGameObject != null)
             {
+                characterGameObject.name = $"P{index}";
                 characterGameObject.GetComponent<CharacterContorl>().inputReader = item.inputReader;
                 cinemachineTargetGroup.AddMember(characterGameObject.transform, 2, 4);
                 characterGameObject.transform.position = pos;
