@@ -27823,6 +27823,7 @@ MonoBehaviour:
   movementMaxVelocity: 3
   jumpForce: 30
   jumpFrequency: 0.25
+  jumpRushFrequency: 2
   jumpBonusToVelocity: 1.6
   jumpWalkBonusToVelocity: 1.2
   runMaxVelocity: 8
@@ -27852,6 +27853,7 @@ MonoBehaviour:
     m_RotationOrder: 4
   cureTime: 20
   stunRecoverTime: 5
+  stunAccumulateTime: 1.2
   velocityToRollAngleArgument: 1
   stunStopRollMaxAngle: 40
   stunStopRollMinAngle: 10
@@ -28132,6 +28134,7 @@ MonoBehaviour:
   stunProgress: {fileID: 3386597691202627684}
   minStaminaThreshold: 10
   jumpRotateAngle: 60
+  slipProtectFrame: 3
 --- !u!114 &4147182195015774368
 MonoBehaviour:
   m_ObjectHideFlags: 0
