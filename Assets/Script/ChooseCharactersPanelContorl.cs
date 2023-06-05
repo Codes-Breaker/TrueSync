@@ -28,7 +28,9 @@ public class ChooseCharactersPanelContorl : MonoBehaviour
             returnData.Add(new PlayerData
             {
                 inputReader = item.inputReader,
-                characterType = item.characterType
+                characterType = item.characterType,
+                H = item.control.H,
+                S = item.control.S,
             });
         }
 

@@ -19,6 +19,8 @@ public struct PlayerData
 {
     public CharacterType characterType;
     public InputReaderBase inputReader;
+    public float H;
+    public float S;
 }
 
 public class InputReadManager : MonoBehaviour
@@ -139,6 +141,7 @@ public class InputReadManager : MonoBehaviour
             {
                 characterGameObject.name = $"P{index}";
                 characterGameObject.GetComponent<CharacterContorl>().inputReader = item.inputReader;
+                characterGameObject.GetComponent<CharacterContorl>().SetColor(item.H, item.S);
                 cinemachineTargetGroup.AddMember(characterGameObject.transform, 2, 4);
                 characterGameObject.transform.position = pos;
                 characterGameObject.GetComponent<CharacterContorl>().playerIndex = index;

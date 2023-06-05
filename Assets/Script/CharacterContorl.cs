@@ -29,6 +29,8 @@ public class CharacterContorl : MonoBehaviour
     public float jumpForce;
     [Header("跳跃间隔")]
     public float jumpFrequency = 1f;
+    [Header("前扑间隔")]
+    public float jumpRushFrequency = 1f;
     [Header("跳跃加成")]
     public float jumpBonusToVelocity = 1.4f;
     [Header("走路加成")]
@@ -240,6 +242,7 @@ public class CharacterContorl : MonoBehaviour
 
     //本地计时器相关
     private float lastJumpLandTime;
+    private float lastJumpRushTime;
     private float lastStunTime;
     private float ElapsedRollTime; //过去了的时间
     private float TargetRollTime; //目标时间
@@ -250,6 +253,7 @@ public class CharacterContorl : MonoBehaviour
     private float lastStunRecoveryTime = 0; //上次眩晕回复时间
     private float lastSpeedUpTime = 0; //上次加速时间
     private float elapsedChargeTime = 0; //已经加速了的时间
+    private float lastSlipReadyTime = 0; //上次打滑准备的时间
 
     //是否处于眩晕状态
     //起身时间
@@ -313,6 +317,10 @@ public class CharacterContorl : MonoBehaviour
     public float minStaminaThreshold = 10f;
     [Header("跳跃空中转角")]
     public float jumpRotateAngle = 60f;
+    [Header("打滑保护帧")]
+    public int slipProtectFrame = 3;
+    private float slipProtectTime;
+    private bool canSlip = false;
    
     private void Awake()
     {
@@ -326,7 +334,7 @@ public class CharacterContorl : MonoBehaviour
         initialRotation = ridbody.transform.rotation.eulerAngles;
         initialRot = ridbody.transform.rotation;
         lastJumpLandTime = jumpFrequency;
-
+        slipProtectTime = slipProtectFrame * Time.fixedDeltaTime;
         gameController = GameObject.Find("GameManager")?.GetComponent<GameController>();
         crown.gameObject.SetActive(false);
 
@@ -371,7 +379,8 @@ public class CharacterContorl : MonoBehaviour
             velocityBeforeCollision = GetComponent<Rigidbody>().velocity;
             positionBeforeCollision = GetComponent<Rigidbody>().position;
         }
-           
+
+        CheckSlipery();
         CheckStun();
         CheckSpeed();
         CheckInVulernable();
@@ -856,16 +865,17 @@ public class CharacterContorl : MonoBehaviour
             return;
         if (isJumpFrequency)
             lastJumpLandTime += Time.deltaTime;
-
+        lastJumpRushTime += Time.fixedDeltaTime;
         if (jump && (isGrounded || isTouchingSlope || isInWater) && !hasJump && lastJumpLandTime >= jumpFrequency)
         {
+            canSlip = false;
             anima.SetBool("isBrake", false);
             ridbody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             hasJump = true;
             isJumpFrequency = false;
             anima.SetBool("Jump", true);
             targetAngle = Mathf.Atan2(axisInput.x, axisInput.y) * Mathf.Rad2Deg + Camera.main.transform.eulerAngles.y;
-            if (isAtMaxSpeed)
+            if (isAtMaxSpeed && lastJumpRushTime > jumpRushFrequency)
             {
                 //fullyRecoveringStamina = true;
                 var addVelocityValue = (jumpBonusToVelocity - 1) * ridbody.velocity.magnitude;
@@ -879,8 +889,9 @@ public class CharacterContorl : MonoBehaviour
                 var force = addVelocityValue * target.normalized;
                 var addForceValue = ridbody.mass * force / Time.fixedDeltaTime;
                 ridbody.AddForce(addForceValue, ForceMode.Force);
+                lastJumpRushTime = 0;
             }
-            else if (isAtWalkSpeed)
+            else if (isAtWalkSpeed && lastJumpRushTime > jumpRushFrequency)
             {
                 var addVelocityValue = (jumpWalkBonusToVelocity - 1) * ridbody.velocity.magnitude;
                 var addVelocityDir = transform.forward.normalized;
@@ -893,6 +904,7 @@ public class CharacterContorl : MonoBehaviour
                 var force = addVelocityValue * target.normalized;
                 var addForceValue = ridbody.mass * force / Time.fixedDeltaTime;
                 ridbody.AddForce(addForceValue, ForceMode.Force);
+                lastJumpRushTime = 0;
             }
         }
 
@@ -928,6 +940,7 @@ public class CharacterContorl : MonoBehaviour
             return;
         if (charge)
         {
+            canSlip = false;
             if (!releasing)
             {
                 elapsedChargeTime = 0;
@@ -959,12 +972,8 @@ public class CharacterContorl : MonoBehaviour
         }
         else
         {
-            if (releasing && ridbody.velocity.magnitude >= runMaxVelocity * 0.85f && (isTouchingSlope || isGrounded))
-            {
-                anima.SetBool("isBrake", true);
-                var buff = new SliperyBuff(this);
-                buffs.Add(buff);
-            }
+            if (ridbody.velocity.magnitude >= runMaxVelocity * 0.85f && (isTouchingSlope || isGrounded) && releasing)
+                canSlip = true;
             releasing = false;
         }
     }
@@ -1021,6 +1030,15 @@ public class CharacterContorl : MonoBehaviour
 
     }
 
+    public void SetColor(float H, float S)
+    {
+        var rendererBlock = new MaterialPropertyBlock();
+        skinnedMeshRenderer.GetPropertyBlock(rendererBlock, 1);
+        rendererBlock.SetFloat("_H", H);
+        rendererBlock.SetFloat("_S", S);
+        skinnedMeshRenderer.SetPropertyBlock(rendererBlock, 1);
+    }
+
     private void MoveRoll()
     {
         if (isDead)
@@ -1063,6 +1081,24 @@ public class CharacterContorl : MonoBehaviour
                 invulernable = false;
                 SetCollider(true);
                 // SetFlashMeshRendererBlock(false);
+            }
+        }
+    }
+
+    private void CheckSlipery()
+    {
+        if (canSlip)
+            lastSlipReadyTime += Time.fixedDeltaTime;
+        else
+            lastSlipReadyTime = 0;
+        if (canSlip && lastSlipReadyTime > slipProtectTime)
+        {
+            if (ridbody.velocity.magnitude >= runMaxVelocity * 0.85f && (isTouchingSlope || isGrounded))
+            {
+                canSlip = false;
+                anima.SetBool("isBrake", true);
+                var buff = new SliperyBuff(this);
+                buffs.Add(buff);
             }
         }
     }
