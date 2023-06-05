@@ -890,6 +890,7 @@ public class CharacterContorl : MonoBehaviour
                 var addForceValue = ridbody.mass * force / Time.fixedDeltaTime;
                 ridbody.AddForce(addForceValue, ForceMode.Force);
                 lastJumpRushTime = 0;
+
             }
             else if (isAtWalkSpeed && lastJumpRushTime > jumpRushFrequency)
             {
@@ -915,7 +916,12 @@ public class CharacterContorl : MonoBehaviour
 
             isJumpFrequency = true;
             if (hasJump)
+            {
+                var eventObjectPrefab = Resources.Load<GameObject>("Prefabs/Effect/Puff");
+                var eventObjectGameObject = Instantiate(eventObjectPrefab, new Vector3(this.transform.position.x, this.transform.position.y - 1.5f, this.transform.position.z), Quaternion.Euler(new Vector3(0, 0, 0)));
                 hasJump = false;
+            }
+
 
         }
 
