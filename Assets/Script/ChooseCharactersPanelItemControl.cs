@@ -11,13 +11,19 @@ public class ChooseCharactersPanelItemControl : MonoBehaviour
     public TextMeshProUGUI characterNameText;
     public TextMeshProUGUI playerIndexText;
     private bool isButtonDown;
+    private bool isLeftButtonDown;
+    private bool isRightButtonDown;
     private int playerIndex;
     public Image background;
     public CharacterType characterType = CharacterType.PolarBear;
     public bool isReady = false;
     public List<Sprite> images = new List<Sprite>();
+    public List<string> previewPrefabPath = new List<string>();
     public Image avatar;
-
+    public RawImage rt;
+    public GameObject previewObject;
+    public RenderTexture renderTexture;
+    public CharacterChooseControl control;
     private void Awake()
     {
 
@@ -32,6 +38,18 @@ public class ChooseCharactersPanelItemControl : MonoBehaviour
         playerIndexText.text = $"P{playerIndex}";
         background.color = InputReadManager.Instance.playerColors[playerIndex - 1];
         avatar.sprite = images[(int)characterType - 1];
+
+        previewObject = Instantiate(Resources.Load(previewPrefabPath[(int)(characterType - 1)], typeof(GameObject)) as GameObject, new Vector3(999*playerIndex, 0, 0), Quaternion.identity);
+        control = previewObject.GetComponent<CharacterChooseControl>();
+        renderTexture = new RenderTexture(300, 400, 24, RenderTextureFormat.ARGB32);
+        rt.texture = renderTexture;
+        control.characterCam.targetTexture = renderTexture;
+        control.characterCam.Render();
+    }
+
+    private void OnDestroy()
+    {
+        Destroy(previewObject.gameObject);
     }
 
     private void LateUpdate()
@@ -48,6 +66,22 @@ public class ChooseCharactersPanelItemControl : MonoBehaviour
         }
         if (!inputReader.jump)
             isButtonDown = false;
+
+        if (inputReader.charge && !isRightButtonDown)
+        {
+            isRightButtonDown = true;
+            control.SwitchColor(true);
+        }
+        if (!inputReader.charge)
+            isRightButtonDown = false;
+
+        if (inputReader.brake && !isLeftButtonDown)
+        {
+            isLeftButtonDown = true;
+            control.SwitchColor(false);
+        }
+        if (!inputReader.brake)
+            isLeftButtonDown = false;
         //if (characterType == CharacterType.Seal)
         //    characterNameText.text = "PolarBear";
         //else if (characterType == CharacterType.PolarBear)

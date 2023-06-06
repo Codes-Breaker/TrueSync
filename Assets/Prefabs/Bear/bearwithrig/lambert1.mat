@@ -138,12 +138,14 @@ Material:
     - _DstBlend: 0
     - _Emission: 1
     - _EnvironmentReflections: 1
+    - _FPower: 6.5
     - _Flipbook: 0
     - _FlipbookBlending: 0
     - _FlipbookMode: 0
     - _GlossMapScale: 1
     - _Glossiness: 0
     - _GlossyReflections: 1
+    - _H: 0
     - _Initialized: 0
     - _InputTab: 1
     - _Metallic: 0
@@ -158,6 +160,7 @@ Material:
     - _ReceiveShadows: 1
     - _RenderFace: 2
     - _RenderPriority: 0
+    - _S: 0.51
     - _Saturation: 1
     - _Shininess: 0.7
     - _Smoothness: 0
@@ -182,10 +185,11 @@ Material:
     - _StencilZFail: 0
     - _StylizeTab: 1
     - _Surface: 0
-    - _Threshold: 0.9
+    - _Threshold: 1
     - _TintAmount: 0
     - _TinyAmount: 0
     - _UVSec: 0
+    - _V: 1
     - _VertexAnimation: 0
     - _VertexAnimationIntensity: 0.05
     - _VertexAnimationStutter: 0
@@ -193,14 +197,15 @@ Material:
     - _ZTest: 4
     - _ZWrite: 1
     m_Colors:
+    - _AddColor: {r: 1, g: 1, b: 1, a: 0}
     - _AlbedoColor: {r: 1, g: 1, b: 1, a: 1}
     - _BaseColor: {r: 0.7075472, g: 0.67083484, b: 0.67083484, a: 1}
     - _BaseColorAddSubDiff: {r: -1, g: 1, b: 0, a: 0}
     - _CameraFadeParams: {r: 0, g: 0, b: 0, a: 0}
-    - _Color: {r: 0.7075472, g: 0.67083484, b: 0.67083484, a: 1}
+    - _Color: {r: 0.7058824, g: 0.67058825, b: 0.67058825, a: 1}
     - _DissolveBorderColor: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0.09433961, g: 0.08677464, b: 0.08677464, a: 1}
-    - _HurtColor: {r: 0.8773585, g: 0.59180313, b: 0.59180313, a: 1}
+    - _HurtColor: {r: 1, g: 0, b: 0, a: 1}
     - _SoftFadeModeParams: {r: 0, g: 0, b: 0, a: 0}
     - _SoftParticleFadeParams: {r: 0, g: 0, b: 0, a: 0}
     - _SpecColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
