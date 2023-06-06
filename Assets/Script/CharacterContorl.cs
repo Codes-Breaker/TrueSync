@@ -733,7 +733,7 @@ public class CharacterContorl : MonoBehaviour
         //单位化输入方向
         if (controlDeviceType == ControlDeviceType.Mouse)
         {
-            Vector3 screenPosition = Camera.main.WorldToScreenPoint(transform.position);
+            Vector3 screenPosition = gameController.mainCamera.WorldToScreenPoint(transform.position);
             var detalPosition = axisInput - new Vector2(screenPosition.x, screenPosition.y);
             axisInput = detalPosition.normalized;
         }
@@ -769,7 +769,7 @@ public class CharacterContorl : MonoBehaviour
 
                 if (axisInput.magnitude > movementThrashold)
                 {
-                    targetAngle = Mathf.Atan2(axisInput.x, axisInput.y) * Mathf.Rad2Deg + Camera.main.transform.eulerAngles.y;
+                    targetAngle = Mathf.Atan2(axisInput.x, axisInput.y) * Mathf.Rad2Deg + gameController.mainCamera.transform.eulerAngles.y;
                     if(hasBrake)
                         transform.rotation = Quaternion.Slerp(this.ridbody.rotation, Quaternion.Euler(new Vector3(0, targetAngle, 0) + initialRotation), breakRotationRate);
                     else
@@ -781,7 +781,7 @@ public class CharacterContorl : MonoBehaviour
                 CheckisDrift();
                 if (axisInput.magnitude > movementThrashold)
                 {
-                    targetAngle = Mathf.Atan2(axisInput.x, axisInput.y) * Mathf.Rad2Deg + Camera.main.transform.eulerAngles.y;
+                    targetAngle = Mathf.Atan2(axisInput.x, axisInput.y) * Mathf.Rad2Deg + gameController.mainCamera.transform.eulerAngles.y;
                     if(hasBrake)
                         transform.rotation = Quaternion.Slerp(this.ridbody.rotation, Quaternion.Euler(new Vector3(0, targetAngle, 0) + initialRotation), breakRotationRate);
                     else
@@ -795,7 +795,7 @@ public class CharacterContorl : MonoBehaviour
             if (ridbody.velocity.magnitude < movementMaxVelocity && axisInput.magnitude > movementThrashold)
             {
                 isWalk = true;
-                targetAngle = Mathf.Atan2(axisInput.x, axisInput.y) * Mathf.Rad2Deg + Camera.main.transform.eulerAngles.y;
+                targetAngle = Mathf.Atan2(axisInput.x, axisInput.y) * Mathf.Rad2Deg + gameController.mainCamera.transform.eulerAngles.y;
                 var acceleration = movementMaxVelocity / movementSpeedUpTime;
                 var forceMagnitude = ridbody.mass * acceleration;
 
@@ -908,7 +908,7 @@ public class CharacterContorl : MonoBehaviour
             hasJump = true;
             isJumpFrequency = false;
             anima.SetBool("Jump", true);
-            targetAngle = Mathf.Atan2(axisInput.x, axisInput.y) * Mathf.Rad2Deg + Camera.main.transform.eulerAngles.y;
+            targetAngle = Mathf.Atan2(axisInput.x, axisInput.y) * Mathf.Rad2Deg + gameController.mainCamera.transform.eulerAngles.y;
             if (isAtMaxSpeed && lastJumpRushTime > jumpRushFrequency)
             {
                 //fullyRecoveringStamina = true;
@@ -939,6 +939,7 @@ public class CharacterContorl : MonoBehaviour
             isJumpFrequency = true;
             if (hasJump)
             {
+                canSlip = true;
                 var eventObjectPrefab = Resources.Load<GameObject>("Prefabs/Effect/Puff");
                 var eventObjectGameObject = Instantiate(eventObjectPrefab, new Vector3(this.transform.position.x, this.transform.position.y - 1.5f, this.transform.position.z), Quaternion.Euler(new Vector3(0, 0, 0)));
                 hasJump = false;
@@ -1121,7 +1122,7 @@ public class CharacterContorl : MonoBehaviour
             lastSlipReadyTime += Time.fixedDeltaTime;
         else
             lastSlipReadyTime = 0;
-        if (canSlip && lastSlipReadyTime > slipProtectTime)
+        if (canSlip && lastSlipReadyTime >= slipProtectTime)
         {
             if (ridbody.velocity.magnitude >= runMaxVelocity * 0.85f && (isTouchingSlope || isGrounded))
             {
@@ -1309,7 +1310,7 @@ public class CharacterContorl : MonoBehaviour
         gpSlider.value = (float)(currentStamina / maxActorStamina);
         stunSlider.value = (float)(currentStunValue / maxStunValue);
         hpSlider.value = (float)(currentHPValue / maxHPValue);
-        canvas.transform.forward = Camera.main.transform.forward;
+        canvas.transform.forward = gameController.mainCamera.transform.forward;
         gpSlider.transform.position = this.transform.position;
         stunSlider.transform.position = this.transform.position;
         hpSlider.transform.position = this.transform.position;
