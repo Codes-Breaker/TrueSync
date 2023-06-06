@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ItemAbilityBase : MonoBehaviour
+public class ItemAbilityBase 
 {
     public CharacterContorl character;
     public GameObject itemGameObject;
@@ -18,7 +18,15 @@ public class ItemAbilityBase : MonoBehaviour
 
     }
 
+    public virtual void Update()
+    {
 
+    }
+
+    public virtual void FixedUpdate()
+    {
+
+    }
 
     protected virtual void UseItemAbility()
     {
@@ -36,8 +44,16 @@ public class ItemAbilityBase : MonoBehaviour
 
     }
 
-    public virtual void End()
+    /// <summary>
+    /// 特定情况下道具从角色的身上移除，重新在地上生成的情况
+    /// </summary>
+    public virtual void LossItemAbility()
     {
 
+    }
+
+    public virtual void End()
+    {
+        character.RemoveItemAbility();
     }
 }

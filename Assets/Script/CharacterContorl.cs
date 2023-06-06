@@ -362,6 +362,7 @@ public class CharacterContorl : MonoBehaviour
     {
         SetAnimatorArgument();
         SetIK();
+        TickItemAbilityUpdate();
     }
 
     private void FixedUpdate()
@@ -384,7 +385,25 @@ public class CharacterContorl : MonoBehaviour
         SetGravity();
         UpdateStamina();
         RecordCollisionVelocity();
+        TickItemAbilityFixedUpdate();
+    }
 
+    //驱动道具的Update
+    private void TickItemAbilityUpdate()
+    {
+        if (itemAbility != null)
+        {
+            itemAbility.Update();
+        }
+    }
+
+    //驱动道具的FixedUpdate
+    private void TickItemAbilityFixedUpdate()
+    {
+        if(itemAbility != null)
+        {
+            itemAbility.FixedUpdate();
+        }
     }
 
     public void SetControlSelf()
@@ -429,6 +448,19 @@ public class CharacterContorl : MonoBehaviour
         currentStunValue = Math.Max(0, currentStunValue - number);
         CheckStun();
     }
+
+    public void GainItemAbility(ItemAbilityBase itemAbility)
+    {
+        this.itemAbility = itemAbility;
+        this.itemAbility.Init();
+    }
+
+    public void RemoveItemAbility()
+    {
+        this.itemAbility = null;
+    }
+
+
 
     public void TakeDamage(float number, Vector3 hitDir)
     {
@@ -869,11 +901,7 @@ public class CharacterContorl : MonoBehaviour
             {
                 //fullyRecoveringStamina = true;
                 var addVelocityValue = (jumpBonusToVelocity - 1) * ridbody.velocity.magnitude;
-				var minVelocityDir = Quaternion.Euler(0, -jumpRotateAngle, 0) * addVelocityDir;
-                var maxVelocityDir = Quaternion.Euler(0, jumpRotateAngle, 0) * addVelocityDir;
-                //target = new Vector3(Mathf.Clamp(target.x, minVelocityDir.x, maxVelocityDir.x),
-                //    Mathf.Clamp(target.y, minVelocityDir.y, maxVelocityDir.y),
-                //    Mathf.Clamp(target.z, minVelocityDir.z, maxVelocityDir.z));
+                var target = Quaternion.Euler(new Vector3(0, targetAngle, 0) + initialRotation) * Vector3.forward;
                 var force = addVelocityValue * target.normalized;
                 var addForceValue = ridbody.mass * force / Time.fixedDeltaTime;
                 ridbody.AddForce(addForceValue, ForceMode.Force);                
@@ -881,13 +909,7 @@ public class CharacterContorl : MonoBehaviour
             else if (isAtWalkSpeed)
             {
                 var addVelocityValue = (jumpWalkBonusToVelocity - 1) * ridbody.velocity.magnitude;
-                var addVelocityDir = transform.forward.normalized;
                 var target = Quaternion.Euler(new Vector3(0, targetAngle, 0) + initialRotation) * Vector3.forward;
-                var minVelocityDir = Quaternion.Euler(0, -jumpRotateAngle, 0) * addVelocityDir;
-                var maxVelocityDir = Quaternion.Euler(0, jumpRotateAngle, 0) * addVelocityDir;
-                //target = new Vector3(Mathf.Clamp(target.x, minVelocityDir.x, maxVelocityDir.x),
-                //    Mathf.Clamp(target.y, minVelocityDir.y, maxVelocityDir.y),
-                //    Mathf.Clamp(target.z, minVelocityDir.z, maxVelocityDir.z));
                 var force = addVelocityValue * target.normalized;
                 var addForceValue = ridbody.mass * force / Time.fixedDeltaTime;
                 ridbody.AddForce(addForceValue, ForceMode.Force);
