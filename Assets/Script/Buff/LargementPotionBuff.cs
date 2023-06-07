@@ -18,7 +18,7 @@ public class LargementPotionBuff : ItemBuffBase
 
     public LargementPotionBuff(CharacterContorl target) : base(target)
     {
-        buffTime = 30f;
+        buffTime = 6f;
     }
 
     public LargementPotionBuff(CharacterContorl target, float buffTime) : base(target, buffTime)
