@@ -17,24 +17,43 @@ public struct ItemData
     public int itemId;
     public ItemType itemType;
     public int canUseNum;
-    public float leftTime;
     public GameObject itemPrefabOnGround;
     public GameObject itemPrefabOnCharacter;
+    public float CountDownTime;
 }
 
 public class ItemManager
 {
     public static ItemAbilityBase CreatItemAbilityByItemData(ItemData itemData,CharacterContorl character)
     {
-        switch(itemData.itemId)
+        switch(itemData.itemType)
         {
-            case 1:
-                return new EnlargementPotionAbility(character, itemData);
-            case 2:
-                return new RocketThrusterAbility(character, itemData);
+            case ItemType.Trap:
+                return new TrapItemAbility(character, itemData);
+            case ItemType.Projectile:
+                return new ProjectileItemAbility(character, itemData);
+            case ItemType.Buff:
+                return new BuffItemAbility(character, itemData);
             default:
-                Debug.LogError("没有找到对应道具ID");
                 return null;
         }    
     }
+
+    public static ItemBuffBase CreatItemBuffByItemID(float ItemID,CharacterContorl character)
+    {
+        switch (ItemID)
+        {
+            case 1:
+                return new RocketThrusterBuff(character);
+            case 2:
+                return new LargementPotionBuff(character);
+            default:
+                UnityEngine.Debug.LogError("没有找到对应ID");
+                return null;
+
+        }
+
+
+    }
+
 }

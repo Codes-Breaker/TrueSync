@@ -99,6 +99,10 @@ public class CharacterContorl : MonoBehaviour
     public float stunStopRollMinAngle;
     [Header("眩晕时停止转动的最小速度阈值")]
     public float stunStopRollMinVelocity;
+    [Header("打击加成系数")]
+    public float hitKnockBackToOtherArgument = 1f;
+    [Header("自身击退加成系数")]
+    public float hitKnockbackToSelfArgument = 1f;
     [Header("正面受击补偿")]
     public float hitBonusToHead = 1f;
     [Header("侧面受击补偿")]
@@ -153,6 +157,7 @@ public class CharacterContorl : MonoBehaviour
     public SimpleFloatingObject floatObj;
     public GrounderQuadruped grounderQuadruped;
     public RagdollActivator ragdollController;
+    public Transform itemPlace;
     private Vector2 axisInput;
     public GameObject playerIndicator;
     public TMPro.TMP_Text playerIndexText;
@@ -172,6 +177,7 @@ public class CharacterContorl : MonoBehaviour
     private bool isWalk;
     private bool isRollContinu;
     public bool isGrounded;
+    private bool hasUseItem;
     public bool isStun { get; private set; }
     //起身
     public bool isRecovering { get; private set; }
@@ -227,7 +233,7 @@ public class CharacterContorl : MonoBehaviour
     //当前的重力大大小
     public Vector3 currentGravity;
 
-    public List<Buff> buffs = new List<Buff>();
+    private List<Buff> buffs = new List<Buff>();
 
     public int playerIndex = 1;
 
@@ -257,7 +263,15 @@ public class CharacterContorl : MonoBehaviour
     private float elapsedChargeTime = 0; //已经加速了的时间
     private float lastSlipReadyTime = 0; //上次打滑准备的时间
 
-    //是否处于眩晕状态
+    //buff控制相关参数
+    private bool controlStun;
+    private bool controlDeath;
+    private bool controlWalk;
+    private bool controlRun;
+    private bool controlJump;
+    private bool controlMoveAim;
+    private bool controlDamage;
+
     //起身时间
     [HideInInspector]
     private float recoveryTime = 1;
@@ -421,7 +435,6 @@ public class CharacterContorl : MonoBehaviour
     {
         inputReader.moveAciotn = MoveWalk;
         inputReader.chargeAction = MoveCharge;
-        inputReader.releaseAciton = MoveRelease;
         inputReader.interactWeaponAction = UseItem;
         inputReader.jumpAction = MoveJump;
         inputReader.brakeAciton = MoveBrake;
@@ -443,7 +456,6 @@ public class CharacterContorl : MonoBehaviour
         crown.gameObject.SetActive(true);
         inputReader.moveAciotn = null;
         inputReader.chargeAction = null;
-        inputReader.releaseAciton = null;
         inputReader.interactWeaponAction = null;
         inputReader.jumpAction = null;
         inputReader.brakeAciton = null;
@@ -674,7 +686,7 @@ public class CharacterContorl : MonoBehaviour
         this.ridbody.gameObject.GetComponent<Collider>().enabled = !set;
     }
 
-    IEnumerator DelayRemove()
+    IEnumerator DelayRemoveCinemachineTargetGroup()
     {
         yield return new WaitForSeconds(3);
         var cinemachineTargetGroup = GameObject.FindObjectOfType<CinemachineTargetGroup>();
@@ -683,7 +695,7 @@ public class CharacterContorl : MonoBehaviour
 
     private void Dead()
     {
-        StartCoroutine(DelayRemove());
+        StartCoroutine(DelayRemoveCinemachineTargetGroup());
         //this.gameObject.SetActive(false);
         this.canvas.gameObject.SetActive(false);
         gameController.CheckGameState();
@@ -953,16 +965,15 @@ public class CharacterContorl : MonoBehaviour
 
     private void UseItem(bool isUse)
     {
-		if (isUse)
+        if(itemAbility != null)
         {
-
+		    if (isUse && !hasUseItem )
+            {
+                itemAbility.UseItemAbility();
+                hasUseItem = true;
+            }
             
         }
-    }
-
-    private void MoveRelease(bool charge)
-    {
-
     }
 
     private void MoveCharge(bool charge)
@@ -995,7 +1006,7 @@ public class CharacterContorl : MonoBehaviour
                 if (ridbody.velocity.magnitude >= runMaxVelocity * 0.85f && (isTouchingSlope || isGrounded))
                 {
                     var buff = new SliperyBuff(this);
-                    buffs.Add(buff);
+                    OnGainBuff(buff);
                     anima.SetBool("isBrake", true);
                 }
                 //fullyRecoveringStamina = true;
@@ -1129,10 +1140,23 @@ public class CharacterContorl : MonoBehaviour
                 canSlip = false;
                 anima.SetBool("isBrake", true);
                 var buff = new SliperyBuff(this);
-                buffs.Add(buff);
+                OnGainBuff(buff);
             }
         }
     }
+
+
+    public void OnGainBuff(Buff buff)
+    {
+        buffs.Add(buff);
+        SetBuffControlState();
+    }
+
+    public void SetBuffControlState()
+    {
+
+    }
+
 
     private void CheckStun()
     {
@@ -1256,7 +1280,7 @@ public class CharacterContorl : MonoBehaviour
 
     private void CheckIsGrounded()
     {
-        isGrounded = Physics.CheckSphere(bodyCollider.transform.position + (bodyCollider as SphereCollider).center - new Vector3(0, (bodyCollider as SphereCollider).radius, 0), 0.02f, groundMask);
+        isGrounded = Physics.CheckSphere(bodyCollider.transform.position + (bodyCollider as SphereCollider).center - new Vector3(0, (bodyCollider as SphereCollider).radius * bodyCollider.transform.localScale.y, 0), 0.02f, groundMask);
         anima.SetBool("OnGround", isGrounded || isTouchingSlope);
     }
 
@@ -1264,7 +1288,7 @@ public class CharacterContorl : MonoBehaviour
     {
         RaycastHit slopeHit;
         isTouchingSlope = false;
-        if (Physics.SphereCast(bodyCollider.transform.position + (bodyCollider as SphereCollider).center + transform.forward.normalized * slopeCheckerForwardOffset, slopeCheckerThrashold, Vector3.down, out slopeHit, (bodyCollider as SphereCollider).radius + 0.01f, groundMask))
+        if (Physics.SphereCast(bodyCollider.transform.position + (bodyCollider as SphereCollider).center + transform.forward.normalized * slopeCheckerForwardOffset, slopeCheckerThrashold, Vector3.down, out slopeHit, (bodyCollider as SphereCollider).radius * bodyCollider.transform.localScale.y + 0.01f, groundMask))
         {
             groundNormal = slopeHit.normal;
 
@@ -1311,6 +1335,9 @@ public class CharacterContorl : MonoBehaviour
         stunSlider.value = (float)(currentStunValue / maxStunValue);
         hpSlider.value = (float)(currentHPValue / maxHPValue);
         canvas.transform.forward = gameController.mainCamera.transform.forward;
+
+        //临时缩放
+        canvas.transform.localScale = Vector3.one / transform.localScale.x;
         gpSlider.transform.position = this.transform.position;
         stunSlider.transform.position = this.transform.position;
         hpSlider.transform.position = this.transform.position;
@@ -1365,10 +1392,6 @@ public class CharacterContorl : MonoBehaviour
         //ringRenderer.SetPropertyBlock(rendererBlock, 0);
     }
 
-
-    #endregion
-
-    #region Render
 
     #endregion
 
@@ -1607,14 +1630,14 @@ public class CharacterContorl : MonoBehaviour
             var eventObjectPrefab = Resources.Load<GameObject>("Prefabs/Effect/StunHit");
             var eventObjectGameObject = Instantiate(eventObjectPrefab, collision.contacts[0].point, Quaternion.Euler(new Vector3(0, 0, 0)));
             var hitDir = Vector3.ProjectOnPlane((ridbody.position - collision.contacts[0].point), groundNormal).normalized;
-            var targetDistance = Math.Min(hitMaxDistance, collision.gameObject.GetComponent<InteractiveObject>().knockbackDistance * myHitKnockbackCoef + hitKnockbackSelfCurve.Evaluate(momentumSelf * myBuff + 2)) * InteractiveDistanceCoef;
+            var targetDistance = Math.Min(hitMaxDistance, collision.gameObject.GetComponent<InteractiveObject>().knockbackDistance * myHitKnockbackCoef + hitKnockbackSelfCurve.Evaluate(momentumSelf * myBuff + 2)) * InteractiveDistanceCoef * hitKnockbackToSelfArgument;
             var forceData = KnockBackForce(targetDistance, hitDir);
             var targetStun = targetDistance * distanceToStunCoef * InteractiveStunDistanceCoef;
             if (collision.gameObject.GetComponent<InteractiveObject>().canStun)
                 TakeStun((int)(targetStun));
             var buff = new HitBuff(this, forceData.hitTime);
             ridbody.AddForce((forceData.force) * hitDir, ForceMode.Force);
-            this.buffs.Add(buff);
+            this.OnGainBuff(buff);
             var hitOnPlane = Vector3.ProjectOnPlane((collision.contacts[0].point - ridbody.position), groundNormal).normalized;
             var forwardOnPlane = Vector3.ProjectOnPlane(ridbody.transform.forward, groundNormal).normalized;
             var hitAngle = Vector3.SignedAngle(forwardOnPlane, hitOnPlane, groundNormal);
@@ -1654,7 +1677,7 @@ public class CharacterContorl : MonoBehaviour
             if (angleOther > 90)
                 momentumOther = 0;
 
-            Debug.Log($"{transform.name} velocitySelf:{velocitySelf} velocityOther:{velocityOther} angleSelf:{angleSelf} angleOther:{angleOther} momentumSelf:{momentumSelf}  momentumOther:{momentumOther}");
+           // Debug.Log($"{transform.name} velocitySelf:{velocitySelf} velocityOther:{velocityOther} angleSelf:{angleSelf} angleOther:{angleOther} momentumSelf:{momentumSelf}  momentumOther:{momentumOther}");
 
             //出招加成
             var hasBuff = (otherCollision.isAtMaxSpeed && (!otherCollision.isGrounded && !otherCollision.isTouchingSlope)) ? buffAttack : 1;
@@ -1686,7 +1709,7 @@ public class CharacterContorl : MonoBehaviour
 
             }
 
-            var targetDistance = Math.Min(hitMaxDistance, hitKnockbackCurve.Evaluate(momentumOther * hasBuff) + hitKnockbackSelfCurve.Evaluate(momentumSelf ));
+            var targetDistance = Math.Min(otherCollision.hitMaxDistance, hitKnockbackCurve.Evaluate(momentumOther * hasBuff) * otherCollision.hitKnockBackToOtherArgument + hitKnockbackSelfCurve.Evaluate(momentumSelf ))*hitKnockbackToSelfArgument;
 
             //施加水平推力
             if (isGrounded || isTouchingSlope)
@@ -1700,12 +1723,12 @@ public class CharacterContorl : MonoBehaviour
             }
             //Debug.LogError($"==> {this.gameObject.name} ===> 打击距离 {targetDistance} otherAtMaxSpeed? {otherCollision.isAtMaxSpeed} ");
             //打击眩晕和血量
-            TakeStun((int)(hitKnockbackCurve.Evaluate(momentumOther * hasBuff) * distanceToStunCoef));
-            TakeDamage((int)(hitKnockbackCurve.Evaluate(momentumOther * hasBuff) * distanceToHPCoef), hitDir);
+            TakeStun((int)(hitKnockbackCurve.Evaluate(momentumOther * hasBuff * otherCollision.hitKnockBackToOtherArgument) * hitKnockbackToSelfArgument * distanceToStunCoef));
+            TakeDamage((int)(hitKnockbackCurve.Evaluate(momentumOther * hasBuff * otherCollision.hitKnockBackToOtherArgument) * hitKnockbackToSelfArgument * distanceToHPCoef), hitDir);
             //TakeDamage(100, hitDir);//测试
             var buff = new HitBuff(this,forceData.hitTime);
             ridbody.AddForce((forceData.force) * hitDir, ForceMode.Force);
-            this.buffs.Add(buff);
+            this.OnGainBuff(buff);
 
             //施加转角力 正值顺时针转动，负值逆时针转动
             var torgueAngle = Vector3.SignedAngle(velocityOther, contactToOther, groundNormal);

@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnlargementPotionAbility : ItemAbilityBase
+public class TrapItemAbility : ItemAbilityBase
 {
-    public EnlargementPotionAbility(CharacterContorl character, ItemData data):base(character , data)
+    public TrapItemAbility(CharacterContorl character, ItemData data) : base(character, data)
     {
     }
 
@@ -13,12 +13,7 @@ public class EnlargementPotionAbility : ItemAbilityBase
         base.Init();
     }
 
-    protected override void CloseItemAbility()
-    {
-        base.CloseItemAbility();
-    }
-
-    protected override void UseItemAbility()
+    public override void UseItemAbility()
     {
         base.UseItemAbility();
     }

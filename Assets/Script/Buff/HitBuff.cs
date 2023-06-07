@@ -22,13 +22,7 @@ public class HitBuff : StunBuff
     {
         base.OnBuffApply();
         character.ridbody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
-        foreach(var buff in character.buffs)
-        {
-            if (buff is SliperyBuff)
-            {
-                buff.Finish();
-            }
-        }
+        character.RemoveSliperyBuff();
     }
 
     public override void OnBuffUpdate()

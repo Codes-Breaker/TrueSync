@@ -15,34 +15,28 @@ public class ItemBase : MonoBehaviour
 
     private GameObject itemGameObject;
 
-    /// <summary>
-    /// 不带位置的
-    /// </summary>
-    /// <param name="data"></param>
-    public ItemBase(ItemData data)
+    private void Start()
     {
-        itemData = data;
         Init();
     }
 
-   /// <summary>
-   /// 带位置的
-   /// </summary>
-    public ItemBase(ItemData data,Vector3 point)
-    {
-        itemData = data;
-        Init(point);
-    }
-    //public ItemBuffBase itemBuffBase;
-
     public void Init()
-    {
+    { 
         CreatItemGameObject();
         SetColliderTrigger();
     }
 
-    public void Init(Vector3 point)
+
+    public void Init(ItemData data)
     {
+        itemData = data;
+        CreatItemGameObject();
+        SetColliderTrigger();
+    }
+
+    public void Init(ItemData data,Vector3 point)
+    {
+        itemData = data;
         CreatItemGameObject(point);
         SetColliderTrigger();
     }
@@ -72,7 +66,7 @@ public class ItemBase : MonoBehaviour
     {
         itemGameObject = Instantiate<GameObject>(itemData.itemPrefabOnGround, this.transform);
         itemGameObject.SetActive(true);
-        itemGameObject.transform.position = point;
+        transform.position = point;
         itemGameObject.transform.DOLocalRotate(new Vector3(0, 360, 0), 1f, RotateMode.FastBeyond360)
             .SetLoops(-1, LoopType.Restart)
             .SetEase(Ease.Linear);
@@ -81,9 +75,9 @@ public class ItemBase : MonoBehaviour
     private void OnTriggerEnter(Collider collision)
     {
         var otherCollision = collision.gameObject.GetComponent<CharacterContorl>();
-        if (otherCollision)
+        if (otherCollision && !otherCollision.isStun)
         {
-            if(otherCollision.itemAbility != null)
+            if(otherCollision.itemAbility == null)
             {
                 var itemAbility =  ItemManager.CreatItemAbilityByItemData(itemData, otherCollision);
                 otherCollision.GainItemAbility(itemAbility);
