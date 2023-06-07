@@ -312,7 +312,7 @@ public class CharacterContorl : MonoBehaviour
     public GameObject stun;
 
     [Header("±ôËÀ×´Ì¬ÌáÊ¾ÑªÁ¿")]
-    public float dangerHpTip = 30f;
+    public float dangerHpTip = 20f;
     public SkinnedMeshRenderer skinnedMeshRenderer;
     public AnimationCurve blinkCurve;
 
@@ -486,8 +486,17 @@ public class CharacterContorl : MonoBehaviour
 
     public void TakeDamage(float number, Vector3 hitDir)
     {
-        currentHPValue -= number;
-        currentHPValue = Math.Max(currentHPValue, 0);
+        //ËøÑª²Ù×÷
+        if (currentHPValue > dangerHpTip && Math.Max(currentHPValue - number, 0) == 0)
+        {
+            currentHPValue = 1;
+        }
+        else
+        {
+            currentHPValue -= number;
+            currentHPValue = Math.Max(currentHPValue, 0);
+        }
+
         lastHPSubtractTime = 0;
         if (currentHPValue == 0)
         {
