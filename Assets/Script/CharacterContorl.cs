@@ -177,7 +177,6 @@ public class CharacterContorl : MonoBehaviour
     private bool isWalk;
     private bool isRollContinu;
     public bool isGrounded;
-    private bool hasUseItem;
     public bool isStun { get; private set; }
     //ÆðÉí
     public bool isRecovering { get; private set; }
@@ -956,8 +955,6 @@ public class CharacterContorl : MonoBehaviour
                 var eventObjectGameObject = Instantiate(eventObjectPrefab, new Vector3(this.transform.position.x, this.transform.position.y - 1.5f, this.transform.position.z), Quaternion.Euler(new Vector3(0, 0, 0)));
                 hasJump = false;
             }
-
-
         }
 
     }
@@ -965,14 +962,9 @@ public class CharacterContorl : MonoBehaviour
 
     private void UseItem(bool isUse)
     {
-        if(itemAbility != null)
+        if(isUse && itemAbility != null)
         {
-		    if (isUse && !hasUseItem )
-            {
-                itemAbility.UseItemAbility();
-                hasUseItem = true;
-            }
-            
+            itemAbility.UseItemAbility();
         }
     }
 
