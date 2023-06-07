@@ -55,7 +55,6 @@ public class InputReaderBase : MonoBehaviour
 
     public delegate void MoveAciotn(Vector2 axisInput, ControlDeviceType controlDeviceType);
     public delegate void ChargeAction(bool isChange);
-    public delegate void ReleaseAciton(bool isChage);
     public delegate void InteractWeaponAction(bool isUseWeapon);
     public delegate void JumpAction(bool isJump);
     public delegate void BrakeAciton(bool isBrake);
@@ -64,7 +63,6 @@ public class InputReaderBase : MonoBehaviour
     public JumpAction jumpAction;
     public MoveAciotn moveAciotn;
     public ChargeAction chargeAction;
-    public ReleaseAciton releaseAciton;
     public InteractWeaponAction interactWeaponAction;
 
     public PlayerOneMovementActions movementActions;
@@ -84,8 +82,6 @@ public class InputReaderBase : MonoBehaviour
         movementActions.Action.Charge.performed += ctx => OnCharge(ctx);
         movementActions.Action.Charge.canceled += ctx => ChargeEnded(ctx);
 
-
-
         movementActions.Action.InteractWeapon.performed += ctx => OnInteract(ctx);
         movementActions.Action.InteractWeapon.canceled += ctx => InteractEnd(ctx);
 
@@ -103,8 +99,6 @@ public class InputReaderBase : MonoBehaviour
             moveAciotn(axisInput, controlDeviceType);
         if (chargeAction != null)
             chargeAction(charge);
-        if (releaseAciton != null)
-            releaseAciton(charge);
         if (interactWeaponAction != null)
             interactWeaponAction(interact);
         if (jumpAction != null)

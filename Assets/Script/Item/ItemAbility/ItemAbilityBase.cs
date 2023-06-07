@@ -6,16 +6,28 @@ public class ItemAbilityBase
 {
     public CharacterContorl character;
     public GameObject itemGameObject;
-    ItemData data;
+    protected ItemData itemData;
     public ItemAbilityBase(CharacterContorl character,ItemData data)
     {
-        this.data = data;
+        this.itemData = data;
         this.character = character;
     }
 
     public virtual void Init()
     {
+        EquipCharacter();
+    }
 
+    protected virtual void EquipCharacter()
+    {
+        itemGameObject = Object.Instantiate<GameObject>(itemData.itemPrefabOnCharacter,character.itemPlace);
+        itemGameObject.SetActive(true);
+
+    }
+
+    protected virtual void UnEquipCharacter()
+    {
+        Object.Destroy(itemGameObject);
     }
 
     public virtual void Update()
@@ -25,23 +37,33 @@ public class ItemAbilityBase
 
     public virtual void FixedUpdate()
     {
-
+        if(character.isDead || character.isStun)
+        {
+            LossItemAbility();
+        }
     }
 
-    protected virtual void UseItemAbility()
+    public virtual void UseItemAbility()
     {
-
+        OnItemReduced();
+        if (!CheckQuantityOfItem())
+        {
+            End();
+        }
     }
 
     protected virtual void OnItemReduced()
     {
-
+        itemData.canUseNum -- ;
     }
 
-
-    protected virtual void CloseItemAbility()
+    protected virtual bool CheckQuantityOfItem()
     {
-
+        if (itemData.canUseNum > 0)
+        {
+            return true;
+        }
+        return false;
     }
 
     /// <summary>
@@ -49,11 +71,18 @@ public class ItemAbilityBase
     /// </summary>
     public virtual void LossItemAbility()
     {
-
+        GameObject item = new GameObject("Item");
+        var itemBase = item.AddComponent<ItemBase>();
+        itemBase.Init(itemData, character.ridbody.transform.position);
+        End();
     }
 
     public virtual void End()
     {
+        //销毁装备物体
+        UnEquipCharacter();
+        //清楚
         character.RemoveItemAbility();
+        character = null;
     }
 }
