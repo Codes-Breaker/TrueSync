@@ -27858,6 +27858,8 @@ MonoBehaviour:
   stunStopRollMaxAngle: 40
   stunStopRollMinAngle: 10
   stunStopRollMinVelocity: 2
+  hitKnockBackToOtherArgument: 1
+  hitKnockbackToSelfArgument: 1
   hitBonusToHead: 1
   hitBonusToSide: 1.2
   hitBonusToBack: 1.35
@@ -27992,7 +27994,7 @@ MonoBehaviour:
   ascendingGravityScale: 1
   buffAttack: 2
   distanceToStunCoef: 6
-  distanceToHPCoef: 2
+  distanceToHPCoef: 3
   gpSlider: {fileID: 4121841322639874642}
   hpSlider: {fileID: 2827711392416063840}
   stunSlider: {fileID: 3323950262081022655}
@@ -28035,7 +28037,7 @@ MonoBehaviour:
   isInWater: 1
   hpRecoveryFrequency: 1
   damageRecoveryFrequency: 5
-  HPRecoveryRate: 2
+  HPRecoveryRate: 4
   HPSubtractRate: 1
   hpSubtractFrequency: 0.1
   inWaterSubtractFrequency: 0
