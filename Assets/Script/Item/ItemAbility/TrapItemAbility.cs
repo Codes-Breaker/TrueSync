@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class TrapItemAbility : ItemAbilityBase
 {
+
+    //向后扔道具的位置偏移
+    protected float offset = 2f;
     public TrapItemAbility(CharacterContorl character, ItemData data) : base(character, data)
     {
     }
@@ -16,6 +19,14 @@ public class TrapItemAbility : ItemAbilityBase
     public override void UseItemAbility()
     {
         base.UseItemAbility();
+    }
+
+    protected override void itemAbility()
+    {
+        var trapObject = ItemManager.CreatTrapItemByItemId(itemData.itemId, character);
+        var point = (character.transform.position + (character.bodyCollider as SphereCollider).center) - (character.ridbody.transform.forward.normalized * (character.bodyCollider as SphereCollider).radius * character.transform.localScale.x + character.ridbody.transform.forward.normalized * offset);
+        trapObject.transform.position = new Vector3(point.x, point.y - (character.bodyCollider as SphereCollider).radius * character.transform.localScale.x,point.z);
+        base.itemAbility();
     }
 
     protected override void OnItemReduced()

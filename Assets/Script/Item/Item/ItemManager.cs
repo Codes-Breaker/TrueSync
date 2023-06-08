@@ -39,9 +39,9 @@ public class ItemManager
         }    
     }
 
-    public static ItemBuffBase CreatItemBuffByItemID(float ItemID,CharacterContorl character)
+    public static ItemBuffBase CreatItemBuffByItemID(float itemID,CharacterContorl character)
     {
-        switch (ItemID)
+        switch (itemID)
         {
             case 1:
                 return new RocketThrusterBuff(character);
@@ -53,6 +53,21 @@ public class ItemManager
 
         }
 
+
+    }
+
+    public static GameObject CreatTrapItemByItemId(float itemID, CharacterContorl character)
+    {
+        switch (itemID)
+        {
+            case 3:
+                var trapGameObject = GameObject.Instantiate(Resources.Load<GameObject>("Prefabs/Item/ItemTrap/BananaTrap"));
+                trapGameObject.GetComponent<ItemTrapBase>().Init(character);
+                return trapGameObject;
+            default:
+                Debug.LogError("没有找到对应ID");
+                return null;
+        }
 
     }
 

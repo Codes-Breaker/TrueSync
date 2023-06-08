@@ -15,10 +15,14 @@ public class BuffItemAbility : ItemAbilityBase
 
     public override void UseItemAbility()
     {
+        base.UseItemAbility();
+    }
+
+    protected override void itemAbility()
+    {
         var itemBuff =  ItemManager.CreatItemBuffByItemID(itemData.itemId, character);
         character.OnGainBuff(itemBuff);
-        base.UseItemAbility();
-
+        base.itemAbility();
     }
 
     protected override void OnItemReduced()
