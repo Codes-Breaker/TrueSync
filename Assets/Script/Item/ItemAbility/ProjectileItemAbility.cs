@@ -23,6 +23,11 @@ public class ProjectileItemAbility : ItemAbilityBase
         base.OnItemReduced();
     }
 
+    protected override void itemAbility()
+    {
+        base.itemAbility();
+    }
+
     public override void FixedUpdate()
     {
         base.FixedUpdate();

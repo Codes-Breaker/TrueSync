@@ -2,17 +2,27 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+[RequireComponent(typeof(SphereCollider))]
 public class ItemTrapBase : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public CharacterContorl character;
+    
+    public void Init(CharacterContorl character)
+    {
+        this.character = character;
+        gameObject.GetComponent<Collider>().isTrigger = true;
+    }
+
+
+    private void OnTriggerEnter(Collider other)
     {
         
     }
 
-    // Update is called once per frame
-    void Update()
+    public virtual void OnEnd()
     {
-        
+        Destroy(gameObject);
     }
+
 }
