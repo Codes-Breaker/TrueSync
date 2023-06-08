@@ -7,6 +7,8 @@ public class ItemAbilityBase
     public CharacterContorl character;
     public GameObject itemGameObject;
     protected ItemData itemData;
+    protected bool canUseItem;
+    protected float currentTime;
     public ItemAbilityBase(CharacterContorl character,ItemData data)
     {
         this.itemData = data;
@@ -16,6 +18,7 @@ public class ItemAbilityBase
     public virtual void Init()
     {
         EquipCharacter();
+        canUseItem = true;
     }
 
     protected virtual void EquipCharacter()
@@ -41,14 +44,35 @@ public class ItemAbilityBase
         {
             LossItemAbility();
         }
+        if(canUseItem == false)
+        {
+            currentTime += Time.deltaTime;
+            if(currentTime > itemData.CountDownTime)
+            {
+                canUseItem = true;
+            }
+        }
     }
 
     public virtual void UseItemAbility()
+    {
+        if (canUseItem == true)
+        {
+            itemAbility();
+        }
+    }
+
+    protected virtual void itemAbility()
     {
         OnItemReduced();
         if (!CheckQuantityOfItem())
         {
             End();
+        }
+        else
+        {
+            canUseItem = false;
+            currentTime = 0f;
         }
     }
 
