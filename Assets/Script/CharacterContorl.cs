@@ -263,13 +263,7 @@ public class CharacterContorl : MonoBehaviour
     private float lastSlipReadyTime = 0; //上次打滑准备的时间
 
     //buff控制相关参数
-    private bool controlStun;
-    private bool controlDeath;
-    private bool controlWalk;
-    private bool controlRun;
-    private bool controlJump;
-    private bool controlMoveAim;
-    private bool controlDamage;
+    private bool controlKeepRuning;
 
     //起身时间
     [HideInInspector]
@@ -504,6 +498,7 @@ public class CharacterContorl : MonoBehaviour
             if (buff.isEnd)
             {
                 buffs.Remove(buff);
+                SetBuffControlState();
             }
         }
     }
@@ -632,7 +627,7 @@ public class CharacterContorl : MonoBehaviour
         anima.SetFloat("Speed", runAnimCurve.Evaluate(speed));
         anima.SetFloat("playSpeed", runAnimPlayCurve.Evaluate(speed));
         anima.SetFloat("velocityY", ridbody.velocity.y);
-        anima.SetBool("Releasing", releasing);
+        anima.SetBool("Releasing", releasing||controlKeepRuning);
         anima.SetBool("isStun", isStun);
         if (isInWater && !hasInWater)
         {
@@ -781,7 +776,7 @@ public class CharacterContorl : MonoBehaviour
                 if (axisInput.magnitude > movementThrashold)
                 {
                     targetAngle = Mathf.Atan2(axisInput.x, axisInput.y) * Mathf.Rad2Deg + gameController.mainCamera.transform.eulerAngles.y;
-                    if(hasBrake)
+                    if (hasBrake)
                         transform.rotation = Quaternion.Slerp(this.ridbody.rotation, Quaternion.Euler(new Vector3(0, targetAngle, 0) + initialRotation), breakRotationRate);
                     else
                         transform.rotation = Quaternion.Slerp(this.ridbody.rotation, Quaternion.Euler(new Vector3(0, targetAngle, 0) + initialRotation), runSpeedUpRotationRate);
@@ -793,12 +788,24 @@ public class CharacterContorl : MonoBehaviour
                 if (axisInput.magnitude > movementThrashold)
                 {
                     targetAngle = Mathf.Atan2(axisInput.x, axisInput.y) * Mathf.Rad2Deg + gameController.mainCamera.transform.eulerAngles.y;
-                    if(hasBrake)
+                    if (hasBrake)
                         transform.rotation = Quaternion.Slerp(this.ridbody.rotation, Quaternion.Euler(new Vector3(0, targetAngle, 0) + initialRotation), breakRotationRate);
                     else
                         transform.rotation = Quaternion.Slerp(this.ridbody.rotation, Quaternion.Euler(new Vector3(0, targetAngle, 0) + initialRotation), runMaxSpeedRotationRate);
                 }
-               // Debug.Log($"isTouchingSlope || isGrounded {isTouchingSlope || isGrounded} velocity {ridbody.velocity} velocityMagnitude {ridbody.velocity.magnitude}");
+                // Debug.Log($"isTouchingSlope || isGrounded {isTouchingSlope || isGrounded} velocity {ridbody.velocity} velocityMagnitude {ridbody.velocity.magnitude}");
+            }
+        }
+        else if (controlKeepRuning)
+        {
+            if (axisInput.magnitude > movementThrashold)
+            {
+                CheckisDrift();
+                targetAngle = Mathf.Atan2(axisInput.x, axisInput.y) * Mathf.Rad2Deg + gameController.mainCamera.transform.eulerAngles.y;
+                if (hasBrake)
+                    transform.rotation = Quaternion.Slerp(this.ridbody.rotation, Quaternion.Euler(new Vector3(0, targetAngle, 0) + initialRotation), breakRotationRate);
+                else
+                    transform.rotation = Quaternion.Slerp(this.ridbody.rotation, Quaternion.Euler(new Vector3(0, targetAngle, 0) + initialRotation), runSpeedUpRotationRate);
             }
         }
         else
@@ -970,7 +977,7 @@ public class CharacterContorl : MonoBehaviour
 
     private void MoveCharge(bool charge)
     {
-        if (isStun || isDead || hasStunBuff())
+        if (isStun || isDead || hasStunBuff() || controlKeepRuning)
             return;
         if (charge)
         {
@@ -1146,7 +1153,17 @@ public class CharacterContorl : MonoBehaviour
 
     public void SetBuffControlState()
     {
+        if (buffs.Any(x => x is RocketThrusterBuff))
+        {
+            releasing = false;
 
+            controlKeepRuning = true;
+        }
+        else
+        {
+            controlKeepRuning = false;
+
+        }
     }
 
 
