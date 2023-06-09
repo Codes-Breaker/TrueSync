@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-
+using System.Linq;
 
 public enum ItemType
 {
@@ -22,8 +22,50 @@ public struct ItemData
     public float CountDownTime;
 }
 
-public class ItemManager
+
+
+public class ItemManager : MonoBehaviour
 {
+    public List<GameObject> itemList;
+    [Header("道具创建频率")]
+    public float itemCreateFrequency;
+    [Header("道具刷新点位父级")]
+    public GameObject itemPosition;
+    public GameController gameController;
+    private float lastSpawnTime = 0;
+    private void FixedUpdate()
+    {
+        if (gameController.startGame)
+        {
+            lastSpawnTime += Time.fixedDeltaTime;
+            if (lastSpawnTime >= itemCreateFrequency)
+            {
+                SpawnItem();
+                lastSpawnTime = 0;
+            }
+        }
+    }
+
+    private void SpawnItem()
+    {
+        var playerCount = GameObject.FindObjectsOfType<CharacterContorl>().ToList().Count;
+        var spawnCount = Mathf.Max(1, playerCount / 2);
+        var points = new List<Vector3>();
+        for(int i = 0; i < itemPosition.transform.childCount; i++)
+        {
+            points.Add(itemPosition.transform.GetChild(i).position);
+        }
+
+        for (int i = 0; i < spawnCount; i++)
+        {
+            var rollIndex = UnityEngine.Random.Range(0, points.Count);
+            var position = points[rollIndex];
+            points.RemoveAt(rollIndex);
+            var rollItemIndex = UnityEngine.Random.Range(0, itemList.Count);
+            Instantiate(itemList[rollItemIndex], position, Quaternion.identity);
+        }
+    }
+
     public static ItemAbilityBase CreatItemAbilityByItemData(ItemData itemData,CharacterContorl character)
     {
         switch(itemData.itemType)
@@ -68,7 +110,6 @@ public class ItemManager
                 Debug.LogError("没有找到对应ID");
                 return null;
         }
-
     }
 
 }

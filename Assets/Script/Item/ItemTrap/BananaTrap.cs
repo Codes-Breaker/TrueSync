@@ -9,6 +9,12 @@ public class BananaTrap : ItemTrapBase
     private float stunTime = 2f;
     private float rollTimes = 3;
 
+    public override void Init(CharacterContorl character)
+    {
+        base.Init(character);
+        character.currentStamina = character.maxActorStamina;
+    }
+
     private void OnTriggerEnter(Collider collision)
     {
         var otherCollision = collision.gameObject.GetComponent<CharacterContorl>();
