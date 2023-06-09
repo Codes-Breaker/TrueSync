@@ -194,7 +194,7 @@ public class CharacterContorl : MonoBehaviour
     public float currentStunValue;
     public float currentHPValue;
     private float lastHPValue;
-    private float maxActorStamina = 100;
+    public float maxActorStamina = 100;
     [HideInInspector]
     public float currentStamina;
     [HideInInspector]
