@@ -4,6 +4,7 @@ using UnityEngine;
 
 
 [RequireComponent(typeof(SphereCollider))]
+[RequireComponent(typeof(Rigidbody))]
 public class ItemTrapBase : MonoBehaviour
 {
     public CharacterContorl character;

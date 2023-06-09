@@ -1734,7 +1734,7 @@ public class CharacterContorl : MonoBehaviour
                 forceData = KnockBackForce(targetDistance, hitDir);
             else
                 forceData = KnockBackOnAirForce(targetDistance, hitDir);
-           
+            //anima.SetBool("isHit", true);
             if (myHitKnockback > 1 || otherHitKnockback > 1)
             {
                 anima.SetBool("isHit", true);
