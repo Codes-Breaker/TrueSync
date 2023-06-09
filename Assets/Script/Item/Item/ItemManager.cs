@@ -49,7 +49,7 @@ public class ItemManager : MonoBehaviour
     private void SpawnItem()
     {
         var playerCount = GameObject.FindObjectsOfType<CharacterContorl>().ToList().Count;
-        var spawnCount = Mathf.Max(1, playerCount / 2);
+        var spawnCount = Mathf.Max(1, Mathf.Ceil(playerCount / 2));
         var points = new List<Vector3>();
         for(int i = 0; i < itemPosition.transform.childCount; i++)
         {
