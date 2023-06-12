@@ -157,7 +157,12 @@ public class CharacterContorl : MonoBehaviour
     public SimpleFloatingObject floatObj;
     public GrounderQuadruped grounderQuadruped;
     public RagdollActivator ragdollController;
+    [Header("背部挂点")]
     public Transform itemPlace;
+    [Header("头部挂点")]
+    public Transform itemPlaceHead;
+    [Header("尾巴挂点")]
+    public Transform itemPlaceTail;
     private Vector2 axisInput;
     public GameObject playerIndicator;
     public TMPro.TMP_Text playerIndexText;
