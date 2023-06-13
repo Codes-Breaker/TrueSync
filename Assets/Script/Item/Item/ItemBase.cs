@@ -14,9 +14,11 @@ public class ItemBase : MonoBehaviour
     public ItemData itemData;
 
     private GameObject itemGameObject;
-
+    private float lastTime;
+    private float maxTime = 30;
     private void Start()
     {
+        lastTime = 0;
         Init();
     }
 
@@ -86,7 +88,16 @@ public class ItemBase : MonoBehaviour
         }
     }
 
- 
+    private void FixedUpdate()
+    {
+        lastTime += Time.fixedDeltaTime;
+        if (lastTime > maxTime)
+        {
+            this.OnEnd();
+        }
+    }
+
+
 
     public virtual void OnEnd()
     {

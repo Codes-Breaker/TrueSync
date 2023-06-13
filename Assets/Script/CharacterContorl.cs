@@ -194,7 +194,7 @@ public class CharacterContorl : MonoBehaviour
     public float currentStunValue;
     public float currentHPValue;
     private float lastHPValue;
-    private float maxActorStamina = 100;
+    public float maxActorStamina = 100;
     [HideInInspector]
     public float currentStamina;
     [HideInInspector]
@@ -1734,7 +1734,7 @@ public class CharacterContorl : MonoBehaviour
                 forceData = KnockBackForce(targetDistance, hitDir);
             else
                 forceData = KnockBackOnAirForce(targetDistance, hitDir);
-           
+            //anima.SetBool("isHit", true);
             if (myHitKnockback > 1 || otherHitKnockback > 1)
             {
                 anima.SetBool("isHit", true);
