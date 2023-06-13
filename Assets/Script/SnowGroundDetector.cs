@@ -12,7 +12,7 @@ public class SnowGroundDetector : MonoBehaviour
 
     private void LateUpdate()
     {
-        this.transform.position = targetTransform.position;   
+        this.transform.position = targetTransform.position;
     }
 
     private void OnTriggerEnter(Collider other)
