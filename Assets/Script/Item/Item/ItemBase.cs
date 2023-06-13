@@ -91,7 +91,7 @@ public class ItemBase : MonoBehaviour
     private void FixedUpdate()
     {
         lastTime += Time.fixedDeltaTime;
-        if (lastTime > maxTime)
+        if (lastTime > maxTime && maxTime != -1)
         {
             this.OnEnd();
         }

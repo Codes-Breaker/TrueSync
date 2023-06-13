@@ -27,8 +27,8 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BaseMap:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
+        m_Texture: {fileID: 10309, guid: 0000000000000000f000000000000000, type: 0}
+        m_Scale: {x: 10, y: 10}
         m_Offset: {x: 0, y: 0}
     - _BumpMap:
         m_Texture: {fileID: 0}
@@ -58,6 +58,10 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _FurMap:
+        m_Texture: {fileID: 2800000, guid: c22fc16178bfeb94cb1b5985380c4287, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _Illum:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -70,11 +74,19 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _NormalMap:
+        m_Texture: {fileID: 2800000, guid: 376acec26d7e74a40b4b2bda2b456a37, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _OcclusionMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _ParallaxMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Ramp:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -105,6 +117,7 @@ Material:
     - _AlphaClip: 0
     - _AlphaClipping: 0
     - _AlphaCutoff: 0.5
+    - _AlphaCutout: 0.172
     - _Blend: 0
     - _BlendDst: 0
     - _BlendOp: 0
@@ -125,6 +138,7 @@ Material:
     - _Contrast: 1
     - _Cull: 2
     - _Cutoff: 0.5
+    - _Damper: 1
     - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1
     - _Dissolve: 0
@@ -142,14 +156,22 @@ Material:
     - _Flipbook: 0
     - _FlipbookBlending: 0
     - _FlipbookMode: 0
+    - _FurJoint: 3
+    - _FurLength: 0.3
+    - _FurScale: 7.8
     - _GlossMapScale: 1
     - _Glossiness: 0
     - _GlossyReflections: 1
+    - _Gravity: -2
     - _H: 0
     - _Initialized: 0
     - _InputTab: 1
     - _Metallic: 0
     - _Mode: 0
+    - _MoveScale: 1
+    - _NormalFactor: 0
+    - _NormalScale: 0.22
+    - _Occlusion: 0.4
     - _OcclusionStrength: 1
     - _OptionsTab: 1
     - _Parallax: 0.02
@@ -157,13 +179,19 @@ Material:
     - _PlayHurt: 1
     - _QueueControl: 0
     - _QueueOffset: 0
+    - _RandomDirection: 0.3
     - _ReceiveShadows: 1
     - _RenderFace: 2
     - _RenderPriority: 0
+    - _RimLightIntensity: 0.82
+    - _RimLightPower: 6
     - _S: 0
     - _Saturation: 1
+    - _ShadowExtraBias: -0.3
+    - _ShellAmount: 14
+    - _ShellStep: 0.004
     - _Shininess: 0.7
-    - _Smoothness: 0
+    - _Smoothness: 0.186
     - _SmoothnessSource: 0
     - _SmoothnessTextureChannel: 0
     - _SoftFade: 0
@@ -174,6 +202,7 @@ Material:
     - _SoftParticlesNearFadeDistance: 0
     - _SpecularHighlights: 1
     - _Speed: 5
+    - _Spring: 5
     - _SrcBlend: 1
     - _Stencil: 1
     - _StencilComp: 8
@@ -185,6 +214,9 @@ Material:
     - _StencilZFail: 0
     - _StylizeTab: 1
     - _Surface: 0
+    - _TessFactor: 4
+    - _TessMaxDist: 10
+    - _TessMinDist: 1
     - _Threshold: 1
     - _TintAmount: 0
     - _TinyAmount: 0
@@ -199,10 +231,12 @@ Material:
     m_Colors:
     - _AddColor: {r: 1, g: 1, b: 1, a: 0}
     - _AlbedoColor: {r: 1, g: 1, b: 1, a: 1}
-    - _BaseColor: {r: 0.7075472, g: 0.67083484, b: 0.67083484, a: 1}
+    - _AmbientColor: {r: 0.2830189, g: 0.2830189, b: 0.2830189, a: 1}
+    - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _BaseColorAddSubDiff: {r: -1, g: 1, b: 0, a: 0}
+    - _BaseMove: {r: 0, g: -0.3, b: 0, a: 3}
     - _CameraFadeParams: {r: 0, g: 0, b: 0, a: 0}
-    - _Color: {r: 0.7058824, g: 0.67058825, b: 0.67058825, a: 1}
+    - _Color: {r: 0.7075472, g: 0.67083484, b: 0.67083484, a: 1}
     - _DissolveBorderColor: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0.09433961, g: 0.08677464, b: 0.08677464, a: 1}
     - _HurtColor: {r: 1, g: 0, b: 0, a: 1}
@@ -210,6 +244,8 @@ Material:
     - _SoftParticleFadeParams: {r: 0, g: 0, b: 0, a: 0}
     - _SpecColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
     - _VertexAnimationFrequency: {r: 2.5, g: 2.5, b: 2.5, a: 1}
+    - _WindFreq: {r: 0.5, g: 0.7, b: 0.9, a: 1}
+    - _WindMove: {r: 0.2, g: 0.3, b: 0.2, a: 1}
   m_BuildTextureStacks: []
 --- !u!114 &4864387892622833729
 MonoBehaviour:
