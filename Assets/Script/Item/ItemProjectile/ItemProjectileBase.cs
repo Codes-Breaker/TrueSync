@@ -28,9 +28,9 @@ public class ItemProjectileBase : MonoBehaviour
         Launch();
     }
 
-    private void OnTriggerEnter(Collider other)
+    protected virtual void OnCollisionEnter(Collision collision)
     {
-
+        
     }
 
     protected virtual void FixedUpdate()
