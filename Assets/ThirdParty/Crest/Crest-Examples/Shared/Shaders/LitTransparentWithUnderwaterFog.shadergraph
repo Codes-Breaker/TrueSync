@@ -1,5 +1,5 @@
 {
-    "m_SGVersion": 2,
+    "m_SGVersion": 3,
     "m_Type": "UnityEditor.ShaderGraph.GraphData",
     "m_ObjectId": "77b93ca863c44080ba2f091210db9439",
     "m_Properties": [
@@ -37,6 +37,12 @@
         },
         {
             "m_Id": "83cd042d69a54f38ace7be44a9a82d01"
+        }
+    ],
+    "m_Dropdowns": [],
+    "m_CategoryData": [
+        {
+            "m_Id": "58113014b2f84a01960d81ea83691c52"
         }
     ],
     "m_Nodes": [
@@ -369,10 +375,11 @@
         "serializedMesh": {
             "m_SerializedMesh": "{\"mesh\":{\"instanceID\":0}}",
             "m_Guid": ""
-        }
+        },
+        "preventRotation": false
     },
     "m_Path": "Crest/Examples/Graphs",
-    "m_ConcretePrecision": 0,
+    "m_GraphPrecision": 0,
     "m_PreviewMode": 2,
     "m_OutputNode": {
         "m_Id": ""
@@ -491,12 +498,17 @@
         "m_GuidSerialized": "47b23a92-776b-4d28-b5d2-21b143bf2855"
     },
     "m_Name": "Subsurface Scattering",
+    "m_DefaultRefNameVersion": 0,
+    "m_RefNameGeneratedByDisplayName": "",
     "m_DefaultReferenceName": "BOOLEAN_0D9957AF77CB4F4C9A3E85FAF4F69D87_ON",
     "m_OverrideReferenceName": "CREST_SUBSURFACESCATTERING_ON",
     "m_GeneratePropertyBlock": false,
+    "m_UseCustomSlotLabel": false,
+    "m_CustomSlotLabel": "",
     "m_KeywordType": 0,
     "m_KeywordDefinition": 1,
     "m_KeywordScope": 1,
+    "m_KeywordStages": 63,
     "m_Entries": [],
     "m_Value": 0,
     "m_IsEditable": true
@@ -593,7 +605,8 @@
         "m_SerializableColors": []
     },
     "m_TextureType": 0,
-    "m_NormalMapSpace": 0
+    "m_NormalMapSpace": 0,
+    "m_EnableGlobalMipBias": true
 }
 
 {
@@ -622,17 +635,23 @@
 }
 
 {
-    "m_SGVersion": 0,
+    "m_SGVersion": 1,
     "m_Type": "UnityEditor.Rendering.Universal.ShaderGraph.UniversalTarget",
     "m_ObjectId": "20a8d339cd9a4f5e9a3d5bbcc16ad1ef",
     "m_ActiveSubTarget": {
         "m_Id": "46c9eb1bb7a8423c8ddce6db7861b685"
     },
+    "m_AllowMaterialOverride": false,
     "m_SurfaceType": 1,
+    "m_ZTestMode": 4,
+    "m_ZWriteControl": 0,
     "m_AlphaMode": 0,
-    "m_TwoSided": false,
+    "m_RenderFace": 2,
     "m_AlphaClip": true,
-    "m_CustomEditorGUI": ""
+    "m_CastShadows": true,
+    "m_ReceiveShadows": true,
+    "m_CustomEditorGUI": "",
+    "m_SupportVFX": false
 }
 
 {
@@ -741,9 +760,13 @@
         "m_GuidSerialized": "1c0f445e-bb23-4730-b082-7fc62f6eada0"
     },
     "m_Name": "Color",
+    "m_DefaultRefNameVersion": 0,
+    "m_RefNameGeneratedByDisplayName": "",
     "m_DefaultReferenceName": "Color_26d3a1b07da242c89a8bb81f4b57963b",
     "m_OverrideReferenceName": "",
     "m_GeneratePropertyBlock": true,
+    "m_UseCustomSlotLabel": false,
+    "m_CustomSlotLabel": "",
     "m_Precision": 0,
     "overrideHLSLDeclaration": false,
     "hlslDeclarationOverride": 0,
@@ -754,6 +777,7 @@
         "b": 1.0,
         "a": 1.0
     },
+    "isMainColor": false,
     "m_ColorMode": 0
 }
 
@@ -765,12 +789,17 @@
         "m_GuidSerialized": "80db6caf-d908-461a-9df8-8ac0d0722b3b"
     },
     "m_Name": "Shadows",
+    "m_DefaultRefNameVersion": 0,
+    "m_RefNameGeneratedByDisplayName": "",
     "m_DefaultReferenceName": "BOOLEAN_323EAB123FB5484196490D6131A33653_ON",
     "m_OverrideReferenceName": "CREST_SHADOWS_ON",
     "m_GeneratePropertyBlock": false,
+    "m_UseCustomSlotLabel": false,
+    "m_CustomSlotLabel": "",
     "m_KeywordType": 0,
     "m_KeywordDefinition": 1,
     "m_KeywordScope": 1,
+    "m_KeywordStages": 63,
     "m_Entries": [],
     "m_Value": 0,
     "m_IsEditable": true
@@ -1192,7 +1221,9 @@
         -1572777087,
         -1369348368,
         -1355498184
-    ]
+    ],
+    "m_Dropdowns": [],
+    "m_DropdownSelectedEntries": []
 }
 
 {
@@ -1277,6 +1308,48 @@
 }
 
 {
+    "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.CategoryData",
+    "m_ObjectId": "58113014b2f84a01960d81ea83691c52",
+    "m_Name": "",
+    "m_ChildObjectList": [
+        {
+            "m_Id": "b7cc6597ca054815b5007f535ef425a0"
+        },
+        {
+            "m_Id": "26d3a1b07da242c89a8bb81f4b57963b"
+        },
+        {
+            "m_Id": "c947370f755146ff9b086da67bd8cf4c"
+        },
+        {
+            "m_Id": "d0d87ff9b1994eaa8815d53a8450f60c"
+        },
+        {
+            "m_Id": "60ece234301b47f2a02c0f54620c4d7d"
+        },
+        {
+            "m_Id": "d320589594e3441083343ac6feef4643"
+        },
+        {
+            "m_Id": "6c6f39429b484254b23639491fed5936"
+        },
+        {
+            "m_Id": "0d9957af77cb4f4c9a3e85faf4f69d87"
+        },
+        {
+            "m_Id": "323eab123fb5484196490d6131a33653"
+        },
+        {
+            "m_Id": "6a2d30557cf5488d9cf3ec9debd60d77"
+        },
+        {
+            "m_Id": "83cd042d69a54f38ace7be44a9a82d01"
+        }
+    ]
+}
+
+{
     "m_SGVersion": 1,
     "m_Type": "UnityEditor.ShaderGraph.Internal.Vector1ShaderProperty",
     "m_ObjectId": "60ece234301b47f2a02c0f54620c4d7d",
@@ -1284,9 +1357,13 @@
         "m_GuidSerialized": "5797c10d-ffea-4b59-bc04-bc2e1ea01c6e"
     },
     "m_Name": "Smoothness",
+    "m_DefaultRefNameVersion": 0,
+    "m_RefNameGeneratedByDisplayName": "",
     "m_DefaultReferenceName": "Vector1_60ece234301b47f2a02c0f54620c4d7d",
     "m_OverrideReferenceName": "",
     "m_GeneratePropertyBlock": true,
+    "m_UseCustomSlotLabel": false,
+    "m_CustomSlotLabel": "",
     "m_Precision": 0,
     "overrideHLSLDeclaration": false,
     "hlslDeclarationOverride": 0,
@@ -1331,12 +1408,17 @@
         "m_GuidSerialized": "b621cba2-2704-4bca-ae65-d1415a4a64f3"
     },
     "m_Name": "Portals And Volumes",
+    "m_DefaultRefNameVersion": 0,
+    "m_RefNameGeneratedByDisplayName": "",
     "m_DefaultReferenceName": "ENUM_6A2D30557CF5488D9CF3EC9DEBD60D77",
     "m_OverrideReferenceName": "CREST_WATER_VOLUME",
     "m_GeneratePropertyBlock": false,
+    "m_UseCustomSlotLabel": false,
+    "m_CustomSlotLabel": "",
     "m_KeywordType": 1,
     "m_KeywordDefinition": 1,
     "m_KeywordScope": 1,
+    "m_KeywordStages": 63,
     "m_Entries": [
         {
             "id": 1,
@@ -1391,9 +1473,13 @@
         "m_GuidSerialized": "4014c165-a170-4d3e-b0dc-ce88ef2f61d5"
     },
     "m_Name": "Metallic",
+    "m_DefaultRefNameVersion": 0,
+    "m_RefNameGeneratedByDisplayName": "",
     "m_DefaultReferenceName": "Vector1_6c6f39429b484254b23639491fed5936",
     "m_OverrideReferenceName": "",
     "m_GeneratePropertyBlock": true,
+    "m_UseCustomSlotLabel": false,
+    "m_CustomSlotLabel": "",
     "m_Precision": 0,
     "overrideHLSLDeclaration": false,
     "hlslDeclarationOverride": 0,
@@ -1576,12 +1662,17 @@
         "m_GuidSerialized": "2859d637-d5e5-44ce-9e07-1f15eea49b6a"
     },
     "m_Name": "Underwater Pass",
+    "m_DefaultRefNameVersion": 0,
+    "m_RefNameGeneratedByDisplayName": "",
     "m_DefaultReferenceName": "BOOLEAN_83CD042D69A54F38ACE7BE44A9A82D01_ON",
     "m_OverrideReferenceName": "CREST_UNDERWATER_OBJECTS_PASS",
     "m_GeneratePropertyBlock": false,
+    "m_UseCustomSlotLabel": false,
+    "m_CustomSlotLabel": "",
     "m_KeywordType": 0,
     "m_KeywordDefinition": 1,
     "m_KeywordScope": 1,
+    "m_KeywordStages": 63,
     "m_Entries": [],
     "m_Value": 0,
     "m_IsEditable": true
@@ -2029,9 +2120,13 @@
         "m_GuidSerialized": "7f510a2d-c7af-40d1-bd55-d0400fad10fc"
     },
     "m_Name": "Albedo",
+    "m_DefaultRefNameVersion": 0,
+    "m_RefNameGeneratedByDisplayName": "",
     "m_DefaultReferenceName": "Texture2D_b7cc6597ca054815b5007f535ef425a0",
     "m_OverrideReferenceName": "",
     "m_GeneratePropertyBlock": true,
+    "m_UseCustomSlotLabel": false,
+    "m_CustomSlotLabel": "",
     "m_Precision": 0,
     "overrideHLSLDeclaration": false,
     "hlslDeclarationOverride": 0,
@@ -2040,6 +2135,8 @@
         "m_SerializedTexture": "{\"texture\":{\"fileID\":2800000,\"guid\":\"d254fdcebc9d1ce45a2d81cb7928a699\",\"type\":3}}",
         "m_Guid": ""
     },
+    "isMainTexture": false,
+    "useTilingAndOffset": false,
     "m_Modifiable": true,
     "m_DefaultType": 0
 }
@@ -2188,9 +2285,13 @@
         "m_GuidSerialized": "64b96dd4-1b9b-4fbc-90a3-8eb9f2f48f2e"
     },
     "m_Name": "Emission",
+    "m_DefaultRefNameVersion": 0,
+    "m_RefNameGeneratedByDisplayName": "",
     "m_DefaultReferenceName": "Color_c947370f755146ff9b086da67bd8cf4c",
     "m_OverrideReferenceName": "",
     "m_GeneratePropertyBlock": true,
+    "m_UseCustomSlotLabel": false,
+    "m_CustomSlotLabel": "",
     "m_Precision": 0,
     "overrideHLSLDeclaration": false,
     "hlslDeclarationOverride": 0,
@@ -2201,6 +2302,7 @@
         "b": 0.0,
         "a": 0.0
     },
+    "isMainColor": false,
     "m_ColorMode": 1
 }
 
@@ -2212,9 +2314,13 @@
         "m_GuidSerialized": "c007e707-3261-4869-a9ae-fe42a98bbb06"
     },
     "m_Name": "Underwater Fog Multiplier",
+    "m_DefaultRefNameVersion": 0,
+    "m_RefNameGeneratedByDisplayName": "",
     "m_DefaultReferenceName": "Vector1_d0d87ff9b1994eaa8815d53a8450f60c",
     "m_OverrideReferenceName": "",
     "m_GeneratePropertyBlock": true,
+    "m_UseCustomSlotLabel": false,
+    "m_CustomSlotLabel": "",
     "m_Precision": 0,
     "overrideHLSLDeclaration": false,
     "hlslDeclarationOverride": 0,
@@ -2250,9 +2356,13 @@
         "m_GuidSerialized": "3bc308dd-40f1-4d80-9a07-8601d3b3b5f4"
     },
     "m_Name": "Occlusion",
+    "m_DefaultRefNameVersion": 0,
+    "m_RefNameGeneratedByDisplayName": "",
     "m_DefaultReferenceName": "Vector1_d320589594e3441083343ac6feef4643",
     "m_OverrideReferenceName": "",
     "m_GeneratePropertyBlock": true,
+    "m_UseCustomSlotLabel": false,
+    "m_CustomSlotLabel": "",
     "m_Precision": 0,
     "overrideHLSLDeclaration": false,
     "hlslDeclarationOverride": 0,
