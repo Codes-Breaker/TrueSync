@@ -56,7 +56,7 @@ public class ItemManager
 
     }
 
-    public static GameObject CreatTrapItemByItemId(float itemID, CharacterContorl character)
+    public static GameObject CreatTrapItemByItemID(float itemID, CharacterContorl character)
     {
         switch (itemID)
         {
@@ -69,6 +69,20 @@ public class ItemManager
                 return null;
         }
 
+    }
+
+    public static GameObject CreatProjectileByItemID(float itemID, CharacterContorl character ,Vector3 project)
+    {
+        switch (itemID)
+        {
+            case 4:
+                var trapGameObject = GameObject.Instantiate(Resources.Load<GameObject>("Prefabs/Item/ItemProjectile/StickyBombProjectile"));
+                trapGameObject.GetComponent<ItemProjectileBase>().Init(character,project);
+                return trapGameObject;
+            default:
+                Debug.LogError("没有找到对应ID");
+                return null;
+        }
     }
 
 }
