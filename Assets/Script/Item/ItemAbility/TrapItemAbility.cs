@@ -6,7 +6,7 @@ public class TrapItemAbility : ItemAbilityBase
 {
 
     //向后扔道具的位置偏移
-    protected float offset = 2f;
+    protected float offset = 1f;
     public TrapItemAbility(CharacterContorl character, ItemData data) : base(character, data)
     {
     }
@@ -25,7 +25,8 @@ public class TrapItemAbility : ItemAbilityBase
     {
         var trapObject = ItemManager.CreatTrapItemByItemID(itemData.itemId, character);
         var point = (character.transform.position + (character.bodyCollider as SphereCollider).center) - (character.ridbody.transform.forward.normalized * (character.bodyCollider as SphereCollider).radius * character.transform.localScale.x + character.ridbody.transform.forward.normalized * offset);
-        trapObject.transform.position = new Vector3(point.x, point.y - (character.bodyCollider as SphereCollider).radius * character.transform.localScale.x,point.z);
+        //trapObject.transform.position = new Vector3(point.x, point.y - (character.bodyCollider as SphereCollider).radius * character.transform.localScale.x,point.z);
+        trapObject.transform.position = point;
         base.itemAbility();
     }
 
