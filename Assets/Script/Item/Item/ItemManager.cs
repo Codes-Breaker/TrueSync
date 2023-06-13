@@ -89,6 +89,8 @@ public class ItemManager : MonoBehaviour
                 return new RocketThrusterBuff(character);
             case 2:
                 return new LargementPotionBuff(character);
+            case 4:
+                return new StickyBombBuff(character);
             default:
                 UnityEngine.Debug.LogError("没有找到对应ID");
                 return null;
@@ -103,9 +105,13 @@ public class ItemManager : MonoBehaviour
         switch (itemID)
         {
             case 3:
-                var trapGameObject = GameObject.Instantiate(Resources.Load<GameObject>("Prefabs/Item/ItemTrap/BananaTrap"));
-                trapGameObject.GetComponent<ItemTrapBase>().Init(character);
-                return trapGameObject;
+                var bananaTrap = GameObject.Instantiate(Resources.Load<GameObject>("Prefabs/Item/ItemTrap/BananaTrap"));
+                bananaTrap.GetComponent<ItemTrapBase>().Init(character);
+                return bananaTrap;
+            case 4:
+                var stickyBombTrap = GameObject.Instantiate(Resources.Load<GameObject>("Prefabs/Item/ItemTrap/StickyBombTrap"));
+                stickyBombTrap.GetComponent<ItemTrapBase>().Init(character);
+                return stickyBombTrap;
             default:
                 Debug.LogError("没有找到对应ID");
                 return null;
