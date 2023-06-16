@@ -1,9 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Obi;
 
 public class ItemBuffBase : Buff
 {
+
+    public ObiParticleAttachment startPoint;
+    public ObiParticleAttachment endPoint;
     public ItemBuffBase(CharacterContorl target) : base(target)
     {
 
