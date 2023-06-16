@@ -26,10 +26,10 @@ public class ProjectileItemAbility : ItemAbilityBase
 
     protected override void itemAbility()
     {
-        var trapObject = ItemManager.CreatProjectileByItemID(itemData.itemId, character,character.ridbody.transform.forward);
         var point = (character.transform.position + (character.bodyCollider as SphereCollider).center) + (character.ridbody.transform.forward.normalized * (character.bodyCollider as SphereCollider).radius * character.transform.localScale.x + character.ridbody.transform.forward.normalized * offset);
         //trapObject.transform.position = new Vector3(point.x, point.y - (character.bodyCollider as SphereCollider).radius * character.transform.localScale.x, point.z);
-        trapObject.transform.position = point;
+        ItemManager.CreatProjectileByItemID(itemData.itemId, character,character.ridbody.transform.forward,point);
+
         base.itemAbility();
     }
 
