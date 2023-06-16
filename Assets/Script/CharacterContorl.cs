@@ -156,6 +156,7 @@ public class CharacterContorl : MonoBehaviour
     public ParticleSystem particle;
     public SimpleFloatingObject floatObj;
     public GrounderQuadruped grounderQuadruped;
+    public LookAtIK lookAtIK;
     public RagdollActivator ragdollController;
     [Header("背部挂点")]
     public Transform itemPlace;
@@ -163,6 +164,8 @@ public class CharacterContorl : MonoBehaviour
     public Transform itemPlaceHead;
     [Header("尾巴挂点")]
     public Transform itemPlaceTail;
+    [Header("腰部挂点")]
+    public Transform itemPlaceBelly;
     private Vector2 axisInput;
     public GameObject playerIndicator;
     public TMPro.TMP_Text playerIndexText;
@@ -248,6 +251,8 @@ public class CharacterContorl : MonoBehaviour
 
     public bool isInWater = false;
     private bool hasInWater = false;
+
+    public bool isInRocket = false;
 
     //刹车时的朝向
     private Vector3 initialBrakeTarget = Vector3.zero;
@@ -335,9 +340,16 @@ public class CharacterContorl : MonoBehaviour
     public int slipProtectFrame = 3;
     private float slipProtectTime;
     private bool canSlip = false;
-   
+
+    public RangeDector rangeDector;
+    private CharacterContorl lastSeenTarget;
+
+    private List<SnowGroundDetector> snowDectors;
+
+    public AnimationEventReceiver animationEventReceiver;
     private void Awake()
     {
+        snowDectors = GetComponentsInChildren<SnowGroundDetector>().ToList();
         speedUpGas = maxSpeedUpGas;
         currentStunValue = maxStunValue;
         currentHPValue = maxHPValue;
@@ -365,7 +377,7 @@ public class CharacterContorl : MonoBehaviour
     {
         this.ridbody.useGravity = false;
         currentStamina = maxActorStamina;
-        if(inputReader != null)
+        if (inputReader != null)
             SetControlSelf();
         SetRingColor();
 
@@ -643,7 +655,7 @@ public class CharacterContorl : MonoBehaviour
         anima.SetFloat("velocityY", ridbody.velocity.y);
         anima.SetBool("Releasing", releasing||controlKeepRuning);
         anima.SetBool("isStun", isStun);
-        if (isInWater && !hasInWater)
+        if (isInWater && !hasInWater && !isInRocket)
         {
             anima.SetTrigger("isInWater");
             hasInWater = true;
@@ -927,7 +939,7 @@ public class CharacterContorl : MonoBehaviour
         if (isDead)
             return;
 
-        if (hasStunBuff())
+        if (hasStunBuff() || isInRocket)
             return;
         if (isJumpFrequency)
             lastJumpLandTime += Time.deltaTime;
@@ -983,7 +995,7 @@ public class CharacterContorl : MonoBehaviour
 
     private void UseItem(bool isUse)
     {
-        if(isUse && itemAbility != null)
+        if(isUse && itemAbility != null && !hasStunBuff())
         {
             itemAbility.UseItemAbility();
         }
@@ -1092,6 +1104,14 @@ public class CharacterContorl : MonoBehaviour
         rendererBlock.SetFloat("_H", H);
         rendererBlock.SetFloat("_S", S);
         skinnedMeshRenderer.SetPropertyBlock(rendererBlock, 1);
+    }
+
+    public void SetSnowCollider()
+    {
+        foreach(var collider in snowDectors)
+        {
+            collider.SetActive(!isInRocket);
+        }
     }
 
     private void MoveRoll()
@@ -1262,9 +1282,48 @@ public class CharacterContorl : MonoBehaviour
         if (isDead)
         {
             grounderQuadruped.weight = 0;
+            lookAtIK.solver.IKPositionWeight = 0;
             return;
         }
         var targetIK = isStun ? 0 : 1;
+
+        var targetAIMIK = 0;
+
+        if (rangeDector.closeTargets.Count > 0 && rangeDector.closeTargets.FirstOrDefault( x => !x.isDead ) != null)
+        {
+            lastSeenTarget = rangeDector.closeTargets.FirstOrDefault(x => !x.isDead);
+        }
+        else
+        {
+            lastSeenTarget = null;
+        }
+
+        if (lastSeenTarget != null)
+        {
+            lookAtIK.solver.target = lastSeenTarget.transform;
+            targetAIMIK = 1;
+        }
+
+        if (lastSeenTarget == null)
+        {
+            targetAIMIK = 0;
+        }
+
+        if (lookAtIK.solver.IKPositionWeight != targetAIMIK)
+        {
+            var speed = Time.deltaTime;
+            if (targetAIMIK > lookAtIK.solver.IKPositionWeight)
+            {
+                lookAtIK.solver.IKPositionWeight += speed;
+                lookAtIK.solver.IKPositionWeight = Mathf.Min(1, lookAtIK.solver.IKPositionWeight);
+            }
+            else
+            {
+                lookAtIK.solver.IKPositionWeight -= speed;
+                lookAtIK.solver.IKPositionWeight = Mathf.Max(0, lookAtIK.solver.IKPositionWeight);
+            }
+        }
+
 
         if (grounderQuadruped.weight != targetIK)
         {
@@ -1340,6 +1399,7 @@ public class CharacterContorl : MonoBehaviour
 
     #endregion
     #region SetUI
+
     private void SetSlider()
     {
         if (!gameController.debug)
@@ -1671,12 +1731,14 @@ public class CharacterContorl : MonoBehaviour
         //撞击角色处理
         if (collision.gameObject.GetComponent<CharacterContorl>())
         {
+
             isCollidingCharacter = true;
             //特效
             var eventObjectPrefab = Resources.Load<GameObject>("MediumHit");
             var eventObjectGameObject = Instantiate(eventObjectPrefab, collision.contacts[0].point, Quaternion.Euler(new Vector3(0, 0, 0)));
 
             var otherCollision = collision.gameObject.GetComponent<CharacterContorl>();
+
             //自身速度
             Vector3 velocitySelf = new Vector3(velocityBeforeCollision.x, velocityBeforeCollision.y, velocityBeforeCollision.z);
             velocitySelf = Vector3.ProjectOnPlane(velocitySelf, groundNormal).normalized * velocitySelf.magnitude;
