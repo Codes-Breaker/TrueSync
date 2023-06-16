@@ -29,7 +29,7 @@ public class LargementPotionBuff : ItemBuffBase
 
     public override void OnBuffApply()
     {
-        character.transform.DOScale(new Vector3(character.transform.localScale.x * scaleParameter, character.transform.localScale.y * scaleParameter, character.transform.localScale.z * scaleParameter), 0.5f).SetEase(Ease.OutBounce);
+        character.transform.DOScale(new Vector3(character.transform.localScale.x * scaleParameter, character.transform.localScale.y * scaleParameter, character.transform.localScale.z * scaleParameter), 0.5f).SetEase(Ease.OutElastic);
         //character.transform.localScale = new Vector3(character.transform.localScale.x * scaleParameter, character.transform.localScale.y * scaleParameter, character.transform.localScale.z * scaleParameter);
         character.hitKnockBackToOtherArgument = character.hitKnockBackToOtherArgument * hitKnockBackToOhterArgument;
         character.hitKnockbackToSelfArgument = character.hitKnockbackToSelfArgument * hitKnockBackToSelfArgument;
@@ -43,7 +43,7 @@ public class LargementPotionBuff : ItemBuffBase
 
     public override void OnBuffRemove()
     {
-        character.transform.DOScale(new Vector3(character.transform.localScale.x / scaleParameter, character.transform.localScale.y / scaleParameter, character.transform.localScale.z / scaleParameter), 0.5f).SetEase(Ease.OutBounce);
+        character.transform.DOScale(new Vector3(character.transform.localScale.x / scaleParameter, character.transform.localScale.y / scaleParameter, character.transform.localScale.z / scaleParameter), 0.25f).SetEase(Ease.OutBounce);
         //character.transform.localScale = new Vector3(character.transform.localScale.x / scaleParameter, character.transform.localScale.y / scaleParameter, character.transform.localScale.z / scaleParameter);
         character.hitKnockBackToOtherArgument = character.hitKnockBackToOtherArgument / hitKnockBackToOhterArgument;
         character.hitKnockbackToSelfArgument = character.hitKnockbackToSelfArgument / hitKnockBackToSelfArgument;

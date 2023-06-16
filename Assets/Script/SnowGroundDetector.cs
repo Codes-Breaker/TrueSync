@@ -9,6 +9,14 @@ public class SnowGroundDetector : MonoBehaviour
     public LayerMask GroundMask;
     public ParticleSystem particleEffect;
     public Transform targetTransform;
+    private bool isActive = true;
+
+    public void SetActive(bool setActive)
+    {
+        isActive = setActive;
+        if (!isActive)
+            particleEffect.Stop();
+    }
 
     private void LateUpdate()
     {
@@ -17,12 +25,13 @@ public class SnowGroundDetector : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        particleEffect.Play();
+        if (isActive)
+            particleEffect.Play();
     }
 
     private void OnTriggerStay(Collider other)
     {
-        if (particleEffect.isStopped)
+        if (particleEffect.isStopped && isActive)
             particleEffect.Play();
     }
 

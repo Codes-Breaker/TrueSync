@@ -9,7 +9,7 @@ public class RocketThrusterBuff : ItemBuffBase
     //推进最大速度
     private float runMaxVelocity = 12f;
 
-
+    GameObject rocket;
     public RocketThrusterBuff(CharacterContorl target) : base(target)
     {
         buffTime = 10f;
@@ -21,13 +21,31 @@ public class RocketThrusterBuff : ItemBuffBase
     public override void OnBuffApply()
     {
         base.OnBuffApply();
+        character.animationEventReceiver.RegisterEvent(AnimationEventReceiver.EventEnum.OnRocket, OnRocket);
+        character.anima.SetBool("inRocket", true);
+        character.isInRocket = true;
+        character.SetSnowCollider();
+        character.anima.SetTrigger("isInRocket");
+    }
 
-
+    public void OnRocket()
+    {
+        var rocketPrefab = Resources.Load<GameObject>("Prefabs/Item/ItemOnCharacter/RocketOnCharacterUsed");
+        rocket = GameObject.Instantiate(rocketPrefab, this.character.itemPlaceBelly);
+        rocket.transform.localPosition = new Vector3(0, 0, 0);
+        rocket.gameObject.SetActive(true);
+        rocket.transform.localPosition = new Vector3(0, 0, 0);
     }
 
 
     public override void OnBuffRemove()
     {
+        character.animationEventReceiver.UnRegisterEvent(AnimationEventReceiver.EventEnum.OnRocket, OnRocket);
+        character.isInRocket = false;
+        character.SetSnowCollider();
+        character.anima.SetBool("inRocket", false);
+        rocket.gameObject.SetActive(false);
+        GameObject.Destroy(rocket);
         base.OnBuffRemove();
     }
 
