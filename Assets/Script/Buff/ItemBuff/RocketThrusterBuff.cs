@@ -5,14 +5,14 @@ using UnityEngine;
 public class RocketThrusterBuff : ItemBuffBase
 {
     //推进提速时间
-    private float runSpeedUpTime = 1f;
+    private float runSpeedUpTime = 0.5f;
     //推进最大速度
     private float runMaxVelocity = 12f;
 
     GameObject rocket;
     public RocketThrusterBuff(CharacterContorl target) : base(target)
     {
-        buffTime = 10f;
+        buffTime = 15f;
     }
 
     public RocketThrusterBuff(CharacterContorl target, float buffTime) : base(target, buffTime)

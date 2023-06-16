@@ -40,7 +40,7 @@ public class StickyBombProjectile : ItemProjectileBase
         {
             trap.Init(character);
             trap.SetExplosionTime(explosionMaxTime);
-            trapObject.transform.position = transform.position;
+            trapObject.transform.position = transform.position + (bodyCollider as SphereCollider).center;
         }
         OnEnd();
     }

@@ -34,7 +34,7 @@ Transform:
   - {fileID: 7938018095744313853}
   m_Father: {fileID: 2020282833422021822}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: -0.0000001067217, y: 1.5147177, z: -53.412155}
+  m_LocalEulerAnglesHint: {x: 2.7913656, y: -6.8709035, z: -58.336655}
 --- !u!54 &272450288
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -10384,7 +10384,7 @@ Transform:
   - {fileID: 3352229115616034467}
   m_Father: {fileID: 8930147850985348359}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 1.0977445e-14, y: 2.4381903e-15, z: 4.3925257}
+  m_LocalEulerAnglesHint: {x: 1.4138949e-14, y: 3.1403882e-15, z: 38.10047}
 --- !u!54 &1313383874
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -10488,10 +10488,11 @@ Transform:
   m_LocalPosition: {x: -0.26493153, y: 8.5265126e-16, z: 2.85565e-11}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 2705583830864266212}
   m_Father: {fileID: 5593149400775470459}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 1.9524331, y: 1.7395593, z: -2.8565907}
+  m_LocalEulerAnglesHint: {x: 8.496654, y: 15.200232, z: -7.358843}
 --- !u!1 &1647384778330282687
 GameObject:
   m_ObjectHideFlags: 0
@@ -10725,7 +10726,7 @@ Transform:
   - {fileID: 9036000695015882944}
   m_Father: {fileID: 4415218999172976508}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 1.5647295, y: -178.26645, z: 91.77838}
+  m_LocalEulerAnglesHint: {x: 2.6111236, y: 35.949875, z: 91.78815}
 --- !u!1 &2320843242349158672
 GameObject:
   m_ObjectHideFlags: 0
@@ -10820,7 +10821,7 @@ Transform:
   - {fileID: 1042293125014634700}
   m_Father: {fileID: 4063331003332727119}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 1.0977445e-14, y: 2.4381903e-15, z: 4.3925257}
+  m_LocalEulerAnglesHint: {x: 1.2129599e-14, y: 2.6940933e-15, z: 37.480423}
 --- !u!54 &1208608389
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -10927,7 +10928,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 7494583762492344273}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: -20.21532, y: 7.926934, z: 39.498043}
+  m_LocalEulerAnglesHint: {x: -20.215319, y: 7.9269357, z: 39.498043}
 --- !u!1 &2814692672589398267
 GameObject:
   m_ObjectHideFlags: 0
@@ -16030,7 +16031,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 7938018095744313853}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 1.9524331, y: 1.7395593, z: -2.8565907}
+  m_LocalEulerAnglesHint: {x: -16.292767, y: 3.9516218, z: 2.5425415}
 --- !u!1 &3388966567095529580
 GameObject:
   m_ObjectHideFlags: 0
@@ -16066,7 +16067,7 @@ Transform:
   - {fileID: 8803649216587224520}
   m_Father: {fileID: 2214004890297895700}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: -1.1239306, y: -179.93918, z: 168.18637}
+  m_LocalEulerAnglesHint: {x: 2.987496, y: 141.52774, z: 168.54543}
 --- !u!54 &1614400637
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -16328,7 +16329,7 @@ Transform:
   - {fileID: 4918245175228318728}
   m_Father: {fileID: 7494583762492344273}
   m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 17.9867, y: 120.94706, z: -126.05167}
+  m_LocalEulerAnglesHint: {x: 17.986698, y: 120.94706, z: -126.05167}
 --- !u!1 &4470946530004631387
 GameObject:
   m_ObjectHideFlags: 0
@@ -16363,7 +16364,7 @@ Transform:
   - {fileID: 5593149400775470459}
   m_Father: {fileID: 6148009127990978095}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: -0.0000001067217, y: 1.5147177, z: -53.412155}
+  m_LocalEulerAnglesHint: {x: 45.097775, y: 56.717262, z: 19.619234}
 --- !u!54 &2012210046
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -16470,7 +16471,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4415218999172976508}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 10.442197}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 10.442198}
 --- !u!1 &4666484608714058618
 GameObject:
   m_ObjectHideFlags: 0
@@ -16531,6 +16532,37 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8912604852690611702}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &4841401898962856478
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2705583830864266212}
+  m_Layer: 10
+  m_Name: HandPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2705583830864266212
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4841401898962856478}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.334, y: -0.02, z: 0.196}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4008188490550968335}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4921691854627131178
@@ -16869,7 +16901,7 @@ Transform:
   - {fileID: 7163408373897753576}
   m_Father: {fileID: 2155099488740267518}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: -9.173606, y: -2.5488443, z: -2.9489868}
+  m_LocalEulerAnglesHint: {x: -1.3523686, y: -0.43485025, z: -2.1843224}
 --- !u!1 &5630000831089003514
 GameObject:
   m_ObjectHideFlags: 0
@@ -21797,6 +21829,7 @@ GameObject:
   - component: {fileID: 8710850407254142023}
   - component: {fileID: 4382902077929413651}
   - component: {fileID: 2131397238}
+  - component: {fileID: 1828130212}
   m_Layer: 10
   m_Name: Mesh
   m_TagString: Untagged
@@ -21919,7 +21952,7 @@ Animator:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5677479699309663618}
   m_Enabled: 1
-  m_Avatar: {fileID: 0}
+  m_Avatar: {fileID: 9000000, guid: 5425317d834b3d441b32398978657d6d, type: 3}
   m_Controller: {fileID: 9100000, guid: 60d94f1718d63244fad2e37c0187bb42, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
@@ -21942,6 +21975,398 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00a804871ddcfa647ab17032324ce387, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1828130212
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5677479699309663618}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 541934e0bcaaa0c4caa13ea631143083, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  RenderingMode: 0
+  UseLossyScale: 0
+  BetaMode: 1
+  ShowAdvancedProperties: 1
+  FullForwardMode: 0
+  AutoUpdateMaterials: 1
+  AutoAdjustForScale: 0
+  UpdateFrequency: 0.1
+  furDatabase: {fileID: 11400000, guid: 59a2996febfee3245beb4c942eb84c83, type: 2}
+  furDataProfiles:
+  - DoubleSided: 0
+    ProbeUse: 1
+    FurGroomStrength: 1
+    FurLength: 0.068
+    FurThickness: 0.22
+    FurThicknessCurve: 0.363
+    FurOcclusion: 0
+    FurOcclusionCurve: 0
+    FurRimPower: 9.25
+    FurSmoothness: 0
+    FurStrandsAsset: {fileID: 11400000, guid: 2cb1919df50ef8b4f801a712277cacb0, type: 2}
+    FurColorVariation: {fileID: 0}
+    FurMainTint: {r: 1, g: 1, b: 1, a: 1}
+    FurColorA: {r: 1, g: 1, b: 1, a: 1}
+    FurColorB: {r: 1, g: 1, b: 1, a: 1}
+    FurColorC: {r: 1, g: 1, b: 1, a: 1}
+    FurColorD: {r: 1, g: 1, b: 1, a: 1}
+    FurShadowsTint: {r: 0.36862746, g: 0.2901961, b: 0.14117648, a: 1}
+    FurRim: {r: 0.86274517, g: 0.59607846, b: 0.25490198, a: 1}
+    FurSpecularTint: {r: 0.8235295, g: 0.60784316, b: 0.2509804, a: 1}
+    FurTransmission: 0.334
+    FurRimBoost: 3
+    FurUnderColorMod: 0
+    FurOverColorMod: 0.25
+    FurBaseTiling: 1
+    FurColorTiling: {x: 1, y: 1, z: 0, w: 0}
+    UseCurlyFur: 1
+    FurCurlAmountX: 1
+    FurCurlAmountY: 1
+    FurCurlSizeX: 0.1
+    FurCurlSizeY: 0.1
+    UseEmissiveFur: 0
+    FurEmissionMap: {fileID: 0}
+    FurEmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    version: v2.7.0
+    ReceiveShadows: 1
+    CastShadows: 1
+    FurSamples: 20
+    FurUVTiling: 12
+    FurColorMap: {fileID: 0}
+    FurNormalmap: {fileID: 0}
+    FurData0: {fileID: 0}
+    FurData1: {fileID: 0}
+    SelfWindStrength: 1.99
+    SkinColorMap: {fileID: 0}
+    SkinNormalMap: {fileID: 0}
+    SkinColor: {r: 1, g: 1, b: 1, a: 1}
+    SkinSmoothness: 0.3
+  - DoubleSided: 0
+    ProbeUse: 1
+    FurGroomStrength: 1
+    FurLength: 0.181
+    FurThickness: 0.176
+    FurThicknessCurve: 0.472
+    FurOcclusion: 0.006
+    FurOcclusionCurve: 0.158
+    FurRimPower: 10
+    FurSmoothness: 0
+    FurStrandsAsset: {fileID: 11400000, guid: 2cb1919df50ef8b4f801a712277cacb0, type: 2}
+    FurColorVariation: {fileID: 0}
+    FurMainTint: {r: 1, g: 1, b: 1, a: 1}
+    FurColorA: {r: 1, g: 1, b: 1, a: 1}
+    FurColorB: {r: 1, g: 1, b: 1, a: 1}
+    FurColorC: {r: 1, g: 1, b: 1, a: 1}
+    FurColorD: {r: 1, g: 1, b: 1, a: 1}
+    FurShadowsTint: {r: 1, g: 1, b: 1, a: 1}
+    FurRim: {r: 0.9622642, g: 0.9622642, b: 0.9622642, a: 1}
+    FurSpecularTint: {r: 0, g: 0, b: 0, a: 1}
+    FurTransmission: 0
+    FurRimBoost: 1
+    FurUnderColorMod: 0
+    FurOverColorMod: 0.25
+    FurBaseTiling: 1
+    FurColorTiling: {x: 1, y: 1, z: 1, w: 1}
+    UseCurlyFur: 1
+    FurCurlAmountX: 1
+    FurCurlAmountY: 1
+    FurCurlSizeX: 0.0987
+    FurCurlSizeY: 0.1
+    UseEmissiveFur: 0
+    FurEmissionMap: {fileID: 0}
+    FurEmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    version: v2.7.0
+    ReceiveShadows: 1
+    CastShadows: 0
+    FurSamples: 4
+    FurUVTiling: 32
+    FurColorMap: {fileID: 2800000, guid: a96b0772a0122a14f8cf79149f143111, type: 3}
+    FurNormalmap: {fileID: 0}
+    FurData0: {fileID: 2800000, guid: e170b76e37ab5094490cca6644e084a9, type: 3}
+    FurData1: {fileID: 0}
+    SelfWindStrength: 1.26
+    SkinColorMap: {fileID: 0}
+    SkinNormalMap: {fileID: 0}
+    SkinColor: {r: 1, g: 1, b: 1, a: 1}
+    SkinSmoothness: 0.3
+  - DoubleSided: 0
+    ProbeUse: 1
+    FurGroomStrength: 1
+    FurLength: 0.1
+    FurThickness: 1
+    FurThicknessCurve: 0.5
+    FurOcclusion: 1
+    FurOcclusionCurve: 0.5
+    FurRimPower: 2.5
+    FurSmoothness: 0.2
+    FurStrandsAsset: {fileID: 0}
+    FurColorVariation: {fileID: 0}
+    FurMainTint: {r: 1, g: 1, b: 1, a: 1}
+    FurColorA: {r: 1, g: 1, b: 1, a: 1}
+    FurColorB: {r: 1, g: 1, b: 1, a: 1}
+    FurColorC: {r: 1, g: 1, b: 1, a: 1}
+    FurColorD: {r: 1, g: 1, b: 1, a: 1}
+    FurShadowsTint: {r: 0, g: 0, b: 0, a: 1}
+    FurRim: {r: 1, g: 1, b: 1, a: 1}
+    FurSpecularTint: {r: 0.33, g: 0.3, b: 0.28, a: 1}
+    FurTransmission: 1
+    FurRimBoost: 1
+    FurUnderColorMod: 0.25
+    FurOverColorMod: 0.5
+    FurBaseTiling: 1
+    FurColorTiling: {x: 1, y: 1, z: 0, w: 0}
+    UseCurlyFur: 0
+    FurCurlAmountX: 0
+    FurCurlAmountY: 0
+    FurCurlSizeX: 0
+    FurCurlSizeY: 0
+    UseEmissiveFur: 0
+    FurEmissionMap: {fileID: 0}
+    FurEmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    version: v2.5.0
+    ReceiveShadows: 1
+    CastShadows: 1
+    FurSamples: 30
+    FurUVTiling: 2
+    FurColorMap: {fileID: 0}
+    FurNormalmap: {fileID: 0}
+    FurData0: {fileID: 0}
+    FurData1: {fileID: 0}
+    SelfWindStrength: 1
+    SkinColorMap: {fileID: 0}
+    SkinNormalMap: {fileID: 0}
+    SkinColor: {r: 1, g: 1, b: 1, a: 1}
+    SkinSmoothness: 0.3
+  mainRenderer:
+    renderer: {fileID: 8710850407254142023}
+    materials:
+    - {fileID: 2100000, guid: 599778d4e37943d4b8ade86193037d1e, type: 2}
+    - {fileID: 2100000, guid: dc0eb14c8e98cb64caaf0d8dc2aca1df, type: 2}
+    - {fileID: 2100000, guid: 571a0c8065a2b9847b7a024f8392f8de, type: 2}
+    originalMesh: {fileID: 8589273709290522378, guid: 5425317d834b3d441b32398978657d6d,
+      type: 3}
+    brokenData: 0
+    isFurMaterial: 000100
+    isLOD: 0
+    furProfiles: ffffffff0000000000000000
+  randomModule:
+    pidiSkin2: {fileID: 11400000, guid: 28daee7028e1f19498bf3f55979d4ddf, type: 2}
+    isEnabled: 0
+    moduleName: Randomization
+    moduleStatus: 3
+    experimentalFeatures: 0
+    version: 2.0
+    hasMobileMode: 1
+    hasSRPMode: 1
+    criticalError: 0
+    name: XFur Module
+    xfurInstance: {fileID: 1828130212}
+    executeInEditor: 0
+    RandomizeOnLoad: 1
+    RandomSettings:
+    - Enabled: 1
+      RandomizationMode: 1
+      RandomizeColorMap: 0
+      RandomizeColorMix: 0
+      RandomizeDataMaps: 0
+      RandomizeFurStrands: 0
+      RandomizeTo:
+        DoubleSided: 0
+        ProbeUse: 1
+        FurGroomStrength: 1
+        FurLength: 0.1
+        FurThickness: 1
+        FurThicknessCurve: 0.5
+        FurOcclusion: 1
+        FurOcclusionCurve: 0.5
+        FurRimPower: 2.5
+        FurSmoothness: 0.2
+        FurStrandsAsset: {fileID: 0}
+        FurColorVariation: {fileID: 0}
+        FurMainTint: {r: 1, g: 1, b: 1, a: 1}
+        FurColorA: {r: 1, g: 1, b: 1, a: 1}
+        FurColorB: {r: 1, g: 1, b: 1, a: 1}
+        FurColorC: {r: 1, g: 1, b: 1, a: 1}
+        FurColorD: {r: 1, g: 1, b: 1, a: 1}
+        FurShadowsTint: {r: 0, g: 0, b: 0, a: 1}
+        FurRim: {r: 1, g: 1, b: 1, a: 1}
+        FurSpecularTint: {r: 0.33, g: 0.3, b: 0.28, a: 1}
+        FurTransmission: 1
+        FurRimBoost: 1
+        FurUnderColorMod: 0.25
+        FurOverColorMod: 0.5
+        FurBaseTiling: 1
+        FurColorTiling: {x: 1, y: 1, z: 0, w: 0}
+        UseCurlyFur: 0
+        FurCurlAmountX: 0
+        FurCurlAmountY: 0
+        FurCurlSizeX: 0
+        FurCurlSizeY: 0
+        UseEmissiveFur: 0
+        FurEmissionMap: {fileID: 0}
+        FurEmissionColor: {r: 0, g: 0, b: 0, a: 1}
+        version: v2.5.0
+        ReceiveShadows: 1
+        CastShadows: 1
+        FurSamples: 30
+        FurUVTiling: 2
+        FurColorMap: {fileID: 0}
+        FurNormalmap: {fileID: 0}
+        FurData0: {fileID: 0}
+        FurData1: {fileID: 0}
+        SelfWindStrength: 1
+        SkinColorMap: {fileID: 0}
+        SkinNormalMap: {fileID: 0}
+        SkinColor: {r: 1, g: 1, b: 1, a: 1}
+        SkinSmoothness: 0.3
+      RandomProfiles: []
+    randomFolds: 01
+  lodModule:
+    pidiSkin2: {fileID: 11400000, guid: 28daee7028e1f19498bf3f55979d4ddf, type: 2}
+    isEnabled: 0
+    moduleName: Dynamic LOD
+    moduleStatus: 3
+    experimentalFeatures: 0
+    version: 2.0
+    hasMobileMode: 1
+    hasSRPMode: 1
+    criticalError: 0
+    name: XFur Module
+    xfurInstance: {fileID: 1828130212}
+    executeInEditor: 0
+    lodRenderers: []
+    furSamples: 1e000000
+    MaxFurDistance: 150
+    MinFurDistance: 2
+    FurSamplesRange: {x: 11, y: 39}
+    SwitchToBasicShells: 0
+    BasicShellsSamples: 8
+    BasicShellsRegion: {x: 25, y: 40}
+    useOverdrawReduction: 1
+    overdrawLODArea: 1.14
+    overdrawLODStrength: 1
+  physicsModule:
+    pidiSkin2: {fileID: 0}
+    isEnabled: 0
+    moduleName: Fur Physics
+    moduleStatus: 3
+    experimentalFeatures: 0
+    version: 3.0
+    hasMobileMode: 1
+    hasSRPMode: 1
+    criticalError: 0
+    name: XFur Module
+    xfurInstance: {fileID: 1828130212}
+    executeInEditor: 0
+    quality: 2
+    disableOnLOD: 0
+    gravityStrength: 0.5
+    physicsSensitivity: 0.35
+    perMatPhysics: 010101
+    PhysicsShader: {fileID: 4800000, guid: 66441ae8344265943b3a5d228504605b, type: 3}
+  vfxModule:
+    pidiSkin2: {fileID: 0}
+    isEnabled: 0
+    moduleName: VFX & Weather
+    moduleStatus: 3
+    experimentalFeatures: 0
+    version: 3.0
+    hasMobileMode: 1
+    hasSRPMode: 1
+    criticalError: 0
+    name: XFur Module
+    xfurInstance: {fileID: 1828130212}
+    executeInEditor: 0
+    VFXProgressiveShader: {fileID: 4800000, guid: 91c3b3c969c2c2a4a881214e93ab57b3,
+      type: 3}
+    disableOnLOD: 0
+    quality: 2
+    Snow:
+      name: SnowFX
+      color: {r: 0.85, g: 0.95, b: 1, a: 1}
+      specular: {r: 0.45, g: 0.5, b: 0.6, a: 1}
+      penetration: 0.65
+      smoothness: 0.5
+      intensity: 1.25
+      fadeoutTime: 4
+      normalFalloff: 0.75
+      vfxMask: {fileID: 0}
+      vfxTiling: 2
+      updated: 0
+      ignoreWeatherComponent: 0
+    Rain:
+      name: RainFX
+      color: {r: 1, g: 1, b: 1, a: 1}
+      specular: {r: 0.45, g: 0.5, b: 0.6, a: 1}
+      penetration: 0.75
+      smoothness: 0.75
+      intensity: 1.25
+      fadeoutTime: 4
+      normalFalloff: 0.75
+      vfxMask: {fileID: 0}
+      vfxTiling: 2
+      updated: 0
+      ignoreWeatherComponent: 0
+    Blood:
+      name: BloodFX
+      color: {r: 0.75, g: 0.05, b: 0.05, a: 1}
+      specular: {r: 0.15, g: 0.15, b: 0.15, a: 1}
+      penetration: 0.75
+      smoothness: 0.2
+      intensity: 1.25
+      fadeoutTime: 10
+      normalFalloff: 0.75
+      vfxMask: {fileID: 0}
+      vfxTiling: 2
+      updated: 0
+      ignoreWeatherComponent: 0
+  decalsModule:
+    pidiSkin2: {fileID: 0}
+    isEnabled: 0
+    moduleName: UV Decals
+    moduleStatus: 3
+    experimentalFeatures: 0
+    version: 2.0
+    hasMobileMode: 1
+    hasSRPMode: 1
+    criticalError: 0
+    name: XFur Module
+    xfurInstance: {fileID: 1828130212}
+    executeInEditor: 0
+    DecalsShader: {fileID: 4800000, guid: 357427ff6e4c3c44ca0c1737798bf9d4, type: 3}
+    ProfileDecals:
+    - enabled: 0
+      finalOutput: {fileID: 0}
+      outputMode: 0
+      decals: []
+    - enabled: 1
+      finalOutput: {fileID: 0}
+      outputMode: 0
+      decals: []
+    - enabled: 0
+      finalOutput: {fileID: 0}
+      outputMode: 0
+      decals: []
+  customModules: []
+  CurrentFurRenderer:
+    renderer: {fileID: 8710850407254142023}
+    materials:
+    - {fileID: 2100000, guid: 599778d4e37943d4b8ade86193037d1e, type: 2}
+    - {fileID: 2100000, guid: dc0eb14c8e98cb64caaf0d8dc2aca1df, type: 2}
+    - {fileID: 2100000, guid: 571a0c8065a2b9847b7a024f8392f8de, type: 2}
+    originalMesh: {fileID: 8589273709290522378, guid: 5425317d834b3d441b32398978657d6d,
+      type: 3}
+    brokenData: 0
+    isFurMaterial: 000100
+    isLOD: 0
+    furProfiles: ffffffff0000000000000000
+  currentRenderingMode: 0
+  folds: 01010101000000000000000000000000
+  profileFolds: 0101000000000000000000000000000000000000000000000000000000000000
 --- !u!1 &5783572227375899335
 GameObject:
   m_ObjectHideFlags: 0
@@ -21976,7 +22401,7 @@ Transform:
   - {fileID: 1599525024006621732}
   m_Father: {fileID: 2214004890297895700}
   m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 44.697395, y: 102.971634, z: -18.983032}
+  m_LocalEulerAnglesHint: {x: 44.404137, y: 102.709755, z: -17.509178}
 --- !u!54 &1682522749
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -27044,7 +27469,7 @@ Transform:
   - {fileID: 6413447881964983309}
   m_Father: {fileID: 7494583762492344273}
   m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 6.485153e-15, y: 1.9074155e-14, z: 44.004364}
+  m_LocalEulerAnglesHint: {x: 4.7096624e-15, y: 1.3852075e-14, z: 44.004364}
 --- !u!1 &6180537979850752613
 GameObject:
   m_ObjectHideFlags: 0
@@ -28549,6 +28974,7 @@ MonoBehaviour:
   itemPlaceHead: {fileID: 2238189138267358599}
   itemPlaceTail: {fileID: 3132642743494774787}
   itemPlaceBelly: {fileID: 4810111987133615562}
+  itemPlaceHand: {fileID: 2705583830864266212}
   playerIndicator: {fileID: 6190402150435443799}
   playerIndexText: {fileID: 8524291645241451985}
   forceArgument: 100
@@ -28764,7 +29190,7 @@ Transform:
   - {fileID: 6617548786829478371}
   m_Father: {fileID: 2965723236932978520}
   m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 9.853167e-15, y: -180, z: 51.80749}
+  m_LocalEulerAnglesHint: {x: 7.155589e-15, y: -180, z: 51.80749}
 --- !u!1 &6780873453331379114
 GameObject:
   m_ObjectHideFlags: 0
@@ -28978,7 +29404,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 7494583762492344273}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 20.215322, y: -7.926935, z: -140.50194}
+  m_LocalEulerAnglesHint: {x: 20.21532, y: -7.9269366, z: -140.50194}
 --- !u!1 &7411474368417260519
 GameObject:
   m_ObjectHideFlags: 0
@@ -29138,7 +29564,7 @@ Transform:
   - {fileID: 5197170049215032404}
   m_Father: {fileID: 4268584946583789228}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 1.41337, y: -0.900923, z: -86.73108}
+  m_LocalEulerAnglesHint: {x: 1.4133716, y: -0.9009235, z: -86.73108}
 --- !u!54 &756451024
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -29608,7 +30034,7 @@ Transform:
   - {fileID: 4729536245028008770}
   m_Father: {fileID: 6851298662914483136}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: -0.9943468, y: -90, z: 176.01038}
+  m_LocalEulerAnglesHint: {x: 1.7275684, y: -90.76436, z: 176.86674}
 --- !u!114 &2137196185
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -29616,7 +30042,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8061790812960641757}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b2d8418b0b9634b1892b0268dd9c2743, type: 3}
   m_Name: 
@@ -29761,7 +30187,7 @@ Transform:
   - {fileID: 5243190416265634640}
   m_Father: {fileID: 2214004890297895700}
   m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: -44.6974, y: -102.971634, z: 161.01697}
+  m_LocalEulerAnglesHint: {x: -48.09278, y: -104.658676, z: 152.62442}
 --- !u!54 &1968192024
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -30065,7 +30491,7 @@ Transform:
   - {fileID: 2842814197572452617}
   m_Father: {fileID: 1599525024006621732}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: -6.8657446e-15, y: 1.8550454e-15, z: -41.684685}
+  m_LocalEulerAnglesHint: {x: -8.843081e-15, y: 2.3892995e-15, z: -28.786764}
 --- !u!54 &1206710781
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -30176,7 +30602,7 @@ Transform:
   - {fileID: 4008188490550968335}
   m_Father: {fileID: 5243190416265634640}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: -6.8657446e-15, y: 1.8550454e-15, z: -41.684685}
+  m_LocalEulerAnglesHint: {x: 42.658184, y: -19.712276, z: -70.9078}
 --- !u!54 &2057508529
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -35202,7 +35628,7 @@ Transform:
   - {fileID: 750271685175636433}
   m_Father: {fileID: 2965723236932978520}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 13.870904, y: 163.3626, z: -72.218956}
+  m_LocalEulerAnglesHint: {x: 11.756351, y: 168.33968, z: -90.98904}
 --- !u!54 &1145634232
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -35309,7 +35735,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2214004890297895700}
   m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: -7.039384e-15, y: -180, z: -179.53445}
+  m_LocalEulerAnglesHint: {x: -5.1121577e-15, y: -180, z: -179.53445}
 --- !u!1 &9106388751204313756
 GameObject:
   m_ObjectHideFlags: 0
@@ -35420,7 +35846,7 @@ Transform:
   - {fileID: 8912604852690611702}
   m_Father: {fileID: 2965723236932978520}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: -13.870905, y: -163.3626, z: 107.781044}
+  m_LocalEulerAnglesHint: {x: -20.316477, y: -164.60213, z: 88.0763}
 --- !u!54 &451530739
 Rigidbody:
   m_ObjectHideFlags: 0

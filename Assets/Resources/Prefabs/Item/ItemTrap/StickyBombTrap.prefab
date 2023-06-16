@@ -669,7 +669,7 @@ Transform:
   m_GameObject: {fileID: 7176401066382099560}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.68828773, y: 4.1859336, z: 3.8299627}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.7, y: 0.7, z: 0.7}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 6420693009078532642}
@@ -683,7 +683,7 @@ SphereCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7176401066382099560}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 76e52cb062385cf4bada5ffbc33f2af1, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
@@ -719,7 +719,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   character: {fileID: 0}
   explosionMaxTime: 0
-  explosionTime: 20
+  explosionTime: 10
   explosionForceArgument: 2000
   explosionRangeRadius: 10
   stickyBombFuseGameObject: {fileID: 8660913711718862041}

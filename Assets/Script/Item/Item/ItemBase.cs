@@ -79,7 +79,7 @@ public class ItemBase : MonoBehaviour
         var otherCollision = collision.gameObject.GetComponent<CharacterContorl>();
         if (otherCollision && !otherCollision.isStun)
         {
-            if(otherCollision.itemAbility == null)
+            if(otherCollision.itemAbility == null && otherCollision.CanPick())
             {
                 var itemAbility =  ItemManager.CreatItemAbilityByItemData(itemData, otherCollision);
                 otherCollision.GainItemAbility(itemAbility);
