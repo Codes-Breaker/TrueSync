@@ -23,7 +23,7 @@ public class TrapItemAbility : ItemAbilityBase
 
     protected override void itemAbility()
     {
-        var trapObject = ItemManager.CreatTrapItemByItemId(itemData.itemId, character);
+        var trapObject = ItemManager.CreatTrapItemByItemID(itemData.itemId, character);
         var point = (character.transform.position + (character.bodyCollider as SphereCollider).center) - (character.ridbody.transform.forward.normalized * (character.bodyCollider as SphereCollider).radius * character.transform.localScale.x + character.ridbody.transform.forward.normalized * offset);
         //trapObject.transform.position = new Vector3(point.x, point.y - (character.bodyCollider as SphereCollider).radius * character.transform.localScale.x,point.z);
         trapObject.transform.position = point;
