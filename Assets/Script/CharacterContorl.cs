@@ -166,6 +166,8 @@ public class CharacterContorl : MonoBehaviour
     public Transform itemPlaceTail;
     [Header("腰部挂点")]
     public Transform itemPlaceBelly;
+    [Header("手部挂点")]
+    public Transform itemPlaceHand;
     private Vector2 axisInput;
     public GameObject playerIndicator;
     public TMPro.TMP_Text playerIndexText;
@@ -992,6 +994,10 @@ public class CharacterContorl : MonoBehaviour
 
     }
 
+    public bool CanPick()
+    {
+        return !isInRocket;
+    }
 
     private void UseItem(bool isUse)
     {

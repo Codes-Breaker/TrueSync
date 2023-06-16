@@ -6,9 +6,11 @@ using UnityEngine;
 public class AnimationEventReceiver : MonoBehaviour
 {
     public Action onRocketCallback;
+    public Action onBoomThrowCallback;
     public enum EventEnum
     {
         OnRocket,
+        ThrowBoom,
     }
     public void TriggerEvent(EventEnum e)
     {
@@ -16,6 +18,9 @@ public class AnimationEventReceiver : MonoBehaviour
         {
             case EventEnum.OnRocket:
                 onRocketCallback?.Invoke();
+                break;
+            case EventEnum.ThrowBoom:
+                onBoomThrowCallback?.Invoke();
                 break;
             default:
                 break;
@@ -29,6 +34,9 @@ public class AnimationEventReceiver : MonoBehaviour
             case EventEnum.OnRocket:
                 onRocketCallback += callback;
                 break;
+            case EventEnum.ThrowBoom:
+                onBoomThrowCallback += callback;
+                break;
             default:
                 break;
         }
@@ -40,6 +48,9 @@ public class AnimationEventReceiver : MonoBehaviour
         {
             case EventEnum.OnRocket:
                 onRocketCallback -= callback;
+                break;
+            case EventEnum.ThrowBoom:
+                onBoomThrowCallback -= callback;
                 break;
             default:
                 break;

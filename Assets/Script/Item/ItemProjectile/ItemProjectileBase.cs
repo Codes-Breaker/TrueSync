@@ -10,13 +10,15 @@ public class ItemProjectileBase : MonoBehaviour
     //飞行目标方向
     protected Vector3 project;
     //水平初速度
-    public float initialHorizontalSpeed ;
+    public float initialHorizontalSpeed;
+    //向上初速度
+    public float initialVerticalSpeed;
     //弹道下坠速度
     public float projectileGravity = 1f;
 
     protected Rigidbody rb;
     protected  Collider bodyCollider;
-
+    private bool hasThrow = false;
     public virtual void Init(CharacterContorl character,Vector3 project)
     {
         this.character = character;
@@ -41,7 +43,25 @@ public class ItemProjectileBase : MonoBehaviour
 
     private void Launch()
     {
-        rb.velocity = initialHorizontalSpeed * project;
+        character.anima.SetTrigger("throwBoom");
+        character.animationEventReceiver.RegisterEvent(AnimationEventReceiver.EventEnum.ThrowBoom, Throw);
+        this.transform.parent = character.itemPlaceHand;
+        this.transform.localPosition = Vector3.zero;
+        Physics.IgnoreCollision(this.bodyCollider, character.bodyCollider, true);
+    }
+
+    private void OnDestroy()
+    {
+        character.animationEventReceiver.UnRegisterEvent(AnimationEventReceiver.EventEnum.ThrowBoom, Throw);
+    }
+
+
+    private void Throw()
+    {
+        hasThrow = true;
+        this.transform.parent = null;
+        rb.velocity = (character.ridbody.velocity.magnitude + initialHorizontalSpeed) * project + initialVerticalSpeed * Vector3.up;
+        character.animationEventReceiver.UnRegisterEvent(AnimationEventReceiver.EventEnum.ThrowBoom, Throw);
     }
 
     private void AddGravity()
@@ -51,7 +71,7 @@ public class ItemProjectileBase : MonoBehaviour
 
     private void CheckGround()
     {
-        if(Physics.CheckSphere(bodyCollider.transform.position + (bodyCollider as SphereCollider).center - new Vector3(0, (bodyCollider as SphereCollider).radius * bodyCollider.transform.localScale.y, 0), 0.02f, groundLayer))
+        if(Physics.CheckSphere(bodyCollider.transform.position + (bodyCollider as SphereCollider).center - new Vector3(0, (bodyCollider as SphereCollider).radius * bodyCollider.transform.localScale.y, 0), 0.1f, groundLayer) && hasThrow)
             OnTouchGround();
 
     }
