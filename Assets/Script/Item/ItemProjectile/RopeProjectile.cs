@@ -19,9 +19,9 @@ public class RopeProjectile : ItemProjectileBase
     private bool isTear;
     private bool isStartStick;
     private bool canStickyCharacter;
-    public override void Init(CharacterContorl character, Vector3 project)
+    public override void Init(CharacterContorl character)
     {
-        base.Init(character, project);
+        base.Init(character);
         ropeObject = Instantiate(Resources.Load<GameObject>(ropePrefabPath));
         obiRope = ropeObject.GetComponent<ObiRope>();
         ropeObject.transform.SetParent(GameObject.FindObjectOfType<ObiSolver>().transform);

@@ -17,17 +17,15 @@ public class ItemProjectileBase : MonoBehaviour
     public float projectileGravity = 1f;
 
     protected Rigidbody rb;
-    protected  Collider bodyCollider;
+    protected Collider bodyCollider;
     private bool hasThrow = false;
-    public virtual void Init(CharacterContorl character,Vector3 project)
+    public virtual void Init(CharacterContorl character)
     {
         this.character = character;
-        this.project = project;
         bodyCollider = gameObject.GetComponent<Collider>();
         rb = gameObject.GetComponent<Rigidbody>();
         rb.useGravity = false;
        // bodyCollider.isTrigger = true;
-        Launch();
     }
 
     protected virtual void OnCollisionEnter(Collision collision)
@@ -41,14 +39,14 @@ public class ItemProjectileBase : MonoBehaviour
         CheckGround();
     }
 
-    private void Launch()
+    public virtual void Launch()
     {
-        character.anima.SetTrigger("throwBoom");
-        character.animationEventReceiver.RegisterEvent(AnimationEventReceiver.EventEnum.ThrowBoom, Throw);
-        this.transform.parent = character.itemPlaceHand;
-        this.transform.localPosition = Vector3.zero;
-        rb.isKinematic = true;
-        Physics.IgnoreCollision(this.bodyCollider, character.bodyCollider, true);
+
+        this.project = this.character.transform.forward;
+        hasThrow = true;
+        this.transform.parent = null;
+        rb.isKinematic = false;
+        rb.velocity = (character.ridbody.velocity.magnitude + initialHorizontalSpeed) * project + initialVerticalSpeed * Vector3.up;
     }
 
     private void OnDestroy()
@@ -57,13 +55,14 @@ public class ItemProjectileBase : MonoBehaviour
     }
 
 
-    private void Throw()
+    public virtual void Throw()
     {
-        hasThrow = true;
-        this.transform.parent = null;
-        rb.isKinematic = false;
-        rb.velocity = (character.ridbody.velocity.magnitude + initialHorizontalSpeed) * project + initialVerticalSpeed * Vector3.up;
-        character.animationEventReceiver.UnRegisterEvent(AnimationEventReceiver.EventEnum.ThrowBoom, Throw);
+        this.transform.parent = character.itemPlaceHand;
+        this.transform.localPosition = Vector3.zero;
+        rb.isKinematic = true;
+        Physics.IgnoreCollision(this.bodyCollider, character.bodyCollider, true);
+
+
     }
 
     private void AddGravity()

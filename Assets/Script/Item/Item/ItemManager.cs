@@ -118,25 +118,35 @@ public class ItemManager : MonoBehaviour
         }
     }
 
-    public static GameObject CreatProjectileByItemID(float itemID, CharacterContorl character ,Vector3 project,Vector3 originalPosition)
+    public static ItemProjectileBase CreatProjectileByItemID(float itemID, CharacterContorl character, Vector3 originalPosition)
     {
+        ItemProjectileBase itemProjectbase = null;
+        GameObject itemObj = null;
         switch (itemID)
         {
+            case 1:
+                itemObj = GameObject.Instantiate(Resources.Load<GameObject>("Prefabs/Item/ItemProjectile/RocketProjectile"));
+                break;
             case 4:
-                var stickyBombGameObject = GameObject.Instantiate(Resources.Load<GameObject>("Prefabs/Item/ItemProjectile/StickyBombProjectile"));
-                stickyBombGameObject.transform.position = originalPosition;
-                stickyBombGameObject.GetComponent<ItemProjectileBase>().Init(character,project);
-                return stickyBombGameObject;
+                itemObj = GameObject.Instantiate(Resources.Load<GameObject>("Prefabs/Item/ItemProjectile/StickyBombProjectile"));
+
+                break;
             case 5:
-                var ropeProjectileObject = GameObject.Instantiate(Resources.Load<GameObject>("Prefabs/Item/ItemProjectile/RopeProjectile/RopeProjectile"));
-                ropeProjectileObject.transform.position = originalPosition;
-                ropeProjectileObject.GetComponent<ItemProjectileBase>().Init(character,project);
-                return ropeProjectileObject;
+                itemObj = GameObject.Instantiate(Resources.Load<GameObject>("Prefabs/Item/ItemProjectile/RopeProjectile/RopeProjectile"));
+                break;
 
             default:
                 Debug.LogError("没有找到对应ID");
-                return null;
+                break;
         }
+
+        if (itemObj != null)
+        {
+            itemObj.transform.position = originalPosition;
+            itemProjectbase = itemObj.GetComponent<ItemProjectileBase>();
+            itemProjectbase.Init(character);
+        }
+        return itemProjectbase;
     }
 
 }

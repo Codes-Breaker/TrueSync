@@ -44,9 +44,21 @@ public class RocketThrusterBuff : ItemBuffBase
         character.isInRocket = false;
         character.SetSnowCollider();
         character.anima.SetBool("inRocket", false);
+
+        base.OnBuffRemove();
+        var point = (character.transform.position + (character.bodyCollider as SphereCollider).center) + (character.ridbody.transform.forward.normalized * (character.bodyCollider as SphereCollider).radius * character.transform.localScale.x + character.ridbody.transform.forward.normalized * 1);
+        //´´½¨»ð¼ý
+        var itemBase = ItemManager.CreatProjectileByItemID(1, character, point);
+        (itemBase as RocketProjectile).itemRot = rocket.transform.rotation;
+        (itemBase as RocketProjectile).rocketForward = rocket.transform.forward;
+        itemBase.Throw();
         rocket.gameObject.SetActive(false);
         GameObject.Destroy(rocket);
-        base.OnBuffRemove();
+    }
+
+    private void GenerateRocket()
+    {
+
     }
 
     public override void OnBuffUpdate()
