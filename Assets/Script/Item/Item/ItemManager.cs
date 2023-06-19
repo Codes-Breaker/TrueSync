@@ -118,14 +118,21 @@ public class ItemManager : MonoBehaviour
         }
     }
 
-    public static GameObject CreatProjectileByItemID(float itemID, CharacterContorl character ,Vector3 project)
+    public static GameObject CreatProjectileByItemID(float itemID, CharacterContorl character ,Vector3 project,Vector3 originalPosition)
     {
         switch (itemID)
         {
             case 4:
-                var trapGameObject = GameObject.Instantiate(Resources.Load<GameObject>("Prefabs/Item/ItemProjectile/StickyBombProjectile"));
-                trapGameObject.GetComponent<ItemProjectileBase>().Init(character,project);
-                return trapGameObject;
+                var stickyBombGameObject = GameObject.Instantiate(Resources.Load<GameObject>("Prefabs/Item/ItemProjectile/StickyBombProjectile"));
+                stickyBombGameObject.transform.position = originalPosition;
+                stickyBombGameObject.GetComponent<ItemProjectileBase>().Init(character,project);
+                return stickyBombGameObject;
+            case 5:
+                var ropeProjectileObject = GameObject.Instantiate(Resources.Load<GameObject>("Prefabs/Item/ItemProjectile/RopeProjectile/RopeProjectile"));
+                ropeProjectileObject.transform.position = originalPosition;
+                ropeProjectileObject.GetComponent<ItemProjectileBase>().Init(character,project);
+                return ropeProjectileObject;
+
             default:
                 Debug.LogError("没有找到对应ID");
                 return null;

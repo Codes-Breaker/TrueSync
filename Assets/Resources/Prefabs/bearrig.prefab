@@ -28706,6 +28706,8 @@ GameObject:
   - component: {fileID: 6524800512801151489}
   - component: {fileID: 4147182195015774368}
   - component: {fileID: 111541647}
+  - component: {fileID: -2964501863608211778}
+  - component: {fileID: 8620077856562710366}
   m_Layer: 10
   m_Name: bearrig
   m_TagString: Untagged
@@ -29159,6 +29161,36 @@ MonoBehaviour:
   - {fileID: 1313383872}
   groundIK: {fileID: 6218862706769915548}
   mainRag: {fileID: 2055589166}
+--- !u!114 &-2964501863608211778
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6524800512801151549}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6757b231cedd544c583ef8aeaf773b2a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  thickness: 0
+  material: {fileID: 0}
+  filter: -65534
+  m_SourceCollider: {fileID: 6524800512801151548}
+  m_DistanceField: {fileID: 0}
+--- !u!114 &8620077856562710366
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6524800512801151549}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62359d80fdc0e4315ab6331b78ec5b90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  kinematicForParticles: 0
 --- !u!1 &6545474141326401775
 GameObject:
   m_ObjectHideFlags: 0
