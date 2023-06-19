@@ -5,7 +5,7 @@ using Obi;
 
 public class RopeProjectile : ItemProjectileBase
 {
-    [Header("����˺��ʱ��")]
+    [Header("扯断时间")]
     public float tearTime;
     private string ropePrefabPath = "Prefabs/Item/ItemProjectile/RopeProjectile/Rope";
     public GameObject ropeObject;

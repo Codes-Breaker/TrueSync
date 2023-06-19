@@ -74,7 +74,7 @@ public class ItemProjectileBase : MonoBehaviour
 
     private void CheckGround()
     {
-        if(Physics.CheckSphere(bodyCollider.transform.position + (bodyCollider as SphereCollider).center - new Vector3(0, (bodyCollider as SphereCollider).radius * bodyCollider.transform.localScale.y, 0), 0.1f, groundLayer) && hasThrow)
+        if(Physics.CheckSphere(bodyCollider.transform.position + (bodyCollider as SphereCollider).center * bodyCollider.transform.localScale.y - new Vector3(0, (bodyCollider as SphereCollider).radius * bodyCollider.transform.localScale.y, 0), 0.1f, groundLayer) && hasThrow)
             OnTouchGround();
 
     }
