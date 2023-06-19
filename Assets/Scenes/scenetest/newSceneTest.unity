@@ -14410,7 +14410,7 @@ MonoBehaviour:
   - {fileID: 517809145394415509, guid: 8d08a9bd29907454db8066e938b3b10e, type: 3}
   - {fileID: 3902960639270191143, guid: dc210bb4178d480479e848ef9dfa088e, type: 3}
   - {fileID: 2609819576525401225, guid: b19cde47aaa921f469a0594a92779188, type: 3}
-  - {fileID: 8442231964018030165}
+  - {fileID: 1983378251315827871, guid: 2467b5b7cc2582148a227779fcb8c106, type: 3}
   - {fileID: 8869650375440422427, guid: 385a6384dcb08e84596cfbf6afeafd9a, type: 3}
   itemCreateFrequency: 1
   itemPosition: {fileID: 159859385}
@@ -31885,70 +31885,3 @@ MonoBehaviour:
   filter: -65535
   m_SourceCollider: {fileID: 6347393346523091132}
   m_DistanceField: {fileID: 0}
---- !u!114 &8442231964018030164
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8442231964018030165}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bb0498c13213fba42b85f6ddb3ee7d9f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  itemData:
-    itemId: 5
-    itemType: 1
-    canUseNum: 2
-    itemPrefabOnGround: {fileID: 2547200956548287349, guid: 63f9a8987f967b145b0f056e4bbcb94d,
-      type: 3}
-    itemPrefabOnCharacter: {fileID: 7225655044744506483, guid: 1822a2ac733a85946bbebcaedcbaec9f,
-      type: 3}
-    CountDownTime: 1
---- !u!1 &8442231964018030165
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 8442231964018030166}
-  - component: {fileID: 8442231964018030167}
-  - component: {fileID: 8442231964018030164}
-  m_Layer: 0
-  m_Name: RopeProjectileItem
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &8442231964018030166
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8442231964018030165}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6.78, y: 4.4, z: 4.1}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 21
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &8442231964018030167
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8442231964018030165}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
