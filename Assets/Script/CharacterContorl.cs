@@ -388,6 +388,7 @@ public class CharacterContorl : MonoBehaviour
     private void LateUpdate()
     {
         SetSlider();
+        SetAnimState();
         MoveRoll();
         SetHPHint();
         SetGPHint();
@@ -773,12 +774,20 @@ public class CharacterContorl : MonoBehaviour
         }
         else
             axisInput = axisInput.normalized;
+
+        if (axisInput.magnitude >= movementThrashold)
+        {
+            isWalk = true;
+        }
+        else
+        {
+            isWalk = false;
+        }
         //
         this.axisInput = axisInput;
         if (releasing)
         {
             anima.SetBool("isBrake", false);
-            isWalk = false;
             if (ridbody.velocity.magnitude < runMaxVelocity * 0.96f)
             {
                 var acceleration = runMaxVelocity / runSpeedUpTime;
@@ -840,7 +849,6 @@ public class CharacterContorl : MonoBehaviour
         {
             if (ridbody.velocity.magnitude < movementMaxVelocity && axisInput.magnitude > movementThrashold)
             {
-                isWalk = true;
                 targetAngle = Mathf.Atan2(axisInput.x, axisInput.y) * Mathf.Rad2Deg + gameController.mainCamera.transform.eulerAngles.y;
                 var acceleration = movementMaxVelocity / movementSpeedUpTime;
                 var forceMagnitude = ridbody.mass * acceleration;
@@ -865,10 +873,6 @@ public class CharacterContorl : MonoBehaviour
                     transform.rotation = Quaternion.Slerp(this.ridbody.rotation, Quaternion.Euler(new Vector3(0, targetAngle, 0) + initialRotation), movementRotationRate);
                 }
                 anima.SetBool("isBrake", false);
-            }
-            else
-            {
-                isWalk = false;
             }
         }
 
@@ -996,7 +1000,7 @@ public class CharacterContorl : MonoBehaviour
 
     public bool CanPick()
     {
-        return !isInRocket;
+        return true;
     }
 
     private void UseItem(bool isUse)
@@ -1405,6 +1409,11 @@ public class CharacterContorl : MonoBehaviour
 
     #endregion
     #region SetUI
+
+    private void SetAnimState()
+    {
+        anima.SetBool("isWalk", isWalk);
+    }
 
     private void SetSlider()
     {
