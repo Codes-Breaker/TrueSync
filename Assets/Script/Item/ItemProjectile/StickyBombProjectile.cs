@@ -6,7 +6,6 @@ public class StickyBombProjectile : ItemProjectileBase
 {
     //本地爆炸倒计时总时长
     public float explosionMaxTime= 20f;
-
     private string stickyBombTrapPath = "Prefabs/Item/ItemTrap/StickyBombTrap";
     public override void Init(CharacterContorl character, Vector3 project)
     {

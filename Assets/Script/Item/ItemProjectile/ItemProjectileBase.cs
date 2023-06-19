@@ -47,6 +47,7 @@ public class ItemProjectileBase : MonoBehaviour
         character.animationEventReceiver.RegisterEvent(AnimationEventReceiver.EventEnum.ThrowBoom, Throw);
         this.transform.parent = character.itemPlaceHand;
         this.transform.localPosition = Vector3.zero;
+        rb.isKinematic = true;
         Physics.IgnoreCollision(this.bodyCollider, character.bodyCollider, true);
     }
 
@@ -60,13 +61,15 @@ public class ItemProjectileBase : MonoBehaviour
     {
         hasThrow = true;
         this.transform.parent = null;
+        rb.isKinematic = false;
         rb.velocity = (character.ridbody.velocity.magnitude + initialHorizontalSpeed) * project + initialVerticalSpeed * Vector3.up;
         character.animationEventReceiver.UnRegisterEvent(AnimationEventReceiver.EventEnum.ThrowBoom, Throw);
     }
 
     private void AddGravity()
     {
-        rb.AddForce(Vector3.down * projectileGravity * rb.mass);
+        if (hasThrow)
+            rb.AddForce(Vector3.down * projectileGravity * rb.mass);
     }
 
     private void CheckGround()
