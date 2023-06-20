@@ -508,9 +508,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8579178478754831918}
-  m_LocalRotation: {x: -0.7439087, y: -0, z: -0, w: 0.6682813}
-  m_LocalPosition: {x: -0.29, y: 0.089, z: 0.068}
-  m_LocalScale: {x: 0.7, y: 0.7, z: 0.7}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 3399284513711107368}
@@ -518,7 +518,7 @@ Transform:
   - {fileID: 3542977684268785455}
   m_Father: {fileID: 7573151255675718541}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: -96.131, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8921125700453522261
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -699,8 +699,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9205158798657765722}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.4600835, y: 15.189713, z: 10.601126}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.7, y: 0.7, z: 0.7}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 8954438036627375252}
@@ -718,8 +718,8 @@ SphereCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.3522573
-  m_Center: {x: -0.29318666, y: 0.095525585, z: 0.07144475}
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &869894657463175225
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -754,4 +754,4 @@ MonoBehaviour:
   initialHorizontalSpeed: 5
   initialVerticalSpeed: 5
   projectileGravity: 10
-  explosionMaxTime: 2000
+  explosionMaxTime: 10
