@@ -32,15 +32,10 @@ public class RocketProjectile : ItemProjectileBase
         }
     }
 
-    public override void Init(CharacterContorl character)
+    public override void Init(CharacterContorl character,Vector3 project)
     {
-        base.Init(character);
+        base.Init(character, project);
         rb.useGravity = false;
-    }
-
-    public override void Launch()
-    {
-
     }
 
     /// <summary>
@@ -71,21 +66,6 @@ public class RocketProjectile : ItemProjectileBase
 
     protected override void OnCollisionEnter(Collision collision)
     {
-        ////施加转角力 正值顺时针转动，负值逆时针转动
-        //var torgueAngle = Vector3.SignedAngle(initialVelocity, collision.contacts[0].point, Vector3.up);
-        //if (torgueAngle >= 0)
-        //{
-        //    rb.AddRelativeTorque(Vector3.up * initialVelocity.magnitude * Mathf.Cos(torgueAngle * Mathf.Deg2Rad) * 50, ForceMode.Force);
-        //}
-        //else
-        //{
-        //    rb.AddRelativeTorque(Vector3.down * initialVelocity.magnitude * Mathf.Cos(torgueAngle * Mathf.Deg2Rad) * 50, ForceMode.Force);
-        //}
-
-        //var hitDir = Vector3.ProjectOnPlane((rb.position - collision.contacts[0].point), Vector3.up).normalized;
-        //var force = KnockBackForce(2, hitDir);
-        //rb.AddForce((force) * hitDir, ForceMode.Force);
-
         if (collision.transform.tag == "StaticObject")
         {
             Explosion();
@@ -114,7 +94,6 @@ public class RocketProjectile : ItemProjectileBase
         base.OnEnd();
     }
 
-    
 
     private void OnDrawGizmos()
     {
@@ -122,7 +101,7 @@ public class RocketProjectile : ItemProjectileBase
         Gizmos.DrawLine(this.transform.position, this.transform.position + initialVelocity * 5);
     }
 
-    public override void Throw()
+    public override void Launch()
     {
         this.transform.parent = character.itemPlaceBelly;
         this.transform.localPosition = Vector3.zero;
@@ -132,6 +111,8 @@ public class RocketProjectile : ItemProjectileBase
         Physics.IgnoreCollision(this.bodyCollider, character.bodyCollider, true);
         rb.velocity = runMaxVelocity * project;
         initialVelocity = rb.velocity;
+        this.rb.constraints = RigidbodyConstraints.FreezeRotation;
     }
+
 }
 

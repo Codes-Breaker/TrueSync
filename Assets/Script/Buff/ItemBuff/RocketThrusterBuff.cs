@@ -77,11 +77,10 @@ public class RocketThrusterBuff : ItemBuffBase
         //´´½¨»ð¼ý
         rocket.transform.parent = null;
         var itemBase = rocket.AddComponent<RocketProjectile>();
-        itemBase.Init(character);
         (itemBase as RocketProjectile).itemRot = rocket.transform.rotation;
         Quaternion rotation = Quaternion.Euler(0f, -90f, 0f);
         (itemBase as RocketProjectile).rocketForward = rotation * rocket.transform.forward;
-        itemBase.Throw();
+        itemBase.Init(character, Vector3.zero);
     }
 
     public override void OnBuffUpdate()

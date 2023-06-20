@@ -107,6 +107,6 @@ public class ItemAbilityBase
         UnEquipCharacter();
         //Çå³þ
         character.RemoveItemAbility();
-        character = null;
+        //character = null;
     }
 }
