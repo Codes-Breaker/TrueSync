@@ -51,7 +51,7 @@ public class ProjectileItemAbility : ItemAbilityBase
         character.animationEventReceiver.UnRegisterEvent(AnimationEventReceiver.EventEnum.ThrowBoom,Launch);
         GameObject.Destroy(itemOnHand);
         itemBase = ItemManager.CreatProjectileByItemID(itemData.itemId, character, itemOnHand.transform.position,character.transform.forward);
-        itemBase.Launch();
+        //itemBase.Launch();
     }
 
     public override void FixedUpdate()
