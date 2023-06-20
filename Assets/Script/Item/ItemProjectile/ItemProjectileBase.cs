@@ -45,6 +45,9 @@ public class ItemProjectileBase : MonoBehaviour
     {
         this.transform.parent = null;
         rb.isKinematic = false;
+        //var characterGroundNomal = character.groundNormal;
+        //var horizontalProject = Vector3.ProjectOnPlane(project, characterGroundNomal).normalized;
+        //var verticalProject = Vector3.Cross(project, Vector3.up).normalized;
         rb.velocity = (character.ridbody.velocity.magnitude + initialHorizontalSpeed) * project + initialVerticalSpeed * Vector3.up;
     }
 
@@ -60,7 +63,8 @@ public class ItemProjectileBase : MonoBehaviour
 
     private void CheckGround()
     {
-        if(Physics.CheckSphere(bodyCollider.transform.position + (bodyCollider as SphereCollider).center * bodyCollider.transform.localScale.y - new Vector3(0, (bodyCollider as SphereCollider).radius * bodyCollider.transform.localScale.y, 0), 0.025f, groundLayer))
+        //if(Physics.CheckSphere(bodyCollider.transform.position + (bodyCollider as SphereCollider).center * bodyCollider.transform.localScale.y - new Vector3(0, (bodyCollider as SphereCollider).radius * bodyCollider.transform.localScale.y, 0), 0.025f, groundLayer))
+        if (Physics.OverlapSphere((bodyCollider.transform.position + (bodyCollider as SphereCollider).center * bodyCollider.transform.localScale.y), (bodyCollider as SphereCollider).radius * bodyCollider.transform.localScale.y,groundLayer).Length != 0)
             OnTouchGround();
 
     }

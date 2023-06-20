@@ -668,7 +668,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7176401066382099560}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.68828773, y: 4.1859336, z: 3.8299627}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.7, y: 0.7, z: 0.7}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -720,7 +720,8 @@ MonoBehaviour:
   character: {fileID: 0}
   explosionMaxTime: 0
   explosionTime: 10
-  explosionForceArgument: 2000
+  delayTime: 0.2
+  explosionForceArgument: 1000
   explosionRangeRadius: 10
   stickyBombFuseGameObject: {fileID: 8660913711718862041}
 --- !u!135 &1599936099966803671

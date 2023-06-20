@@ -39,7 +39,11 @@ public class StickyBombProjectile : ItemProjectileBase
         {
             trap.Init(character);
             trap.SetExplosionTime(explosionMaxTime);
-            trapObject.transform.position = transform.position + (bodyCollider as SphereCollider).center;
+            trapObject.transform.position = transform.position;
+            var trapRB = trapObject.GetComponent<Rigidbody>();
+            trapObject.transform.rotation = transform.rotation;
+            trapRB.velocity = rb.velocity;
+            trapRB.angularVelocity = rb.angularVelocity;
         }
         OnEnd();
     }
