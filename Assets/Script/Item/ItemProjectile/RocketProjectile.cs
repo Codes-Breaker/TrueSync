@@ -17,17 +17,12 @@ public class RocketProjectile : ItemProjectileBase
         rb.velocity = initialVelocity;
     }
 
-    public override void Init(CharacterContorl character)
+    public override void Init(CharacterContorl character,Vector3 project)
     {
-        base.Init(character);
+        base.Init(character, project);
     }
 
     public override void Launch()
-    {
-
-    }
-
-    public override void Throw()
     {
         this.transform.parent = character.itemPlaceBelly;
         this.transform.localPosition = Vector3.zero;
@@ -37,6 +32,8 @@ public class RocketProjectile : ItemProjectileBase
         Physics.IgnoreCollision(this.bodyCollider, character.bodyCollider, true);
         rb.velocity = (character.ridbody.velocity.magnitude) * project;
         initialVelocity = rb.velocity;
+
     }
+
 }
 

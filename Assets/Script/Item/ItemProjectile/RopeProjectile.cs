@@ -19,9 +19,14 @@ public class RopeProjectile : ItemProjectileBase
     private bool isTear;
     private bool isStartStick;
     private bool canStickyCharacter;
-    public override void Init(CharacterContorl character)
+    public override void Init(CharacterContorl character,Vector3 project)
     {
-        base.Init(character);
+        base.Init(character, project);
+    }
+
+    public override void Launch()
+    {
+        base.Launch();
         ropeObject = Instantiate(Resources.Load<GameObject>(ropePrefabPath));
         obiRope = ropeObject.GetComponent<ObiRope>();
         ropeObject.transform.SetParent(GameObject.FindObjectOfType<ObiSolver>().transform);
@@ -29,9 +34,10 @@ public class RopeProjectile : ItemProjectileBase
         for (int i= 0;i<obiRope.activeParticleCount;i++)
         {
             obiRope.solver.positions[obiRope.solverIndices[i]] = obiRope.solver.transform.InverseTransformPoint(character.transform.position - detalPosition * i);
-            //obiRope.solver.positions[obiRope.solverIndices[i]] =character.transform.position;
+
 
         }
+        
         var attachments = ropeObject.GetComponents<ObiParticleAttachment>();
         startPoint = attachments[0];
         endPoint = attachments[1];
@@ -41,6 +47,8 @@ public class RopeProjectile : ItemProjectileBase
         isTear = false;
         //isStartStick = false;
         currentTime = 0;
+
+
     }
     protected override void FixedUpdate()
     {
@@ -68,7 +76,7 @@ public class RopeProjectile : ItemProjectileBase
     {
         base.OnCollisionEnter(collision);
         var otherCharacter = collision.collider.GetComponent<CharacterContorl>();
-        if (otherCharacter && canStickyCharacter)
+        if (otherCharacter && canStickyCharacter && otherCharacter != character)
         {
             startPoint.target = otherCharacter.transform;
             canStickyCharacter = false;
@@ -98,7 +106,7 @@ public class RopeProjectile : ItemProjectileBase
     private void OnTriggerEnter(Collider collision)
     {
         var otherCharacter = collision.GetComponent<Collider>().GetComponent<CharacterContorl>();
-        if (otherCharacter && canStickyCharacter)
+        if (otherCharacter && canStickyCharacter && otherCharacter != character)
         {
             startPoint.target = otherCharacter.transform;
             canStickyCharacter = false;
@@ -128,8 +136,12 @@ public class RopeProjectile : ItemProjectileBase
     protected override void OnTouchGround()
     {
         base.OnTouchGround();
-        obiRidbody.kinematicForParticles = false;
-        canStickyCharacter = false;
+        //obiRidbody.kinematicForParticles = false;
+        if (canStickyCharacter)
+        {
+            currentTime = tearTime;
+            canStickyCharacter = false;
+        }
     }
     public override void OnEnd()
     {

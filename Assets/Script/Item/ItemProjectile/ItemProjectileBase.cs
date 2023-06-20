@@ -19,18 +19,20 @@ public class ItemProjectileBase : MonoBehaviour
     protected Rigidbody rb;
     protected Collider bodyCollider;
     private bool hasThrow = false;
-    public virtual void Init(CharacterContorl character)
+    public virtual void Init(CharacterContorl character,Vector3 project)
     {
         this.character = character;
+        this.project = project;
         bodyCollider = gameObject.GetComponent<Collider>();
         rb = gameObject.GetComponent<Rigidbody>();
         rb.useGravity = false;
+        Launch();
        // bodyCollider.isTrigger = true;
     }
 
     protected virtual void OnCollisionEnter(Collision collision)
     {
-        
+
     }
 
     protected virtual void FixedUpdate()
@@ -41,9 +43,6 @@ public class ItemProjectileBase : MonoBehaviour
 
     public virtual void Launch()
     {
-
-        this.project = this.character.transform.forward;
-        hasThrow = true;
         this.transform.parent = null;
         rb.isKinematic = false;
         rb.velocity = (character.ridbody.velocity.magnitude + initialHorizontalSpeed) * project + initialVerticalSpeed * Vector3.up;
@@ -51,29 +50,17 @@ public class ItemProjectileBase : MonoBehaviour
 
     private void OnDestroy()
     {
-        character.animationEventReceiver.UnRegisterEvent(AnimationEventReceiver.EventEnum.ThrowBoom, Throw);
-    }
-
-
-    public virtual void Throw()
-    {
-        this.transform.parent = character.itemPlaceHand;
-        this.transform.localPosition = Vector3.zero;
-        rb.isKinematic = true;
-        Physics.IgnoreCollision(this.bodyCollider, character.bodyCollider, true);
-
-
+       
     }
 
     private void AddGravity()
     {
-        if (hasThrow)
-            rb.AddForce(Vector3.down * projectileGravity * rb.mass);
+        rb.AddForce(Vector3.down * projectileGravity * rb.mass);
     }
 
     private void CheckGround()
     {
-        if(Physics.CheckSphere(bodyCollider.transform.position + (bodyCollider as SphereCollider).center * bodyCollider.transform.localScale.y - new Vector3(0, (bodyCollider as SphereCollider).radius * bodyCollider.transform.localScale.y, 0), 0.1f, groundLayer) && hasThrow)
+        if(Physics.CheckSphere(bodyCollider.transform.position + (bodyCollider as SphereCollider).center * bodyCollider.transform.localScale.y - new Vector3(0, (bodyCollider as SphereCollider).radius * bodyCollider.transform.localScale.y, 0), 0.025f, groundLayer))
             OnTouchGround();
 
     }
