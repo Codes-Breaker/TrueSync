@@ -7,6 +7,7 @@ public class Buff
     public CharacterContorl character;
     public bool isEnd = false;
     public float buffTime = -1;
+    public float maxBuffTime = -1;
     public Buff(CharacterContorl target)
     {
         this.character = target;
@@ -17,6 +18,7 @@ public class Buff
     {
         this.character = target;
         this.buffTime = buffTime;
+        this.maxBuffTime = buffTime;
         OnBuffApply();
     }
 
@@ -40,6 +42,10 @@ public class Buff
                 Finish();
             }
         }
+    }
+
+    public virtual void OnBuffLateUpdate()
+    {
 
     }
 
