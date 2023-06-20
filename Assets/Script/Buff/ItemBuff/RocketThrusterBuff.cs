@@ -48,10 +48,10 @@ public class RocketThrusterBuff : ItemBuffBase
         base.OnBuffRemove();
         var point = (character.transform.position + (character.bodyCollider as SphereCollider).center) + (character.ridbody.transform.forward.normalized * (character.bodyCollider as SphereCollider).radius * character.transform.localScale.x + character.ridbody.transform.forward.normalized * 1);
         //´´½¨»ð¼ý
-        var itemBase = ItemManager.CreatProjectileByItemID(1, character, point);
+        var itemBase = ItemManager.CreatProjectileByItemID(1, character, point, Vector3.zero);
         (itemBase as RocketProjectile).itemRot = rocket.transform.rotation;
         (itemBase as RocketProjectile).rocketForward = rocket.transform.forward;
-        itemBase.Throw();
+
         rocket.gameObject.SetActive(false);
         GameObject.Destroy(rocket);
     }

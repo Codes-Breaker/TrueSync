@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class StickyBombBuff : ItemBuffBase
 {
@@ -8,6 +9,10 @@ public class StickyBombBuff : ItemBuffBase
     private float explosionRangeRadius = 10f;
     //爆炸力大小
     private float explosionForceArgument = 2000f;
+    //传递时的飞行高度
+    public float stickyBombHeight = 5f;
+    //传递时的飞行时间
+    public float stickyBombFlyTime = 1f;
     //爆炸特效预制体路径
     private string timeLapseBombExplosionEffectPath = "Prefabs/Effect/StickyBomb_Explosion";
     //倒计时特效
@@ -19,6 +24,7 @@ public class StickyBombBuff : ItemBuffBase
 
     private bool isCreatCountDownEffect = false;
 
+    private bool isPassingBomb = false;
     private string stickyBombPrefabPath = "Prefabs/Item/ItemBuffPrefab/StickyBombBuffItem";
     private GameObject stickyBombGameObject;
     private Transform stickyBombFuseGameObject;
@@ -100,12 +106,16 @@ public class StickyBombBuff : ItemBuffBase
     {
         base.OnCollide(collision);
         var otherCharacter = collision.collider.GetComponent<CharacterContorl>();
-        if (otherCharacter)
+        if (otherCharacter && !isPassingBomb)
         {
-            var bombBuff = new StickyBombBuff(otherCharacter);
-            bombBuff.SetExplosionTime(explosionTime, explosionMaxTime);
-            otherCharacter.OnGainBuff(bombBuff);
-            base.Finish();
+            stickyBombGameObject.transform.SetParent(null);
+            stickyBombGameObject.transform.DOPath(new Vector3[] { character.itemPlaceHand.transform.position, (otherCharacter.itemPlaceHand.transform.position + character.itemPlaceHand.transform.position) / 2 + new Vector3(0, stickyBombHeight, 0), otherCharacter.itemPlaceHand.transform.position }, stickyBombFlyTime, PathType.CubicBezier,PathMode.Full3D).OnComplete(()=> { 
+                var bombBuff = new StickyBombBuff(otherCharacter);
+                bombBuff.SetExplosionTime(explosionTime, explosionMaxTime);
+                otherCharacter.OnGainBuff(bombBuff);
+                isPassingBomb = true;
+                base.Finish();
+            });
         }
     }
 }
