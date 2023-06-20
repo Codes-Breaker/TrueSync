@@ -45,10 +45,9 @@ public class ItemProjectileBase : MonoBehaviour
     {
         this.transform.parent = null;
         rb.isKinematic = false;
-        //var characterGroundNomal = character.groundNormal;
-        //var horizontalProject = Vector3.ProjectOnPlane(project, characterGroundNomal).normalized;
-        //var verticalProject = Vector3.Cross(project, Vector3.up).normalized;
-        rb.velocity = (character.ridbody.velocity.magnitude + initialHorizontalSpeed) * project + initialVerticalSpeed * Vector3.up;
+        var characterGroundNomal = character.groundNormal;
+        var horizontalProject = Vector3.ProjectOnPlane(project, characterGroundNomal).normalized;
+        rb.velocity = (character.ridbody.velocity.magnitude + initialHorizontalSpeed) * horizontalProject + initialVerticalSpeed * characterGroundNomal.normalized;
     }
 
     private void OnDestroy()
