@@ -118,7 +118,24 @@ public class ItemManager : MonoBehaviour
         }
     }
 
-    public static ItemProjectileBase CreatProjectileByItemID(float itemID, CharacterContorl character, Vector3 originalPosition)
+    public static GameObject CreatItemOnHand(float itemID)
+    {
+        GameObject itemObj = null;
+        switch (itemID)
+        {
+            case 4:
+                itemObj = GameObject.Instantiate(Resources.Load<GameObject>("Prefabs/Item/ItemOnHand/StickyBombOnHand"));
+                return itemObj;
+            case 5:
+                itemObj = GameObject.Instantiate(Resources.Load<GameObject>("Prefabs/Item/ItemOnHand/RopeProjectileOnHand"));
+                return itemObj;
+            default:
+                Debug.LogError("没有找到对应ID");
+                return null;
+        }
+    }
+
+    public static ItemProjectileBase CreatProjectileByItemID(float itemID, CharacterContorl character, Vector3 originalPosition,Vector3 project)
     {
         ItemProjectileBase itemProjectbase = null;
         GameObject itemObj = null;
@@ -144,7 +161,7 @@ public class ItemManager : MonoBehaviour
         {
             itemObj.transform.position = originalPosition;
             itemProjectbase = itemObj.GetComponent<ItemProjectileBase>();
-            itemProjectbase.Init(character);
+            itemProjectbase.Init(character,project);
         }
         return itemProjectbase;
     }

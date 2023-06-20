@@ -6,9 +6,9 @@ public class ProjectileItemAbility : ItemAbilityBase
 {
     protected float offset = 1f;
     private ItemProjectileBase itemBase;
+    private GameObject itemOnHand;
     public ProjectileItemAbility(CharacterContorl character, ItemData data) : base(character, data)
     {
-        character.animationEventReceiver.RegisterEvent(AnimationEventReceiver.EventEnum.ThrowBoom, Launch);
     }
 
     public override void Init()
@@ -31,19 +31,26 @@ public class ProjectileItemAbility : ItemAbilityBase
         var point = (character.transform.position + (character.bodyCollider as SphereCollider).center) + (character.ridbody.transform.forward.normalized * (character.bodyCollider as SphereCollider).radius * character.transform.localScale.x + character.ridbody.transform.forward.normalized * offset);
         //trapObject.transform.position = new Vector3(point.x, point.y - (character.bodyCollider as SphereCollider).radius * character.transform.localScale.x, point.z);
         //trapObject.transform.position = point;
-        itemBase = ItemManager.CreatProjectileByItemID(itemData.itemId, character, point);
-        itemBase.Throw();
+        
         Throw();
         base.itemAbility();
     }
 
     private void Throw()
     {
+        itemOnHand = ItemManager.CreatItemOnHand(itemData.itemId);
+        itemOnHand.transform.SetParent(character.itemPlaceHand);
+        itemOnHand.transform.localPosition = Vector3.zero;
+        //Physics.IgnoreCollision(this.bodyCollider, character.bodyCollider, true);
+        character.animationEventReceiver.RegisterEvent(AnimationEventReceiver.EventEnum.ThrowBoom, Launch);
         character.anima.SetTrigger("throwBoom");
     }
 
     private void Launch()
     {
+        character.animationEventReceiver.UnRegisterEvent(AnimationEventReceiver.EventEnum.ThrowBoom,Launch);
+        GameObject.Destroy(itemOnHand);
+        itemBase = ItemManager.CreatProjectileByItemID(itemData.itemId, character, itemOnHand.transform.position,character.transform.forward);
         itemBase.Launch();
     }
 
@@ -59,7 +66,6 @@ public class ProjectileItemAbility : ItemAbilityBase
 
     public override void End()
     {
-        character.animationEventReceiver.UnRegisterEvent(AnimationEventReceiver.EventEnum.ThrowBoom, Throw);
         base.End();
     }
 }
