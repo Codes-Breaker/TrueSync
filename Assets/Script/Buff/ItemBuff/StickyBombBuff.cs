@@ -8,7 +8,7 @@ public class StickyBombBuff : ItemBuffBase
     //爆炸范围
     private float explosionRangeRadius = 10f;
     //爆炸力大小
-    private float explosionForceArgument = 2000f;
+    private float explosionForceArgument = 20f;
     //传递时的飞行高度
     public float stickyBombHeight = 5f;
     //传递时的飞行时间
@@ -23,6 +23,10 @@ public class StickyBombBuff : ItemBuffBase
     public float explosionMaxTime;
 
     private bool isCreatCountDownEffect = false;
+
+    private Tweener pathTweener;
+
+    private CharacterContorl otherCharacter;
 
     private bool isPassingBomb = false;
     private string stickyBombPrefabPath = "Prefabs/Item/ItemBuffPrefab/StickyBombBuffItem";
@@ -68,6 +72,7 @@ public class StickyBombBuff : ItemBuffBase
             SetFuseState();
 
         }
+
     }
 
     private void SetFuseState()
@@ -108,14 +113,22 @@ public class StickyBombBuff : ItemBuffBase
         var otherCharacter = collision.collider.GetComponent<CharacterContorl>();
         if (otherCharacter && !isPassingBomb)
         {
+            this.otherCharacter = otherCharacter;
             stickyBombGameObject.transform.SetParent(null);
-            stickyBombGameObject.transform.DOPath(new Vector3[] { character.itemPlaceHand.transform.position, (otherCharacter.itemPlaceHand.transform.position + character.itemPlaceHand.transform.position) / 2 + new Vector3(0, stickyBombHeight, 0), otherCharacter.itemPlaceHand.transform.position }, stickyBombFlyTime, PathType.CubicBezier,PathMode.Full3D).OnComplete(()=> { 
-                var bombBuff = new StickyBombBuff(otherCharacter);
-                bombBuff.SetExplosionTime(explosionTime, explosionMaxTime);
-                otherCharacter.OnGainBuff(bombBuff);
-                isPassingBomb = true;
-                base.Finish();
-            });
+            pathTweener = stickyBombGameObject.transform.DOLocalPath(new Vector3[] { character.itemPlaceHand.transform.position, (otherCharacter.itemPlaceHand.transform.position + character.itemPlaceHand.transform.position) / 2 + new Vector3(0, stickyBombHeight, 0), otherCharacter.itemPlaceHand.transform.position }, stickyBombFlyTime, PathType.CubicBezier, PathMode.Full3D)
+                .OnWaypointChange((int wayPointIndex) => {
+                    if (wayPointIndex == 1)
+                    {
+
+                    }
+                })
+                .OnComplete(() => {
+                    var bombBuff = new StickyBombBuff(otherCharacter);
+                    bombBuff.SetExplosionTime(explosionTime, explosionMaxTime);
+                    otherCharacter.OnGainBuff(bombBuff);
+                    isPassingBomb = true;
+                    base.Finish();
+                });
         }
     }
 }

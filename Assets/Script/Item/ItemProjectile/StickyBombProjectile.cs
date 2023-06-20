@@ -5,7 +5,7 @@ using UnityEngine;
 public class StickyBombProjectile : ItemProjectileBase
 {
     //本地爆炸倒计时总时长
-    public float explosionMaxTime= 20f;
+    public float explosionMaxTime= 2000f;
     private string stickyBombTrapPath = "Prefabs/Item/ItemTrap/StickyBombTrap";
     public override void Init(CharacterContorl character,Vector3 project)
     {
@@ -21,7 +21,7 @@ public class StickyBombProjectile : ItemProjectileBase
     {
         base.OnCollisionEnter(collision);
         var otherCharacter = collision.collider.GetComponent<CharacterContorl>();
-        if (otherCharacter)
+        if (otherCharacter && otherCharacter != character)
         {
             var bombBuff = new StickyBombBuff(otherCharacter);
             bombBuff.SetExplosionTime(explosionMaxTime, explosionMaxTime);
