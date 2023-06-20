@@ -342,7 +342,7 @@ public class CharacterContorl : MonoBehaviour
     public int slipProtectFrame = 3;
     private float slipProtectTime;
     private bool canSlip = false;
-
+    public bool isBrake = false;
     public RangeDector rangeDector;
     private CharacterContorl lastSeenTarget;
 
@@ -883,6 +883,7 @@ public class CharacterContorl : MonoBehaviour
     {
         if (isDead)
             return;
+        isBrake = brake;
         if (isStun || isInWater)
         {
             if (hasBrake)
@@ -1247,10 +1248,11 @@ public class CharacterContorl : MonoBehaviour
         }
     }
 
+ 
     private void CheckSpeed()
     {
         //Debug.LogError($"current speed: {velocityBeforeCollision.magnitude} ---> {(velocityBeforeCollision.magnitude / runMaxVelocity) * 100}% {(DateTime.Now - releaseDateTime).TotalSeconds} seconds");
-        if (velocityBeforeCollision.magnitude >= runMaxVelocity * 0.9f)
+        if (velocityBeforeCollision.magnitude >= runMaxVelocity * 0.9f && !isInRocket)
         {
             isAtMaxSpeed = true;
             anima.SetBool("isAtMaxSpeed", isAtMaxSpeed);
