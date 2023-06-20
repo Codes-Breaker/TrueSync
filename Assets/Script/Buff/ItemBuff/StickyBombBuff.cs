@@ -88,6 +88,8 @@ public class StickyBombBuff : ItemBuffBase
     
     private void Explosion()
     {
+        this.character.TakeStun(100);
+
         var colliders = GameObject.FindObjectsOfType<Rigidbody>();
 
         if (colliders.Length != 0)

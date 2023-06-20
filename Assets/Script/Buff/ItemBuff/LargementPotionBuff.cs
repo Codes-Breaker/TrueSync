@@ -33,7 +33,7 @@ public class LargementPotionBuff : ItemBuffBase
         //character.transform.localScale = new Vector3(character.transform.localScale.x * scaleParameter, character.transform.localScale.y * scaleParameter, character.transform.localScale.z * scaleParameter);
         character.hitKnockBackToOtherArgument = character.hitKnockBackToOtherArgument * hitKnockBackToOhterArgument;
         character.hitKnockbackToSelfArgument = character.hitKnockbackToSelfArgument * hitKnockBackToSelfArgument;
-
+        character.invulernable = true;
         character.hitMaxDistance = character.hitMaxDistance * 2;
         base.OnBuffApply();
 
@@ -48,6 +48,7 @@ public class LargementPotionBuff : ItemBuffBase
         character.hitKnockBackToOtherArgument = character.hitKnockBackToOtherArgument / hitKnockBackToOhterArgument;
         character.hitKnockbackToSelfArgument = character.hitKnockbackToSelfArgument / hitKnockBackToSelfArgument;
         character.hitMaxDistance = character.hitMaxDistance / 2;
+        character.invulernable = false;
         base.OnBuffRemove();
 
         var eventObjectPrefab = Resources.Load<GameObject>("Prefabs/Effect/Huge");
