@@ -185,7 +185,7 @@ public class CharacterContorl : MonoBehaviour
     private bool hasBrake = false;
     private bool isDrift;
     private bool isWalk;
-    private bool isRollContinu;
+
     public bool isGrounded;
     public bool isStun { get; private set; }
     //起身
@@ -246,10 +246,6 @@ public class CharacterContorl : MonoBehaviour
 
     public int playerIndex = 1;
 
-    //眩晕旋转状态相关
-    Vector3 rollRotationAxis = Vector3.zero;
-    float rollRotationAmount = 0f;
-
 
     public bool isInWater = false;
     private bool hasInWater = false;
@@ -264,7 +260,7 @@ public class CharacterContorl : MonoBehaviour
     private float lastJumpRushTime;
     private float lastStunTime;
     private float ElapsedRollTime; //过去了的时间
-    private float TargetRollTime; //目标时间
+    //private float TargetRollTime; //目标时间
     private float lastInWaterTime; //上次入水时间
     private float lastCollisionTime; //上次碰撞时间
     private float lastHPSubtractTime = 0; //上次扣血时间
@@ -389,16 +385,18 @@ public class CharacterContorl : MonoBehaviour
     {
         SetSlider();
         SetAnimState();
-        MoveRoll();
+        SetQTE();
+        //MoveRoll();
         SetHPHint();
         SetGPHint();
+        LateUpdateBuff();
+        SetIK();
         //SetEffect();
     }
 
     private void Update()
     {
         SetAnimatorArgument();
-        SetIK();
         TickItemAbilityUpdate();
     }
 
@@ -446,11 +444,20 @@ public class CharacterContorl : MonoBehaviour
 
     public void SetControlSelf()
     {
-        inputReader.moveAciotn = MoveWalk;
-        inputReader.chargeAction = MoveCharge;
-        inputReader.interactWeaponAction = UseItem;
-        inputReader.jumpAction = MoveJump;
-        inputReader.brakeAciton = MoveBrake;
+        inputReader.moveAciotn += MoveWalk;
+        inputReader.chargeAction += MoveCharge;
+        inputReader.interactWeaponAction += UseItem;
+        inputReader.jumpAction += MoveJump;
+        inputReader.brakeAciton += MoveBrake;
+    }
+
+    public void SetOffControlSelf()
+    {
+        inputReader.moveAciotn -= MoveWalk;
+        inputReader.chargeAction -= MoveCharge;
+        inputReader.interactWeaponAction -= UseItem;
+        inputReader.jumpAction -= MoveJump;
+        inputReader.brakeAciton -= MoveBrake;
     }
 
     private void SetDead(Vector3 hitDir)
@@ -462,6 +469,7 @@ public class CharacterContorl : MonoBehaviour
         ragdollController.Ragdoll(true, hitDir);
         Destroy(floatObj);
         Dead();
+        SetOffControlSelf();
     }
 
     public void SetWin()
@@ -479,7 +487,7 @@ public class CharacterContorl : MonoBehaviour
 
     public void TakeStun(int number)
     {
-        if (isStun)
+        if (HasRollStun())
             return;
         currentStunValue = Math.Max(0, currentStunValue - number);
         CheckStun();
@@ -515,6 +523,15 @@ public class CharacterContorl : MonoBehaviour
         if (currentHPValue == 0)
         {
             SetDead(hitDir);
+        }
+    }
+
+    private void LateUpdateBuff()
+    {
+        foreach (var buff in buffs.ToArray())
+        {
+            if (!buff.isEnd)
+                buff.OnBuffLateUpdate();
         }
     }
 
@@ -657,7 +674,7 @@ public class CharacterContorl : MonoBehaviour
         anima.SetFloat("playSpeed", runAnimPlayCurve.Evaluate(speed));
         anima.SetFloat("velocityY", ridbody.velocity.y);
         anima.SetBool("Releasing", releasing||controlKeepRuning);
-        anima.SetBool("isStun", isStun);
+
         if (isInWater && !hasInWater && !isInRocket)
         {
             anima.SetTrigger("isInWater");
@@ -763,7 +780,7 @@ public class CharacterContorl : MonoBehaviour
 
     private void MoveWalk(Vector2 axisInput, ControlDeviceType controlDeviceType)
     {
-        if (isStun || isDead)
+        if (HasQTEStun() || isDead)
             return;
         //单位化输入方向
         if (controlDeviceType == ControlDeviceType.Mouse)
@@ -884,7 +901,7 @@ public class CharacterContorl : MonoBehaviour
         if (isDead)
             return;
         isBrake = brake;
-        if (isStun || isInWater)
+        if (HasRollStun() || isInWater)
         {
             if (hasBrake)
             {
@@ -927,21 +944,49 @@ public class CharacterContorl : MonoBehaviour
         }
     }
 
+    private void MoveQTE(QTEButton e)
+    {
+        //当前QTE
+        var currentQTE = this.buffs.Where(x => x is QTEBuff).Cast<QTEBuff>().ToList();
+        var chosenOne = currentQTE.FirstOrDefault(x => x.QTEPriority == -1);
+        if (chosenOne != null)
+        {
+            chosenOne.PressButton(e);
+            return;
+        }
+        if (currentQTE.Count > 0)
+        {
+            //同层级同时结算
+            var maxP = currentQTE.Max(x => x.QTEPriority);
+            var chosens = currentQTE.Where(x => x.QTEPriority == maxP);
+            foreach(var chose in chosens)
+            {
+                chose.PressButton(e);
+            }
+        }
+
+
+    }
+
     private void MoveJump(bool jump)
     {
+        if (jump)
+        {
+            MoveQTE(QTEButton.A);
+        }
 
         if ((isGrounded || isTouchingSlope) && ridbody.velocity.y <= 0)
         {
             anima.SetBool("Jump", false);
         }
-        if (isStun)
-        {
-            if (jump)
-            {
-                lastStunTime += 0.05f;
-            }
-            return;
-        }
+        //if (isStun)
+        //{
+        //    if (jump)
+        //    {
+        //        lastStunTime += 0.05f;
+        //    }
+        //    return;
+        //}
 
         if (isDead)
             return;
@@ -1014,7 +1059,7 @@ public class CharacterContorl : MonoBehaviour
 
     private void MoveCharge(bool charge)
     {
-        if (isStun || isDead || hasStunBuff() || controlKeepRuning)
+        if (isDead || hasStunBuff() || controlKeepRuning)
             return;
         if (charge)
         {
@@ -1125,33 +1170,33 @@ public class CharacterContorl : MonoBehaviour
         }
     }
 
-    private void MoveRoll()
-    {
-        if (isDead)
-            return;
-        if (isStun)
-        {
-            if(ridbody.velocity.magnitude > stunStopRollMinVelocity)
-            {
-                rollRotationAxis = - Vector3.Cross(groundNormal, ridbody.velocity);
-                rollRotationAmount = ridbody.velocity.magnitude;
-                IKObject.transform.Rotate(rollRotationAxis, - rollRotationAmount, Space.World);
-                isRollContinu = true;
-            }
-            else
-            {
-                var upAngle = Vector3.Angle(IKObject.transform.up, groundNormal);
-                var forwardAngle = Vector3.Angle(IKObject.transform.forward, groundNormal);
-                isRollContinu = upAngle < stunStopRollMinAngle || (180f - upAngle) < stunStopRollMinAngle || (stunStopRollMaxAngle < upAngle && upAngle < (180 - stunStopRollMaxAngle))&&(stunStopRollMaxAngle < forwardAngle && forwardAngle < (180 - stunStopRollMaxAngle));
-                //近乎停止旋转时的平衡补偿
-                if(isRollContinu)
-                {
-                    IKObject.transform.Rotate(rollRotationAxis, -rollRotationAmount, Space.World);
+    //private void MoveRoll()
+    //{
+    //    if (isDead)
+    //        return;
+    //    if (isStun)
+    //    {
+    //        if(ridbody.velocity.magnitude > stunStopRollMinVelocity)
+    //        {
+    //            rollRotationAxis = - Vector3.Cross(groundNormal, ridbody.velocity);
+    //            rollRotationAmount = ridbody.velocity.magnitude;
+    //            IKObject.transform.Rotate(rollRotationAxis, - rollRotationAmount, Space.World);
+    //            isRollContinu = true;
+    //        }
+    //        else
+    //        {
+    //            var upAngle = Vector3.Angle(IKObject.transform.up, groundNormal);
+    //            var forwardAngle = Vector3.Angle(IKObject.transform.forward, groundNormal);
+    //            isRollContinu = upAngle < stunStopRollMinAngle || (180f - upAngle) < stunStopRollMinAngle || (stunStopRollMaxAngle < upAngle && upAngle < (180 - stunStopRollMaxAngle))&&(stunStopRollMaxAngle < forwardAngle && forwardAngle < (180 - stunStopRollMaxAngle));
+    //            //近乎停止旋转时的平衡补偿
+    //            if(isRollContinu)
+    //            {
+    //                IKObject.transform.Rotate(rollRotationAxis, -rollRotationAmount, Space.World);
 
-                }
-            }
-        }
-    }
+    //            }
+    //        }
+    //    }
+    //}
 
     #endregion
 
@@ -1211,41 +1256,54 @@ public class CharacterContorl : MonoBehaviour
         }
     }
 
+    private bool HasRollStun()
+    {
+        return buffs.Any(x => x is QTERollStun);
+    }
+
+    private bool HasQTEStun()
+    {
+        return buffs.Any(x => x is QTEBuff);
+    }
 
     private void CheckStun()
     {
-        if (isDead)
-            return;        
-
-        if (isStun)
+        if (isDead || HasRollStun())
+            return;
+        if (currentStunValue <= 0)
         {
-            lastStunTime += Time.fixedDeltaTime;
-            if (lastStunTime >= stunRecoverTime && !isRecoveringFromStun)
-            {
-                isRecoveringFromStun = true;
-                stunRecoverTime *= stunAccumulateTime;
-                //maxStunValue = Math.Max(stunMinValue, maxStunValue - stunDecreaseRate);
-                currentStunValue = maxStunValue;
+            var QTERollStun = new QTERollStun(this, stunRecoverTime, 0.05f);
+            OnGainBuff(QTERollStun);
+        }
+        //if (isStun)
+        //{
+        //    lastStunTime += Time.fixedDeltaTime;
+        //    if (lastStunTime >= stunRecoverTime && !isRecoveringFromStun)
+        //    {
+        //        isRecoveringFromStun = true;
+        //        stunRecoverTime *= stunAccumulateTime;
+        //        //maxStunValue = Math.Max(stunMinValue, maxStunValue - stunDecreaseRate);
+        //        currentStunValue = maxStunValue;
 
-                IKObject.transform.DOLocalRotate(new Vector3(0, 0, 0), 0.5f).onComplete += () =>
-                {
-                    //stunProgress.gameObject.SetActive(false);
-                    stun.gameObject.SetActive(false);
-                    isStun = false;
-                    isRecoveringFromStun = false;
-                };
-            }
-        }
-        else
-        {
-            if (currentStunValue <= 0)
-            {
-                //stunProgress.gameObject.SetActive(true);
-                stun.gameObject.SetActive(true);
-                isStun = true;
-                lastStunTime = 0;
-            }
-        }
+        //        IKObject.transform.DOLocalRotate(new Vector3(0, 0, 0), 0.5f).onComplete += () =>
+        //        {
+        //            //stunProgress.gameObject.SetActive(false);
+        //            stun.gameObject.SetActive(false);
+        //            isStun = false;
+        //            isRecoveringFromStun = false;
+        //        };
+        //    }
+        //}
+        //else
+        //{
+        //    if (currentStunValue <= 0)
+        //    {
+        //        //stunProgress.gameObject.SetActive(true);
+        //        stun.gameObject.SetActive(true);
+        //        isStun = true;
+        //        lastStunTime = 0;
+        //    }
+        //}
     }
 
  
@@ -1274,7 +1332,7 @@ public class CharacterContorl : MonoBehaviour
         {
             isAtWalkSpeed = false;
         }
-        if (!isGrounded && !isTouchingSlope && !isStun)
+        if (!isGrounded && !isTouchingSlope && !HasRollStun())
             particle.Stop();
     }
 
@@ -1297,7 +1355,7 @@ public class CharacterContorl : MonoBehaviour
             lookAtIK.solver.IKPositionWeight = 0;
             return;
         }
-        var targetIK = isStun ? 0 : 1;
+        var targetIK = buffs.Any(x => (x is QTEBuff qte && qte.requireIKOff)) ? 0 : 1;
 
         var targetAIMIK = 0;
 
@@ -1417,54 +1475,41 @@ public class CharacterContorl : MonoBehaviour
         anima.SetBool("isWalk", isWalk);
     }
 
-    private void SetSlider()
+    private void SetQTE()
     {
         if (!gameController.debug)
         {
             stunSlider.gameObject.SetActive(false);
             stunProgress.gameObject.SetActive(false);
-            hpSlider.gameObject.SetActive(false);
         }
         else
         {
             stunProgress.gameObject.SetActive(true);
             stunSlider.gameObject.SetActive(true);
-            hpSlider.gameObject.SetActive(true);
         }
-        gpSlider.value = (float)(currentStamina / maxActorStamina);
-        stunSlider.value = (float)(currentStunValue / maxStunValue);
-        hpSlider.value = (float)(currentHPValue / maxHPValue);
-        canvas.transform.forward = gameController.mainCamera.transform.forward;
 
-        //临时缩放
-        canvas.transform.localScale = Vector3.one / transform.localScale.x;
-        gpSlider.transform.position = this.transform.position;
-        stunSlider.transform.position = this.transform.position;
-        hpSlider.transform.position = this.transform.position;
-        gpSlider.transform.localPosition = gpSlider.transform.localPosition + new Vector3(0, 1.25f + (this.transform.localScale.x - 1) * 1.2f, 0);
-        stunSlider.transform.localPosition = stunSlider.transform.localPosition + new Vector3(0, 1.5f + (this.transform.localScale.x - 1) * 1.2f, 0);
-        hpSlider.transform.localPosition = hpSlider.transform.localPosition + new Vector3(0, 1.75f + (this.transform.localScale.x - 1) * 1.2f, 0);
-        playerIndicator.transform.position = this.transform.position;
-        playerIndicator.transform.localPosition = playerIndicator.transform.localPosition + new Vector3(0, 1.75f + (this.transform.localScale.x - 1) * 1.5f, 0);
-
-
-        stunProgress.fillAmount = lastStunTime / stunRecoverTime;
-        stunProgress.transform.position = this.transform.position;
-        stunProgress.transform.localPosition = stunProgress.transform.localPosition + new Vector3(-1f, 1.5f + (this.transform.localScale.x - 1) * 1.2f, 0);
-
-        if (isStun)
+        //当前QTE
+        var currentQTE = this.buffs.Where(x => x is QTEBuff).Cast<QTEBuff>().ToList();
+        var chosenOne = currentQTE.FirstOrDefault(x => x.QTEPriority == -1);
+        if (chosenOne == null && currentQTE.Count > 0)
         {
+            var maxP = currentQTE.Max(x => x.QTEPriority);
+            chosenOne = currentQTE.FirstOrDefault(x => x.QTEPriority == maxP);
+        }
+
+        if (chosenOne != null)
+        {
+            stunProgress.fillAmount = chosenOne.buffTime / chosenOne.maxBuffTime;
             if (!stunButtonHint.activeSelf)
             {
                 stunButtonHint.SetActive(true);
 
                 gpSlider.gameObject.SetActive(false);
             }
-            stunButtonHint.transform.position = this.transform.position;
-            stunButtonHint.transform.localPosition = stunButtonHint.transform.localPosition + new Vector3(0, 1.25f + (this.transform.localScale.x - 1) * 1.2f, 0);
         }
         else
         {
+            stunSlider.value = (float)(currentStunValue / maxStunValue);
             if (!gpSlider.gameObject.activeSelf)
             {
                 stunButtonHint.SetActive(false);
@@ -1472,6 +1517,67 @@ public class CharacterContorl : MonoBehaviour
                 gpSlider.gameObject.SetActive(true);
             }
         }
+        stunSlider.transform.position = this.transform.position;
+        stunSlider.transform.localPosition = stunSlider.transform.localPosition + new Vector3(0, 1.5f + (this.transform.localScale.x - 1) * 1.2f, 0);
+
+        stunProgress.transform.position = this.transform.position;
+        stunProgress.transform.localPosition = stunProgress.transform.localPosition + new Vector3(-1f, 1.5f + (this.transform.localScale.x - 1) * 1.2f, 0);
+        stunButtonHint.transform.position = this.transform.position;
+        stunButtonHint.transform.localPosition = stunButtonHint.transform.localPosition + new Vector3(0, 1.25f + (this.transform.localScale.x - 1) * 1.2f, 0);
+
+    }
+
+    private void SetSlider()
+    {
+        if (!gameController.debug)
+        {
+            hpSlider.gameObject.SetActive(false);
+        }
+        else
+        {
+            hpSlider.gameObject.SetActive(true);
+        }
+        gpSlider.value = (float)(currentStamina / maxActorStamina);
+
+        hpSlider.value = (float)(currentHPValue / maxHPValue);
+        canvas.transform.forward = gameController.mainCamera.transform.forward;
+
+        //临时缩放
+        canvas.transform.localScale = Vector3.one / transform.localScale.x;
+        gpSlider.transform.position = this.transform.position;
+        ////stunSlider.transform.position = this.transform.position;
+        hpSlider.transform.position = this.transform.position;
+        gpSlider.transform.localPosition = gpSlider.transform.localPosition + new Vector3(0, 1.25f + (this.transform.localScale.x - 1) * 1.2f, 0);
+        //stunSlider.transform.localPosition = stunSlider.transform.localPosition + new Vector3(0, 1.5f + (this.transform.localScale.x - 1) * 1.2f, 0);
+        hpSlider.transform.localPosition = hpSlider.transform.localPosition + new Vector3(0, 1.75f + (this.transform.localScale.x - 1) * 1.2f, 0);
+        playerIndicator.transform.position = this.transform.position;
+        playerIndicator.transform.localPosition = playerIndicator.transform.localPosition + new Vector3(0, 1.75f + (this.transform.localScale.x - 1) * 1.5f, 0);
+
+
+        //stunProgress.fillAmount = lastStunTime / stunRecoverTime;
+        //stunProgress.transform.position = this.transform.position;
+        //stunProgress.transform.localPosition = stunProgress.transform.localPosition + new Vector3(-1f, 1.5f + (this.transform.localScale.x - 1) * 1.2f, 0);
+
+    //    if (isStun)
+    //    {
+    //        if (!stunButtonHint.activeSelf)
+    //        {
+    //            stunButtonHint.SetActive(true);
+
+    //            gpSlider.gameObject.SetActive(false);
+    //        }
+    //        stunButtonHint.transform.position = this.transform.position;
+    //        stunButtonHint.transform.localPosition = stunButtonHint.transform.localPosition + new Vector3(0, 1.25f + (this.transform.localScale.x - 1) * 1.2f, 0);
+    //    }
+    //    else
+    //    {
+    //        if (!gpSlider.gameObject.activeSelf)
+    //        {
+    //            stunButtonHint.SetActive(false);
+
+    //            gpSlider.gameObject.SetActive(true);
+    //        }
+    //    }
     }
     private void SetRingColor()
     {
@@ -1846,16 +1952,16 @@ public class CharacterContorl : MonoBehaviour
             //Debug.LogError($"结算 {otherCollision.gameObject.name} force {force} hit Dir {hitDir}");
 
 
-            //旋转
-            if (isStun)
-            {
-                var targetTime = hitKnockbackCurve.Evaluate(momentumOther * hasBuff);
-                TargetRollTime = Math.Max(targetTime, TargetRollTime);
-                if (TargetRollTime - ElapsedRollTime < targetTime)
-                {
-                    TargetRollTime += (targetTime - (TargetRollTime - ElapsedRollTime));
-                }
-            }
+            ////旋转
+            //if (isStun)
+            //{
+            //    var targetTime = hitKnockbackCurve.Evaluate(momentumOther * hasBuff);
+            //    TargetRollTime = Math.Max(targetTime, TargetRollTime);
+            //    if (TargetRollTime - ElapsedRollTime < targetTime)
+            //    {
+            //        TargetRollTime += (targetTime - (TargetRollTime - ElapsedRollTime));
+            //    }
+            //}
         }
 
     }
