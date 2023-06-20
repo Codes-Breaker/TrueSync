@@ -17,21 +17,21 @@ MonoBehaviour:
     Bits:
       m_bits: 0
     TwoDPlane: 1
-    PositionParameterMode: 1
-    RotationParameterMode: 1
+    PositionParameterMode: 2
+    RotationParameterMode: 2
     ScaleParameterMode: 1
     PositionExponentialHalfLife: 0
-    PositionOscillationHalfLife: 0.15
-    PositionOscillationFrequency: 5
-    PositionOscillationDampingRatio: 0.5
+    PositionOscillationHalfLife: 0
+    PositionOscillationFrequency: 1.28
+    PositionOscillationDampingRatio: 0.21
     MoveReactionMultiplier: 0
-    LinearImpulseMultiplier: 2.3
+    LinearImpulseMultiplier: 0
     RotationExponentialHalfLife: 0.02
-    RotationOscillationHalfLife: 0.1
-    RotationOscillationFrequency: 2.57
-    RotationOscillationDampingRatio: 0.5
-    RotationReactionMultiplier: 6.25
-    AngularImpulseMultiplier: 2.03
+    RotationOscillationHalfLife: 5
+    RotationOscillationFrequency: 0.61
+    RotationOscillationDampingRatio: 0.179
+    RotationReactionMultiplier: 1.12
+    AngularImpulseMultiplier: 0
     ScaleExponentialHalfLife: 0.02
     ScaleOscillationHalfLife: 0.1
     ScaleOscillationFrequency: 5

@@ -29,6 +29,7 @@ public class RopeProjectile : ItemProjectileBase
         base.Launch();
         ropeObject = Instantiate(Resources.Load<GameObject>(ropePrefabPath));
         obiRope = ropeObject.GetComponent<ObiRope>();
+        obiRope.stretchingScale = 2f;
         ropeObject.transform.SetParent(GameObject.FindObjectOfType<ObiSolver>().transform);
         var detalPosition = (character.transform.position - transform.position) / (obiRope.activeParticleCount - 1);
         for (int i= 0;i<obiRope.activeParticleCount;i++)
@@ -54,7 +55,7 @@ public class RopeProjectile : ItemProjectileBase
     {
         base.FixedUpdate();
 
-        currentTime += Time.deltaTime;
+        //currentTime += Time.deltaTime;
         if (isTear)
             obiRope.enabled = true;
         if (isStartStick)
@@ -63,7 +64,7 @@ public class RopeProjectile : ItemProjectileBase
             isStartStick = false;
             Destroy(removeRope);
         }
-        if (currentTime > tearTime && !isTear)
+        if (currentTime >= tearTime && !isTear)
         {
             obiRope.enabled = false;
             startPoint.target = null;
@@ -78,59 +79,51 @@ public class RopeProjectile : ItemProjectileBase
         var otherCharacter = collision.collider.GetComponent<CharacterContorl>();
         if (otherCharacter && canStickyCharacter && otherCharacter != character)
         {
+            if (otherCharacter.invulernable)
+            {
+                OnTouchGround();
+                return;
+            }
             startPoint.target = otherCharacter.transform;
             canStickyCharacter = false;
 
+            var ropeStun = new QTERopeStun(otherCharacter, character, tearTime, 0.05f);
+            otherCharacter.OnGainBuff(ropeStun);
+
             //ropeObject.SetActive(false);
             Destroy(ropeObject);
-            ropeObject = Instantiate(Resources.Load<GameObject>(ropePrefabPath));
-            obiRope = ropeObject.GetComponent<ObiRope>();
-            ropeObject.transform.SetParent(GameObject.FindObjectOfType<ObiSolver>().transform);
-            var detalPosition = (character.transform.position - otherCharacter.transform.position) / (obiRope.activeParticleCount - 1);
-            for (int i = 0; i < obiRope.activeParticleCount; i++)
-            {
-                obiRope.solver.positions[obiRope.solverIndices[i]] = obiRope.solver.transform.InverseTransformPoint(character.transform.position - detalPosition * i);
-                //obiRope.solver.positions[obiRope.solverIndices[i]] =character.transform.position;
 
-            }
-            var attachments = ropeObject.GetComponents<ObiParticleAttachment>();
-            startPoint = attachments[0];
-            endPoint = attachments[1];
-            endPoint.target = character.transform;
-            startPoint.target = otherCharacter.transform;
-            // obiRope.enabled =false;
-            isStartStick = true;
         }
     }
 
     private void OnTriggerEnter(Collider collision)
     {
-        var otherCharacter = collision.GetComponent<Collider>().GetComponent<CharacterContorl>();
-        if (otherCharacter && canStickyCharacter && otherCharacter != character)
-        {
-            startPoint.target = otherCharacter.transform;
-            canStickyCharacter = false;
+        //var otherCharacter = collision.GetComponent<Collider>().GetComponent<CharacterContorl>();
+        //if (otherCharacter && canStickyCharacter && otherCharacter != character)
+        //{
+        //    startPoint.target = otherCharacter.transform;
+        //    canStickyCharacter = false;
 
-            removeRope = ropeObject;
-            //ropeObject.SetActive(false);
-            ropeObject = Instantiate(Resources.Load<GameObject>(ropePrefabPath));
-            obiRope = ropeObject.GetComponent<ObiRope>();
-            ropeObject.transform.SetParent(GameObject.FindObjectOfType<ObiSolver>().transform);
-            var detalPosition = (character.transform.position - otherCharacter.transform.position) / (obiRope.activeParticleCount - 1);
-            for (int i = 0; i < obiRope.activeParticleCount; i++)
-            {
-                obiRope.solver.positions[obiRope.solverIndices[i]] = obiRope.solver.transform.InverseTransformPoint(character.transform.position - detalPosition * i);
-                //obiRope.solver.positions[obiRope.solverIndices[i]] =character.transform.position;
+        //    removeRope = ropeObject;
+        //    //ropeObject.SetActive(false);
+        //    ropeObject = Instantiate(Resources.Load<GameObject>(ropePrefabPath));
+        //    obiRope = ropeObject.GetComponent<ObiRope>();
+        //    ropeObject.transform.SetParent(GameObject.FindObjectOfType<ObiSolver>().transform);
+        //    var detalPosition = (character.transform.position - otherCharacter.transform.position) / (obiRope.activeParticleCount - 1);
+        //    for (int i = 0; i < obiRope.activeParticleCount; i++)
+        //    {
+        //        obiRope.solver.positions[obiRope.solverIndices[i]] = obiRope.solver.transform.InverseTransformPoint(character.transform.position - detalPosition * i);
+        //        //obiRope.solver.positions[obiRope.solverIndices[i]] =character.transform.position;
 
-            }
-            var attachments = ropeObject.GetComponents<ObiParticleAttachment>();
-            startPoint = attachments[0];
-            endPoint = attachments[1];
-            endPoint.target = character.transform;
-            startPoint.target = otherCharacter.transform;
-            // obiRope.enabled =false;
-            isStartStick = true;
-        }
+        //    }
+        //    var attachments = ropeObject.GetComponents<ObiParticleAttachment>();
+        //    startPoint = attachments[0];
+        //    endPoint = attachments[1];
+        //    endPoint.target = character.transform;
+        //    startPoint.target = otherCharacter.transform;
+        //    // obiRope.enabled =false;
+        //    isStartStick = true;
+        //}
     }
 
     protected override void OnTouchGround()

@@ -27,6 +27,12 @@ public class QTEBuff : StunBuff
         QTEAccelerateRate = qteRate;
     }
 
+    public QTEBuff(CharacterContorl target, CharacterContorl source, float buffTime, float qteRate) : base(target, source, buffTime)
+    {
+        QTEAccelerateRate = qteRate;
+    }
+
+
     public void PressButton(QTEButton button)
     {
         if (button == QTEButton.A)

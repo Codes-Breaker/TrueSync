@@ -87,7 +87,7 @@ public class RocketThrusterBuff : ItemBuffBase
     {
         base.OnBuffUpdate();
 
-        if (character.isDead || character.isStun)
+        if (character.isDead || character.HasQTEStun())
         {
             base.Finish();
             return;

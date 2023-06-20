@@ -18,7 +18,7 @@ public class BananaTrap : ItemTrapBase
     private void OnTriggerEnter(Collider collision)
     {
         var otherCollision = collision.gameObject.GetComponent<CharacterContorl>();
-        if (otherCollision)
+        if (otherCollision && !otherCollision.invulernable && !otherCollision.isInRocket)
         {
             var buff = new SliperyBuff(otherCollision, stunTime);
             otherCollision.OnGainBuff(buff);
