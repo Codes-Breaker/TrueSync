@@ -68,14 +68,18 @@ public class ItemManager : MonoBehaviour
 
     public static ItemAbilityBase CreatItemAbilityByItemData(ItemData itemData,CharacterContorl character)
     {
-        switch(itemData.itemType)
+        switch(itemData.itemId)
         {
-            case ItemType.Trap:
-                return new TrapItemAbility(character, itemData);
-            case ItemType.Projectile:
-                return new ProjectileItemAbility(character, itemData);
-            case ItemType.Buff:
+            case 1:
                 return new BuffItemAbility(character, itemData);
+            case 2:
+                return new BuffItemAbility(character, itemData);
+            case 3:
+                return new BananaTrapItemAblility(character, itemData);
+            case 4:
+                return new ProjectileItemAbility(character, itemData);
+            case 5:
+                return new ProjectileItemAbility(character, itemData);
             default:
                 return null;
         }    
