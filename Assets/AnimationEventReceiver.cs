@@ -7,10 +7,17 @@ public class AnimationEventReceiver : MonoBehaviour
 {
     public Action onRocketCallback;
     public Action onBoomThrowCallback;
+    public Action onBananaTakeCallback;
+    public Action onBananaEatCallback;
+    public Action onBananaThrowCallback;
+
     public enum EventEnum
     {
         OnRocket,
         ThrowBoom,
+        BananaTake,
+        BananaEat,
+        BananaThrow,
     }
     public void TriggerEvent(EventEnum e)
     {
@@ -21,6 +28,15 @@ public class AnimationEventReceiver : MonoBehaviour
                 break;
             case EventEnum.ThrowBoom:
                 onBoomThrowCallback?.Invoke();
+                break;
+            case EventEnum.BananaTake:
+                onBananaTakeCallback?.Invoke();
+                break;
+            case EventEnum.BananaEat:
+                onBananaEatCallback?.Invoke();
+                break;
+            case EventEnum.BananaThrow:
+                onBananaThrowCallback?.Invoke();
                 break;
             default:
                 break;
@@ -37,6 +53,15 @@ public class AnimationEventReceiver : MonoBehaviour
             case EventEnum.ThrowBoom:
                 onBoomThrowCallback += callback;
                 break;
+            case EventEnum.BananaTake:
+                onBananaTakeCallback += callback;
+                break;
+            case EventEnum.BananaEat:
+                onBananaEatCallback += callback;
+                break;
+            case EventEnum.BananaThrow:
+                onBananaThrowCallback += callback;
+                break;
             default:
                 break;
         }
@@ -52,20 +77,18 @@ public class AnimationEventReceiver : MonoBehaviour
             case EventEnum.ThrowBoom:
                 onBoomThrowCallback -= callback;
                 break;
+            case EventEnum.BananaTake:
+                onBananaTakeCallback -= callback;
+                break;
+            case EventEnum.BananaEat:
+                onBananaEatCallback -= callback;
+                break;
+            case EventEnum.BananaThrow:
+                onBananaThrowCallback -= callback;
+                break;
             default:
                 break;
         }
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }
