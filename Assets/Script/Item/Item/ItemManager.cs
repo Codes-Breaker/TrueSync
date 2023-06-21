@@ -11,6 +11,13 @@ public enum ItemType
     Buff
 }
 
+public enum EquipPlace 
+{ 
+    OnHead,
+    OnDorsal
+}
+
+
 [Serializable]
 public struct ItemData
 {
@@ -20,6 +27,7 @@ public struct ItemData
     public GameObject itemPrefabOnGround;
     public GameObject itemPrefabOnCharacter;
     public float CountDownTime;
+    public EquipPlace equipPlace;
 }
 
 
@@ -79,6 +87,8 @@ public class ItemManager : MonoBehaviour
             case 4:
                 return new ProjectileItemAbility(character, itemData);
             case 5:
+                return new ProjectileItemAbility(character, itemData);
+            case 6:
                 return new ProjectileItemAbility(character, itemData);
             default:
                 return null;
@@ -155,7 +165,8 @@ public class ItemManager : MonoBehaviour
             case 5:
                 itemObj = GameObject.Instantiate(Resources.Load<GameObject>("Prefabs/Item/ItemProjectile/RopeProjectile/RopeProjectile"));
                 break;
-
+            //case 6:
+            //    itemObj = GameObject.Instantiate(Resources.Load<GameObject>())
             default:
                 Debug.LogError("没有找到对应ID");
                 break;
