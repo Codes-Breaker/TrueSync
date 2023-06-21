@@ -8,11 +8,11 @@ public class StickyBombBuff : ItemBuffBase
     //爆炸范围
     private float explosionRangeRadius = 10f;
     //爆炸力大小
-    private float explosionForceArgument = 20f;
+    private float explosionForceArgument = 1000f;
     //传递时的飞行高度
-    public float stickyBombHeight = 5f;
+    public float stickyBombHeight = 0.5f;
     //传递时的飞行时间
-    public float stickyBombFlyTime = 1f;
+    public float stickyBombFlyTime = 0.1f;
     //爆炸特效预制体路径
     private string timeLapseBombExplosionEffectPath = "Prefabs/Effect/StickyBomb_Explosion";
     //倒计时特效
@@ -23,6 +23,8 @@ public class StickyBombBuff : ItemBuffBase
     public float explosionMaxTime;
 
     private bool isCreatCountDownEffect = false;
+
+    private float currentFlyTime;
 
     private Tweener pathTweener;
 
@@ -46,6 +48,7 @@ public class StickyBombBuff : ItemBuffBase
         var stickyBombPrefab = Resources.Load<GameObject>(stickyBombPrefabPath);
         stickyBombGameObject = GameObject.Instantiate(stickyBombPrefab,character.itemPlaceHead);
         stickyBombFuseGameObject = stickyBombGameObject.transform.Find("lead/root");
+        currentFlyTime = 0f;
     }
 
     public void SetExplosionTime(float time,float maxTime)
@@ -72,6 +75,10 @@ public class StickyBombBuff : ItemBuffBase
             SetFuseState();
 
         }
+        if(isPassingBomb)
+        {
+            PassingBomb();
+        }
 
     }
 
@@ -90,16 +97,18 @@ public class StickyBombBuff : ItemBuffBase
     {
         this.character.TakeStun(100);
 
-        var colliders = GameObject.FindObjectsOfType<Rigidbody>();
+        //var colliders = GameObject.FindObjectsOfType<Rigidbody>();
+        var colliders = Physics.OverlapSphere(stickyBombGameObject.transform.position, explosionRangeRadius);
 
         if (colliders.Length != 0)
         {
             foreach (var item in colliders)
             {
-                if ((item.transform.position - stickyBombGameObject.transform.position).magnitude < explosionRangeRadius)
-                {
-                    item.GetComponent<Rigidbody>().AddExplosionForce(explosionForceArgument, stickyBombGameObject.transform.position, explosionRangeRadius);
-                }
+                if(item.GetComponent<Rigidbody>())
+                    if ((item.transform.position - stickyBombGameObject.transform.position).magnitude < explosionRangeRadius)
+                    {
+                        item.GetComponent<Rigidbody>().AddExplosionForce(explosionForceArgument, stickyBombGameObject.transform.position, explosionRangeRadius);
+                    }
             }
 
         }
@@ -117,20 +126,35 @@ public class StickyBombBuff : ItemBuffBase
         {
             this.otherCharacter = otherCharacter;
             stickyBombGameObject.transform.SetParent(null);
-            pathTweener = stickyBombGameObject.transform.DOLocalPath(new Vector3[] { character.itemPlaceHand.transform.position, (otherCharacter.itemPlaceHand.transform.position + character.itemPlaceHand.transform.position) / 2 + new Vector3(0, stickyBombHeight, 0), otherCharacter.itemPlaceHand.transform.position }, stickyBombFlyTime, PathType.CubicBezier, PathMode.Full3D)
-                .OnWaypointChange((int wayPointIndex) => {
-                    if (wayPointIndex == 1)
-                    {
-
-                    }
-                })
-                .OnComplete(() => {
-                    var bombBuff = new StickyBombBuff(otherCharacter);
-                    bombBuff.SetExplosionTime(explosionTime, explosionMaxTime);
-                    otherCharacter.OnGainBuff(bombBuff);
-                    isPassingBomb = true;
-                    base.Finish();
-                });
+            isPassingBomb = true;
         }
+    }
+
+    private void PassingBomb()
+    {
+        currentFlyTime += Time.deltaTime;
+        float t = Mathf.Clamp01(currentFlyTime / stickyBombFlyTime);
+        Vector3 curvePoint = CalculateParabolicPoint(stickyBombGameObject.transform.position, otherCharacter.transform.position, stickyBombHeight, t);
+        stickyBombGameObject.transform.position = curvePoint;
+        if (currentFlyTime > stickyBombFlyTime)
+            OnComplete();
+    }
+
+    private void OnComplete()
+    {
+        var bombBuff = new StickyBombBuff(otherCharacter);
+        bombBuff.SetExplosionTime(explosionTime, explosionMaxTime);
+        otherCharacter.OnGainBuff(bombBuff);
+        base.Finish();
+    }
+
+    private Vector3 CalculateParabolicPoint(Vector3 start, Vector3 end, float height, float t)
+    {
+        // 根据抛物线公式计算曲线上的位置
+        float parabolicT = Mathf.Sin(t * Mathf.PI);
+        Vector3 result = Vector3.Lerp(start, end, t);
+        result.y += parabolicT * height;
+
+        return result;
     }
 }

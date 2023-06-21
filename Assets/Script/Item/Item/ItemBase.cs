@@ -77,7 +77,7 @@ public class ItemBase : MonoBehaviour
     private void OnTriggerEnter(Collider collision)
     {
         var otherCollision = collision.gameObject.GetComponent<CharacterContorl>();
-        if (otherCollision && !otherCollision.isStun)
+        if (otherCollision && !otherCollision.HasQTEStun())
         {
             if(otherCollision.itemAbility == null && otherCollision.CanPick())
             {

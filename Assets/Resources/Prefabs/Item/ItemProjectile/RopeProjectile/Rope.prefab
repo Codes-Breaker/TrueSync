@@ -31,7 +31,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 202167195937452899}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 6.93, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -55,16 +55,16 @@ MonoBehaviour:
     type: 2}
   m_SurfaceCollisions: 0
   m_SelfCollisions: 0
-  restLength_: 5.5065994
+  restLength_: 5.5066004
   elements:
   - particle1: 0
     particle2: 1
-    restLength: 0.1518261
+    restLength: 0.15180288
     constraintForce: 0
     tearResistance: 1
   - particle1: 1
     particle2: 2
-    restLength: 0.1515113
+    restLength: 0.15153518
     constraintForce: 0
     tearResistance: 1
   - particle1: 2
@@ -124,12 +124,12 @@ MonoBehaviour:
     tearResistance: 1
   - particle1: 13
     particle2: 14
-    restLength: 0.19441397
+    restLength: 0.19441421
     constraintForce: 0
     tearResistance: 1
   - particle1: 14
     particle2: 15
-    restLength: 0.19225352
+    restLength: 0.19225328
     constraintForce: 0
     tearResistance: 1
   - particle1: 15
@@ -311,7 +311,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Actor: {fileID: 202167195937452901}
   m_Target: {fileID: 0}
-  m_ParticleGroup: {fileID: -5148890879596288200, guid: d82adbfa2e0744621823a657cc1d4d9a,
+  m_ParticleGroup: {fileID: -8864857226987616246, guid: d82adbfa2e0744621823a657cc1d4d9a,
     type: 2}
   m_AttachmentType: 1
   m_ConstrainOrientation: 0
@@ -331,7 +331,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Actor: {fileID: 202167195937452901}
   m_Target: {fileID: 0}
-  m_ParticleGroup: {fileID: -8382937291845961381, guid: d82adbfa2e0744621823a657cc1d4d9a,
+  m_ParticleGroup: {fileID: -2639811391673711616, guid: d82adbfa2e0744621823a657cc1d4d9a,
     type: 2}
   m_AttachmentType: 1
   m_ConstrainOrientation: 0

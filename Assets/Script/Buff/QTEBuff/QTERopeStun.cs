@@ -40,17 +40,17 @@ public class QTERopeStun : QTEBuff
         obiRope = ropeObject.GetComponent<ObiRope>();
         obiRope.stretchingScale = 1.25f;
         ropeObject.transform.SetParent(GameObject.FindObjectOfType<ObiSolver>().transform);
-        var detalPosition = (source.transform.position - character.transform.position) / (obiRope.activeParticleCount - 1);
+        var detalPosition = (source.itemPlaceHand.position - character.transform.position) / (obiRope.activeParticleCount - 1);
         for (int i = 0; i < obiRope.activeParticleCount; i++)
         {
-            obiRope.solver.positions[obiRope.solverIndices[i]] = obiRope.solver.transform.InverseTransformPoint(source.transform.position - detalPosition * i);
+            obiRope.solver.positions[obiRope.solverIndices[i]] = obiRope.solver.transform.InverseTransformPoint(source.itemPlaceHand.position - detalPosition * i);
             //obiRope.solver.positions[obiRope.solverIndices[i]] =character.transform.position;
 
         }
         var attachments = ropeObject.GetComponents<ObiParticleAttachment>();
         startPoint = attachments[0];
         endPoint = attachments[1];
-        endPoint.target = source.transform;
+        endPoint.target = source.itemPlaceHand.transform;
         startPoint.target = character.transform;
         // obiRope.enabled =false;
         isStartStick = true;
