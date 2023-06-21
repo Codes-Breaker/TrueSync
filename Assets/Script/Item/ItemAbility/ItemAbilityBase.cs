@@ -23,7 +23,17 @@ public class ItemAbilityBase
 
     protected virtual void EquipCharacter()
     {
-        itemGameObject = Object.Instantiate<GameObject>(itemData.itemPrefabOnCharacter,character.itemPlace);
+        switch(itemData.equipPlace)
+        {
+            case EquipPlace.OnHead:
+                itemGameObject = Object.Instantiate<GameObject>(itemData.itemPrefabOnCharacter,character.itemPlaceHead);
+                break;
+            case EquipPlace.OnDorsal:
+                itemGameObject = Object.Instantiate<GameObject>(itemData.itemPrefabOnCharacter,character.itemPlace);
+                break;
+
+        }
+
         itemGameObject.SetActive(true);
 
     }
