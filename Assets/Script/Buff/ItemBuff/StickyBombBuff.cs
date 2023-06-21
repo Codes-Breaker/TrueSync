@@ -95,6 +95,9 @@ public class StickyBombBuff : ItemBuffBase
     
     private void Explosion()
     {
+        this.character.TakeStun(100);
+
+        //var colliders = GameObject.FindObjectsOfType<Rigidbody>();
         var colliders = Physics.OverlapSphere(stickyBombGameObject.transform.position, explosionRangeRadius);
 
         if (colliders.Length != 0)

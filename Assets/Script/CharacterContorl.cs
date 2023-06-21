@@ -444,21 +444,13 @@ public class CharacterContorl : MonoBehaviour
 
     public void SetControlSelf()
     {
-        inputReader.moveAciotn += MoveWalk;
-        inputReader.chargeAction += MoveCharge;
-        inputReader.interactWeaponAction += UseItem;
-        inputReader.jumpAction += MoveJump;
-        inputReader.brakeAciton += MoveBrake;
+        inputReader.moveAciotn = MoveWalk;
+        inputReader.chargeAction = MoveCharge;
+        inputReader.interactWeaponAction = UseItem;
+        inputReader.jumpAction = MoveJump;
+        inputReader.brakeAciton = MoveBrake;
     }
 
-    public void SetOffControlSelf()
-    {
-        inputReader.moveAciotn -= MoveWalk;
-        inputReader.chargeAction -= MoveCharge;
-        inputReader.interactWeaponAction -= UseItem;
-        inputReader.jumpAction -= MoveJump;
-        inputReader.brakeAciton -= MoveBrake;
-    }
 
     private void SetDead(Vector3 hitDir)
     {
@@ -469,7 +461,6 @@ public class CharacterContorl : MonoBehaviour
         ragdollController.Ragdoll(true, hitDir);
         Destroy(floatObj);
         Dead();
-        SetOffControlSelf();
     }
 
     public void SetWin()
@@ -760,6 +751,10 @@ public class CharacterContorl : MonoBehaviour
 
     #region Move
 
+    public int countRopeStunBuff()
+    {
+        return buffs.Count(x => x is QTERopeStun);
+    }
 
     public bool hasStunBuff()
     {
@@ -1238,6 +1233,7 @@ public class CharacterContorl : MonoBehaviour
     public void OnGainBuff(Buff buff)
     {
         buffs.Add(buff);
+        buff.OnBuffApply();
         SetBuffControlState();
     }
 
@@ -1261,7 +1257,7 @@ public class CharacterContorl : MonoBehaviour
         return buffs.Any(x => x is QTERollStun);
     }
 
-    private bool HasQTEStun()
+    public bool HasQTEStun()
     {
         return buffs.Any(x => x is QTEBuff);
     }
@@ -1586,7 +1582,8 @@ public class CharacterContorl : MonoBehaviour
         //rendererBlock.SetColor("_Color", InputReadManager.Instance.playerColors[playerIndex]);
         //ringRenderer.SetPropertyBlock(rendererBlock, 0);
         playerIndexText.text = $"P{playerIndex}";
-        playerIndicator.GetComponent<Image>().sprite = InputReadManager.Instance.playerIndicatorSprites[playerIndex - 1];
+        if (InputReadManager.Instance.playerIndicatorSprites.Count >= playerIndex && playerIndex > 0)
+            playerIndicator.GetComponent<Image>().sprite = InputReadManager.Instance.playerIndicatorSprites[playerIndex - 1];
     }
 
     // temp, 告诉用户到达最大速
@@ -1918,6 +1915,9 @@ public class CharacterContorl : MonoBehaviour
             }
 
             var targetDistance = Math.Min(otherCollision.hitMaxDistance, hitKnockbackCurve.Evaluate(momentumOther * hasBuff) * otherCollision.hitKnockBackToOtherArgument + hitKnockbackSelfCurve.Evaluate(momentumSelf ))*hitKnockbackToSelfArgument;
+
+            if (targetDistance < 0.1f)
+                return;
 
             //施加水平推力
             if (isGrounded || isTouchingSlope)
