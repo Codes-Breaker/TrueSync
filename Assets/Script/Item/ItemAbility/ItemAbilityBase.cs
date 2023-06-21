@@ -40,7 +40,7 @@ public class ItemAbilityBase
 
     public virtual void FixedUpdate()
     {
-        if(character.isDead || character.isStun)
+        if(character.isDead || character.HasQTEStun())
         {
             LossItemAbility();
         }

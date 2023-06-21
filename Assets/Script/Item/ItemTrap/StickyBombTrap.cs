@@ -8,6 +8,8 @@ public class StickyBombTrap : ItemTrapBase
     public float explosionMaxTime;
     //本地爆炸倒计时
     public float explosionTime;
+    //生效延迟
+    public float delayTime;
     //爆炸特效预制体路径
     private string timeLapseBombExplosionEffectPath = "Prefabs/Effect/StickyBomb_Explosion";
     //爆炸力大小
@@ -17,6 +19,7 @@ public class StickyBombTrap : ItemTrapBase
 
     public Transform stickyBombFuseGameObject;
 
+    private float currentTime;
     private bool isCreatCountDownEffect = false;
     private string timeLapseBombCountDownEffectPath = "Prefabs/Effect/BombCountDown";
 
@@ -34,6 +37,7 @@ public class StickyBombTrap : ItemTrapBase
     private void Update()
     {
         explosionTime -= Time.deltaTime;
+        currentTime += Time.deltaTime;
         if (explosionTime <= 0)
             Explosion();
         else
@@ -56,16 +60,17 @@ public class StickyBombTrap : ItemTrapBase
     }
     private void Explosion()
     {
-        var colliders = GameObject.FindObjectsOfType<Rigidbody>();
+        var colliders = Physics.OverlapSphere(transform.position, explosionRangeRadius);
 
         if (colliders.Length != 0)
         {
             foreach (var item in colliders)
             {
-                if ((item.transform.position - transform.position).magnitude < explosionRangeRadius)
-                {
-                    item.GetComponent<Rigidbody>().AddExplosionForce(explosionForceArgument,transform.position, explosionRangeRadius);
-                }
+                if (item.GetComponent<Rigidbody>())
+                    if ((item.transform.position - transform.position).magnitude < explosionRangeRadius)
+                    {
+                        item.GetComponent<Rigidbody>().AddExplosionForce(explosionForceArgument,transform.position, explosionRangeRadius);
+                    }
             }
 
         }
@@ -79,7 +84,7 @@ public class StickyBombTrap : ItemTrapBase
     private void OnTriggerEnter(Collider collision)
     {
         var otherCharacter = collision.gameObject.GetComponent<CharacterContorl>();
-        if (otherCharacter)
+        if (otherCharacter && currentTime > delayTime)
         {
             var bombBuff = new StickyBombBuff(otherCharacter);
             bombBuff.SetExplosionTime(explosionTime,explosionMaxTime);

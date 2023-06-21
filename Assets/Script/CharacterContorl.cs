@@ -1916,6 +1916,9 @@ public class CharacterContorl : MonoBehaviour
 
             var targetDistance = Math.Min(otherCollision.hitMaxDistance, hitKnockbackCurve.Evaluate(momentumOther * hasBuff) * otherCollision.hitKnockBackToOtherArgument + hitKnockbackSelfCurve.Evaluate(momentumSelf ))*hitKnockbackToSelfArgument;
 
+            if (targetDistance < 0.1f)
+                return;
+
             //施加水平推力
             if (isGrounded || isTouchingSlope)
                 forceData = KnockBackForce(targetDistance, hitDir);

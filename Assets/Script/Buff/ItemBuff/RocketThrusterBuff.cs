@@ -15,6 +15,10 @@ public class RocketThrusterBuff : ItemBuffBase
     GameObject rocket;
     private Light light;
     private MudNoiseVolume volume;
+    //自身击退加成
+    private float hitKnockBackToSelfArgument = 0.01f;
+    //打击加成
+    private float hitKnockBackToOhterArgument = 1.5f;
     public RocketThrusterBuff(CharacterContorl target) : base(target)
     {
         buffTime = 15f;
@@ -44,7 +48,8 @@ public class RocketThrusterBuff : ItemBuffBase
         light = rocket.GetComponentInChildren<Light>();
         light.intensity = 0;
         light.DOIntensity(1, 2);
-
+        character.hitKnockbackToSelfArgument = character.hitKnockbackToSelfArgument * hitKnockBackToSelfArgument;
+        character.hitKnockBackToOtherArgument = character.hitKnockBackToOtherArgument * hitKnockBackToOhterArgument;
         volume = rocket.GetComponentInChildren<MudNoiseVolume>();
         var getter = new DOGetter<float>(() =>
         {
@@ -64,7 +69,8 @@ public class RocketThrusterBuff : ItemBuffBase
         character.isInRocket = false;
         character.SetSnowCollider();
         character.anima.SetBool("inRocket", false);
-
+        character.hitKnockbackToSelfArgument = character.hitKnockbackToSelfArgument / hitKnockBackToSelfArgument;
+        character.hitKnockBackToOtherArgument = character.hitKnockBackToOtherArgument / hitKnockBackToOhterArgument;
         base.OnBuffRemove();
         GenerateRocket();
         //rocket.gameObject.SetActive(false);
