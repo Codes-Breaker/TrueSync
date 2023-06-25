@@ -28,6 +28,9 @@ public class ItemAbilityBase
             case EquipPlace.OnHead:
                 itemGameObject = Object.Instantiate<GameObject>(itemData.itemPrefabOnCharacter,character.itemPlaceHead);
                 break;
+            case EquipPlace.OnHeadStatic:
+                itemGameObject = Object.Instantiate<GameObject>(itemData.itemPrefabOnCharacter, character.itemPlaceHeadStatic);
+                break;
             case EquipPlace.OnDorsal:
                 itemGameObject = Object.Instantiate<GameObject>(itemData.itemPrefabOnCharacter,character.itemPlace);
                 break;
