@@ -116,7 +116,7 @@ public class RocketThrusterBuff : ItemBuffBase
             moveTarget = moveTarget.normalized;
             moveTarget = Vector3.ProjectOnPlane(moveTarget, character.groundNormal).normalized;
             if (!character.hasStunBuff())
-                character.ridbody.AddForce(moveTarget * forceMagnitude - gravityDivide, ForceMode.Force);
+                character.AddForce(moveTarget * forceMagnitude - gravityDivide, ForceMode.Force);
         }
         //补偿重力分量
     }

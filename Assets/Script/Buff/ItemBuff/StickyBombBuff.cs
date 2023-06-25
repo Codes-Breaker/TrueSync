@@ -107,7 +107,7 @@ public class StickyBombBuff : ItemBuffBase
                 if(item.GetComponent<Rigidbody>())
                     if ((item.transform.position - stickyBombGameObject.transform.position).magnitude < explosionRangeRadius)
                     {
-                        item.GetComponent<Rigidbody>().AddExplosionForce(explosionForceArgument * item.GetComponent<Rigidbody>().mass, stickyBombGameObject.transform.position, explosionRangeRadius);
+                        item.GetComponent<CharacterContorl>().AddExplosionForce(explosionForceArgument * item.GetComponent<Rigidbody>().mass, stickyBombGameObject.transform.position, explosionRangeRadius);
                     }
             }
 

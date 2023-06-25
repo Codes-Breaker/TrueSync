@@ -26,7 +26,7 @@ public class LglooBuff : StunBuff
 
         if (m1 < maxSpeed)
         {
-            character.ridbody.AddForce(releaseDir * 40, ForceMode.Impulse);
+            character.AddForce(releaseDir * 40, ForceMode.Impulse);
         }
     }
 
