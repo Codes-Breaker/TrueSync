@@ -162,6 +162,8 @@ public class CharacterContorl : MonoBehaviour
     public Transform itemPlace;
     [Header("头部挂点")]
     public Transform itemPlaceHead;
+    [Header("头部挂点不带物理")]
+    public Transform itemPlaceHeadStatic;
     [Header("尾巴挂点")]
     public Transform itemPlaceTail;
     [Header("腰部挂点")]
@@ -1847,6 +1849,21 @@ public class CharacterContorl : MonoBehaviour
             anima.SetFloat("hitAngle", hitAngle);
             anima.SetBool("isHit", true);
             
+            if (isInRocket)
+            {
+                if (Mathf.Abs(hitAngle) <= 45)
+                {
+                    foreach(var allbuff in buffs)
+                    {
+                        if (allbuff is RocketThrusterBuff rBuff)
+                        {
+                            rBuff.Finish();
+                        }
+                    }
+                }
+            }
+
+
         }
         //撞击角色处理
         if (collision.gameObject.GetComponent<CharacterContorl>())
