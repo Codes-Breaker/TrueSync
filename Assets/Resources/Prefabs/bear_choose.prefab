@@ -1429,6 +1429,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterCam: {fileID: 8426878427970565319}
   meshRenderer: {fileID: 800554106722673831}
+  H: 0
+  S: 0
+  furData: {fileID: 11400000, guid: 6dedd58e395f8124bb004a520776681a, type: 2}
+  index: 0
+  xfurInstance: {fileID: 4839895652310813709}
 --- !u!1 &3307202910255659850
 GameObject:
   m_ObjectHideFlags: 0
@@ -1564,6 +1569,7 @@ GameObject:
   - component: {fileID: 5704998372097758444}
   - component: {fileID: 800554106722673831}
   - component: {fileID: 5704998372097758451}
+  - component: {fileID: 4839895652310813709}
   m_Layer: 19
   m_Name: Mesh
   m_TagString: Untagged
@@ -1697,6 +1703,398 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &4839895652310813709
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4410570259350969698}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 541934e0bcaaa0c4caa13ea631143083, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  RenderingMode: 0
+  UseLossyScale: 0
+  BetaMode: 1
+  ShowAdvancedProperties: 1
+  FullForwardMode: 0
+  AutoUpdateMaterials: 1
+  AutoAdjustForScale: 0
+  UpdateFrequency: 0.1
+  furDatabase: {fileID: 11400000, guid: 59a2996febfee3245beb4c942eb84c83, type: 2}
+  furDataProfiles:
+  - DoubleSided: 0
+    ProbeUse: 1
+    FurGroomStrength: 1
+    FurLength: 0.068
+    FurThickness: 0.22
+    FurThicknessCurve: 0.363
+    FurOcclusion: 0
+    FurOcclusionCurve: 0
+    FurRimPower: 9.25
+    FurSmoothness: 0
+    FurStrandsAsset: {fileID: 11400000, guid: 2cb1919df50ef8b4f801a712277cacb0, type: 2}
+    FurColorVariation: {fileID: 0}
+    FurMainTint: {r: 1, g: 1, b: 1, a: 1}
+    FurColorA: {r: 1, g: 1, b: 1, a: 1}
+    FurColorB: {r: 1, g: 1, b: 1, a: 1}
+    FurColorC: {r: 1, g: 1, b: 1, a: 1}
+    FurColorD: {r: 1, g: 1, b: 1, a: 1}
+    FurShadowsTint: {r: 0.36862746, g: 0.2901961, b: 0.14117648, a: 1}
+    FurRim: {r: 0.86274517, g: 0.59607846, b: 0.25490198, a: 1}
+    FurSpecularTint: {r: 0.8235295, g: 0.60784316, b: 0.2509804, a: 1}
+    FurTransmission: 0.334
+    FurRimBoost: 3
+    FurUnderColorMod: 0
+    FurOverColorMod: 0.25
+    FurBaseTiling: 1
+    FurColorTiling: {x: 1, y: 1, z: 0, w: 0}
+    UseCurlyFur: 1
+    FurCurlAmountX: 1
+    FurCurlAmountY: 1
+    FurCurlSizeX: 0.1
+    FurCurlSizeY: 0.1
+    UseEmissiveFur: 0
+    FurEmissionMap: {fileID: 0}
+    FurEmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    version: v2.7.0
+    ReceiveShadows: 1
+    CastShadows: 1
+    FurSamples: 20
+    FurUVTiling: 12
+    FurColorMap: {fileID: 0}
+    FurNormalmap: {fileID: 0}
+    FurData0: {fileID: 0}
+    FurData1: {fileID: 0}
+    SelfWindStrength: 1.99
+    SkinColorMap: {fileID: 0}
+    SkinNormalMap: {fileID: 0}
+    SkinColor: {r: 1, g: 1, b: 1, a: 1}
+    SkinSmoothness: 0.3
+  - DoubleSided: 0
+    ProbeUse: 1
+    FurGroomStrength: 1
+    FurLength: 0.146
+    FurThickness: 0.682
+    FurThicknessCurve: 0.189
+    FurOcclusion: 0.006
+    FurOcclusionCurve: 0.158
+    FurRimPower: 10
+    FurSmoothness: 0
+    FurStrandsAsset: {fileID: 11400000, guid: 2cb1919df50ef8b4f801a712277cacb0, type: 2}
+    FurColorVariation: {fileID: 0}
+    FurMainTint: {r: 1, g: 1, b: 1, a: 1}
+    FurColorA: {r: 1, g: 1, b: 1, a: 1}
+    FurColorB: {r: 1, g: 1, b: 1, a: 1}
+    FurColorC: {r: 1, g: 1, b: 1, a: 1}
+    FurColorD: {r: 1, g: 1, b: 1, a: 1}
+    FurShadowsTint: {r: 1, g: 1, b: 1, a: 1}
+    FurRim: {r: 0.9622642, g: 0.9622642, b: 0.9622642, a: 1}
+    FurSpecularTint: {r: 0, g: 0, b: 0, a: 1}
+    FurTransmission: 0
+    FurRimBoost: 1
+    FurUnderColorMod: 0
+    FurOverColorMod: 0.25
+    FurBaseTiling: 1
+    FurColorTiling: {x: 1, y: 1, z: 1, w: 1}
+    UseCurlyFur: 1
+    FurCurlAmountX: 1
+    FurCurlAmountY: 1
+    FurCurlSizeX: 0.0987
+    FurCurlSizeY: 0.1
+    UseEmissiveFur: 1
+    FurEmissionMap: {fileID: 0}
+    FurEmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    version: v2.7.0
+    ReceiveShadows: 1
+    CastShadows: 0
+    FurSamples: 10
+    FurUVTiling: 32
+    FurColorMap: {fileID: 2800000, guid: a96b0772a0122a14f8cf79149f143111, type: 3}
+    FurNormalmap: {fileID: 0}
+    FurData0: {fileID: 2800000, guid: e170b76e37ab5094490cca6644e084a9, type: 3}
+    FurData1: {fileID: 0}
+    SelfWindStrength: 1.26
+    SkinColorMap: {fileID: 0}
+    SkinNormalMap: {fileID: 0}
+    SkinColor: {r: 1, g: 1, b: 1, a: 1}
+    SkinSmoothness: 0.3
+  - DoubleSided: 0
+    ProbeUse: 1
+    FurGroomStrength: 1
+    FurLength: 0.1
+    FurThickness: 1
+    FurThicknessCurve: 0.5
+    FurOcclusion: 1
+    FurOcclusionCurve: 0.5
+    FurRimPower: 2.5
+    FurSmoothness: 0.2
+    FurStrandsAsset: {fileID: 0}
+    FurColorVariation: {fileID: 0}
+    FurMainTint: {r: 1, g: 1, b: 1, a: 1}
+    FurColorA: {r: 1, g: 1, b: 1, a: 1}
+    FurColorB: {r: 1, g: 1, b: 1, a: 1}
+    FurColorC: {r: 1, g: 1, b: 1, a: 1}
+    FurColorD: {r: 1, g: 1, b: 1, a: 1}
+    FurShadowsTint: {r: 0, g: 0, b: 0, a: 1}
+    FurRim: {r: 1, g: 1, b: 1, a: 1}
+    FurSpecularTint: {r: 0.33, g: 0.3, b: 0.28, a: 1}
+    FurTransmission: 1
+    FurRimBoost: 1
+    FurUnderColorMod: 0.25
+    FurOverColorMod: 0.5
+    FurBaseTiling: 1
+    FurColorTiling: {x: 1, y: 1, z: 0, w: 0}
+    UseCurlyFur: 0
+    FurCurlAmountX: 0
+    FurCurlAmountY: 0
+    FurCurlSizeX: 0
+    FurCurlSizeY: 0
+    UseEmissiveFur: 0
+    FurEmissionMap: {fileID: 0}
+    FurEmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    version: v2.5.0
+    ReceiveShadows: 1
+    CastShadows: 1
+    FurSamples: 30
+    FurUVTiling: 2
+    FurColorMap: {fileID: 0}
+    FurNormalmap: {fileID: 0}
+    FurData0: {fileID: 0}
+    FurData1: {fileID: 0}
+    SelfWindStrength: 1
+    SkinColorMap: {fileID: 0}
+    SkinNormalMap: {fileID: 0}
+    SkinColor: {r: 1, g: 1, b: 1, a: 1}
+    SkinSmoothness: 0.3
+  mainRenderer:
+    renderer: {fileID: 800554106722673831}
+    materials:
+    - {fileID: 2100000, guid: 599778d4e37943d4b8ade86193037d1e, type: 2}
+    - {fileID: 2100000, guid: dc0eb14c8e98cb64caaf0d8dc2aca1df, type: 2}
+    - {fileID: 2100000, guid: 571a0c8065a2b9847b7a024f8392f8de, type: 2}
+    originalMesh: {fileID: 8589273709290522378, guid: 5425317d834b3d441b32398978657d6d,
+      type: 3}
+    brokenData: 0
+    isFurMaterial: 000100
+    isLOD: 0
+    furProfiles: ffffffff0000000000000000
+  randomModule:
+    pidiSkin2: {fileID: 11400000, guid: 28daee7028e1f19498bf3f55979d4ddf, type: 2}
+    isEnabled: 0
+    moduleName: Randomization
+    moduleStatus: 3
+    experimentalFeatures: 0
+    version: 2.0
+    hasMobileMode: 1
+    hasSRPMode: 1
+    criticalError: 0
+    name: XFur Module
+    xfurInstance: {fileID: 4839895652310813709}
+    executeInEditor: 0
+    RandomizeOnLoad: 1
+    RandomSettings:
+    - Enabled: 1
+      RandomizationMode: 1
+      RandomizeColorMap: 0
+      RandomizeColorMix: 0
+      RandomizeDataMaps: 0
+      RandomizeFurStrands: 0
+      RandomizeTo:
+        DoubleSided: 0
+        ProbeUse: 1
+        FurGroomStrength: 1
+        FurLength: 0.1
+        FurThickness: 1
+        FurThicknessCurve: 0.5
+        FurOcclusion: 1
+        FurOcclusionCurve: 0.5
+        FurRimPower: 2.5
+        FurSmoothness: 0.2
+        FurStrandsAsset: {fileID: 0}
+        FurColorVariation: {fileID: 0}
+        FurMainTint: {r: 1, g: 1, b: 1, a: 1}
+        FurColorA: {r: 1, g: 1, b: 1, a: 1}
+        FurColorB: {r: 1, g: 1, b: 1, a: 1}
+        FurColorC: {r: 1, g: 1, b: 1, a: 1}
+        FurColorD: {r: 1, g: 1, b: 1, a: 1}
+        FurShadowsTint: {r: 0, g: 0, b: 0, a: 1}
+        FurRim: {r: 1, g: 1, b: 1, a: 1}
+        FurSpecularTint: {r: 0.33, g: 0.3, b: 0.28, a: 1}
+        FurTransmission: 1
+        FurRimBoost: 1
+        FurUnderColorMod: 0.25
+        FurOverColorMod: 0.5
+        FurBaseTiling: 1
+        FurColorTiling: {x: 1, y: 1, z: 0, w: 0}
+        UseCurlyFur: 0
+        FurCurlAmountX: 0
+        FurCurlAmountY: 0
+        FurCurlSizeX: 0
+        FurCurlSizeY: 0
+        UseEmissiveFur: 0
+        FurEmissionMap: {fileID: 0}
+        FurEmissionColor: {r: 0, g: 0, b: 0, a: 1}
+        version: v2.5.0
+        ReceiveShadows: 1
+        CastShadows: 1
+        FurSamples: 30
+        FurUVTiling: 2
+        FurColorMap: {fileID: 0}
+        FurNormalmap: {fileID: 0}
+        FurData0: {fileID: 0}
+        FurData1: {fileID: 0}
+        SelfWindStrength: 1
+        SkinColorMap: {fileID: 0}
+        SkinNormalMap: {fileID: 0}
+        SkinColor: {r: 1, g: 1, b: 1, a: 1}
+        SkinSmoothness: 0.3
+      RandomProfiles: []
+    randomFolds: 01
+  lodModule:
+    pidiSkin2: {fileID: 11400000, guid: 28daee7028e1f19498bf3f55979d4ddf, type: 2}
+    isEnabled: 0
+    moduleName: Dynamic LOD
+    moduleStatus: 3
+    experimentalFeatures: 0
+    version: 2.0
+    hasMobileMode: 1
+    hasSRPMode: 1
+    criticalError: 0
+    name: XFur Module
+    xfurInstance: {fileID: 4839895652310813709}
+    executeInEditor: 0
+    lodRenderers: []
+    furSamples: 1e000000
+    MaxFurDistance: 150
+    MinFurDistance: 2
+    FurSamplesRange: {x: 11, y: 39}
+    SwitchToBasicShells: 0
+    BasicShellsSamples: 8
+    BasicShellsRegion: {x: 25, y: 40}
+    useOverdrawReduction: 1
+    overdrawLODArea: 1.14
+    overdrawLODStrength: 1
+  physicsModule:
+    pidiSkin2: {fileID: 0}
+    isEnabled: 0
+    moduleName: Fur Physics
+    moduleStatus: 3
+    experimentalFeatures: 0
+    version: 3.0
+    hasMobileMode: 1
+    hasSRPMode: 1
+    criticalError: 0
+    name: XFur Module
+    xfurInstance: {fileID: 4839895652310813709}
+    executeInEditor: 0
+    quality: 2
+    disableOnLOD: 0
+    gravityStrength: 0.5
+    physicsSensitivity: 0.35
+    perMatPhysics: 010101
+    PhysicsShader: {fileID: 4800000, guid: 66441ae8344265943b3a5d228504605b, type: 3}
+  vfxModule:
+    pidiSkin2: {fileID: 0}
+    isEnabled: 0
+    moduleName: VFX & Weather
+    moduleStatus: 3
+    experimentalFeatures: 0
+    version: 3.0
+    hasMobileMode: 1
+    hasSRPMode: 1
+    criticalError: 0
+    name: XFur Module
+    xfurInstance: {fileID: 4839895652310813709}
+    executeInEditor: 0
+    VFXProgressiveShader: {fileID: 4800000, guid: 91c3b3c969c2c2a4a881214e93ab57b3,
+      type: 3}
+    disableOnLOD: 0
+    quality: 2
+    Snow:
+      name: SnowFX
+      color: {r: 0.85, g: 0.95, b: 1, a: 1}
+      specular: {r: 0.45, g: 0.5, b: 0.6, a: 1}
+      penetration: 0.65
+      smoothness: 0.5
+      intensity: 1.25
+      fadeoutTime: 4
+      normalFalloff: 0.75
+      vfxMask: {fileID: 0}
+      vfxTiling: 2
+      updated: 0
+      ignoreWeatherComponent: 0
+    Rain:
+      name: RainFX
+      color: {r: 1, g: 1, b: 1, a: 1}
+      specular: {r: 0.45, g: 0.5, b: 0.6, a: 1}
+      penetration: 0.75
+      smoothness: 0.75
+      intensity: 1.25
+      fadeoutTime: 4
+      normalFalloff: 0.75
+      vfxMask: {fileID: 0}
+      vfxTiling: 2
+      updated: 0
+      ignoreWeatherComponent: 0
+    Blood:
+      name: BloodFX
+      color: {r: 0.75, g: 0.05, b: 0.05, a: 1}
+      specular: {r: 0.15, g: 0.15, b: 0.15, a: 1}
+      penetration: 0.75
+      smoothness: 0.2
+      intensity: 1.25
+      fadeoutTime: 10
+      normalFalloff: 0.75
+      vfxMask: {fileID: 0}
+      vfxTiling: 2
+      updated: 0
+      ignoreWeatherComponent: 0
+  decalsModule:
+    pidiSkin2: {fileID: 0}
+    isEnabled: 0
+    moduleName: UV Decals
+    moduleStatus: 3
+    experimentalFeatures: 0
+    version: 2.0
+    hasMobileMode: 1
+    hasSRPMode: 1
+    criticalError: 0
+    name: XFur Module
+    xfurInstance: {fileID: 4839895652310813709}
+    executeInEditor: 0
+    DecalsShader: {fileID: 4800000, guid: 357427ff6e4c3c44ca0c1737798bf9d4, type: 3}
+    ProfileDecals:
+    - enabled: 0
+      finalOutput: {fileID: 0}
+      outputMode: 0
+      decals: []
+    - enabled: 1
+      finalOutput: {fileID: 0}
+      outputMode: 0
+      decals: []
+    - enabled: 0
+      finalOutput: {fileID: 0}
+      outputMode: 0
+      decals: []
+  customModules: []
+  CurrentFurRenderer:
+    renderer: {fileID: 800554106722673831}
+    materials:
+    - {fileID: 2100000, guid: 599778d4e37943d4b8ade86193037d1e, type: 2}
+    - {fileID: 2100000, guid: dc0eb14c8e98cb64caaf0d8dc2aca1df, type: 2}
+    - {fileID: 2100000, guid: 571a0c8065a2b9847b7a024f8392f8de, type: 2}
+    originalMesh: {fileID: 8589273709290522378, guid: 5425317d834b3d441b32398978657d6d,
+      type: 3}
+    brokenData: 0
+    isFurMaterial: 000100
+    isLOD: 0
+    furProfiles: ffffffff0000000000000000
+  currentRenderingMode: 0
+  folds: 01010101000000000000000000000000
+  profileFolds: 0101000000000000000000000000000000000000000000000000000000000000
 --- !u!1 &4418460390989642966
 GameObject:
   m_ObjectHideFlags: 0
