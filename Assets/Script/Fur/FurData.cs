@@ -1,14 +1,16 @@
 using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-
+[Serializable]
 public struct FurDataStruct
 {
-    Color furColor;
+    public Color furColor;
 }
-
+[CreateAssetMenu(fileName = "Data", menuName = "ScriptableObjects/FurData", order = 1)]
 public class FurData : ScriptableObject
 {
-    public FurDataStruct furData;
+    [SerializeField]
+    public List<FurDataStruct> furDataList = new List<FurDataStruct>();
 }

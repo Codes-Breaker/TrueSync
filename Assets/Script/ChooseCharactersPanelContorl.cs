@@ -31,6 +31,7 @@ public class ChooseCharactersPanelContorl : MonoBehaviour
                 characterType = item.characterType,
                 H = item.control.H,
                 S = item.control.S,
+                furIndex = item.control.index
             });
         }
 

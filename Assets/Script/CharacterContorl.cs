@@ -11,6 +11,7 @@ using Crest;
 using RangeAttribute = UnityEngine.RangeAttribute;
 using RootMotion.FinalIK;
 using System.Linq;
+using XFurStudio2;
 
 public class CharacterContorl : MonoBehaviour
 {
@@ -347,6 +348,14 @@ public class CharacterContorl : MonoBehaviour
     private List<SnowGroundDetector> snowDectors;
 
     public AnimationEventReceiver animationEventReceiver;
+
+    //Ã«·¢Êý¾Ý
+    public FurData furData;
+    public XFurStudioInstance xfurInstance;
+    [ColorUsage(true, true)]
+    public Color dangerHPColor;
+    [ColorUsage(true, true)]
+    public Color normalHPColor;
     private void Awake()
     {
         snowDectors = GetComponentsInChildren<SnowGroundDetector>().ToList();
@@ -416,6 +425,7 @@ public class CharacterContorl : MonoBehaviour
         CheckInVulernable();
         CheckIsGrounded();
         UpdateBuff();
+        CheckSlopeAndDirections();
         CheckSlopeAndDirections();
         CheckIsInWater();
         UpdateHP();
@@ -598,7 +608,6 @@ public class CharacterContorl : MonoBehaviour
                 if (lastHPSubtractTime > hpSubtractFrequency)
                 {
                     TakeDamage(HPSubtractRate, Vector3.zero);
-
                 }
                 else
                 {
@@ -756,6 +765,11 @@ public class CharacterContorl : MonoBehaviour
     public int countRopeStunBuff()
     {
         return buffs.Count(x => x is QTERopeStun);
+    }
+
+    public int countQTEStun()
+    {
+        return buffs.Count(x => x is QTEBuff);
     }
 
     public bool hasStunBuff()
@@ -1118,36 +1132,49 @@ public class CharacterContorl : MonoBehaviour
     {
         if (isDead)
         {
-            var rendererBlock = new MaterialPropertyBlock();
-            skinnedMeshRenderer.GetPropertyBlock(rendererBlock, 1);
-            if (rendererBlock.GetFloat("_TintAmount") != 0)
+            //var rendererBlock = new MaterialPropertyBlock();
+            //skinnedMeshRenderer.GetPropertyBlock(rendererBlock, 1);
+            //if (rendererBlock.GetFloat("_TintAmount") != 0)
+            //{
+            //    rendererBlock.SetFloat("_TintAmount", 0f);
+            //    skinnedMeshRenderer.SetPropertyBlock(rendererBlock, 1);
+            //}
+            if (xfurInstance.FurDataProfiles[1].FurEmissionColor != normalHPColor)
             {
-                rendererBlock.SetFloat("_TintAmount", 0f);
-                skinnedMeshRenderer.SetPropertyBlock(rendererBlock, 1);
+                xfurInstance.FurDataProfiles[1].FurEmissionColor = normalHPColor;
             }
         }
         else
         {
             if (currentHPValue < dangerHpTip)
             {
-                var rendererBlock = new MaterialPropertyBlock();
-                skinnedMeshRenderer.GetPropertyBlock(rendererBlock, 1);
-                rendererBlock.SetFloat("_TintAmount", blinkCurve.Evaluate(Time.time));
-                skinnedMeshRenderer.SetPropertyBlock(rendererBlock, 1);
+                //var rendererBlock = new MaterialPropertyBlock();
+                //skinnedMeshRenderer.GetPropertyBlock(rendererBlock, 1);
+                //rendererBlock.SetFloat("_TintAmount", blinkCurve.Evaluate(Time.time));
+                //skinnedMeshRenderer.SetPropertyBlock(rendererBlock, 1);
+                xfurInstance.FurDataProfiles[1].FurEmissionColor = Color.Lerp(normalHPColor, dangerHPColor, blinkCurve.Evaluate(Time.time));
             }
             else
             {
-                var rendererBlock = new MaterialPropertyBlock();
-                skinnedMeshRenderer.GetPropertyBlock(rendererBlock, 1);
-                if (rendererBlock.GetFloat("_TintAmount") != 0)
+                //var rendererBlock = new MaterialPropertyBlock();
+                //skinnedMeshRenderer.GetPropertyBlock(rendererBlock, 1);
+                //if (rendererBlock.GetFloat("_TintAmount") != 0)
+                //{
+                //    rendererBlock.SetFloat("_TintAmount", 0f);
+                //    skinnedMeshRenderer.SetPropertyBlock(rendererBlock, 1);
+                //}
+                if (xfurInstance.FurDataProfiles[1].FurEmissionColor != normalHPColor)
                 {
-                    rendererBlock.SetFloat("_TintAmount", 0f);
-                    skinnedMeshRenderer.SetPropertyBlock(rendererBlock, 1);
+                    xfurInstance.FurDataProfiles[1].FurEmissionColor = normalHPColor;
                 }
-
             }
         }
 
+    }
+
+    public void SetFurColor(int index)
+    {
+        xfurInstance.FurDataProfiles[1].FurMainTint = furData.furDataList[index].furColor;
     }
 
     public void SetColor(float H, float S)
