@@ -8,7 +8,7 @@ public class StickyBombBuff : ItemBuffBase
     //爆炸范围
     private float explosionRangeRadius = 10f;
     //爆炸力大小
-    private float explosionForceArgument = 1000f;
+    private float explosionForceArgument = 100f;
     //传递时的飞行高度
     public float stickyBombHeight = 0.5f;
     //传递时的飞行时间
@@ -107,7 +107,7 @@ public class StickyBombBuff : ItemBuffBase
                 if(item.GetComponent<Rigidbody>())
                     if ((item.transform.position - stickyBombGameObject.transform.position).magnitude < explosionRangeRadius)
                     {
-                        item.GetComponent<Rigidbody>().AddExplosionForce(explosionForceArgument, stickyBombGameObject.transform.position, explosionRangeRadius);
+                        item.GetComponent<Rigidbody>().AddExplosionForce(explosionForceArgument * item.GetComponent<Rigidbody>().mass, stickyBombGameObject.transform.position, explosionRangeRadius);
                     }
             }
 

@@ -69,7 +69,7 @@ public class StickyBombTrap : ItemTrapBase
                 if (item.GetComponent<Rigidbody>())
                     if ((item.transform.position - transform.position).magnitude < explosionRangeRadius)
                     {
-                        item.GetComponent<Rigidbody>().AddExplosionForce(explosionForceArgument,transform.position, explosionRangeRadius);
+                        item.GetComponent<Rigidbody>().AddExplosionForce(explosionForceArgument * item.GetComponent<Rigidbody>().mass, transform.position, explosionRangeRadius);
                     }
             }
 

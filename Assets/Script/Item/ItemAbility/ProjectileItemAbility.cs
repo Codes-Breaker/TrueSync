@@ -5,8 +5,8 @@ using UnityEngine;
 public class ProjectileItemAbility : ItemAbilityBase
 {
     protected float offset = 1f;
-    private ItemProjectileBase itemBase;
-    private GameObject itemOnHand;
+    protected ItemProjectileBase itemBase;
+    protected GameObject itemOnHand;
     public ProjectileItemAbility(CharacterContorl character, ItemData data) : base(character, data)
     {
     }
@@ -28,7 +28,7 @@ public class ProjectileItemAbility : ItemAbilityBase
 
     protected override void itemAbility()
     {
-        var point = (character.transform.position + (character.bodyCollider as SphereCollider).center) + (character.ridbody.transform.forward.normalized * (character.bodyCollider as SphereCollider).radius * character.transform.localScale.x + character.ridbody.transform.forward.normalized * offset);
+       // var point = (character.transform.position + (character.bodyCollider as SphereCollider).center) + (character.ridbody.transform.forward.normalized * (character.bodyCollider as SphereCollider).radius * character.transform.localScale.x + character.ridbody.transform.forward.normalized * offset);
         //trapObject.transform.position = new Vector3(point.x, point.y - (character.bodyCollider as SphereCollider).radius * character.transform.localScale.x, point.z);
         //trapObject.transform.position = point;
         
@@ -36,7 +36,7 @@ public class ProjectileItemAbility : ItemAbilityBase
         base.itemAbility();
     }
 
-    private void Throw()
+    protected virtual void Throw()
     {
         itemOnHand = ItemManager.CreatItemOnHand(itemData.itemId);
         itemOnHand.transform.SetParent(character.itemPlaceHand);
@@ -46,7 +46,7 @@ public class ProjectileItemAbility : ItemAbilityBase
         character.anima.SetTrigger("throwBoom");
     }
 
-    private void Launch()
+    protected virtual void Launch()
     {
         character.animationEventReceiver.UnRegisterEvent(AnimationEventReceiver.EventEnum.ThrowBoom,Launch);
         GameObject.Destroy(itemOnHand);

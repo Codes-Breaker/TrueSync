@@ -14,7 +14,8 @@ public enum ItemType
 public enum EquipPlace 
 { 
     OnHead,
-    OnDorsal
+    OnHeadStatic,
+    OnDorsal,
 }
 
 
@@ -89,7 +90,7 @@ public class ItemManager : MonoBehaviour
             case 5:
                 return new ProjectileItemAbility(character, itemData);
             case 6:
-                return new ProjectileItemAbility(character, itemData);
+                return new ShoryukenProjectileAbility(character, itemData);
             default:
                 return null;
         }    
@@ -165,8 +166,9 @@ public class ItemManager : MonoBehaviour
             case 5:
                 itemObj = GameObject.Instantiate(Resources.Load<GameObject>("Prefabs/Item/ItemProjectile/RopeProjectile/RopeProjectile"));
                 break;
-            //case 6:
-            //    itemObj = GameObject.Instantiate(Resources.Load<GameObject>())
+            case 6:
+                itemObj = GameObject.Instantiate(Resources.Load<GameObject>("Prefabs/Item/ItemProjectile/ShoryukenProjectile"));
+                break;
             default:
                 Debug.LogError("没有找到对应ID");
                 break;
