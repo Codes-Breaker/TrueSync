@@ -58,8 +58,12 @@ public class QTERopeStun : QTEBuff
 
     public override void OnBuffRemove()
     {
-        character.stun.gameObject.SetActive(false);
-        character.anima.SetBool("isStun", false);
+        if (character.countQTEStun() == 1)
+        {
+            character.stun.gameObject.SetActive(false);
+            character.anima.SetBool("isStun", false);
+        }
+
         
         if (character.countRopeStunBuff() == 1)
         {

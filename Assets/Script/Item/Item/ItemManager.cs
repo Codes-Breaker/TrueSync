@@ -49,21 +49,30 @@ public class ItemManager : MonoBehaviour
     private void SpawnItem()
     {
         var playerCount = GameObject.FindObjectsOfType<CharacterContorl>().ToList().Count;
-        var spawnCount = Mathf.Max(1, Mathf.Ceil(playerCount / 2));
+        var spawnCount = Mathf.Max(1, Mathf.Ceil(playerCount / 2)) + 1;
         var points = new List<Vector3>();
+        var pointTransform = new List<Transform>();
         for(int i = 0; i < itemPosition.transform.childCount; i++)
         {
-            points.Add(itemPosition.transform.GetChild(i).position);
+            if (itemPosition.transform.GetChild(i).childCount == 0)
+            {
+                pointTransform.Add(itemPosition.transform.GetChild(i));
+                points.Add(itemPosition.transform.GetChild(i).position);
+            }
         }
 
-        for (int i = 0; i < spawnCount; i++)
+        if (points.Count >= spawnCount)
         {
-            var rollIndex = UnityEngine.Random.Range(0, points.Count);
-            var position = points[rollIndex];
-            points.RemoveAt(rollIndex);
-            var rollItemIndex = UnityEngine.Random.Range(0, itemList.Count);
-            Instantiate(itemList[rollItemIndex], position, Quaternion.identity);
+            for (int i = 0; i < spawnCount; i++)
+            {
+                var rollIndex = UnityEngine.Random.Range(0, points.Count);
+                var position = points[rollIndex];
+                points.RemoveAt(rollIndex);
+                var rollItemIndex = UnityEngine.Random.Range(0, itemList.Count);
+                Instantiate(itemList[rollItemIndex], position, Quaternion.identity, pointTransform[rollIndex]);
+            }
         }
+
     }
 
     public static ItemAbilityBase CreatItemAbilityByItemData(ItemData itemData,CharacterContorl character)

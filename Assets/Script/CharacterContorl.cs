@@ -767,6 +767,11 @@ public class CharacterContorl : MonoBehaviour
         return buffs.Count(x => x is QTERopeStun);
     }
 
+    public int countQTEStun()
+    {
+        return buffs.Count(x => x is QTEBuff);
+    }
+
     public bool hasStunBuff()
     {
         var hasStunBuff = buffs.Any(x => x is StunBuff);
