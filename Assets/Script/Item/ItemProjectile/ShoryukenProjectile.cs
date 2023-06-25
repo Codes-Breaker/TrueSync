@@ -49,9 +49,9 @@ public class ShoryukenProjectile : ItemProjectileBase
         var otherCharacter = other.GetComponent<CharacterContorl>();
         if (otherCharacter && otherCharacter != character && !characterContorls.Contains(otherCharacter))
         {
-            otherCharacter.ridbody.AddForce(Vector3.up * upForceArgument * otherCharacter.ridbody.mass,ForceMode.Force);
+            otherCharacter.AddForce(Vector3.up * upForceArgument * otherCharacter.ridbody.mass,ForceMode.Force);
             var knockBackTarget = (otherCharacter.ridbody.transform.position - character.ridbody.transform.position).normalized;
-            otherCharacter.ridbody.AddForce(knockBackTarget * knockBackForceArgument * otherCharacter.ridbody.mass, ForceMode.Force);
+            otherCharacter.AddForce(knockBackTarget * knockBackForceArgument * otherCharacter.ridbody.mass, ForceMode.Force);
             var stunBuffToOther = new StunBuff(otherCharacter,stunTime);
             otherCharacter.OnGainBuff(stunBuffToOther);
 
