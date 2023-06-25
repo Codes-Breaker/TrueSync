@@ -37,6 +37,7 @@ public class ItemAbilityBase
 
         }
 
+        itemGameObject.transform.localPosition = Vector3.zero;
         itemGameObject.SetActive(true);
 
     }
