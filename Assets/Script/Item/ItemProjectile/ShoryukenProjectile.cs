@@ -11,6 +11,7 @@ public class ShoryukenProjectile : ItemProjectileBase
     public float upForceArgument;
     [Header("击退力参数(无视重力)")]
     public float knockBackForceArgument;
+    private List<CharacterContorl> characterContorls = new List<CharacterContorl>();
 
     public override void Init(CharacterContorl character, Vector3 project)
     {
@@ -29,6 +30,7 @@ public class ShoryukenProjectile : ItemProjectileBase
     protected override void FixedUpdate()
     {
         base.FixedUpdate();
+        rb.velocity = new Vector3(character.ridbody.velocity.x,rb.velocity.y,character.ridbody.velocity.z);
     }
 
     private void DestroyShoryukenprojectile()
@@ -41,13 +43,25 @@ public class ShoryukenProjectile : ItemProjectileBase
     private void OnTriggerEnter(Collider other)
     {
         var otherCharacter = other.GetComponent<CharacterContorl>();
-        if (otherCharacter && otherCharacter != character)
+        if (otherCharacter && otherCharacter != character && !characterContorls.Contains(otherCharacter))
         {
             otherCharacter.ridbody.AddForce(Vector3.up * upForceArgument * otherCharacter.ridbody.mass,ForceMode.Force);
             var knockBackTarget = (otherCharacter.ridbody.transform.position - character.ridbody.transform.position).normalized;
             otherCharacter.ridbody.AddForce(knockBackTarget * knockBackForceArgument * otherCharacter.ridbody.mass, ForceMode.Force);
             var stunBuffToOther = new StunBuff(otherCharacter,stunTime);
-            otherCharacter.OnGainBuff(stunBuffToOther); 
+            otherCharacter.OnGainBuff(stunBuffToOther);
+
+            var eventObjectPrefab = Resources.Load<GameObject>("Prefabs/Effect/StunHit");
+            var eventObjectGameObject = Instantiate(eventObjectPrefab, other.transform.position + (transform.position - other.transform.position).normalized * (otherCharacter.bodyCollider as SphereCollider).radius * otherCharacter.transform.localScale.y, Quaternion.Euler(new Vector3(0, 0, 0)));
+
+            //打击角度计算
+            var hitOnPlane = Vector3.ProjectOnPlane((rb.transform.position - otherCharacter.ridbody.position), otherCharacter.groundNormal).normalized;
+            var forwardOnPlane = Vector3.ProjectOnPlane(otherCharacter.ridbody.transform.forward, otherCharacter.groundNormal).normalized;
+            var hitAngle = Vector3.SignedAngle(forwardOnPlane, hitOnPlane, otherCharacter.groundNormal);
+            otherCharacter.anima.SetFloat("hitAngle", hitAngle);
+            otherCharacter.anima.SetBool("isHit", true);
+
+            characterContorls.Add(otherCharacter);
         }
 
     }

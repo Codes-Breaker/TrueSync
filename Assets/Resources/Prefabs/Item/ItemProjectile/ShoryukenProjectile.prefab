@@ -31,8 +31,8 @@ Transform:
   m_GameObject: {fileID: 7411893268378388003}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 6.1470575, y: 13.04, z: -5.7638607}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 3.06, y: 2.2173913, z: 3.06}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -52,7 +52,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7411893268378388003}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -110,7 +110,7 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 1
-  m_Radius: 2
+  m_Radius: 0.8
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
@@ -146,8 +146,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 0
   initialHorizontalSpeed: 0
-  initialVerticalSpeed: 5
+  initialVerticalSpeed: 8
   projectileGravity: 0
   stunTime: 1.5
-  upForceArgument: 300
+  upForceArgument: 400
   knockBackForceArgument: 200
