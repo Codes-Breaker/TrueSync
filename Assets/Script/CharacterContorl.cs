@@ -1065,12 +1065,14 @@ public class CharacterContorl : MonoBehaviour
 
     public void AddForce(Vector3 force,ForceMode forceMode)
     {
-        ridbody.AddForce(force,forceMode);
+        if (!invulernable)
+            ridbody.AddForce(force,forceMode);
     }
 
     public void AddExplosionForce(float explosionForce,Vector3 explosionPositon,float explosionRadius)
     {
-        ridbody.AddExplosionForce(explosionForce, explosionPositon, explosionRadius);
+        if (!invulernable)
+            ridbody.AddExplosionForce(explosionForce, explosionPositon, explosionRadius);
     }
 
     private void UseItem(bool isUse)
