@@ -16,9 +16,9 @@ public class RocketThrusterBuff : ItemBuffBase
     private Light light;
     private MudNoiseVolume volume;
     //自身击退加成
-    private float hitKnockBackToSelfArgument = 0.01f;
+    private float hitKnockBackToSelfArgument = 1f;
     //打击加成
-    private float hitKnockBackToOhterArgument = 1.5f;
+    private float hitKnockBackToOhterArgument = 1f;
     public RocketThrusterBuff(CharacterContorl target) : base(target)
     {
         buffTime = 15f;
