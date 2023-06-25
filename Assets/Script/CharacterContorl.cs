@@ -12,6 +12,8 @@ using RangeAttribute = UnityEngine.RangeAttribute;
 using RootMotion.FinalIK;
 using System.Linq;
 using XFurStudio2;
+using BoingKit;
+using Collision = UnityEngine.Collision;
 
 public class CharacterContorl : MonoBehaviour
 {
@@ -234,8 +236,10 @@ public class CharacterContorl : MonoBehaviour
     [Range(0, 1)]
     public float continueReceivedForceRate = 0.2f;
 
-    public float invulernableTime = 0;
-    public bool invulernable = false;
+    public bool invulernable {
+        get => buffs.Any(x => x is InvulernableBuff);
+    }
+
     public bool isTouchingSlope = false;
 
     private int defaultLayer = 0;
@@ -348,7 +352,7 @@ public class CharacterContorl : MonoBehaviour
     private List<SnowGroundDetector> snowDectors;
 
     public AnimationEventReceiver animationEventReceiver;
-
+    public BoingBones boingBones;
     //毛发数据
     public FurData furData;
     public XFurStudioInstance xfurInstance;
@@ -422,7 +426,6 @@ public class CharacterContorl : MonoBehaviour
         CheckSlipery();
         CheckStun();
         CheckSpeed();
-        CheckInVulernable();
         CheckIsGrounded();
         UpdateBuff();
         CheckSlopeAndDirections();
@@ -1226,20 +1229,6 @@ public class CharacterContorl : MonoBehaviour
 
     #region Check
 
-    private void CheckInVulernable()
-    {
-        if (invulernable && invulernableTime > 0)
-        {
-            invulernableTime -= Time.fixedDeltaTime;
-            if (invulernableTime <= 0)
-            {
-                invulernable = false;
-                SetCollider(true);
-                // SetFlashMeshRendererBlock(false);
-            }
-        }
-    }
-
     private void CheckSlipery()
     {
         if (canSlip)
@@ -1978,9 +1967,12 @@ public class CharacterContorl : MonoBehaviour
             TakeStun((int)(hitKnockbackCurve.Evaluate(momentumOther * hasBuff * otherCollision.hitKnockBackToOtherArgument) * hitKnockbackToSelfArgument * distanceToStunCoef));
             TakeDamage((int)(hitKnockbackCurve.Evaluate(momentumOther * hasBuff * otherCollision.hitKnockBackToOtherArgument) * hitKnockbackToSelfArgument * distanceToHPCoef), hitDir);
             //TakeDamage(100, hitDir);//测试
-            var buff = new HitBuff(this,forceData.hitTime);
-            ridbody.AddForce((forceData.force) * hitDir, ForceMode.Force);
-            this.OnGainBuff(buff);
+            if (!invulernable)
+            {
+                var buff = new HitBuff(this, forceData.hitTime);
+                ridbody.AddForce((forceData.force) * hitDir, ForceMode.Force);
+                this.OnGainBuff(buff);
+            }
 
             //施加转角力 正值顺时针转动，负值逆时针转动
             var torgueAngle = Vector3.SignedAngle(velocityOther, contactToOther, groundNormal);
