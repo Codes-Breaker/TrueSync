@@ -12,11 +12,9 @@ public class UFODevice : MonoBehaviour
 
     [Header("模拟空气阻力")]
     public float frictionCoefficient = 0.6f;
+
     [Header("吸力终点")]
     public Transform suctionTarget;
-
-    [Header("最小控制距离")]
-    public float minDistance;
 
     [Header("是否有吸力")]
     public bool isSuction;
