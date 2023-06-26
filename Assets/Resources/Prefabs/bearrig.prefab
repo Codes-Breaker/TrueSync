@@ -21948,7 +21948,7 @@ GameObject:
   - component: {fileID: 4382902077929413651}
   - component: {fileID: 2131397238}
   - component: {fileID: 1828130212}
-  m_Layer: 10
+  m_Layer: 20
   m_Name: Mesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -22196,7 +22196,7 @@ MonoBehaviour:
     FurCurlSizeY: 0.1
     UseEmissiveFur: 1
     FurEmissionMap: {fileID: 0}
-    FurEmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    FurEmissionColor: {r: 0, g: 0, b: 0.03773582, a: 1}
     version: v2.7.0
     ReceiveShadows: 1
     CastShadows: 0
@@ -22483,7 +22483,7 @@ MonoBehaviour:
     isLOD: 0
     furProfiles: ffffffff0000000000000000
   currentRenderingMode: 0
-  folds: 01010101000000000000000000000000
+  folds: 00010101000000000000000000000000
   profileFolds: 0101000000000000000000000000000000000000000000000000000000000000
 --- !u!1 &5783572227375899335
 GameObject:
@@ -29182,7 +29182,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inputReader: {fileID: 0}
   movementSpeedUpTime: 3
-  movementRotationRate: 0.035
+  movementRotationRate: 0.07
   movementMaxVelocity: 3
   jumpForce: 30
   jumpFrequency: 0.25
@@ -29399,8 +29399,6 @@ MonoBehaviour:
   velocityBeforeCollision: {x: 0.0019085407, y: -0.00041620433, z: -0.0055051753}
   positionBeforeCollision: {x: -8.079711, y: 4.7962174, z: -5.2694073}
   continueReceivedForceRate: 1
-  invulernableTime: 0
-  invulernable: 0
   isTouchingSlope: 0
   currentGravity: {x: 0, y: -9.81, z: 0}
   playerIndex: 0
@@ -29510,10 +29508,12 @@ MonoBehaviour:
   isBrake: 0
   rangeDector: {fileID: 1172302225296486108}
   animationEventReceiver: {fileID: 2131397238}
+  boingBones: {fileID: 1988338272673851255}
   furData: {fileID: 11400000, guid: 6dedd58e395f8124bb004a520776681a, type: 2}
   xfurInstance: {fileID: 1828130212}
   dangerHPColor: {r: 0.5647059, g: 0.03529412, b: 0.03529412, a: 1}
   normalHPColor: {r: 0, g: 0, b: 0, a: 1}
+  invulenableHPColor: {r: 1, g: 0.42352942, b: 0, a: 1}
 --- !u!114 &4147182195015774368
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -36521,7 +36521,7 @@ PrefabInstance:
     - target: {fileID: 4299847510588267131, guid: b1ad57d7288c70f41930b900c6088dd7,
         type: 3}
       propertyPath: m_Layer
-      value: 10
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 4299847511690501449, guid: b1ad57d7288c70f41930b900c6088dd7,
         type: 3}
@@ -36601,7 +36601,7 @@ PrefabInstance:
     - target: {fileID: 4299847511690501454, guid: b1ad57d7288c70f41930b900c6088dd7,
         type: 3}
       propertyPath: m_Layer
-      value: 10
+      value: 20
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 9106004893056377683, guid: b1ad57d7288c70f41930b900c6088dd7, type: 3}

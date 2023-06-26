@@ -79,19 +79,22 @@ public class QTERopeStun : QTEBuff
         {
             obiRope.enabled = true;
             Finish();
+            return;
         }
         //特殊流程，因为有个重置
         if (buffTime != -1)
         {
             buffTime = buffTime - Time.deltaTime;
-            if (buffTime <= 0)
-            {
-                obiRope.enabled = false;
-                startPoint.target = null;
-                endPoint.target = null;
-                cutting = true;
-            }
         }
+
+        if (buffTime <= 0)
+        {
+            obiRope.enabled = false;
+            startPoint.target = null;
+            endPoint.target = null;
+            cutting = true;
+        }
+        
     }
 }
 

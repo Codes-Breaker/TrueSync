@@ -30,6 +30,15 @@ public class RocketThrusterBuff : ItemBuffBase
     public override void OnBuffApply()
     {
         base.OnBuffApply();
+
+        foreach(var buff in character.getRocketThrusterBuffs())
+        {
+            if (buff != this)
+            {
+                buff.Finish();
+            }
+        }
+
         character.animationEventReceiver.RegisterEvent(AnimationEventReceiver.EventEnum.OnRocket, OnRocket);
         character.anima.SetBool("inRocket", true);
         character.isInRocket = true;
@@ -68,7 +77,8 @@ public class RocketThrusterBuff : ItemBuffBase
         character.animationEventReceiver.UnRegisterEvent(AnimationEventReceiver.EventEnum.OnRocket, OnRocket);
         character.isInRocket = false;
         character.SetSnowCollider();
-        character.anima.SetBool("inRocket", false);
+        if (character.countRocketBuff() == 1)
+            character.anima.SetBool("inRocket", false);
         character.hitKnockbackToSelfArgument = character.hitKnockbackToSelfArgument / hitKnockBackToSelfArgument;
         character.hitKnockBackToOtherArgument = character.hitKnockBackToOtherArgument / hitKnockBackToOhterArgument;
         base.OnBuffRemove();
@@ -124,5 +134,16 @@ public class RocketThrusterBuff : ItemBuffBase
     public override void OnCollide(Collision collision)
     {
         base.OnCollide(collision);
+        if (collision.gameObject.CompareTag("StaticObject"))
+        {
+            var hitOnPlane = Vector3.ProjectOnPlane((collision.contacts[0].point - character.ridbody.position), character.groundNormal).normalized;
+            var forwardOnPlane = Vector3.ProjectOnPlane(character.ridbody.transform.forward, character.groundNormal).normalized;
+            var hitAngle = Vector3.SignedAngle(forwardOnPlane, hitOnPlane, character.groundNormal);
+            if (Mathf.Abs(hitAngle) <= 45)
+            {
+                this.Finish();
+            }
+            
+        }
     }
 }

@@ -12,6 +12,8 @@ using RangeAttribute = UnityEngine.RangeAttribute;
 using RootMotion.FinalIK;
 using System.Linq;
 using XFurStudio2;
+using BoingKit;
+using Collision = UnityEngine.Collision;
 
 public class CharacterContorl : MonoBehaviour
 {
@@ -234,8 +236,10 @@ public class CharacterContorl : MonoBehaviour
     [Range(0, 1)]
     public float continueReceivedForceRate = 0.2f;
 
-    public float invulernableTime = 0;
-    public bool invulernable = false;
+    public bool invulernable {
+        get => buffs.Any(x => x is InvulernableBuff);
+    }
+
     public bool isTouchingSlope = false;
 
     private int defaultLayer = 0;
@@ -348,7 +352,7 @@ public class CharacterContorl : MonoBehaviour
     private List<SnowGroundDetector> snowDectors;
 
     public AnimationEventReceiver animationEventReceiver;
-
+    public BoingBones boingBones;
     //毛发数据
     public FurData furData;
     public XFurStudioInstance xfurInstance;
@@ -356,6 +360,8 @@ public class CharacterContorl : MonoBehaviour
     public Color dangerHPColor;
     [ColorUsage(true, true)]
     public Color normalHPColor;
+    [ColorUsage(true, true)]
+    public Color invulenableHPColor;
     private void Awake()
     {
         snowDectors = GetComponentsInChildren<SnowGroundDetector>().ToList();
@@ -422,7 +428,6 @@ public class CharacterContorl : MonoBehaviour
         CheckSlipery();
         CheckStun();
         CheckSpeed();
-        CheckInVulernable();
         CheckIsGrounded();
         UpdateBuff();
         CheckSlopeAndDirections();
@@ -490,7 +495,7 @@ public class CharacterContorl : MonoBehaviour
 
     public void TakeStun(int number)
     {
-        if (HasRollStun())
+        if (HasRollStun() || invulernable)
             return;
         currentStunValue = Math.Max(0, currentStunValue - number);
         CheckStun();
@@ -762,6 +767,16 @@ public class CharacterContorl : MonoBehaviour
 
     #region Move
 
+    public int countRocketBuff()
+    {
+        return buffs.Count(x => x is RocketThrusterBuff);
+    }
+
+    public List<RocketThrusterBuff> getRocketThrusterBuffs()
+    {
+        return buffs.Where(x => x is RocketThrusterBuff).Cast<RocketThrusterBuff>().ToList();
+    }
+
     public int countRopeStunBuff()
     {
         return buffs.Count(x => x is QTERopeStun);
@@ -772,12 +787,27 @@ public class CharacterContorl : MonoBehaviour
         return buffs.Count(x => x is QTEBuff);
     }
 
+    public int countLargeBuffType()
+    {
+        return buffs.Count(x => x is LargementPotionBuff);
+    }
+
     public bool hasStunBuff()
     {
         var hasStunBuff = buffs.Any(x => x is StunBuff);
         return hasStunBuff;
     }
 
+    public void RemoveRocketBuff()
+    {
+        foreach (var buff in buffs)
+        {
+            if (buff is RocketThrusterBuff)
+            {
+                buff.Finish();
+            }
+        }
+    }
     public void RemoveSliperyBuff()
     {
         foreach(var buff in buffs)
@@ -1062,12 +1092,14 @@ public class CharacterContorl : MonoBehaviour
 
     public void AddForce(Vector3 force,ForceMode forceMode)
     {
-        ridbody.AddForce(force,forceMode);
+        if (!invulernable)
+            ridbody.AddForce(force,forceMode);
     }
 
     public void AddExplosionForce(float explosionForce,Vector3 explosionPositon,float explosionRadius)
     {
-        ridbody.AddExplosionForce(explosionForce, explosionPositon, explosionRadius);
+        if (!invulernable)
+            ridbody.AddExplosionForce(explosionForce, explosionPositon, explosionRadius);
     }
 
     private void UseItem(bool isUse)
@@ -1154,6 +1186,13 @@ public class CharacterContorl : MonoBehaviour
                 xfurInstance.FurDataProfiles[1].FurEmissionColor = normalHPColor;
             }
         }
+        else if (invulernable)
+        {
+            if (xfurInstance.FurDataProfiles[1].FurEmissionColor != invulenableHPColor)
+            {
+                xfurInstance.FurDataProfiles[1].FurEmissionColor = invulenableHPColor;
+            }
+        }
         else
         {
             if (currentHPValue < dangerHpTip)
@@ -1235,20 +1274,6 @@ public class CharacterContorl : MonoBehaviour
     #endregion
 
     #region Check
-
-    private void CheckInVulernable()
-    {
-        if (invulernable && invulernableTime > 0)
-        {
-            invulernableTime -= Time.fixedDeltaTime;
-            if (invulernableTime <= 0)
-            {
-                invulernable = false;
-                SetCollider(true);
-                // SetFlashMeshRendererBlock(false);
-            }
-        }
-    }
 
     private void CheckSlipery()
     {
@@ -1844,6 +1869,7 @@ public class CharacterContorl : MonoBehaviour
         {
             buff.OnCollide(collision);
         }
+
         //撞击场景物体处理
         if (collision.gameObject.GetComponent<InteractiveObject>())
         {
@@ -1886,19 +1912,7 @@ public class CharacterContorl : MonoBehaviour
             anima.SetFloat("hitAngle", hitAngle);
             anima.SetBool("isHit", true);
             
-            if (isInRocket)
-            {
-                if (Mathf.Abs(hitAngle) <= 45)
-                {
-                    foreach(var allbuff in buffs)
-                    {
-                        if (allbuff is RocketThrusterBuff rBuff)
-                        {
-                            rBuff.Finish();
-                        }
-                    }
-                }
-            }
+
 
 
         }
@@ -1988,9 +2002,12 @@ public class CharacterContorl : MonoBehaviour
             TakeStun((int)(hitKnockbackCurve.Evaluate(momentumOther * hasBuff * otherCollision.hitKnockBackToOtherArgument) * hitKnockbackToSelfArgument * distanceToStunCoef));
             TakeDamage((int)(hitKnockbackCurve.Evaluate(momentumOther * hasBuff * otherCollision.hitKnockBackToOtherArgument) * hitKnockbackToSelfArgument * distanceToHPCoef), hitDir);
             //TakeDamage(100, hitDir);//测试
-            var buff = new HitBuff(this,forceData.hitTime);
-            ridbody.AddForce((forceData.force) * hitDir, ForceMode.Force);
-            this.OnGainBuff(buff);
+            if (!invulernable)
+            {
+                var buff = new HitBuff(this, forceData.hitTime);
+                ridbody.AddForce((forceData.force) * hitDir, ForceMode.Force);
+                this.OnGainBuff(buff);
+            }
 
             //施加转角力 正值顺时针转动，负值逆时针转动
             var torgueAngle = Vector3.SignedAngle(velocityOther, contactToOther, groundNormal);

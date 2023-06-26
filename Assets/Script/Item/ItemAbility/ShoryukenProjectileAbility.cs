@@ -12,6 +12,15 @@ public class ShoryukenProjectileAbility : ProjectileItemAbility
     public override void Init()
     {
         base.Init();
+        var boingBones = this.itemGameObject.GetComponent<BoingKit.BoingBones>();
+        if (boingBones != null)
+        {
+            for (int i = 0; i < character.boingBones.BoingColliders.Length; i++)
+            {
+                boingBones.BoingColliders[i] = character.boingBones.BoingColliders[i];
+            }
+        }
+
     }
     protected override void itemAbility()
     {

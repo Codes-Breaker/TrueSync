@@ -13,7 +13,7 @@ public class RocketProjectile : ItemProjectileBase
     public Vector3 rocketForward = Vector3.zero;
     private float runMaxVelocity = 12f;
     public float explosionRangeRadius = 5f;
-    public float explosionForceArgument = 2000f;
+    public float explosionForceArgument = 250f;
     private float autoExplosionTime = 20f;
     private float elapsedTime = 0f;
     //爆炸特效预制体路径
@@ -81,10 +81,14 @@ public class RocketProjectile : ItemProjectileBase
         {
             foreach (var item in colliders)
             {
-                if ((item.transform.position - this.transform.position).magnitude < explosionRangeRadius)
-                {
-                    item.GetComponent<Rigidbody>().AddExplosionForce(explosionForceArgument, this.transform.position, explosionRangeRadius);
-                }
+                if (item.GetComponent<Rigidbody>())
+                    if ((item.transform.position - transform.position).magnitude < explosionRangeRadius)
+                    {
+                        if (item.GetComponent<CharacterContorl>())
+                            item.GetComponent<CharacterContorl>().AddExplosionForce(explosionForceArgument * item.GetComponent<Rigidbody>().mass, transform.position, explosionRangeRadius);
+                        else
+                            item.GetComponent<Rigidbody>().AddExplosionForce(explosionForceArgument * item.GetComponent<Rigidbody>().mass, transform.position, explosionRangeRadius);
+                    }
             }
 
         }

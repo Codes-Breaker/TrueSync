@@ -84,7 +84,7 @@ MonoBehaviour:
   initialHorizontalSpeed: 15
   initialVerticalSpeed: 5
   projectileGravity: 15
-  tearTime: 20
+  tearTime: 10
   shootTearTime: 2
   ropeObject: {fileID: 0}
   obiRidbody: {fileID: 0}
@@ -213,7 +213,7 @@ SphereCollider:
   m_GameObject: {fileID: 8645080388501873372}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}

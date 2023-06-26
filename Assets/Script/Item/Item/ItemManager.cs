@@ -57,10 +57,13 @@ public class ItemManager : MonoBehaviour
 
     private void SpawnItem()
     {
-        var playerCount = GameObject.FindObjectsOfType<CharacterContorl>().ToList().Count;
+        var players = GameObject.FindObjectsOfType<CharacterContorl>();
+        var playerCount = players.Count();
+        var playerWithUnsedAbility = players.Count(x => x.itemAbility != null);
         var spawnCount = Mathf.Max(1, Mathf.Ceil(playerCount / 2)) + 1;
         var points = new List<Vector3>();
         var pointTransform = new List<Transform>();
+        var existCount = 0;
         for(int i = 0; i < itemPosition.transform.childCount; i++)
         {
             if (itemPosition.transform.GetChild(i).childCount == 0)
@@ -68,11 +71,17 @@ public class ItemManager : MonoBehaviour
                 pointTransform.Add(itemPosition.transform.GetChild(i));
                 points.Add(itemPosition.transform.GetChild(i).position);
             }
+            else
+            {
+                existCount++;
+            }
         }
 
-        if (points.Count >= spawnCount)
+        var requireSpawn = spawnCount - existCount - playerWithUnsedAbility;
+
+        if (points.Count >= requireSpawn && requireSpawn > 0)
         {
-            for (int i = 0; i < spawnCount; i++)
+            for (int i = 0; i < requireSpawn; i++)
             {
                 var rollIndex = UnityEngine.Random.Range(0, points.Count);
                 var position = points[rollIndex];

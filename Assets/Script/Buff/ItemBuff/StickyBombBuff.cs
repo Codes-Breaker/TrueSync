@@ -104,11 +104,16 @@ public class StickyBombBuff : ItemBuffBase
         {
             foreach (var item in colliders)
             {
-                if(item.GetComponent<Rigidbody>())
+                if (item.GetComponent<Rigidbody>())
+                {
                     if ((item.transform.position - stickyBombGameObject.transform.position).magnitude < explosionRangeRadius)
                     {
-                        item.GetComponent<CharacterContorl>().AddExplosionForce(explosionForceArgument * item.GetComponent<Rigidbody>().mass, stickyBombGameObject.transform.position, explosionRangeRadius);
+                        if (item.GetComponent<CharacterContorl>())
+                            item.GetComponent<CharacterContorl>().AddExplosionForce(explosionForceArgument * item.GetComponent<Rigidbody>().mass, stickyBombGameObject.transform.position, explosionRangeRadius);
+                        else
+                            item.GetComponent<Rigidbody>().AddExplosionForce(explosionForceArgument * item.GetComponent<Rigidbody>().mass, stickyBombGameObject.transform.position, explosionRangeRadius);
                     }
+                }
             }
 
         }

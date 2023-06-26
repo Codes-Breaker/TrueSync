@@ -12,7 +12,7 @@ public class ShoryukenProjectile : ItemProjectileBase
     [Header("击退力参数(无视重力)")]
     public float knockBackForceArgument;
     private List<CharacterContorl> characterContorls = new List<CharacterContorl>();
-
+    InvulernableBuff buff;
     public override void Init(CharacterContorl character, Vector3 project)
     {
         base.Init(character, project);
@@ -20,6 +20,9 @@ public class ShoryukenProjectile : ItemProjectileBase
         stunBuffToSelf = new StunBuff(character);
         character.OnGainBuff(stunBuffToSelf);
         bodyCollider.isTrigger = true;
+
+        buff = new InvulernableBuff(character, -1);
+        character.OnGainBuff(buff);
     }
 
     public override void Launch()
@@ -37,6 +40,7 @@ public class ShoryukenProjectile : ItemProjectileBase
     {
         character.animationEventReceiver.UnRegisterEvent(AnimationEventReceiver.EventEnum.ShoryukenEnd, DestroyShoryukenprojectile);
         stunBuffToSelf.isEnd = true;
+        buff.Finish();
         OnEnd();
     }
     
