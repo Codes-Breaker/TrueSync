@@ -15,7 +15,7 @@ public class ItemBase : MonoBehaviour
 
     private GameObject itemGameObject;
     private float lastTime;
-    private float maxTime = 30;
+    private float maxTime = -1;
     private void Start()
     {
         lastTime = 0;

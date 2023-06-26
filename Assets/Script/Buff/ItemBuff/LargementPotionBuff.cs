@@ -35,6 +35,7 @@ public class LargementPotionBuff : ItemBuffBase
         character.hitKnockbackToSelfArgument = character.hitKnockbackToSelfArgument * hitKnockBackToSelfArgument;
 
         character.hitMaxDistance = character.hitMaxDistance * 2;
+        character.tag = "StaticObject";
         base.OnBuffApply();
         buff = new InvulernableBuff(character, -1);
         character.OnGainBuff(buff);
@@ -51,6 +52,11 @@ public class LargementPotionBuff : ItemBuffBase
         character.hitMaxDistance = character.hitMaxDistance / 2;
         buff.Finish();
         base.OnBuffRemove();
+
+        if (character.countLargeBuffType() == 1)
+        {
+            character.tag = "Untagged";
+        }
 
         var eventObjectPrefab = Resources.Load<GameObject>("Prefabs/Effect/Huge");
         var eventObjectGameObject = GameObject.Instantiate(eventObjectPrefab, new Vector3(character.transform.position.x, character.transform.position.y - 1.5f, character.transform.position.z), Quaternion.Euler(new Vector3(0, 0, 0)));

@@ -63,7 +63,11 @@ public class RopeProjectile : ItemProjectileBase
 
         currentTime += Time.deltaTime;
         if (isTear)
+        {
             obiRope.enabled = true;
+            RemoveRidgidBody();
+        }
+
         
         if (isStartStick)
         {
@@ -78,6 +82,12 @@ public class RopeProjectile : ItemProjectileBase
             endPoint.target = null;
             isTear = true;
         }
+    }
+
+    private void RemoveRidgidBody()
+    {
+        GetComponent<Rigidbody>().isKinematic = true;
+        GetComponent<SphereCollider>().enabled = false;
     }
 
     protected override void OnCollisionEnter(Collision collision)

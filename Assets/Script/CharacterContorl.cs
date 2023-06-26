@@ -360,6 +360,8 @@ public class CharacterContorl : MonoBehaviour
     public Color dangerHPColor;
     [ColorUsage(true, true)]
     public Color normalHPColor;
+    [ColorUsage(true, true)]
+    public Color invulenableHPColor;
     private void Awake()
     {
         snowDectors = GetComponentsInChildren<SnowGroundDetector>().ToList();
@@ -493,7 +495,7 @@ public class CharacterContorl : MonoBehaviour
 
     public void TakeStun(int number)
     {
-        if (HasRollStun())
+        if (HasRollStun() || invulernable)
             return;
         currentStunValue = Math.Max(0, currentStunValue - number);
         CheckStun();
@@ -765,6 +767,16 @@ public class CharacterContorl : MonoBehaviour
 
     #region Move
 
+    public int countRocketBuff()
+    {
+        return buffs.Count(x => x is RocketThrusterBuff);
+    }
+
+    public List<RocketThrusterBuff> getRocketThrusterBuffs()
+    {
+        return buffs.Where(x => x is RocketThrusterBuff).Cast<RocketThrusterBuff>().ToList();
+    }
+
     public int countRopeStunBuff()
     {
         return buffs.Count(x => x is QTERopeStun);
@@ -775,12 +787,27 @@ public class CharacterContorl : MonoBehaviour
         return buffs.Count(x => x is QTEBuff);
     }
 
+    public int countLargeBuffType()
+    {
+        return buffs.Count(x => x is LargementPotionBuff);
+    }
+
     public bool hasStunBuff()
     {
         var hasStunBuff = buffs.Any(x => x is StunBuff);
         return hasStunBuff;
     }
 
+    public void RemoveRocketBuff()
+    {
+        foreach (var buff in buffs)
+        {
+            if (buff is RocketThrusterBuff)
+            {
+                buff.Finish();
+            }
+        }
+    }
     public void RemoveSliperyBuff()
     {
         foreach(var buff in buffs)
@@ -1157,6 +1184,13 @@ public class CharacterContorl : MonoBehaviour
             if (xfurInstance.FurDataProfiles[1].FurEmissionColor != normalHPColor)
             {
                 xfurInstance.FurDataProfiles[1].FurEmissionColor = normalHPColor;
+            }
+        }
+        else if (invulernable)
+        {
+            if (xfurInstance.FurDataProfiles[1].FurEmissionColor != invulenableHPColor)
+            {
+                xfurInstance.FurDataProfiles[1].FurEmissionColor = invulenableHPColor;
             }
         }
         else
@@ -1835,6 +1869,7 @@ public class CharacterContorl : MonoBehaviour
         {
             buff.OnCollide(collision);
         }
+
         //撞击场景物体处理
         if (collision.gameObject.GetComponent<InteractiveObject>())
         {
@@ -1877,19 +1912,7 @@ public class CharacterContorl : MonoBehaviour
             anima.SetFloat("hitAngle", hitAngle);
             anima.SetBool("isHit", true);
             
-            if (isInRocket)
-            {
-                if (Mathf.Abs(hitAngle) <= 45)
-                {
-                    foreach(var allbuff in buffs)
-                    {
-                        if (allbuff is RocketThrusterBuff rBuff)
-                        {
-                            rBuff.Finish();
-                        }
-                    }
-                }
-            }
+
 
 
         }
