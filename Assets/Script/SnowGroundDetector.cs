@@ -25,13 +25,13 @@ public class SnowGroundDetector : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (isActive)
+        if (isActive && other.gameObject.layer == 6)
             particleEffect.Play();
     }
 
     private void OnTriggerStay(Collider other)
     {
-        if (particleEffect.isStopped && isActive)
+        if (particleEffect.isStopped && isActive && other.gameObject.layer == 6)
             particleEffect.Play();
     }
 

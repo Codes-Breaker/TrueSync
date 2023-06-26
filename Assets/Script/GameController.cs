@@ -22,6 +22,7 @@ public class GameController : MonoBehaviour
     public float RiseSeaLevelTime = 180;
     private float gameTime = 0;
     private bool hasRiseSea = false;
+    private bool hasStartEvent = false;
     public bool startGame = false;
     public bool debug = false;
     public bool isGameOver = false;
@@ -29,6 +30,8 @@ public class GameController : MonoBehaviour
     private int winIndex = -1;
     public CinemachineVirtualCamera winVM;
     public GameObject bornPointsParent;
+    public PlayableDirector randomEventDirector;
+    public float RandomEventTime = 120;
     // Start is called before the first frame update
     void Awake()
     {
@@ -40,6 +43,7 @@ public class GameController : MonoBehaviour
         gameTime = 0;
         hasRiseSea = false;
         isGameOver = false;
+        hasStartEvent = false;
         UnityEngine.Random.InitState(System.DateTime.Now.Millisecond);
     }
 
@@ -49,8 +53,21 @@ public class GameController : MonoBehaviour
         {
             gameTime = gameTime += Time.fixedDeltaTime;
             CheckSeaLevelRise();
+            CheckRandomEvent();
         }
 
+    }
+
+    private void CheckRandomEvent()
+    {
+        if (!hasStartEvent)
+        {
+            if (gameTime >= RandomEventTime)
+            {
+                hasStartEvent = true;
+                randomEventDirector.Play();
+            }
+        }
     }
 
     private void CheckSeaLevelRise()
