@@ -28181,7 +28181,7 @@ MonoBehaviour:
   fixTransforms: 1
   solver:
     executedInEditor: 0
-    IKPosition: {x: -3.3971825e-11, y: 6.233422, z: 3.2228777}
+    IKPosition: {x: -1.04, y: 6.6434216, z: 8.622877}
     IKPositionWeight: 1
     root: {fileID: 6218862706769915549}
     target: {fileID: 0}
@@ -28250,7 +28250,7 @@ MonoBehaviour:
       baseForwardOffsetEuler: {x: 0, y: 0, z: 0}
     eyes: []
     bodyWeight: 0
-    headWeight: 0.4
+    headWeight: 0.6
     eyesWeight: 1
     clampWeight: 0.5
     clampWeightHead: 0.5
@@ -29386,6 +29386,7 @@ MonoBehaviour:
   receivedForceRate: 1
   groundNormal: {x: 0, y: 0, z: 0}
   isDead: 0
+  isAirWalk: 0
   isGrounded: 1
   sensitivity: 1
   targetAngle: 0
@@ -29511,6 +29512,7 @@ MonoBehaviour:
   boingBones: {fileID: 1988338272673851255}
   furData: {fileID: 11400000, guid: 6dedd58e395f8124bb004a520776681a, type: 2}
   xfurInstance: {fileID: 1828130212}
+  furIndex: 0
   dangerHPColor: {r: 0.5647059, g: 0.03529412, b: 0.03529412, a: 1}
   normalHPColor: {r: 0, g: 0, b: 0, a: 1}
   invulenableHPColor: {r: 1, g: 0.42352942, b: 0, a: 1}

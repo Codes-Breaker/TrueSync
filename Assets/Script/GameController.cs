@@ -12,6 +12,7 @@ using System;
 public class GameController : MonoBehaviour
 {
     public Camera mainCamera;
+    public Camera uiCamera;
     public GameObject GameOverGO;
     public TMP_Text GameOverText;
     public GameObject windText;
