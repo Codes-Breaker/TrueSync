@@ -29,7 +29,7 @@ public class InputReadManager : MonoBehaviour
     public ChooseCharactersPanelContorl chooseCharactersPanel;
     public RandomEventsControl randomEventsControl;
     public List<PlayerData> playerDatas = new List<PlayerData>();
-    private CinemachineTargetGroup cinemachineTargetGroup;
+    private CinemachineTargetGroup cinemachineTargetGroups;
     public List<int> ExistingIndex = new List<int>();
     public static InputReadManager Instance { get; protected set; }
     public List<Color> playerColors = new List<Color>();
@@ -110,7 +110,7 @@ public class InputReadManager : MonoBehaviour
     public void CreatCharacter()
     {
         playerDatas = chooseCharactersPanel.GetCharactersData();
-        cinemachineTargetGroup = GameObject.FindObjectOfType<CinemachineTargetGroup>();
+        var cinemachineTargetGroups = GameObject.FindObjectsOfType<CinemachineTargetGroup>();
         int index = 0;
         var randomPointIndex = new List<int>();
         for (int i = 0; i < gameController.bornPointsParent.transform.childCount; i++)
@@ -144,7 +144,12 @@ public class InputReadManager : MonoBehaviour
                 characterGameObject.GetComponent<CharacterContorl>().inputReader = item.inputReader;
                 characterGameObject.GetComponent<CharacterContorl>().SetColor(item.H, item.S);
                 characterGameObject.GetComponent<CharacterContorl>().SetFurColor(item.furIndex);
-                cinemachineTargetGroup.AddMember(characterGameObject.transform, 2, 4);
+                //foreach(var cinemachineItem in cinemachineTargetGroups)
+                //{
+                //    cinemachineItem.AddMember(characterGameObject.transform, 2, 4);
+
+                //}
+                cinemachineTargetGroups[index - 1].AddMember(characterGameObject.transform, 2, 4);
                 characterGameObject.transform.position = pos;
                 characterGameObject.GetComponent<CharacterContorl>().playerIndex = index;
             }

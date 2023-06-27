@@ -362,6 +362,7 @@ public class CharacterContorl : MonoBehaviour
     public Color normalHPColor;
     [ColorUsage(true, true)]
     public Color invulenableHPColor;
+
     private void Awake()
     {
         snowDectors = GetComponentsInChildren<SnowGroundDetector>().ToList();
@@ -1422,9 +1423,17 @@ public class CharacterContorl : MonoBehaviour
         if (rangeDector.closeTargets.Count > 0 && rangeDector.closeTargets.FirstOrDefault( x => !x.isDead ) != null)
         {
             lastSeenTarget = rangeDector.closeTargets.FirstOrDefault(x => !x.isDead);
+
+            var cinemachineTargetGroups = GameObject.FindObjectsOfType<CinemachineTargetGroup>();
+            cinemachineTargetGroups[playerIndex - 1].AddMember(lastSeenTarget.transform, 2, 4);
         }
         else
         {
+            if (lastSeenTarget != null)
+            {
+                var cinemachineTargetGroups = GameObject.FindObjectsOfType<CinemachineTargetGroup>();
+                cinemachineTargetGroups[playerIndex - 1].RemoveMember(lastSeenTarget.transform);
+            }
             lastSeenTarget = null;
         }
 
