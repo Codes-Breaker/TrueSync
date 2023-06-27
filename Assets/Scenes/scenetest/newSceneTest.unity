@@ -27518,6 +27518,7 @@ MonoBehaviour:
   modetext: {fileID: 1524828662}
   chooseCharactersPanelItemControls: []
   modeButton: {fileID: 539347372}
+  selectedColors: 
 --- !u!114 &1255799255
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -31286,6 +31287,7 @@ MonoBehaviour:
   previewObject: {fileID: 0}
   renderTexture: {fileID: 0}
   control: {fileID: 0}
+  masterControl: {fileID: 0}
 --- !u!1 &1778826505
 GameObject:
   m_ObjectHideFlags: 0
@@ -31430,9 +31432,9 @@ MonoBehaviour:
   m_LookaheadTime: 0
   m_LookaheadSmoothing: 0
   m_LookaheadIgnoreY: 0
-  m_XDamping: 1
-  m_YDamping: 1
-  m_ZDamping: 1
+  m_XDamping: 1.5
+  m_YDamping: 1.5
+  m_ZDamping: 1.5
   m_TargetMovementOnly: 0
   m_ScreenX: 0.5
   m_ScreenY: 0.5
@@ -32520,12 +32522,12 @@ PrefabInstance:
     - target: {fileID: 25539922087628395, guid: 7131824a9ad019f4aa6717ca742d581b,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 25539922087628395, guid: 7131824a9ad019f4aa6717ca742d581b,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 750271685175636433, guid: 7131824a9ad019f4aa6717ca742d581b,
         type: 3}
@@ -32560,12 +32562,12 @@ PrefabInstance:
     - target: {fileID: 1645618599502264407, guid: 7131824a9ad019f4aa6717ca742d581b,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1645618599502264407, guid: 7131824a9ad019f4aa6717ca742d581b,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2020282833422021822, guid: 7131824a9ad019f4aa6717ca742d581b,
         type: 3}
@@ -32750,12 +32752,12 @@ PrefabInstance:
     - target: {fileID: 5667477767988214532, guid: 7131824a9ad019f4aa6717ca742d581b,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5667477767988214532, guid: 7131824a9ad019f4aa6717ca742d581b,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5892801591638802567, guid: 7131824a9ad019f4aa6717ca742d581b,
         type: 3}
@@ -32841,6 +32843,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: bearrig (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 6524800512801151549, guid: 7131824a9ad019f4aa6717ca742d581b,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7494583762492344273, guid: 7131824a9ad019f4aa6717ca742d581b,
         type: 3}
@@ -33292,7 +33299,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   defaultSeaLevel: 0
-  maxSeaLevel: 6
+  maxSeaLevel: 4
   riseTime: 180
 --- !u!1 &2024937596
 GameObject:

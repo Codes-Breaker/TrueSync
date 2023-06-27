@@ -69,7 +69,7 @@ MonoBehaviour:
   m_UseMipMap: 0
   m_VSyncEnabled: 0
   m_Gizmos: 0
-  m_Stats: 0
+  m_Stats: 1
   m_SelectedSizes: 09000000000000000000000000000000000000000000000000000000000000000000000000000000
   m_ZoomArea:
     m_HRangeLocked: 0
@@ -227,9 +227,9 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 7665f1ff
-      m_LastClickedID: 0
-      m_ExpandedIDs: c80bf2ffda0bf2ffce62f4ffe062f4ffc46ef4ffe8bef4fffabef4ffe6cbf4ffb0d5fbff2ac5fcff3cc5fcff14d2fcff3ad2fcff4cd2fcff8467fdff5cd9fdff9c09feffa009feffac09feffd209feffe409feff2a0afeffe4faffffc27501002a76010094760100727701006e7801008c780100
+      m_SelectedIDs: e409feff
+      m_LastClickedID: -128540
+      m_ExpandedIDs: c80bf2ffda0bf2ffce62f4ffe062f4ffc46ef4ffe8bef4fffabef4ffe6cbf4ffb0d5fbff2ac5fcff3cc5fcff14d2fcff3ad2fcff4cd2fcff8467fdff5cd9fdff9c09feffa009feffac09feffd209feff2a0afeffe4faffff2a76010094760100727701008c780100
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -589,9 +589,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: -3.8987834, y: 4.4878745, z: 1.1571022}
+    m_Target: {x: -0.14087257, y: -21.332453, z: -37.533836}
     speed: 2
-    m_Value: {x: -3.8987834, y: 4.4878745, z: 1.1571022}
+    m_Value: {x: -0.14087257, y: -21.332453, z: -37.533836}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -638,13 +638,13 @@ MonoBehaviour:
     m_GridAxis: 1
     m_gridOpacity: 0.5
   m_Rotation:
-    m_Target: {x: -0.14420424, y: 0.8535217, z: -0.35495955, w: -0.3543218}
+    m_Target: {x: 0.0074714897, y: 0.9611846, z: -0.27686873, w: 0.015686613}
     speed: 2
-    m_Value: {x: -0.14414412, y: 0.85316586, z: -0.35481155, w: -0.35417408}
+    m_Value: {x: 0.0074683754, y: 0.96078396, z: -0.27675334, w: 0.015680075}
   m_Size:
-    m_Target: 9.65058
+    m_Target: 32.09213
     speed: 2
-    m_Value: 9.65058
+    m_Value: 32.09213
   m_Ortho:
     m_Target: 0
     speed: 2
@@ -679,7 +679,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 12006, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: AnimationWindow
+  m_Name: ConsoleWindow
   m_EditorClassIdentifier: 
   m_Children: []
   m_Position:
@@ -690,12 +690,12 @@ MonoBehaviour:
     height: 243
   m_MinSize: {x: 100, y: 100}
   m_MaxSize: {x: 4000, y: 4000}
-  m_ActualView: {fileID: 12}
+  m_ActualView: {fileID: 11}
   m_Panes:
   - {fileID: 11}
   - {fileID: 12}
-  m_Selected: 1
-  m_LastSelected: 0
+  m_Selected: 0
+  m_LastSelected: 1
 --- !u!114 &11
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -719,7 +719,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 777
-    width: 897
+    width: 1208
     height: 222
   m_ViewDataDictionary: {fileID: 0}
   m_OverlayCanvas:
@@ -756,7 +756,7 @@ MonoBehaviour:
     m_SaveData: []
   m_LockTracker:
     m_IsLocked: 0
-  m_LastSelectedObjectID: -128596
+  m_LastSelectedObjectID: 95746
 --- !u!114 &13
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -774,7 +774,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 1209
     y: 0
-    width: 116
+    width: 354
     height: 947
   m_MinSize: {x: 232, y: 271}
   m_MaxSize: {x: 10002, y: 10021}
@@ -806,14 +806,14 @@ MonoBehaviour:
     serializedVersion: 2
     x: 1209
     y: 73
-    width: 114
+    width: 352
     height: 926
   m_ViewDataDictionary: {fileID: 0}
   m_OverlayCanvas:
     m_LastAppliedPresetName: Default
     m_SaveData: []
   m_SearchFilter:
-    m_NameFilter: jumplo
+    m_NameFilter: 
     m_ClassNames: []
     m_AssetLabels: []
     m_AssetBundleNames: []
@@ -825,22 +825,22 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/MudBun/Shader/Render/URP
+    - Assets/ThirdParty/VFX_Klaus/Prefabs/Hyper Casual FX
     m_Globs: []
-    m_OriginalText: jumplo
+    m_OriginalText: 
   m_ViewMode: 1
   m_StartGridSize: 16
   m_LastFolders:
-  - Assets/MudBun/Shader/Render/URP
+  - Assets/ThirdParty/VFX_Klaus/Prefabs/Hyper Casual FX
   m_LastFoldersGridSize: 16
   m_LastProjectPath: E:\UnityProjects\TrueSyncPhysicsDemo
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 79}
-    m_SelectedIDs: b0b10000
-    m_LastClickedID: 45488
-    m_ExpandedIDs: 0000000010b1000012b1000014b1000016b1000018b100001ab100001cb100001eb1000020b1000022b1000024b1000026b1000028b100002ab100002cb100002eb1000030b1000032b1000034b1000036b1000038b100003ab100003cb100003eb1000040b1000042b1000044b1000046b1000048b100004ab100004cb100004eb1000050b1000052b1000054b1000056b1000058b100005ab100005cb100005eb1000060b1000062b1000064b1000066b1000068b100006ab100006cb100006eb1000070b1000072b1000074b1000076b1000078b100007ab100007cb100007eb1000080b1000082b1000084b1000086b1000088b100008ab100008cb100008eb1000094b1000000ca9a3b
+    scrollPos: {x: 0, y: 1238}
+    m_SelectedIDs: e60b0600
+    m_LastClickedID: 396262
+    m_ExpandedIDs: 0000000010b1000012b1000014b1000016b1000018b100001ab100001cb100001eb1000020b1000022b1000024b1000026b1000028b100002ab100002cb100002eb1000030b1000032b100003ab100003cb100003eb1000040b1000042b1000044b1000046b1000048b100004ab100004cb100004eb1000050b1000054b1000056b1000058b100005ab100005cb100005eb1000060b1000062b1000064b1000066b1000068b100006ab100006cb100006eb1000072b1000074b1000076b1000078b100007ab100007cb100007eb1000080b1000082b1000084b1000086b1000088b100008ab100008eb1000094b10000f6b20000e40b060000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -893,24 +893,24 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_ListAreaState:
-    m_SelectedInstanceIDs: 7665f1ff
-    m_LastClickedInstanceID: -957066
+    m_SelectedInstanceIDs: e409feff
+    m_LastClickedInstanceID: -128540
     m_HadKeyboardFocusLastEvent: 1
     m_ExpandedInstanceIDs: c623000000d10000ee1801000ee90000b8a60000aec30000caa8000082cf0000d40601003ad6010038d6010034030200de320100e2080300ea080300e60803009c36030098360300a03603009aa200001651020000000000308d0000127503000e750300a8970300a4970300
     m_RenameOverlay:
       m_UserAcceptedRename: 0
-      m_Name: 
-      m_OriginalName: 
+      m_Name: HCFX_Hit_03
+      m_OriginalName: HCFX_Hit_03
       m_EditFieldRect:
         serializedVersion: 2
         x: 0
         y: 0
         width: 0
         height: 0
-      m_UserData: 0
+      m_UserData: 435256
       m_IsWaitingForDelay: 0
       m_IsRenaming: 0
-      m_OriginalEventType: 11
+      m_OriginalEventType: 0
       m_IsRenamingFilename: 1
       m_ClientGUIView: {fileID: 13}
     m_CreateAssetUtility:
@@ -920,10 +920,10 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
     m_NewAssetIndexInList: -1
-    m_ScrollPosition: {x: 0, y: 0}
+    m_ScrollPosition: {x: 0, y: 240}
     m_GridSize: 16
   m_SkipHiddenPackages: 0
-  m_DirectoriesAreaWidth: 50
+  m_DirectoriesAreaWidth: 150
 --- !u!114 &15
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -939,9 +939,9 @@ MonoBehaviour:
   m_Children: []
   m_Position:
     serializedVersion: 2
-    x: 1325
+    x: 1563
     y: 0
-    width: 595
+    width: 357
     height: 947
   m_MinSize: {x: 275, y: 50}
   m_MaxSize: {x: 4000, y: 4000}
@@ -971,9 +971,9 @@ MonoBehaviour:
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 1325
+    x: 1563
     y: 73
-    width: 594
+    width: 356
     height: 926
   m_ViewDataDictionary: {fileID: 0}
   m_OverlayCanvas:

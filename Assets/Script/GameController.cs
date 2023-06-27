@@ -161,7 +161,7 @@ public class GameController : MonoBehaviour
 
     private void GameOver()
     {
-        director?.Play();
+        //director?.Play();
         StartCoroutine(DelayOpen());
     }
 

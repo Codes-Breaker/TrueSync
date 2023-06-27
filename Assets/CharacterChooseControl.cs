@@ -22,7 +22,7 @@ public class CharacterChooseControl : MonoBehaviour
         //S = rendererBlock.GetFloat("_S");
         //H = rendererBlock.GetFloat("_H");
         //originalS = 0.51f;
-        index = 0;
+        //index = 0;
         //SetColor();
         SetFurColor();
     }

@@ -60,7 +60,7 @@ public class ItemManager : MonoBehaviour
         var players = GameObject.FindObjectsOfType<CharacterContorl>();
         var playerCount = players.Count();
         var playerWithUnsedAbility = players.Count(x => x.itemAbility != null);
-        var spawnCount = Mathf.Max(1, Mathf.Ceil(playerCount / 2)) + 1;
+        var spawnCount = Mathf.Max(1, Mathf.Ceil(playerCount / 2));
         var points = new List<Vector3>();
         var pointTransform = new List<Transform>();
         var existCount = 0;
