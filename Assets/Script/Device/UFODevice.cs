@@ -1,3 +1,4 @@
+using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -19,10 +20,34 @@ public class UFODevice : MonoBehaviour
     [Header("是否有吸力")]
     public bool isSuction;
 
+    public bool active;
+
+    private bool hasAddGroup = false;
+    private bool hasRemoveGroup = false;
+
+    private void LateUpdate()
+    {
+        if (active)
+        {
+            if (!hasAddGroup)
+            {
+                AddCamGroup();
+            }
+        }
+        else
+        {
+            if (!hasRemoveGroup)
+            {
+                RemoveCamGroup();
+            }
+        }
+    }
+
     private void OnTriggerStay(Collider other)
     {
         if(isSuction)
         {
+
             var otherRB = other.GetComponent<Rigidbody>();
             if (otherRB)
             {
@@ -47,6 +72,7 @@ public class UFODevice : MonoBehaviour
         }
         else
         {
+
             var otherRB = other.GetComponent<Rigidbody>();
             if (otherRB)
             {
@@ -56,6 +82,28 @@ public class UFODevice : MonoBehaviour
                     character.isAirWalk = false;
                 }
             }
+        }
+    }
+
+    private void AddCamGroup()
+    {
+        hasAddGroup = true;
+        hasRemoveGroup = false;
+
+        var groups = GameObject.FindObjectsOfType<CinemachineTargetGroup>();
+        foreach(var g in groups)
+        {
+            g.AddMember(this.transform.parent, 2, 12);
+        }
+    }
+
+    private void RemoveCamGroup()
+    {
+        hasRemoveGroup = true;
+        var groups = GameObject.FindObjectsOfType<CinemachineTargetGroup>();
+        foreach (var g in groups)
+        {
+            g.RemoveMember(this.transform.parent);
         }
     }
 
