@@ -161,6 +161,8 @@ public class CharacterContorl : MonoBehaviour
     public GrounderQuadruped grounderQuadruped;
     public LookAtIK lookAtIK;
     public RagdollActivator ragdollController;
+    public CinemachineTargetGroup cinemachineTargetGroup;
+    public Camera m_camera;
     [Header("背部挂点")]
     public Transform itemPlace;
     [Header("头部挂点")]
@@ -190,7 +192,8 @@ public class CharacterContorl : MonoBehaviour
     private bool hasBrake = false;
     private bool isDrift;
     private bool isWalk;
-
+    public bool isAirWalk;
+    private bool hasAirWalk;
     public bool isGrounded;
     public bool isStun { get; private set; }
     //起身
@@ -356,6 +359,7 @@ public class CharacterContorl : MonoBehaviour
     //毛发数据
     public FurData furData;
     public XFurStudioInstance xfurInstance;
+    public int furIndex;
     [ColorUsage(true, true)]
     public Color dangerHPColor;
     [ColorUsage(true, true)]
@@ -682,6 +686,16 @@ public class CharacterContorl : MonoBehaviour
         anima.SetFloat("playSpeed", runAnimPlayCurve.Evaluate(speed));
         anima.SetFloat("velocityY", ridbody.velocity.y);
         anima.SetBool("Releasing", releasing||controlKeepRuning);
+        anima.SetBool("isAirWalk", isAirWalk);
+        if (!hasAirWalk && isAirWalk)
+        {
+            anima.SetTrigger("AirWalk");
+            hasAirWalk = true;
+        }
+        else if (!isAirWalk && hasAirWalk)
+        {
+            hasAirWalk = false;
+        }
 
         if (isInWater && !hasInWater && !isInRocket)
         {
@@ -827,7 +841,12 @@ public class CharacterContorl : MonoBehaviour
         //单位化输入方向
         if (controlDeviceType == ControlDeviceType.Mouse)
         {
-            Vector3 screenPosition = gameController.mainCamera.WorldToScreenPoint(transform.position);
+            Vector3 screenPosition = new Vector3();
+            if (gameController.screenMode == ScreenMode.Same)
+                screenPosition = gameController.mainCamera.WorldToScreenPoint(transform.position);
+            else if(gameController.screenMode == ScreenMode.Split)
+                screenPosition = m_camera.WorldToScreenPoint(transform.position);
+
             var detalPosition = axisInput - new Vector2(screenPosition.x, screenPosition.y);
             axisInput = detalPosition.normalized;
         }
@@ -871,7 +890,11 @@ public class CharacterContorl : MonoBehaviour
 
                 if (axisInput.magnitude > movementThrashold)
                 {
-                    targetAngle = Mathf.Atan2(axisInput.x, axisInput.y) * Mathf.Rad2Deg + gameController.mainCamera.transform.eulerAngles.y;
+                    if (gameController.screenMode == ScreenMode.Same)
+                        targetAngle = Mathf.Atan2(axisInput.x, axisInput.y) * Mathf.Rad2Deg + gameController.mainCamera.transform.eulerAngles.y;
+                    else if(gameController.screenMode == ScreenMode.Split)
+                        targetAngle = Mathf.Atan2(axisInput.x, axisInput.y) * Mathf.Rad2Deg + m_camera.transform.eulerAngles.y;
+
                     if (hasBrake)
                         transform.rotation = Quaternion.Slerp(this.ridbody.rotation, Quaternion.Euler(new Vector3(0, targetAngle, 0) + initialRotation), breakRotationRate);
                     else
@@ -883,7 +906,11 @@ public class CharacterContorl : MonoBehaviour
                 CheckisDrift();
                 if (axisInput.magnitude > movementThrashold)
                 {
-                    targetAngle = Mathf.Atan2(axisInput.x, axisInput.y) * Mathf.Rad2Deg + gameController.mainCamera.transform.eulerAngles.y;
+                    if (gameController.screenMode == ScreenMode.Same)
+                        targetAngle = Mathf.Atan2(axisInput.x, axisInput.y) * Mathf.Rad2Deg + gameController.mainCamera.transform.eulerAngles.y;
+                    else if (gameController.screenMode == ScreenMode.Split)
+                        targetAngle = Mathf.Atan2(axisInput.x, axisInput.y) * Mathf.Rad2Deg + m_camera.transform.eulerAngles.y;
+
                     if (hasBrake)
                         transform.rotation = Quaternion.Slerp(this.ridbody.rotation, Quaternion.Euler(new Vector3(0, targetAngle, 0) + initialRotation), breakRotationRate);
                     else
@@ -897,7 +924,11 @@ public class CharacterContorl : MonoBehaviour
             if (axisInput.magnitude > movementThrashold)
             {
                 CheckisDrift();
-                targetAngle = Mathf.Atan2(axisInput.x, axisInput.y) * Mathf.Rad2Deg + gameController.mainCamera.transform.eulerAngles.y;
+                if (gameController.screenMode == ScreenMode.Same)
+                    targetAngle = Mathf.Atan2(axisInput.x, axisInput.y) * Mathf.Rad2Deg + gameController.mainCamera.transform.eulerAngles.y;
+                else if (gameController.screenMode == ScreenMode.Split)
+                    targetAngle = Mathf.Atan2(axisInput.x, axisInput.y) * Mathf.Rad2Deg + m_camera.transform.eulerAngles.y;
+
                 if (hasBrake)
                     transform.rotation = Quaternion.Slerp(this.ridbody.rotation, Quaternion.Euler(new Vector3(0, targetAngle, 0) + initialRotation), breakRotationRate);
                 else
@@ -908,7 +939,11 @@ public class CharacterContorl : MonoBehaviour
         {
             if (ridbody.velocity.magnitude < movementMaxVelocity && axisInput.magnitude > movementThrashold)
             {
-                targetAngle = Mathf.Atan2(axisInput.x, axisInput.y) * Mathf.Rad2Deg + gameController.mainCamera.transform.eulerAngles.y;
+                if (gameController.screenMode == ScreenMode.Same)
+                    targetAngle = Mathf.Atan2(axisInput.x, axisInput.y) * Mathf.Rad2Deg + gameController.mainCamera.transform.eulerAngles.y;
+                else if (gameController.screenMode == ScreenMode.Split)
+                    targetAngle = Mathf.Atan2(axisInput.x, axisInput.y) * Mathf.Rad2Deg + m_camera.transform.eulerAngles.y;
+
                 var acceleration = movementMaxVelocity / movementSpeedUpTime;
                 var forceMagnitude = ridbody.mass * acceleration;
 
@@ -1046,7 +1081,13 @@ public class CharacterContorl : MonoBehaviour
             hasJump = true;
             isJumpFrequency = false;
             anima.SetBool("Jump", true);
-            targetAngle = Mathf.Atan2(axisInput.x, axisInput.y) * Mathf.Rad2Deg + gameController.mainCamera.transform.eulerAngles.y;
+            if (gameController.screenMode == ScreenMode.Same)
+                targetAngle = Mathf.Atan2(axisInput.x, axisInput.y) * Mathf.Rad2Deg + gameController.mainCamera.transform.eulerAngles.y;
+            else if(gameController.screenMode == ScreenMode.Split)
+            {
+                targetAngle = Mathf.Atan2(axisInput.x, axisInput.y) * Mathf.Rad2Deg + m_camera.transform.eulerAngles.y;
+
+            }
             if (isAtMaxSpeed && lastJumpRushTime > jumpRushFrequency)
             {
                 //fullyRecoveringStamina = true;
@@ -1225,6 +1266,7 @@ public class CharacterContorl : MonoBehaviour
     public void SetFurColor(int index)
     {
         xfurInstance.FurDataProfiles[1].FurMainTint = furData.furDataList[index].furColor;
+        furIndex = index;
     }
 
     public void SetColor(float H, float S)
@@ -1423,16 +1465,14 @@ public class CharacterContorl : MonoBehaviour
         if (rangeDector.closeTargets.Count > 0 && rangeDector.closeTargets.FirstOrDefault( x => !x.isDead ) != null)
         {
             lastSeenTarget = rangeDector.closeTargets.FirstOrDefault(x => !x.isDead);
-
-            var cinemachineTargetGroups = GameObject.FindObjectsOfType<CinemachineTargetGroup>();
-            cinemachineTargetGroups[playerIndex - 1].AddMember(lastSeenTarget.transform, 2, 4);
+            if(gameController.screenMode == ScreenMode.Split)
+                cinemachineTargetGroup.AddMember(lastSeenTarget.transform, 2, 4);
         }
         else
         {
-            if (lastSeenTarget != null)
+            if (lastSeenTarget != null && gameController.screenMode == ScreenMode.Split)
             {
-                var cinemachineTargetGroups = GameObject.FindObjectsOfType<CinemachineTargetGroup>();
-                cinemachineTargetGroups[playerIndex - 1].RemoveMember(lastSeenTarget.transform);
+                cinemachineTargetGroup.RemoveMember(lastSeenTarget.transform);
             }
             lastSeenTarget = null;
         }
@@ -1609,7 +1649,10 @@ public class CharacterContorl : MonoBehaviour
         gpSlider.value = (float)(currentStamina / maxActorStamina);
 
         hpSlider.value = (float)(currentHPValue / maxHPValue);
-        canvas.transform.forward = gameController.mainCamera.transform.forward;
+        if (gameController.screenMode == ScreenMode.Same)
+            canvas.transform.forward = gameController.mainCamera.transform.forward;
+        else if (gameController.screenMode == ScreenMode.Split)
+            canvas.transform.forward = m_camera.transform.forward;
 
         //临时缩放
         canvas.transform.localScale = Vector3.one / transform.localScale.x;
