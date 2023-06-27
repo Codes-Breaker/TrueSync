@@ -70,6 +70,14 @@ public class RocketProjectile : ItemProjectileBase
         {
             Explosion();
         }
+        var character = collision.gameObject.GetComponent<CharacterContorl>();
+        if (character != null)
+        {
+            if (character.invulernable)
+            {
+                Explosion();
+            }
+        }
 
     }
 

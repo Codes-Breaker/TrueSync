@@ -789,6 +789,17 @@ public class CharacterContorl : MonoBehaviour
         return buffs.Where(x => x is RocketThrusterBuff).Cast<RocketThrusterBuff>().ToList();
     }
 
+    public void FinishRocketThrusterBuffs()
+    {
+        buffs.ForEach(x =>
+        {
+            if (x is RocketThrusterBuff)
+            {
+                x.Finish();
+            }
+        });
+    }
+
     public int countRopeStunBuff()
     {
         return buffs.Count(x => x is QTERopeStun);
@@ -1434,7 +1445,14 @@ public class CharacterContorl : MonoBehaviour
 
         if (rangeDector.closeTargets.Count > 0 && rangeDector.closeTargets.FirstOrDefault( x => !x.isDead ) != null)
         {
-            lastSeenTarget = rangeDector.closeTargets.FirstOrDefault(x => !x.isDead);
+            var target = rangeDector.closeTargets.FirstOrDefault(x => !x.isDead);
+            var hitOnPlane = Vector3.ProjectOnPlane((target.transform.position - ridbody.position), groundNormal).normalized;
+            var forwardOnPlane = Vector3.ProjectOnPlane(ridbody.transform.forward, groundNormal).normalized;
+            var seenAngle = Vector3.SignedAngle(forwardOnPlane, hitOnPlane, groundNormal);
+            if (Mathf.Abs(seenAngle) <= 90)
+                lastSeenTarget = rangeDector.closeTargets.FirstOrDefault(x => !x.isDead);
+            else
+                lastSeenTarget = null;
         }
         else
         {

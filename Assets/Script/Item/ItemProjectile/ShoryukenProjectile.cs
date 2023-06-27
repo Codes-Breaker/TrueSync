@@ -64,7 +64,7 @@ public class ShoryukenProjectile : ItemProjectileBase
             var hitAngle = Vector3.SignedAngle(forwardOnPlane, hitOnPlane, otherCharacter.groundNormal);
             otherCharacter.anima.SetFloat("hitAngle", hitAngle);
             otherCharacter.anima.SetBool("isHit", true);
-
+            otherCharacter.FinishRocketThrusterBuffs();
             characterContorls.Add(otherCharacter);
         }
 
