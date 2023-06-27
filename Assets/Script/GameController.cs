@@ -28,10 +28,14 @@ public class GameController : MonoBehaviour
     public bool isGameOver = false;
     public PlayableDirector director;
     private int winIndex = -1;
+    private int winFurIndex = -1;
+    public string winFurName = "";
     public CinemachineVirtualCamera winVM;
     public GameObject bornPointsParent;
     public PlayableDirector randomEventDirector;
     public float RandomEventTime = 120;
+    public GameMode gameMode = GameMode.Single;
+    
     // Start is called before the first frame update
     void Awake()
     {
@@ -87,16 +91,45 @@ public class GameController : MonoBehaviour
     public void CheckGameState()
     {
         List<CharacterContorl> characters = GameObject.FindObjectsOfType<CharacterContorl>().ToList();
-        if (characters.Count <= 1 || characters.Sum(x => x.isDead ? 0: 1) == 1)
+        switch (gameMode)
         {
-            var winCharacter = characters.FirstOrDefault(x => !x.isDead);
-            isGameOver = true;
-            winCharacter?.SetWin();
-            winIndex = winCharacter.playerIndex;
-            winVM.LookAt = winCharacter.transform;
-            winVM.Follow = winCharacter.transform;
-            GameOver();
+            case GameMode.Single:
+                if (characters.Count <= 1 || characters.Sum(x => x.isDead ? 0 : 1) == 1)
+                {
+                    var winCharacter = characters.FirstOrDefault(x => !x.isDead);
+                    isGameOver = true;
+                    winCharacter?.SetWin();
+                    winIndex = winCharacter.playerIndex;
+                    //winVM.LookAt = winCharacter.transform;
+                    //winVM.Follow = winCharacter.transform;
+                    GameOver();
+                }
+                break;
+
+            case GameMode.Multiple:
+                if (characters.Count <= 1 || characters.Where(x => !x.isDead).GroupBy(x => x.furIndex).Count() == 1)
+                {
+                    var winFur = characters.FirstOrDefault(x => !x.isDead).furIndex;
+                    winFurName = characters.FirstOrDefault(x => !x.isDead).furData.furDataList[winFur].furName;
+                    isGameOver = true;
+                    foreach(var character in characters.Where(x => !x.isDead))
+                    {
+                        character.SetWin();
+                    }
+                    winFurIndex = winFur;
+
+                    //winCharacter?.SetWin();
+                    //winIndex = winCharacter.playerIndex;
+                    //winVM.LookAt = winCharacter.transform;
+                    //winVM.Follow = winCharacter.transform;
+                    GameOver();
+                }
+                break;
+
+            default:
+                break;
         }
+
 
     }
 
@@ -104,7 +137,20 @@ public class GameController : MonoBehaviour
     {
         yield return new WaitForSeconds(4);
         GameOverGO.SetActive(true);
-        GameOverText.text = $"P{winIndex} Win!\nPress R to Restart";
+        switch (gameMode)
+        {
+            case GameMode.Single:
+                GameOverText.text = $"P{winIndex} Win!\nPress R to Restart";
+                break;
+            case GameMode.Multiple:
+                GameOverText.text = $"{winFurName} Win!\nPress R to Restart";
+                break;
+
+            default:
+
+                break;
+        }
+
     }
 
     public void StartGame()

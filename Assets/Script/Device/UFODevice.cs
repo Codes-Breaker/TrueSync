@@ -37,11 +37,38 @@ public class UFODevice : MonoBehaviour
                 Vector3 airResistance = - otherRB.velocity * frictionCoefficient;
                 // 应用空气阻力
                 otherRB.AddForce(Vector3.ProjectOnPlane(airResistance , Vector3.up) * otherRB.mass);
-
+                var character = otherRB.GetComponent<CharacterContorl>();
+                if (character)
+                {
+                    character.isAirWalk = true;
+                }
                 Debug.Log($"distance : {distance} hdistance : {hdistance}");
             }
+        }
+        else
+        {
+            var otherRB = other.GetComponent<Rigidbody>();
+            if (otherRB)
+            {
+                var character = otherRB.GetComponent<CharacterContorl>();
+                if (character)
+                {
+                    character.isAirWalk = false;
+                }
+            }
+        }
+    }
 
-
+    private void OnTriggerExit(Collider other)
+    {
+        var otherRB = other.GetComponent<Rigidbody>();
+        if (otherRB)
+        {
+            var character = otherRB.GetComponent<CharacterContorl>();
+            if (character)
+            {
+                character.isAirWalk = false;
+            }
         }
     }
 

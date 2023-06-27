@@ -1866,7 +1866,7 @@ Light:
   m_Type: 2
   m_Shape: 0
   m_Color: {r: 0.28235295, g: 0.78823537, b: 0.9450981, a: 1}
-  m_Intensity: 2
+  m_Intensity: 0.5
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -14651,7 +14651,7 @@ PrefabInstance:
     - target: {fileID: 517809145394415509, guid: 8d08a9bd29907454db8066e938b3b10e,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 517809145394415510, guid: 8d08a9bd29907454db8066e938b3b10e,
         type: 3}
@@ -15305,8 +15305,8 @@ MonoBehaviour:
       inWeight: 0.33333334
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 4.6804094
-      value: 10.348444
+      time: 4.563132
+      value: 10.546473
       inSlope: Infinity
       outSlope: Infinity
       tangentMode: 0
@@ -15331,24 +15331,24 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0.10008686
       value: 3.2641602
-      inSlope: 2.7473347
-      outSlope: 2.7473347
+      inSlope: 2.9050522
+      outSlope: 2.9050522
       tangentMode: 34
       weightedMode: 0
       inWeight: 0
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 3.194403
-      value: 11.765282
+      time: 0.92292595
+      value: 5.6545506
       inSlope: Infinity
       outSlope: Infinity
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
+      inWeight: 0.048346736
+      outWeight: 0
     - serializedVersion: 3
-      time: 4.1497946
-      value: 7.91302
+      time: 4.8642645
+      value: 6.4269295
       inSlope: Infinity
       outSlope: Infinity
       tangentMode: 0
@@ -15356,8 +15356,8 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 5.5031734
-      value: 3.2057772
+      time: 5.7115474
+      value: 3.281125
       inSlope: Infinity
       outSlope: Infinity
       tangentMode: 0
@@ -15367,8 +15367,8 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 16.27977
       value: 3.0144653
-      inSlope: -0.01775253
-      outSlope: -0.01775253
+      inSlope: -0.025232224
+      outSlope: -0.025232224
       tangentMode: 34
       weightedMode: 0
       inWeight: 0.33333334
@@ -15377,8 +15377,8 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   frictionCoefficient: 0.6
-  suctionTarget: {fileID: 1928626946}
-  isSuction: 1
+  suctionTarget: {fileID: 1377827067}
+  isSuction: 0
 --- !u!23 &915756453
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -28070,7 +28070,7 @@ Light:
   m_Type: 2
   m_Shape: 0
   m_Color: {r: 0.28235295, g: 0.78823537, b: 0.9450981, a: 1}
-  m_Intensity: 2
+  m_Intensity: 0.5
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -31432,10 +31432,12 @@ MonoBehaviour:
   debug: 0
   isGameOver: 0
   director: {fileID: 288295383}
+  winFurName: 
   winVM: {fileID: 1955686259}
   bornPointsParent: {fileID: 1925829344}
   randomEventDirector: {fileID: 1931827102}
-  RandomEventTime: 120
+  RandomEventTime: 0
+  gameMode: 0
 --- !u!4 &1778826507
 Transform:
   m_ObjectHideFlags: 0
@@ -32621,32 +32623,32 @@ PrefabInstance:
     - target: {fileID: 25539922087628395, guid: 7131824a9ad019f4aa6717ca742d581b,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 25539922087628395, guid: 7131824a9ad019f4aa6717ca742d581b,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1645618599502264407, guid: 7131824a9ad019f4aa6717ca742d581b,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1645618599502264407, guid: 7131824a9ad019f4aa6717ca742d581b,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5667477767988214532, guid: 7131824a9ad019f4aa6717ca742d581b,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5667477767988214532, guid: 7131824a9ad019f4aa6717ca742d581b,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5892801591638802567, guid: 7131824a9ad019f4aa6717ca742d581b,
         type: 3}
@@ -32707,6 +32709,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: bearrig (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 6524800512801151549, guid: 7131824a9ad019f4aa6717ca742d581b,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7131824a9ad019f4aa6717ca742d581b, type: 3}
@@ -33112,7 +33119,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2024937597
 Transform:
   m_ObjectHideFlags: 0

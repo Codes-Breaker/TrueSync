@@ -190,7 +190,8 @@ public class CharacterContorl : MonoBehaviour
     private bool hasBrake = false;
     private bool isDrift;
     private bool isWalk;
-
+    public bool isAirWalk;
+    private bool hasAirWalk;
     public bool isGrounded;
     public bool isStun { get; private set; }
     //起身
@@ -356,6 +357,7 @@ public class CharacterContorl : MonoBehaviour
     //毛发数据
     public FurData furData;
     public XFurStudioInstance xfurInstance;
+    public int furIndex;
     [ColorUsage(true, true)]
     public Color dangerHPColor;
     [ColorUsage(true, true)]
@@ -681,6 +683,16 @@ public class CharacterContorl : MonoBehaviour
         anima.SetFloat("playSpeed", runAnimPlayCurve.Evaluate(speed));
         anima.SetFloat("velocityY", ridbody.velocity.y);
         anima.SetBool("Releasing", releasing||controlKeepRuning);
+        anima.SetBool("isAirWalk", isAirWalk);
+        if (!hasAirWalk && isAirWalk)
+        {
+            anima.SetTrigger("AirWalk");
+            hasAirWalk = true;
+        }
+        else if (!isAirWalk && hasAirWalk)
+        {
+            hasAirWalk = false;
+        }
 
         if (isInWater && !hasInWater && !isInRocket)
         {
@@ -1224,6 +1236,7 @@ public class CharacterContorl : MonoBehaviour
     public void SetFurColor(int index)
     {
         xfurInstance.FurDataProfiles[1].FurMainTint = furData.furDataList[index].furColor;
+        furIndex = index;
     }
 
     public void SetColor(float H, float S)
