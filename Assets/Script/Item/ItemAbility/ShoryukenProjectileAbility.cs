@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class ShoryukenProjectileAbility : ProjectileItemAbility
 {
+    private float jumpForce = 45;
     public ShoryukenProjectileAbility(CharacterContorl character, ItemData data) : base(character, data)
     {
 
@@ -29,7 +30,10 @@ public class ShoryukenProjectileAbility : ProjectileItemAbility
 
     protected override void Throw()
     {
+        //ÌøÔ¾
+        character.ridbody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
         character.anima.SetTrigger("shenglong");
+        character.anima.SetBool("Jump", true);
         character.animationEventReceiver.RegisterEvent(AnimationEventReceiver.EventEnum.ShoryukenStart, Launch);
     }
 

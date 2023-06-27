@@ -190,7 +190,8 @@ public class CharacterContorl : MonoBehaviour
     private bool hasBrake = false;
     private bool isDrift;
     private bool isWalk;
-
+    public bool isAirWalk;
+    private bool hasAirWalk;
     public bool isGrounded;
     public bool isStun { get; private set; }
     //起身
@@ -356,6 +357,7 @@ public class CharacterContorl : MonoBehaviour
     //毛发数据
     public FurData furData;
     public XFurStudioInstance xfurInstance;
+    public int furIndex;
     [ColorUsage(true, true)]
     public Color dangerHPColor;
     [ColorUsage(true, true)]
@@ -681,6 +683,16 @@ public class CharacterContorl : MonoBehaviour
         anima.SetFloat("playSpeed", runAnimPlayCurve.Evaluate(speed));
         anima.SetFloat("velocityY", ridbody.velocity.y);
         anima.SetBool("Releasing", releasing||controlKeepRuning);
+        anima.SetBool("isAirWalk", isAirWalk);
+        if (!hasAirWalk && isAirWalk)
+        {
+            anima.SetTrigger("AirWalk");
+            hasAirWalk = true;
+        }
+        else if (!isAirWalk && hasAirWalk)
+        {
+            hasAirWalk = false;
+        }
 
         if (isInWater && !hasInWater && !isInRocket)
         {
@@ -775,6 +787,17 @@ public class CharacterContorl : MonoBehaviour
     public List<RocketThrusterBuff> getRocketThrusterBuffs()
     {
         return buffs.Where(x => x is RocketThrusterBuff).Cast<RocketThrusterBuff>().ToList();
+    }
+
+    public void FinishRocketThrusterBuffs()
+    {
+        buffs.ForEach(x =>
+        {
+            if (x is RocketThrusterBuff)
+            {
+                x.Finish();
+            }
+        });
     }
 
     public int countRopeStunBuff()
@@ -1224,6 +1247,7 @@ public class CharacterContorl : MonoBehaviour
     public void SetFurColor(int index)
     {
         xfurInstance.FurDataProfiles[1].FurMainTint = furData.furDataList[index].furColor;
+        furIndex = index;
     }
 
     public void SetColor(float H, float S)
@@ -1421,7 +1445,14 @@ public class CharacterContorl : MonoBehaviour
 
         if (rangeDector.closeTargets.Count > 0 && rangeDector.closeTargets.FirstOrDefault( x => !x.isDead ) != null)
         {
-            lastSeenTarget = rangeDector.closeTargets.FirstOrDefault(x => !x.isDead);
+            var target = rangeDector.closeTargets.FirstOrDefault(x => !x.isDead);
+            var hitOnPlane = Vector3.ProjectOnPlane((target.transform.position - ridbody.position), groundNormal).normalized;
+            var forwardOnPlane = Vector3.ProjectOnPlane(ridbody.transform.forward, groundNormal).normalized;
+            var seenAngle = Vector3.SignedAngle(forwardOnPlane, hitOnPlane, groundNormal);
+            if (Mathf.Abs(seenAngle) <= 90)
+                lastSeenTarget = rangeDector.closeTargets.FirstOrDefault(x => !x.isDead);
+            else
+                lastSeenTarget = null;
         }
         else
         {

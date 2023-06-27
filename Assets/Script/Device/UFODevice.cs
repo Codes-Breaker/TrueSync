@@ -28,17 +28,48 @@ public class UFODevice : MonoBehaviour
             {
                 var otherPositon =  other.transform.position;
                 var selfPositon = suctionTarget.position;
-                var distance = (otherPositon - selfPositon).magnitude;
+                var distance = Mathf.Abs(otherPositon.y - selfPositon.y);
+                var hdistance = (otherPositon - selfPositon).magnitude;
                 var target = (selfPositon - otherPositon).normalized;
                 otherRB.AddForce(Vector3.up * suctionToTargetForceParameters.Evaluate(distance) * otherRB.mass, ForceMode.Force);
-                otherRB.AddForce(Vector3.ProjectOnPlane(target, Vector3.up).normalized * suctionToCenterForceParameters.Evaluate(distance) * otherRB.mass, ForceMode.Force);
+                otherRB.AddForce(Vector3.ProjectOnPlane(target, Vector3.up).normalized * suctionToCenterForceParameters.Evaluate(hdistance) * otherRB.mass, ForceMode.Force);
                 // 计算空气阻力
                 Vector3 airResistance = - otherRB.velocity * frictionCoefficient;
                 // 应用空气阻力
                 otherRB.AddForce(Vector3.ProjectOnPlane(airResistance , Vector3.up) * otherRB.mass);
+                var character = otherRB.GetComponent<CharacterContorl>();
+                if (character)
+                {
+                    character.isAirWalk = true;
+                }
+                Debug.Log($"distance : {distance} hdistance : {hdistance}");
             }
-
-
+        }
+        else
+        {
+            var otherRB = other.GetComponent<Rigidbody>();
+            if (otherRB)
+            {
+                var character = otherRB.GetComponent<CharacterContorl>();
+                if (character)
+                {
+                    character.isAirWalk = false;
+                }
+            }
         }
     }
+
+    private void OnTriggerExit(Collider other)
+    {
+        var otherRB = other.GetComponent<Rigidbody>();
+        if (otherRB)
+        {
+            var character = otherRB.GetComponent<CharacterContorl>();
+            if (character)
+            {
+                character.isAirWalk = false;
+            }
+        }
+    }
+
 }

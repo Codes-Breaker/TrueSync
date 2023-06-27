@@ -7,6 +7,8 @@ using UnityEngine;
 public struct FurDataStruct
 {
     public Color furColor;
+    public int id;
+    public string furName;
 }
 [CreateAssetMenu(fileName = "Data", menuName = "ScriptableObjects/FurData", order = 1)]
 public class FurData : ScriptableObject
