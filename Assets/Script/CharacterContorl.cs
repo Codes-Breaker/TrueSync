@@ -161,6 +161,8 @@ public class CharacterContorl : MonoBehaviour
     public GrounderQuadruped grounderQuadruped;
     public LookAtIK lookAtIK;
     public RagdollActivator ragdollController;
+    public CinemachineTargetGroup cinemachineTargetGroup;
+    public Camera m_camera;
     [Header("背部挂点")]
     public Transform itemPlace;
     [Header("头部挂点")]
@@ -348,8 +350,9 @@ public class CharacterContorl : MonoBehaviour
     private bool canSlip = false;
     public bool isBrake = false;
     public RangeDector rangeDector;
+    public RangeDector viewRangeDector;
     private CharacterContorl lastSeenTarget;
-
+    private CharacterContorl lastSeenView;
     private List<SnowGroundDetector> snowDectors;
 
     public AnimationEventReceiver animationEventReceiver;
@@ -364,6 +367,7 @@ public class CharacterContorl : MonoBehaviour
     public Color normalHPColor;
     [ColorUsage(true, true)]
     public Color invulenableHPColor;
+
     private void Awake()
     {
         snowDectors = GetComponentsInChildren<SnowGroundDetector>().ToList();
@@ -410,6 +414,7 @@ public class CharacterContorl : MonoBehaviour
         SetGPHint();
         LateUpdateBuff();
         SetIK();
+        SetView();
         //SetEffect();
     }
 
@@ -849,7 +854,12 @@ public class CharacterContorl : MonoBehaviour
         //单位化输入方向
         if (controlDeviceType == ControlDeviceType.Mouse)
         {
-            Vector3 screenPosition = gameController.mainCamera.WorldToScreenPoint(transform.position);
+            Vector3 screenPosition = new Vector3();
+            if (gameController.screenMode == ScreenMode.Same)
+                screenPosition = gameController.mainCamera.WorldToScreenPoint(transform.position);
+            else if(gameController.screenMode == ScreenMode.Split)
+                screenPosition = m_camera.WorldToScreenPoint(transform.position);
+
             var detalPosition = axisInput - new Vector2(screenPosition.x, screenPosition.y);
             axisInput = detalPosition.normalized;
         }
@@ -893,7 +903,11 @@ public class CharacterContorl : MonoBehaviour
 
                 if (axisInput.magnitude > movementThrashold)
                 {
-                    targetAngle = Mathf.Atan2(axisInput.x, axisInput.y) * Mathf.Rad2Deg + gameController.mainCamera.transform.eulerAngles.y;
+                    if (gameController.screenMode == ScreenMode.Same)
+                        targetAngle = Mathf.Atan2(axisInput.x, axisInput.y) * Mathf.Rad2Deg + gameController.mainCamera.transform.eulerAngles.y;
+                    else if(gameController.screenMode == ScreenMode.Split)
+                        targetAngle = Mathf.Atan2(axisInput.x, axisInput.y) * Mathf.Rad2Deg + m_camera.transform.eulerAngles.y;
+
                     if (hasBrake)
                         transform.rotation = Quaternion.Slerp(this.ridbody.rotation, Quaternion.Euler(new Vector3(0, targetAngle, 0) + initialRotation), breakRotationRate);
                     else
@@ -905,7 +919,11 @@ public class CharacterContorl : MonoBehaviour
                 CheckisDrift();
                 if (axisInput.magnitude > movementThrashold)
                 {
-                    targetAngle = Mathf.Atan2(axisInput.x, axisInput.y) * Mathf.Rad2Deg + gameController.mainCamera.transform.eulerAngles.y;
+                    if (gameController.screenMode == ScreenMode.Same)
+                        targetAngle = Mathf.Atan2(axisInput.x, axisInput.y) * Mathf.Rad2Deg + gameController.mainCamera.transform.eulerAngles.y;
+                    else if (gameController.screenMode == ScreenMode.Split)
+                        targetAngle = Mathf.Atan2(axisInput.x, axisInput.y) * Mathf.Rad2Deg + m_camera.transform.eulerAngles.y;
+
                     if (hasBrake)
                         transform.rotation = Quaternion.Slerp(this.ridbody.rotation, Quaternion.Euler(new Vector3(0, targetAngle, 0) + initialRotation), breakRotationRate);
                     else
@@ -919,7 +937,11 @@ public class CharacterContorl : MonoBehaviour
             if (axisInput.magnitude > movementThrashold)
             {
                 CheckisDrift();
-                targetAngle = Mathf.Atan2(axisInput.x, axisInput.y) * Mathf.Rad2Deg + gameController.mainCamera.transform.eulerAngles.y;
+                if (gameController.screenMode == ScreenMode.Same)
+                    targetAngle = Mathf.Atan2(axisInput.x, axisInput.y) * Mathf.Rad2Deg + gameController.mainCamera.transform.eulerAngles.y;
+                else if (gameController.screenMode == ScreenMode.Split)
+                    targetAngle = Mathf.Atan2(axisInput.x, axisInput.y) * Mathf.Rad2Deg + m_camera.transform.eulerAngles.y;
+
                 if (hasBrake)
                     transform.rotation = Quaternion.Slerp(this.ridbody.rotation, Quaternion.Euler(new Vector3(0, targetAngle, 0) + initialRotation), breakRotationRate);
                 else
@@ -930,7 +952,11 @@ public class CharacterContorl : MonoBehaviour
         {
             if (ridbody.velocity.magnitude < movementMaxVelocity && axisInput.magnitude > movementThrashold)
             {
-                targetAngle = Mathf.Atan2(axisInput.x, axisInput.y) * Mathf.Rad2Deg + gameController.mainCamera.transform.eulerAngles.y;
+                if (gameController.screenMode == ScreenMode.Same)
+                    targetAngle = Mathf.Atan2(axisInput.x, axisInput.y) * Mathf.Rad2Deg + gameController.mainCamera.transform.eulerAngles.y;
+                else if (gameController.screenMode == ScreenMode.Split)
+                    targetAngle = Mathf.Atan2(axisInput.x, axisInput.y) * Mathf.Rad2Deg + m_camera.transform.eulerAngles.y;
+
                 var acceleration = movementMaxVelocity / movementSpeedUpTime;
                 var forceMagnitude = ridbody.mass * acceleration;
 
@@ -1068,7 +1094,13 @@ public class CharacterContorl : MonoBehaviour
             hasJump = true;
             isJumpFrequency = false;
             anima.SetBool("Jump", true);
-            targetAngle = Mathf.Atan2(axisInput.x, axisInput.y) * Mathf.Rad2Deg + gameController.mainCamera.transform.eulerAngles.y;
+            if (gameController.screenMode == ScreenMode.Same)
+                targetAngle = Mathf.Atan2(axisInput.x, axisInput.y) * Mathf.Rad2Deg + gameController.mainCamera.transform.eulerAngles.y;
+            else if(gameController.screenMode == ScreenMode.Split)
+            {
+                targetAngle = Mathf.Atan2(axisInput.x, axisInput.y) * Mathf.Rad2Deg + m_camera.transform.eulerAngles.y;
+
+            }
             if (isAtMaxSpeed && lastJumpRushTime > jumpRushFrequency)
             {
                 //fullyRecoveringStamina = true;
@@ -1431,6 +1463,37 @@ public class CharacterContorl : MonoBehaviour
             isDrift = false;
     }
 
+    private void SetView()
+    {
+        if (viewRangeDector.closeTargets.Count > 0 && viewRangeDector.closeTargets.FirstOrDefault(x => !x.isDead) != null)
+        {
+            var closeTarget = viewRangeDector.closeTargets.FirstOrDefault(x => !x.isDead);
+
+            if (lastSeenView != null && gameController.screenMode == ScreenMode.Split)
+            {
+                cinemachineTargetGroup.RemoveMember(lastSeenView.transform);
+            }
+
+            if (gameController.screenMode == ScreenMode.Split && cinemachineTargetGroup.FindMember(closeTarget.transform) == -1)
+            {
+                cinemachineTargetGroup.AddMember(closeTarget.transform, 2, 4);
+            }
+
+            lastSeenView = viewRangeDector.closeTargets.FirstOrDefault(x => !x.isDead);
+
+
+        }
+        else
+        {
+            if (lastSeenView != null && gameController.screenMode == ScreenMode.Split)
+            {
+                cinemachineTargetGroup.RemoveMember(lastSeenView.transform);
+            }
+            lastSeenView = null;
+        }
+
+    }
+
     private void SetIK()
     {
         if (isDead)
@@ -1449,13 +1512,24 @@ public class CharacterContorl : MonoBehaviour
             var hitOnPlane = Vector3.ProjectOnPlane((target.transform.position - ridbody.position), groundNormal).normalized;
             var forwardOnPlane = Vector3.ProjectOnPlane(ridbody.transform.forward, groundNormal).normalized;
             var seenAngle = Vector3.SignedAngle(forwardOnPlane, hitOnPlane, groundNormal);
+            var closeTarget = rangeDector.closeTargets.FirstOrDefault(x => !x.isDead);
+
+            if (gameController.screenMode == ScreenMode.Split && cinemachineTargetGroup.FindMember(closeTarget.transform) == -1) {
+                cinemachineTargetGroup.AddMember(closeTarget.transform, 2, 4);
+            }
+
             if (Mathf.Abs(seenAngle) <= 90)
                 lastSeenTarget = rangeDector.closeTargets.FirstOrDefault(x => !x.isDead);
             else
                 lastSeenTarget = null;
+
         }
         else
         {
+            if (lastSeenTarget != null && gameController.screenMode == ScreenMode.Split)
+            {
+                cinemachineTargetGroup.RemoveMember(lastSeenTarget.transform);
+            }
             lastSeenTarget = null;
         }
 
@@ -1467,6 +1541,7 @@ public class CharacterContorl : MonoBehaviour
 
         if (lastSeenTarget == null)
         {
+            lookAtIK.solver.target = null;
             targetAIMIK = 0;
         }
 
@@ -1631,7 +1706,10 @@ public class CharacterContorl : MonoBehaviour
         gpSlider.value = (float)(currentStamina / maxActorStamina);
 
         hpSlider.value = (float)(currentHPValue / maxHPValue);
-        canvas.transform.forward = gameController.mainCamera.transform.forward;
+        if (gameController.screenMode == ScreenMode.Same)
+            canvas.transform.forward = gameController.mainCamera.transform.forward;
+        else if (gameController.screenMode == ScreenMode.Split)
+            canvas.transform.forward = m_camera.transform.forward;
 
         //临时缩放
         canvas.transform.localScale = Vector3.one / transform.localScale.x;

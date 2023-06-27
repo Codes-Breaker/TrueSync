@@ -31,12 +31,14 @@ public class GameController : MonoBehaviour
     private int winIndex = -1;
     private int winFurIndex = -1;
     public string winFurName = "";
+    private List<CharacterContorl> winners = new List<CharacterContorl>();
     public CinemachineVirtualCamera winVM;
     public GameObject bornPointsParent;
     public PlayableDirector randomEventDirector;
     public float RandomEventTime = 120;
     public GameMode gameMode = GameMode.Single;
-    
+    public ScreenMode screenMode = ScreenMode.Same;
+    public GameObject splitScreenBlackImage;
     // Start is called before the first frame update
     void Awake()
     {
@@ -100,6 +102,7 @@ public class GameController : MonoBehaviour
                     var winCharacter = characters.FirstOrDefault(x => !x.isDead);
                     isGameOver = true;
                     winCharacter?.SetWin();
+                    winners.Add(winCharacter);
                     winIndex = winCharacter.playerIndex;
                     //winVM.LookAt = winCharacter.transform;
                     //winVM.Follow = winCharacter.transform;
@@ -116,6 +119,7 @@ public class GameController : MonoBehaviour
                     foreach(var character in characters.Where(x => !x.isDead))
                     {
                         character.SetWin();
+                        winners.Add(character);
                     }
                     winFurIndex = winFur;
 
@@ -162,6 +166,22 @@ public class GameController : MonoBehaviour
     private void GameOver()
     {
         //director?.Play();
+        List<CharacterContorl> characters = GameObject.FindObjectsOfType<CharacterContorl>().ToList();
+        if(screenMode == ScreenMode.Split)
+        {
+            foreach (var character in characters)
+            {
+                character.m_camera?.gameObject.SetActive(false);
+            }
+            var winner = winners.FirstOrDefault();
+            Camera.main.cullingMask |= 1 << winner.cinemachineTargetGroup.gameObject.layer;
+            foreach (var w in winners)
+            {
+                winner.cinemachineTargetGroup.AddMember(w.transform, 2, 4);
+            }
+            splitScreenBlackImage.gameObject.SetActive(false);
+        }
+
         StartCoroutine(DelayOpen());
     }
 
