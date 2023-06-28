@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 6abdd16f7037ca840856b2a9b5c20006
+guid: 52e28af78d6e87647b043d2a9929e784
 ModelImporter:
   serializedVersion: 21300
   internalIDToNameTable: []
@@ -7,8 +7,23 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: ufo_fx
-    second: {fileID: 2100000, guid: ba691c865c068ef449701317b566a878, type: 2}
+      name: ufo_fx_ilight_long
+    second: {fileID: 2100000, guid: 511f8ad30b79fb045a432da7c5358725, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ufo_fx_iring
+    second: {fileID: 2100000, guid: a19c6af3bb53faf4b99c96d7e66a7c3d, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ufo_fx_light
+    second: {fileID: 2100000, guid: 6ab6d4d7da2067348887afd3dad021ac, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ufo_fx_oring
+    second: {fileID: 2100000, guid: b80b634f6a28bb6419eb352d25972fab, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
