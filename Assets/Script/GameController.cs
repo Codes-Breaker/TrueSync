@@ -39,6 +39,8 @@ public class GameController : MonoBehaviour
     public GameMode gameMode = GameMode.Single;
     public ScreenMode screenMode = ScreenMode.Same;
     public GameObject splitScreenBlackImage;
+    public bool ufoSpeedUpPhase = false;
+    public UFODevice ufoDevice;
     // Start is called before the first frame update
     void Awake()
     {
@@ -61,8 +63,23 @@ public class GameController : MonoBehaviour
             gameTime = gameTime += Time.fixedDeltaTime;
             CheckSeaLevelRise();
             CheckRandomEvent();
+            CheckUFOSpeed();
         }
 
+    }
+
+    private void CheckUFOSpeed()
+    {
+        if (!hasStartEvent || randomEventDirector.state != PlayState.Playing)
+            return;
+        if (ufoSpeedUpPhase)
+        {
+            randomEventDirector.playableGraph.GetRootPlayable(0).SetSpeed(1 + ufoDevice.catchedPlayer * 0.5f);
+        }
+        else
+        {
+            randomEventDirector.playableGraph.GetRootPlayable(0).SetSpeed(1);
+        }
     }
 
     private void CheckRandomEvent()
@@ -89,6 +106,16 @@ public class GameController : MonoBehaviour
             }
         }
 
+    }
+
+    public void StartSpeedUpUFO()
+    {
+        ufoSpeedUpPhase = true;
+    }
+
+    public void EndSpeedUpUFO()
+    {
+        ufoSpeedUpPhase = false;
     }
 
     public void CheckGameState()

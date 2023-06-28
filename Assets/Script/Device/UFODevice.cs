@@ -24,7 +24,9 @@ public class UFODevice : MonoBehaviour
 
     private bool hasAddGroup = false;
     private bool hasRemoveGroup = false;
+    public int catchedPlayer => catchedPlayers.Count;
 
+    public List<CharacterContorl> catchedPlayers = new List<CharacterContorl>();
     private void LateUpdate()
     {
         if (active)
@@ -56,8 +58,13 @@ public class UFODevice : MonoBehaviour
                 var distance = Mathf.Abs(otherPositon.y - selfPositon.y);
                 var hdistance = (otherPositon - selfPositon).magnitude;
                 var target = (selfPositon - otherPositon).normalized;
-                otherRB.AddForce(Vector3.up * suctionToTargetForceParameters.Evaluate(distance) * otherRB.mass, ForceMode.Force);
-                otherRB.AddForce(Vector3.ProjectOnPlane(target, Vector3.up).normalized * suctionToCenterForceParameters.Evaluate(hdistance) * otherRB.mass, ForceMode.Force);
+
+
+
+                //otherRB.AddForce(Vector3.up * suctionToTargetForceParameters.Evaluate(distance) * otherRB.mass, ForceMode.Force);
+                var hForce = suctionToCenterForceParameters.Evaluate(distance);
+                otherRB.velocity = new Vector3(otherRB.velocity.x, 1f,otherRB.velocity.z);
+                otherRB.AddForce(Vector3.ProjectOnPlane(target, Vector3.up).normalized * hForce * otherRB.mass, ForceMode.Force);
                 // 计算空气阻力
                 Vector3 airResistance = - otherRB.velocity * frictionCoefficient;
                 // 应用空气阻力
@@ -66,8 +73,14 @@ public class UFODevice : MonoBehaviour
                 if (character)
                 {
                     character.isAirWalk = true;
+                    if (hdistance <= 1 && !catchedPlayers.Contains(character))
+                    {
+                        var immuneBuff = new UFODamageImmuneBuff(character, -1);
+                        character.OnGainBuff(immuneBuff);
+                        catchedPlayers.Add(character);
+                    }
                 }
-                Debug.Log($"distance : {distance} hdistance : {hdistance}");
+                Debug.Log($"distance : {distance} hdistance : {hdistance} hforce {hForce}");
             }
         }
         else
@@ -79,7 +92,10 @@ public class UFODevice : MonoBehaviour
                 var character = otherRB.GetComponent<CharacterContorl>();
                 if (character)
                 {
+                    character.FinishUFOImmuneBuff();
                     character.isAirWalk = false;
+                    if (catchedPlayers.Contains(character))
+                        catchedPlayers.Remove(character);
                 }
             }
         }

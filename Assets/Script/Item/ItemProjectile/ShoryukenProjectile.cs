@@ -5,6 +5,7 @@ using UnityEngine;
 public class ShoryukenProjectile : ItemProjectileBase
 {
     private StunBuff stunBuffToSelf;
+    private CollisionIneffectiveBuff collisionIneffectiveBuff;
     [Header("击晕时间")]
     public float stunTime;
     [Header("向上打击力参数(无视重力)")]
@@ -18,6 +19,7 @@ public class ShoryukenProjectile : ItemProjectileBase
         base.Init(character, project);
         character.animationEventReceiver.RegisterEvent(AnimationEventReceiver.EventEnum.ShoryukenEnd, DestroyShoryukenprojectile);
         stunBuffToSelf = new StunBuff(character);
+        collisionIneffectiveBuff = new CollisionIneffectiveBuff(character, 2);
         character.OnGainBuff(stunBuffToSelf);
         bodyCollider.isTrigger = true;
 
@@ -40,6 +42,7 @@ public class ShoryukenProjectile : ItemProjectileBase
     {
         character.animationEventReceiver.UnRegisterEvent(AnimationEventReceiver.EventEnum.ShoryukenEnd, DestroyShoryukenprojectile);
         stunBuffToSelf.isEnd = true;
+        //collisionIneffectiveBuff.Finish();
         buff.Finish();
         OnEnd();
     }

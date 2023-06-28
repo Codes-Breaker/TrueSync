@@ -502,6 +502,8 @@ public class CharacterContorl : MonoBehaviour
 
     public void TakeStun(int number)
     {
+        if (HasDamageImmuneBuff())
+            return;
         if (HasRollStun() || invulernable)
             return;
         currentStunValue = Math.Max(0, currentStunValue - number);
@@ -523,6 +525,8 @@ public class CharacterContorl : MonoBehaviour
 
     public void TakeDamage(float number, Vector3 hitDir)
     {
+        if (HasDamageImmuneBuff())
+            return;
         //锁血操作
         if (currentHPValue > dangerHpTip && Math.Max(currentHPValue - number, 0) == 0)
         {
@@ -1377,9 +1381,30 @@ public class CharacterContorl : MonoBehaviour
         return buffs.Any(x => x is QTERollStun);
     }
 
+    public bool HasDamageImmuneBuff()
+    {
+        return buffs.Any(x => x is DamageImmuneBuff);
+    }
+
+    public void FinishUFOImmuneBuff()
+    {
+        foreach(var buff in buffs)
+        {
+            if (buff is UFODamageImmuneBuff)
+            {
+                buff.Finish();
+            }
+        }
+    }
+
     public bool HasQTEStun()
     {
         return buffs.Any(x => x is QTEBuff);
+    }
+
+    public bool HasCollisionInEffectiveBuff()
+    {
+        return buffs.Any(x => x is CollisionIneffectiveBuff);
     }
 
     private void CheckStun()
@@ -2036,6 +2061,9 @@ public class CharacterContorl : MonoBehaviour
 
             var otherCollision = collision.gameObject.GetComponent<CharacterContorl>();
 
+            if (otherCollision.HasCollisionInEffectiveBuff())
+                return;
+
             //自身速度
             Vector3 velocitySelf = new Vector3(velocityBeforeCollision.x, velocityBeforeCollision.y, velocityBeforeCollision.z);
             velocitySelf = Vector3.ProjectOnPlane(velocitySelf, groundNormal).normalized * velocitySelf.magnitude;
@@ -2059,7 +2087,7 @@ public class CharacterContorl : MonoBehaviour
             if (angleOther > 90)
                 momentumOther = 0;
 
-           // Debug.Log($"{transform.name} velocitySelf:{velocitySelf} velocityOther:{velocityOther} angleSelf:{angleSelf} angleOther:{angleOther} momentumSelf:{momentumSelf}  momentumOther:{momentumOther}");
+            Debug.Log($"{transform.name} velocitySelf:{velocitySelf} velocityOther:{velocityOther} angleSelf:{angleSelf} angleOther:{angleOther} momentumSelf:{momentumSelf}  momentumOther:{momentumOther}");
 
             //出招加成
             var hasBuff = (otherCollision.isAtMaxSpeed && (!otherCollision.isGrounded && !otherCollision.isTouchingSlope)) ? buffAttack : 1;
