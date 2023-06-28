@@ -168,7 +168,7 @@ public class InputReadManager : MonoBehaviour
                 if (isSplitScreen)
                 {
                     characterGameObject.GetComponent<CharacterContorl>().cinemachineTargetGroup = cinemachineTargetGroups[index - 1];
-                    characterGameObject.GetComponent<CharacterContorl>().m_camera = cameras[index - 1];
+                    characterGameObject.GetComponent<CharacterContorl>().m_camera = cameras[index -1];
                     cinemachineTargetGroups[index - 1].AddMember(characterGameObject.transform, 2, 4);
 
                 }

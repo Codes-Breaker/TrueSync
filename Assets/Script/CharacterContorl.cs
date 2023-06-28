@@ -1158,7 +1158,7 @@ public class CharacterContorl : MonoBehaviour
     public void AddExplosionForce(float explosionForce,Vector3 explosionPositon,float explosionRadius)
     {
         if (!invulernable)
-            ridbody.AddExplosionForce(explosionForce, explosionPositon, explosionRadius);
+            ridbody.AddExplosionForce(explosionForce, explosionPositon, explosionRadius,2f,ForceMode.Impulse);
     }
 
     private void UseItem(bool isUse)
@@ -1644,17 +1644,6 @@ public class CharacterContorl : MonoBehaviour
         else
         {
             groundNormal = Vector3.up;
-        }
-    }
-    private IEnumerator AddExplosiveForceSmooth(float force, Vector3 contactPoint)
-    {
-        int steps = 0;
-        int stepsToTake = 3;
-        while (steps < stepsToTake)
-        {
-            ridbody.AddExplosionForce(force / stepsToTake, contactPoint, 2, 0, ForceMode.Force);
-            steps++;
-            yield return new WaitForFixedUpdate();
         }
     }
 
