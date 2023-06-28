@@ -67,14 +67,14 @@ public class StickyBombTrap : ItemTrapBase
             foreach (var item in colliders)
             {
                 if (item.GetComponent<Rigidbody>())
-                    if ((item.transform.position - transform.position).magnitude < explosionRangeRadius)
-                    {
-                        if(item.GetComponent<CharacterContorl>())
-                            item.GetComponent<CharacterContorl>().AddExplosionForce(explosionForceArgument * item.GetComponent<Rigidbody>().mass, transform.position, explosionRangeRadius);
-                        else
-                            item.GetComponent<Rigidbody>().AddExplosionForce(explosionForceArgument * item.GetComponent<Rigidbody>().mass, transform.position, explosionRangeRadius);
+                    if(item.GetComponent<CharacterContorl>())
+                        item.GetComponent<CharacterContorl>().AddExplosionForce(explosionForceArgument * item.GetComponent<Rigidbody>().mass, transform.position, explosionRangeRadius);
+                    else
+                        item.GetComponent<Rigidbody>().AddExplosionForce(explosionForceArgument * item.GetComponent<Rigidbody>().mass, transform.position, explosionRangeRadius,2f, ForceMode.Impulse);
+                    //if ((item.transform.position - transform.position).magnitude < explosionRangeRadius)
+                    //{
 
-                    }
+                    //}
             }
 
         }

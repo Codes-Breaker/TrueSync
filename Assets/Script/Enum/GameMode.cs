@@ -9,3 +9,9 @@ public enum GameMode
     Single, //单人
     Multiple, //多人
 }
+
+public enum ScreenMode
+{
+    Same,
+    Split
+}

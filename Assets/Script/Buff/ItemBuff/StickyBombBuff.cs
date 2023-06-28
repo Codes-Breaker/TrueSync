@@ -6,9 +6,11 @@ using DG.Tweening;
 public class StickyBombBuff : ItemBuffBase
 {
     //爆炸范围
-    private float explosionRangeRadius = 10f;
+    private float explosionRangeRadius = 15f;
     //爆炸力大小
-    private float explosionForceArgument = 100f;
+    private float explosionForceArgument = 2.3f;
+    //爆炸力对自身得加成
+    private float explosionFroceToSelfBonusArgument = 1.6f;
     //传递时的飞行高度
     public float stickyBombHeight = 0.5f;
     //传递时的飞行时间
@@ -96,9 +98,11 @@ public class StickyBombBuff : ItemBuffBase
     private void Explosion()
     {
         this.character.TakeStun(100);
+        this.character.AddExplosionForce(explosionForceArgument * character.GetComponent<Rigidbody>().mass * explosionFroceToSelfBonusArgument, stickyBombGameObject.transform.position, explosionRangeRadius);
 
         //var colliders = GameObject.FindObjectsOfType<Rigidbody>();
         var colliders = Physics.OverlapSphere(stickyBombGameObject.transform.position, explosionRangeRadius);
+
 
         if (colliders.Length != 0)
         {
@@ -106,13 +110,16 @@ public class StickyBombBuff : ItemBuffBase
             {
                 if (item.GetComponent<Rigidbody>())
                 {
-                    if ((item.transform.position - stickyBombGameObject.transform.position).magnitude < explosionRangeRadius)
+                    if (item.GetComponent<CharacterContorl>())
                     {
-                        if (item.GetComponent<CharacterContorl>())
+                        if(item.GetComponent<CharacterContorl>() != character)
                             item.GetComponent<CharacterContorl>().AddExplosionForce(explosionForceArgument * item.GetComponent<Rigidbody>().mass, stickyBombGameObject.transform.position, explosionRangeRadius);
-                        else
-                            item.GetComponent<Rigidbody>().AddExplosionForce(explosionForceArgument * item.GetComponent<Rigidbody>().mass, stickyBombGameObject.transform.position, explosionRangeRadius);
                     }
+                    else
+                        item.GetComponent<Rigidbody>().AddExplosionForce(explosionForceArgument * item.GetComponent<Rigidbody>().mass, stickyBombGameObject.transform.position, explosionRangeRadius,2f,ForceMode.Impulse);
+                    //if ((item.transform.position - stickyBombGameObject.transform.position).magnitude < explosionRangeRadius)
+                    //{
+                    //}
                 }
             }
 
