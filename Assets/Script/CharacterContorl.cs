@@ -350,8 +350,9 @@ public class CharacterContorl : MonoBehaviour
     private bool canSlip = false;
     public bool isBrake = false;
     public RangeDector rangeDector;
+    public RangeDector viewRangeDector;
     private CharacterContorl lastSeenTarget;
-
+    private CharacterContorl lastSeenView;
     private List<SnowGroundDetector> snowDectors;
 
     public AnimationEventReceiver animationEventReceiver;
@@ -413,6 +414,7 @@ public class CharacterContorl : MonoBehaviour
         SetGPHint();
         LateUpdateBuff();
         SetIK();
+        SetView();
         //SetEffect();
     }
 
@@ -500,6 +502,8 @@ public class CharacterContorl : MonoBehaviour
 
     public void TakeStun(int number)
     {
+        if (HasDamageImmuneBuff())
+            return;
         if (HasRollStun() || invulernable)
             return;
         currentStunValue = Math.Max(0, currentStunValue - number);
@@ -521,6 +525,8 @@ public class CharacterContorl : MonoBehaviour
 
     public void TakeDamage(float number, Vector3 hitDir)
     {
+        if (HasDamageImmuneBuff())
+            return;
         //锁血操作
         if (currentHPValue > dangerHpTip && Math.Max(currentHPValue - number, 0) == 0)
         {
@@ -1375,9 +1381,30 @@ public class CharacterContorl : MonoBehaviour
         return buffs.Any(x => x is QTERollStun);
     }
 
+    public bool HasDamageImmuneBuff()
+    {
+        return buffs.Any(x => x is DamageImmuneBuff);
+    }
+
+    public void FinishUFOImmuneBuff()
+    {
+        foreach(var buff in buffs)
+        {
+            if (buff is UFODamageImmuneBuff)
+            {
+                buff.Finish();
+            }
+        }
+    }
+
     public bool HasQTEStun()
     {
         return buffs.Any(x => x is QTEBuff);
+    }
+
+    public bool HasCollisionInEffectiveBuff()
+    {
+        return buffs.Any(x => x is CollisionIneffectiveBuff);
     }
 
     private void CheckStun()
@@ -1461,6 +1488,37 @@ public class CharacterContorl : MonoBehaviour
             isDrift = false;
     }
 
+    private void SetView()
+    {
+        if (viewRangeDector.closeTargets.Count > 0 && viewRangeDector.closeTargets.FirstOrDefault(x => !x.isDead) != null)
+        {
+            var closeTarget = viewRangeDector.closeTargets.FirstOrDefault(x => !x.isDead);
+
+            if (lastSeenView != null && gameController.screenMode == ScreenMode.Split)
+            {
+                cinemachineTargetGroup.RemoveMember(lastSeenView.transform);
+            }
+
+            if (gameController.screenMode == ScreenMode.Split && cinemachineTargetGroup.FindMember(closeTarget.transform) == -1)
+            {
+                cinemachineTargetGroup.AddMember(closeTarget.transform, 2, 4);
+            }
+
+            lastSeenView = viewRangeDector.closeTargets.FirstOrDefault(x => !x.isDead);
+
+
+        }
+        else
+        {
+            if (lastSeenView != null && gameController.screenMode == ScreenMode.Split)
+            {
+                cinemachineTargetGroup.RemoveMember(lastSeenView.transform);
+            }
+            lastSeenView = null;
+        }
+
+    }
+
     private void SetIK()
     {
         if (isDead)
@@ -1479,12 +1537,17 @@ public class CharacterContorl : MonoBehaviour
             var hitOnPlane = Vector3.ProjectOnPlane((target.transform.position - ridbody.position), groundNormal).normalized;
             var forwardOnPlane = Vector3.ProjectOnPlane(ridbody.transform.forward, groundNormal).normalized;
             var seenAngle = Vector3.SignedAngle(forwardOnPlane, hitOnPlane, groundNormal);
+            var closeTarget = rangeDector.closeTargets.FirstOrDefault(x => !x.isDead);
+
+            if (gameController.screenMode == ScreenMode.Split && cinemachineTargetGroup.FindMember(closeTarget.transform) == -1) {
+                cinemachineTargetGroup.AddMember(closeTarget.transform, 2, 4);
+            }
+
             if (Mathf.Abs(seenAngle) <= 90)
                 lastSeenTarget = rangeDector.closeTargets.FirstOrDefault(x => !x.isDead);
             else
                 lastSeenTarget = null;
-            if(gameController.screenMode == ScreenMode.Split)
-                cinemachineTargetGroup.AddMember(lastSeenTarget.transform, 2, 4);
+
         }
         else
         {
@@ -1503,6 +1566,7 @@ public class CharacterContorl : MonoBehaviour
 
         if (lastSeenTarget == null)
         {
+            lookAtIK.solver.target = null;
             targetAIMIK = 0;
         }
 
@@ -1986,6 +2050,9 @@ public class CharacterContorl : MonoBehaviour
 
             var otherCollision = collision.gameObject.GetComponent<CharacterContorl>();
 
+            if (otherCollision.HasCollisionInEffectiveBuff())
+                return;
+
             //自身速度
             Vector3 velocitySelf = new Vector3(velocityBeforeCollision.x, velocityBeforeCollision.y, velocityBeforeCollision.z);
             velocitySelf = Vector3.ProjectOnPlane(velocitySelf, groundNormal).normalized * velocitySelf.magnitude;
@@ -2009,7 +2076,7 @@ public class CharacterContorl : MonoBehaviour
             if (angleOther > 90)
                 momentumOther = 0;
 
-           // Debug.Log($"{transform.name} velocitySelf:{velocitySelf} velocityOther:{velocityOther} angleSelf:{angleSelf} angleOther:{angleOther} momentumSelf:{momentumSelf}  momentumOther:{momentumOther}");
+            Debug.Log($"{transform.name} velocitySelf:{velocitySelf} velocityOther:{velocityOther} angleSelf:{angleSelf} angleOther:{angleOther} momentumSelf:{momentumSelf}  momentumOther:{momentumOther}");
 
             //出招加成
             var hasBuff = (otherCollision.isAtMaxSpeed && (!otherCollision.isGrounded && !otherCollision.isTouchingSlope)) ? buffAttack : 1;

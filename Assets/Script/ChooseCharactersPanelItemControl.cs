@@ -24,13 +24,15 @@ public class ChooseCharactersPanelItemControl : MonoBehaviour
     public GameObject previewObject;
     public RenderTexture renderTexture;
     public CharacterChooseControl control;
+    public ChooseCharactersPanelContorl masterControl;
     private void Awake()
     {
 
     }
 
-    public void Init(InputDevice inputDevice, int playerIndex)
+    public void Init(InputDevice inputDevice, int playerIndex, ChooseCharactersPanelContorl mcontrol)
     {
+        masterControl = mcontrol;
         var go = new GameObject("InputReader");
         inputReader = go.AddComponent<InputReaderBase>();
         inputReader.Init(inputDevice);
@@ -41,6 +43,12 @@ public class ChooseCharactersPanelItemControl : MonoBehaviour
 
         previewObject = Instantiate(Resources.Load(previewPrefabPath[(int)(characterType - 1)], typeof(GameObject)) as GameObject, new Vector3(999*playerIndex, 0, 0), Quaternion.identity);
         control = previewObject.GetComponent<CharacterChooseControl>();
+        int index = 0;
+        while (masterControl.selectedColors.Contains(index))
+        {
+            index++;
+        }
+        control.index = index;
         renderTexture = new RenderTexture(300, 400, 24, RenderTextureFormat.ARGB32);
         rt.texture = renderTexture;
         control.characterCam.targetTexture = renderTexture;
