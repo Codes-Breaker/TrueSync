@@ -1157,8 +1157,15 @@ public class CharacterContorl : MonoBehaviour
 
     public void AddExplosionForce(float explosionForce,Vector3 explosionPositon,float explosionRadius)
     {
+            //{
+            //    var target = (transform.position - explosionPositon).normalized;
+            //    ridbody.AddForce(explosionForce * ( 1 / Mathf.Sqrt((explosionPositon - transform.position).magnitude)) * target,ForceMode.Force);
+            //}
         if (!invulernable)
-            ridbody.AddExplosionForce(explosionForce, explosionPositon, explosionRadius,2f,ForceMode.Impulse);
+            //ridbody.AddExplosionForce(explosionForce * (1 / Mathf.Sqrt((explosionPositon - transform.position).magnitude)),explosionPositon,-1,2f);
+            ridbody.AddExplosionForce(explosionForce * (1 / Mathf.Sqrt((explosionPositon - transform.position).magnitude)), explosionPositon,-1,(explosionPositon.y - (transform.position.y - (bodyCollider as SphereCollider).radius))+4f);
+        Debug.Log(explosionForce * (1 / Mathf.Sqrt((explosionPositon - transform.position).magnitude)));
+        Debug.Log($"{(explosionPositon.y - (transform.position.y - (bodyCollider as SphereCollider).radius)) + 4f} ... {explosionPositon} ... {transform.position} .. {(explosionPositon - transform.position).magnitude}");
     }
 
     private void UseItem(bool isUse)

@@ -70,7 +70,7 @@ public class StickyBombTrap : ItemTrapBase
                     if(item.GetComponent<CharacterContorl>())
                         item.GetComponent<CharacterContorl>().AddExplosionForce(explosionForceArgument * item.GetComponent<Rigidbody>().mass, transform.position, explosionRangeRadius);
                     else
-                        item.GetComponent<Rigidbody>().AddExplosionForce(explosionForceArgument * item.GetComponent<Rigidbody>().mass, transform.position, explosionRangeRadius,2f, ForceMode.Impulse);
+                        item.GetComponent<Rigidbody>().AddExplosionForce(explosionForceArgument * item.GetComponent<Rigidbody>().mass, transform.position, explosionRangeRadius,2f);
                     //if ((item.transform.position - transform.position).magnitude < explosionRangeRadius)
                     //{
 
@@ -95,5 +95,12 @@ public class StickyBombTrap : ItemTrapBase
             otherCharacter.OnGainBuff(bombBuff);
             base.OnEnd();
         }
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.green;
+        Gizmos.DrawSphere(transform.position, explosionRangeRadius);
+
     }
 }

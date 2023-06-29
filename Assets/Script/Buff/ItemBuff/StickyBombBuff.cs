@@ -6,11 +6,11 @@ using DG.Tweening;
 public class StickyBombBuff : ItemBuffBase
 {
     //爆炸范围
-    private float explosionRangeRadius = 15f;
+    private float explosionRangeRadius = 8f;
     //爆炸力大小
-    private float explosionForceArgument = 2.3f;
+    private float explosionForceArgument = 120f;
     //爆炸力对自身得加成
-    private float explosionFroceToSelfBonusArgument = 1.6f;
+    private float explosionFroceToSelfBonusArgument = 1f;
     //传递时的飞行高度
     public float stickyBombHeight = 0.5f;
     //传递时的飞行时间
@@ -116,7 +116,7 @@ public class StickyBombBuff : ItemBuffBase
                             item.GetComponent<CharacterContorl>().AddExplosionForce(explosionForceArgument * item.GetComponent<Rigidbody>().mass, stickyBombGameObject.transform.position, explosionRangeRadius);
                     }
                     else
-                        item.GetComponent<Rigidbody>().AddExplosionForce(explosionForceArgument * item.GetComponent<Rigidbody>().mass, stickyBombGameObject.transform.position, explosionRangeRadius,2f,ForceMode.Impulse);
+                        item.GetComponent<Rigidbody>().AddExplosionForce(explosionForceArgument * item.GetComponent<Rigidbody>().mass, stickyBombGameObject.transform.position, explosionRangeRadius,2f);
                     //if ((item.transform.position - stickyBombGameObject.transform.position).magnitude < explosionRangeRadius)
                     //{
                     //}
