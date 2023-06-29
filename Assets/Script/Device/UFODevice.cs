@@ -63,7 +63,7 @@ public class UFODevice : MonoBehaviour
 
                 //otherRB.AddForce(Vector3.up * suctionToTargetForceParameters.Evaluate(distance) * otherRB.mass, ForceMode.Force);
                 var hForce = suctionToCenterForceParameters.Evaluate(distance);
-                otherRB.velocity = new Vector3(otherRB.velocity.x, 1f,otherRB.velocity.z);
+                otherRB.velocity = new Vector3(otherRB.velocity.x, 0.9f,otherRB.velocity.z);
                 otherRB.AddForce(Vector3.ProjectOnPlane(target, Vector3.up).normalized * hForce * otherRB.mass, ForceMode.Force);
                 // 计算空气阻力
                 Vector3 airResistance = - otherRB.velocity * frictionCoefficient;

@@ -21,7 +21,7 @@ public class RocketThrusterBuff : ItemBuffBase
     private float hitKnockBackToOhterArgument = 1f;
     public RocketThrusterBuff(CharacterContorl target) : base(target)
     {
-        buffTime = 15f;
+        buffTime = 10f;
     }
 
     public RocketThrusterBuff(CharacterContorl target, float buffTime) : base(target, buffTime)

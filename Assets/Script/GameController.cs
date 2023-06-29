@@ -18,7 +18,6 @@ public class GameController : MonoBehaviour
     public GameObject windText;
     public GameObject windIndicator;
     public GameObject infoBg;
-    public VisualEffect windEffect;
     public OceanController oceanController;
     public float RiseSeaLevelTime = 180;
     private float gameTime = 0;
@@ -48,7 +47,6 @@ public class GameController : MonoBehaviour
         windText?.gameObject.SetActive(false);
         infoBg?.gameObject.SetActive(false);
         windIndicator?.gameObject.SetActive(false);
-        windEffect.SetFloat("ParticlesRate", 0);
         gameTime = 0;
         hasRiseSea = false;
         isGameOver = false;

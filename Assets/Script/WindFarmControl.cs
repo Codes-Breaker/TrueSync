@@ -44,7 +44,6 @@ public class WindFarmControl : MonoBehaviour, IRandomEventsObject
         text = gameController.windText.GetComponent<TMP_Text>();
         windImage = gameController.windIndicator.GetComponent<Image>();
         infoBg = gameController.infoBg;
-        windEffect = gameController.windEffect;
     }
     public void OnShow(Vector3 point, float stayTime)
     {

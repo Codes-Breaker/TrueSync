@@ -1508,7 +1508,7 @@ public class CharacterContorl : MonoBehaviour
 
             if (gameController.screenMode == ScreenMode.Split && cinemachineTargetGroup.FindMember(closeTarget.transform) == -1)
             {
-                cinemachineTargetGroup.AddMember(closeTarget.transform, 2, 4);
+                cinemachineTargetGroup.AddMember(closeTarget.transform, 2, 2);
             }
 
             lastSeenView = viewRangeDector.closeTargets.FirstOrDefault(x => !x.isDead);
