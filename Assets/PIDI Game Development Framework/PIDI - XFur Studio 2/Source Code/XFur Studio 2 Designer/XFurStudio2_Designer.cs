@@ -1867,8 +1867,8 @@
 
             var position = rotation * new Vector3( 0.0f, 0.0f, -distance ) + TargetInstances[ActiveTarget].targetXFur.transform.TransformPoint( meshBounds.center ) + pivotOffset;
 
-            transform.rotation = rotation;
-            transform.position = position;
+            //transform.rotation = rotation;
+            //transform.position = position;
 
 #if ENABLE_INPUT_SYSTEM
             if ( !Keyboard.current.shiftKey.isPressed && Mouse.current.middleButton.isPressed ) {
