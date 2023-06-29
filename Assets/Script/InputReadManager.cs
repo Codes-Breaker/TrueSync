@@ -206,7 +206,7 @@ public class InputReadManager : MonoBehaviour
             var cameraOne = cameraOneGameObject.GetComponent<Camera>();
             GameObject.Destroy(cameraOneGameObject.GetComponent<AudioListener>());
             //相机一设置
-            cameraOne.rect = new Rect(0,0,0.497f,1);
+            cameraOne.rect = new Rect(0,0,0.5f,1);
             cameraOne.cullingMask |= 1 << 10;
             cinemachineTargetGroupGameObject.layer = 10;
             for(int i = 0;i<cinemachineTargetGroupGameObject.transform.childCount;i++)
@@ -240,7 +240,7 @@ public class InputReadManager : MonoBehaviour
             var cameraOne = cameraOneGameObject.GetComponent<Camera>();
             GameObject.Destroy(cameraOneGameObject.GetComponent<AudioListener>());
             //相机一设置
-            cameraOne.rect = new Rect(0, 0.5f, 0.497f, 0.5f);
+            cameraOne.rect = new Rect(0, 0.5f, 0.5f, 0.5f);
             cameraOne.cullingMask |= 1 << 10;
             cinemachineTargetGroupGameObject.layer = 10;
             for (int i = 0; i < cinemachineTargetGroupGameObject.transform.childCount; i++)
@@ -272,7 +272,7 @@ public class InputReadManager : MonoBehaviour
             var targetGroupThree = GameObject.Instantiate(cinemachineTargetGroupGameObject);
             GameObject.Destroy(cameraThreeGameObject.GetComponent<AudioListener>());
             var cameraThree = cameraThreeGameObject.GetComponent<Camera>();
-            cameraThree.rect = new Rect(0, 0, 0.497f, 0.497f);
+            cameraThree.rect = new Rect(0, 0, 0.5f, 0.5f);
             cameraThree.cullingMask |= 1 << 12;
             targetGroupThree.layer = 12;
             for (int i = 0; i < targetGroupThree.transform.childCount; i++)
@@ -290,7 +290,7 @@ public class InputReadManager : MonoBehaviour
             var cameraOne = cameraOneGameObject.GetComponent<Camera>();
             GameObject.Destroy(cameraOneGameObject.GetComponent<AudioListener>());
             //相机一设置
-            cameraOne.rect = new Rect(0, 0.5f, 0.497f, 0.5f);
+            cameraOne.rect = new Rect(0, 0.5f, 0.5f, 0.5f);
             cameraOne.cullingMask |= 1 << 10;
             cinemachineTargetGroupGameObject.layer = 10;
             for (int i = 0; i < cinemachineTargetGroupGameObject.transform.childCount; i++)
@@ -322,7 +322,7 @@ public class InputReadManager : MonoBehaviour
             var targetGroupThree = GameObject.Instantiate(cinemachineTargetGroupGameObject);
             GameObject.Destroy(cameraThreeGameObject.GetComponent<AudioListener>());
             var cameraThree = cameraThreeGameObject.GetComponent<Camera>();
-            cameraThree.rect = new Rect(0, 0, 0.497f, 0.497f);
+            cameraThree.rect = new Rect(0, 0, 0.5f, 0.5f);
             cameraThree.cullingMask |= 1 << 12;
             targetGroupThree.layer = 12;
             for (int i = 0; i < targetGroupThree.transform.childCount; i++)
@@ -338,7 +338,7 @@ public class InputReadManager : MonoBehaviour
             var targetGroupFour = GameObject.Instantiate(cinemachineTargetGroupGameObject);
             GameObject.Destroy(cameraFourGameObject.GetComponent<AudioListener>());
             var cameraFour = cameraFourGameObject.GetComponent<Camera>();
-            cameraFour.rect = new Rect(0.5f, 0, 0.5f, 0.497f);
+            cameraFour.rect = new Rect(0.5f, 0, 0.5f, 0.5f);
             cameraFour.cullingMask |= 1 << 13;
             targetGroupFour.layer = 13;
             for (int i = 0; i < targetGroupFour.transform.childCount; i++)
