@@ -35,6 +35,7 @@ public class LargementPotionBuff : ItemBuffBase
         character.hitKnockbackToSelfArgument = character.hitKnockbackToSelfArgument * hitKnockBackToSelfArgument;
 
         character.hitMaxDistance = character.hitMaxDistance * 2;
+    
         character.tag = "StaticObject";
         base.OnBuffApply();
         buff = new InvulernableBuff(character, -1);

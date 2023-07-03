@@ -12,8 +12,8 @@ public class RocketProjectile : ItemProjectileBase
     public Quaternion itemRot = Quaternion.identity;
     public Vector3 rocketForward = Vector3.zero;
     private float runMaxVelocity = 12f;
-    public float explosionRangeRadius = 5f;
-    public float explosionForceArgument = 250f;
+    public float explosionRangeRadius = 8f;
+    public float explosionForceArgument = 100f;
     private float autoExplosionTime = 20f;
     private float elapsedTime = 0f;
     //爆炸特效预制体路径
@@ -73,10 +73,7 @@ public class RocketProjectile : ItemProjectileBase
         var character = collision.gameObject.GetComponent<CharacterContorl>();
         if (character != null)
         {
-            if (character.invulernable)
-            {
-                Explosion();
-            }
+            Explosion();
         }
 
     }

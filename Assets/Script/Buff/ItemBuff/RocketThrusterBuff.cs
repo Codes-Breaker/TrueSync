@@ -126,7 +126,7 @@ public class RocketThrusterBuff : ItemBuffBase
             moveTarget = moveTarget.normalized;
             moveTarget = Vector3.ProjectOnPlane(moveTarget, character.groundNormal).normalized;
             if (!character.hasStunBuff())
-                character.AddForce(moveTarget * forceMagnitude - gravityDivide, ForceMode.Force);
+                character.AddForce(moveTarget * forceMagnitude - gravityDivide, ForceMode.Force, true);
         }
         //补偿重力分量
     }
@@ -136,14 +136,7 @@ public class RocketThrusterBuff : ItemBuffBase
         base.OnCollide(collision);
         if (collision.gameObject.CompareTag("StaticObject"))
         {
-            var hitOnPlane = Vector3.ProjectOnPlane((collision.contacts[0].point - character.ridbody.position), character.groundNormal).normalized;
-            var forwardOnPlane = Vector3.ProjectOnPlane(character.ridbody.transform.forward, character.groundNormal).normalized;
-            var hitAngle = Vector3.SignedAngle(forwardOnPlane, hitOnPlane, character.groundNormal);
-            if (Mathf.Abs(hitAngle) <= 45)
-            {
-                this.Finish();
-            }
-            
+            this.Finish();
         }
     }
 }

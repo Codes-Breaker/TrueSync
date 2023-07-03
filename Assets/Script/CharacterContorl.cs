@@ -824,6 +824,11 @@ public class CharacterContorl : MonoBehaviour
         return buffs.Count(x => x is LargementPotionBuff);
     }
 
+    public bool isBrakeRecover()
+    {
+        return anima.GetBool("brakeRecover");
+    }
+
     public bool hasStunBuff()
     {
         var hasStunBuff = buffs.Any(x => x is StunBuff);
@@ -1149,9 +1154,9 @@ public class CharacterContorl : MonoBehaviour
         return true;
     }
 
-    public void AddForce(Vector3 force,ForceMode forceMode)
+    public void AddForce(Vector3 force,ForceMode forceMode, bool isForce = false)
     {
-        if (!invulernable)
+        if (!invulernable || isForce)
             ridbody.AddForce(force,forceMode);
     }
 
@@ -1164,13 +1169,13 @@ public class CharacterContorl : MonoBehaviour
         if (!invulernable)
             //ridbody.AddExplosionForce(explosionForce * (1 / Mathf.Sqrt((explosionPositon - transform.position).magnitude)),explosionPositon,-1,2f);
             ridbody.AddExplosionForce(explosionForce * (1 / Mathf.Sqrt((explosionPositon - transform.position).magnitude)), explosionPositon,-1,(explosionPositon.y - (transform.position.y - (bodyCollider as SphereCollider).radius))+4f);
-        Debug.Log(explosionForce * (1 / Mathf.Sqrt((explosionPositon - transform.position).magnitude)));
-        Debug.Log($"{(explosionPositon.y - (transform.position.y - (bodyCollider as SphereCollider).radius)) + 4f} ... {explosionPositon} ... {transform.position} .. {(explosionPositon - transform.position).magnitude}");
+        //Debug.Log(explosionForce * (1 / Mathf.Sqrt((explosionPositon - transform.position).magnitude)));
+        //Debug.Log($"{(explosionPositon.y - (transform.position.y - (bodyCollider as SphereCollider).radius)) + 4f} ... {explosionPositon} ... {transform.position} .. {(explosionPositon - transform.position).magnitude}");
     }
 
     private void UseItem(bool isUse)
     {
-        if(isUse && itemAbility != null && !hasStunBuff())
+        if (isUse && itemAbility != null && !hasStunBuff() && !isBrake && !isBrakeRecover())
         {
             itemAbility.UseItemAbility();
         }
@@ -1619,7 +1624,7 @@ public class CharacterContorl : MonoBehaviour
             lastInWaterTime = 0;
         }
 
-        isInWater = floatObj.InWater;
+        isInWater = floatObj.InWater && !isInRocket;
 
         if (isInWater)
         {

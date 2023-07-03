@@ -22,7 +22,7 @@ public class ShoryukenProjectile : ItemProjectileBase
         collisionIneffectiveBuff = new CollisionIneffectiveBuff(character, 2);
         character.OnGainBuff(stunBuffToSelf);
         bodyCollider.isTrigger = true;
-
+        character.tag = "StaticObject";
         buff = new InvulernableBuff(character, -1);
         character.OnGainBuff(buff);
     }
@@ -42,6 +42,7 @@ public class ShoryukenProjectile : ItemProjectileBase
     {
         character.animationEventReceiver.UnRegisterEvent(AnimationEventReceiver.EventEnum.ShoryukenEnd, DestroyShoryukenprojectile);
         stunBuffToSelf.isEnd = true;
+        character.tag = "Untagged";
         //collisionIneffectiveBuff.Finish();
         buff.Finish();
         OnEnd();
