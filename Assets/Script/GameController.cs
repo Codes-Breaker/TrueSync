@@ -11,6 +11,7 @@ using System;
 
 public class GameController : MonoBehaviour
 {
+    public SceneMode sceneMode;
     public Camera mainCamera;
     public Camera uiCamera;
     public GameObject GameOverGO;

@@ -1801,35 +1801,6 @@ public class CharacterContorl : MonoBehaviour
     #region OnCollison
     private void OnCollisionStay(Collision collision)
     {
-        if (collision.gameObject.GetComponent<TimeLapseBombSkill>())
-        {
-            //ÍÆÕ¨µ¯
-            var eventObjectPrefab = Resources.Load<GameObject>("MediumHit");
-            var eventObjectGameObject = Instantiate(eventObjectPrefab, collision.contacts[0].point, Quaternion.Euler(new Vector3(0, 0, 0)));
-
-            var otherCollision = collision.gameObject.GetComponent<TimeLapseBombSkill>();
-
-            Vector3 vel1 = new Vector3(velocityBeforeCollision.x, 0.25f * velocityBeforeCollision.y, velocityBeforeCollision.z);
-            Vector3 vel2 = new Vector3(otherCollision.velocityBeforeCollision.x, 0.25f * otherCollision.velocityBeforeCollision.y, otherCollision.velocityBeforeCollision.z);
-
-            Vector3 cPoint = collision.contacts[0].point;
-            Vector3 contactToMe = cPoint - positionBeforeCollision;
-            Vector3 contactToOther = cPoint - otherCollision.positionBeforeCollision;
-
-            var d1 = Vector3.Angle(vel1, contactToMe);
-            var d2 = Vector3.Angle(vel1, contactToOther);
-
-            var degree1 = d1 * Mathf.Deg2Rad;
-            var degree2 = d2 * Mathf.Deg2Rad;
-
-            Vector3 impactVelocity = collision.relativeVelocity;
-
-            var m1 = (Mathf.Cos(degree1) * vel1).magnitude;
-            var m2 = (Mathf.Cos(degree2) * vel2).magnitude;
-
-            ridbody.AddExplosionForce(m2 * 2.5f + 300, collision.contacts[0].point, 4);
-            collision.collider.gameObject.GetComponent<Rigidbody>().AddExplosionForce((forceArgument + m1) * 1.5f + 50, collision.contacts[0].point, 4);
-        }
         if (collision.gameObject.GetComponent<CharacterContorl>())
         {
             var otherCollision = collision.gameObject.GetComponent<CharacterContorl>();
