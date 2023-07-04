@@ -15,3 +15,11 @@ public enum ScreenMode
     Same,
     Split
 }
+
+[Serializable]
+public enum SceneMode 
+{ 
+    Island,
+    Football,
+
+}
