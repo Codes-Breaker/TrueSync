@@ -1295,6 +1295,7 @@ public class CharacterContorl : MonoBehaviour
     public void SetFurColor(int index)
     {
         xfurInstance.FurDataProfiles[1].FurMainTint = furData.furDataList[index].furColor;
+        xfurInstance.FurDataProfiles[1].FurRim = furData.furDataList[index].furColor;
         furIndex = index;
     }
 
