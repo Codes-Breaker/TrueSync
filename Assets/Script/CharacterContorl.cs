@@ -11,9 +11,9 @@ using Crest;
 using RangeAttribute = UnityEngine.RangeAttribute;
 using RootMotion.FinalIK;
 using System.Linq;
-using XFurStudio2;
 using BoingKit;
 using Collision = UnityEngine.Collision;
+using XFurStudio3.Core;
 
 public class CharacterContorl : MonoBehaviour
 {
@@ -1295,6 +1295,7 @@ public class CharacterContorl : MonoBehaviour
     public void SetFurColor(int index)
     {
         xfurInstance.FurDataProfiles[1].FurMainTint = furData.furDataList[index].furColor;
+        xfurInstance.FurDataProfiles[1].FurRim = furData.furDataList[index].furColor;
         furIndex = index;
     }
 

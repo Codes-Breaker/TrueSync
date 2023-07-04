@@ -49,7 +49,7 @@ public class ChooseCharactersPanelItemControl : MonoBehaviour
             index++;
         }
         control.index = index;
-        renderTexture = new RenderTexture(300, 400, 24, RenderTextureFormat.ARGB32);
+        renderTexture = new RenderTexture(300, 400, 24, RenderTextureFormat.ARGB64);
         rt.texture = renderTexture;
         control.characterCam.targetTexture = renderTexture;
         control.characterCam.Render();

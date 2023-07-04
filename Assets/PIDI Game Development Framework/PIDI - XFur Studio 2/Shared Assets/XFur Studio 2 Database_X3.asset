@@ -1,0 +1,419 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &-1858728331305041901
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Internal XFShells FW
+  m_Shader: {fileID: 4800000, guid: 66683b1aa13fee54b914f6c62276c087, type: 3}
+  m_ValidKeywords:
+  - FURPROFILES_BLENDED
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _XFurEmissionMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _XFurNormalmap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _XFurParamData:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _XFurPhysics:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _XFurProfilesSplat:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _XFurSelfColorVariation:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _XFurSelfStrandsPattern:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _XFurVFXMask:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _XFurCullFur: 2
+    - _XFurHasGroomData: 0
+    - _XFurSelfOverColorMod: 0.5
+    - _XFurSelfRimPower: 2
+    - _XFurSelfUnderColorMod: 0.25
+    - _XFurUVTiling: 2
+    m_Colors:
+    - _XFurRimColor: {r: 1, g: 1, b: 1, a: 1}
+    - _XFurSelfColor: {r: 1, g: 1, b: 1, a: 1}
+    - _XFurSelfColorA: {r: 1, g: 1, b: 1, a: 1}
+    - _XFurSelfColorB: {r: 1, g: 1, b: 1, a: 1}
+    - _XFurSelfColorC: {r: 1, g: 1, b: 1, a: 1}
+    - _XFurSelfColorD: {r: 1, g: 1, b: 1, a: 1}
+    - _XFurVFX1Color: {r: 0.75, g: 0.05, b: 0.05, a: 1}
+    - _XFurVFX2Color: {r: 0.85, g: 0.95, b: 1, a: 1}
+  m_BuildTextureStacks: []
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61894040ee6467643bbedfc165e05212, type: 3}
+  m_Name: XFur Studio 2 Database_X3
+  m_EditorClassIdentifier: 
+  receiveURPShadows: 1
+  xfurStrandMaps: []
+  RenderingMode: 1
+  MobileMode: 0
+  MultiProfileBlending: 1
+  BakeFurData: 0
+  Virtual3DStrands: 1
+  UseNormalmaps: 0
+  referenceFurProfiles: []
+  referencedFurStrands: {fileID: 0}
+  XFShells: {fileID: 4800000, guid: 66683b1aa13fee54b914f6c62276c087, type: 3}
+  Basic8: {fileID: 0}
+  Basic4: {fileID: 0}
+  XFURP: {fileID: -6465566751694194690, guid: 1c73d2f903b32244aa9b63acaedd424f, type: 3}
+  XFHDRP: {fileID: 0}
+  XFHDRPEmissive: {fileID: 0}
+  XFShellsMaterial: {fileID: 5641616019626156267}
+  XFShellsMaterialDouble: {fileID: 5325033116511445613}
+  XFShellsMaterialFWD: {fileID: -1858728331305041901}
+  XFShellsMaterialFWDDouble: {fileID: 7952068581838933711}
+  Basic4Mat: {fileID: 0}
+  Basic8Mat: {fileID: 0}
+  URPShells: {fileID: 227527407170292259}
+  URPShellsDouble: {fileID: 6215214595278248468}
+  HDRPShells: {fileID: 0}
+  HDRPShellsDouble: {fileID: 0}
+  HDRPEmissive: {fileID: 0}
+  HDRPEmissiveDouble: {fileID: 0}
+  VFXProgressive: {fileID: 4800000, guid: fffcab2d25d13254db7bd62e9063a553, type: 3}
+  GPUPhysics: {fileID: 4800000, guid: a5f5c2f80f6642649b6ed84ffac1cc4f, type: 3}
+  PainterFill: {fileID: 4800000, guid: cbfb3cc62193fe046af76da39871c7f3, type: 3}
+  PainterUnwrap: {fileID: 4800000, guid: 45b44b2fc72bff244b95db937809a853, type: 3}
+  PainterBase: {fileID: 4800000, guid: 0db7066dcd9648f49b0e02b94814cdff, type: 3}
+--- !u!21 &227527407170292259
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Internal URPShells
+  m_Shader: {fileID: -6465566751694194690, guid: 1c73d2f903b32244aa9b63acaedd424f,
+    type: 3}
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 1
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _XFurNormalmap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_Lightmaps:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_LightmapsInd:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_ShadowMasks:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _QueueControl: 0
+    - _QueueOffset: 0
+    - _XFurURPRenderingMode: 1
+    m_Colors: []
+  m_BuildTextureStacks: []
+--- !u!21 &5325033116511445613
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Internal XFShellsD
+  m_Shader: {fileID: 4800000, guid: 66683b1aa13fee54b914f6c62276c087, type: 3}
+  m_ValidKeywords:
+  - FURPROFILES_BLENDED
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 1
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _XFurEmissionMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _XFurNormalmap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _XFurParamData:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _XFurPhysics:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _XFurProfilesSplat:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _XFurSelfColorVariation:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _XFurSelfStrandsPattern:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _XFurVFXMask:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _XFurCullFur: 0
+    - _XFurHasGroomData: 0
+    - _XFurSelfOverColorMod: 0.5
+    - _XFurSelfRimPower: 2
+    - _XFurSelfUnderColorMod: 0.25
+    - _XFurUVTiling: 2
+    m_Colors:
+    - _XFurRimColor: {r: 1, g: 1, b: 1, a: 1}
+    - _XFurSelfColor: {r: 1, g: 1, b: 1, a: 1}
+    - _XFurSelfColorA: {r: 1, g: 1, b: 1, a: 1}
+    - _XFurSelfColorB: {r: 1, g: 1, b: 1, a: 1}
+    - _XFurSelfColorC: {r: 1, g: 1, b: 1, a: 1}
+    - _XFurSelfColorD: {r: 1, g: 1, b: 1, a: 1}
+    - _XFurVFX1Color: {r: 0.75, g: 0.05, b: 0.05, a: 1}
+    - _XFurVFX2Color: {r: 0.85, g: 0.95, b: 1, a: 1}
+  m_BuildTextureStacks: []
+--- !u!21 &5641616019626156267
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Internal XFShells
+  m_Shader: {fileID: 4800000, guid: 66683b1aa13fee54b914f6c62276c087, type: 3}
+  m_ValidKeywords:
+  - FURPROFILES_BLENDED
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 1
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _XFurEmissionMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _XFurNormalmap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _XFurParamData:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _XFurPhysics:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _XFurProfilesSplat:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _XFurSelfColorVariation:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _XFurSelfStrandsPattern:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _XFurVFXMask:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _XFurCullFur: 2
+    - _XFurHasGroomData: 0
+    - _XFurSelfOverColorMod: 0.5
+    - _XFurSelfRimPower: 2
+    - _XFurSelfUnderColorMod: 0.25
+    - _XFurUVTiling: 2
+    m_Colors:
+    - _XFurRimColor: {r: 1, g: 1, b: 1, a: 1}
+    - _XFurSelfColor: {r: 1, g: 1, b: 1, a: 1}
+    - _XFurSelfColorA: {r: 1, g: 1, b: 1, a: 1}
+    - _XFurSelfColorB: {r: 1, g: 1, b: 1, a: 1}
+    - _XFurSelfColorC: {r: 1, g: 1, b: 1, a: 1}
+    - _XFurSelfColorD: {r: 1, g: 1, b: 1, a: 1}
+    - _XFurVFX1Color: {r: 0.75, g: 0.05, b: 0.05, a: 1}
+    - _XFurVFX2Color: {r: 0.85, g: 0.95, b: 1, a: 1}
+  m_BuildTextureStacks: []
+--- !u!21 &6215214595278248468
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Internal URPShellsD
+  m_Shader: {fileID: -6465566751694194690, guid: 3e4c07f92d242d743b7bcf2934c96164,
+    type: 3}
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 1
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _XFurNormalmap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_Lightmaps:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_LightmapsInd:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_ShadowMasks:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _QueueControl: 0
+    - _QueueOffset: 0
+    - _XFurURPRenderingMode: 1
+    m_Colors: []
+  m_BuildTextureStacks: []
+--- !u!21 &7952068581838933711
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Internal XFShells DFW
+  m_Shader: {fileID: 4800000, guid: 66683b1aa13fee54b914f6c62276c087, type: 3}
+  m_ValidKeywords:
+  - FURPROFILES_BLENDED
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _XFurEmissionMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _XFurNormalmap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _XFurParamData:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _XFurPhysics:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _XFurProfilesSplat:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _XFurSelfColorVariation:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _XFurSelfStrandsPattern:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _XFurVFXMask:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _XFurCullFur: 0
+    - _XFurHasGroomData: 0
+    - _XFurSelfOverColorMod: 0.5
+    - _XFurSelfRimPower: 2
+    - _XFurSelfUnderColorMod: 0.25
+    - _XFurUVTiling: 2
+    m_Colors:
+    - _XFurRimColor: {r: 1, g: 1, b: 1, a: 1}
+    - _XFurSelfColor: {r: 1, g: 1, b: 1, a: 1}
+    - _XFurSelfColorA: {r: 1, g: 1, b: 1, a: 1}
+    - _XFurSelfColorB: {r: 1, g: 1, b: 1, a: 1}
+    - _XFurSelfColorC: {r: 1, g: 1, b: 1, a: 1}
+    - _XFurSelfColorD: {r: 1, g: 1, b: 1, a: 1}
+    - _XFurVFX1Color: {r: 0.75, g: 0.05, b: 0.05, a: 1}
+    - _XFurVFX2Color: {r: 0.85, g: 0.95, b: 1, a: 1}
+  m_BuildTextureStacks: []

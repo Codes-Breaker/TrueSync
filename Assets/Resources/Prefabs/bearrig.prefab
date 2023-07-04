@@ -21947,10 +21947,11 @@ GameObject:
   - component: {fileID: 8710850407254142023}
   - component: {fileID: 4382902077929413651}
   - component: {fileID: 2131397238}
-  - component: {fileID: 1828130212}
   - component: {fileID: 261792194}
   - component: {fileID: 261792193}
   - component: {fileID: 261792195}
+  - component: {fileID: 4149409310053481277}
+  - component: {fileID: 424012148120414931}
   m_Layer: 7
   m_Name: Mesh
   m_TagString: Untagged
@@ -22096,7 +22097,49 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00a804871ddcfa647ab17032324ce387, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1828130212
+--- !u!54 &261792194
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5677479699309663618}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!135 &261792193
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5677479699309663618}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Center: {x: -0.0027680395, y: 0.5990348, z: 0.10534233}
+--- !u!65 &261792195
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5677479699309663618}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 0
+  serializedVersion: 2
+  m_Size: {x: 0, y: 0, z: 0}
+  m_Center: {x: -0.0027680395, y: 0.5990348, z: 0.10534233}
+--- !u!114 &4149409310053481277
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -22105,7 +22148,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5677479699309663618}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 541934e0bcaaa0c4caa13ea631143083, type: 3}
+  m_Script: {fileID: 11500000, guid: 0b8ac187428450c43a78f8a482288dd9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   RenderingMode: 0
@@ -22116,7 +22159,8 @@ MonoBehaviour:
   AutoUpdateMaterials: 1
   AutoAdjustForScale: 0
   UpdateFrequency: 0.1
-  furDatabase: {fileID: 11400000, guid: 59a2996febfee3245beb4c942eb84c83, type: 2}
+  editFurProfile: 1
+  furDatabase: {fileID: 11400000, guid: 3880625e728a3c44aa5d2713e39f8144, type: 2}
   furDataProfiles:
   - DoubleSided: 0
     ProbeUse: 1
@@ -22128,7 +22172,7 @@ MonoBehaviour:
     FurOcclusionCurve: 0
     FurRimPower: 9.25
     FurSmoothness: 0
-    FurStrandsAsset: {fileID: 11400000, guid: 2cb1919df50ef8b4f801a712277cacb0, type: 2}
+    FurStrandsAsset: {fileID: 11400000, guid: 0ee5d351088be5f4aa406cd0a673197f, type: 2}
     FurColorVariation: {fileID: 0}
     FurMainTint: {r: 1, g: 1, b: 1, a: 1}
     FurColorA: {r: 1, g: 1, b: 1, a: 1}
@@ -22152,7 +22196,7 @@ MonoBehaviour:
     UseEmissiveFur: 0
     FurEmissionMap: {fileID: 0}
     FurEmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    version: v2.7.0
+    version: v3.0.0
     ReceiveShadows: 1
     CastShadows: 1
     FurSamples: 20
@@ -22164,19 +22208,20 @@ MonoBehaviour:
     SelfWindStrength: 1.99
     SkinColorMap: {fileID: 0}
     SkinNormalMap: {fileID: 0}
+    SkinMetalMap: {fileID: 0}
     SkinColor: {r: 1, g: 1, b: 1, a: 1}
     SkinSmoothness: 0.3
   - DoubleSided: 0
-    ProbeUse: 0
+    ProbeUse: 1
     FurGroomStrength: 1
-    FurLength: 0.146
-    FurThickness: 0.682
-    FurThicknessCurve: 0.189
-    FurOcclusion: 0.006
-    FurOcclusionCurve: 0.158
+    FurLength: 0.302
+    FurThickness: 1
+    FurThicknessCurve: 0.242
+    FurOcclusion: 0
+    FurOcclusionCurve: 0
     FurRimPower: 10
     FurSmoothness: 0
-    FurStrandsAsset: {fileID: 11400000, guid: 2cb1919df50ef8b4f801a712277cacb0, type: 2}
+    FurStrandsAsset: {fileID: 11400000, guid: 996227f02b05a644ba97631625b8ed35, type: 2}
     FurColorVariation: {fileID: 0}
     FurMainTint: {r: 1, g: 1, b: 1, a: 1}
     FurColorA: {r: 1, g: 1, b: 1, a: 1}
@@ -22185,14 +22230,14 @@ MonoBehaviour:
     FurColorD: {r: 1, g: 1, b: 1, a: 1}
     FurShadowsTint: {r: 1, g: 1, b: 1, a: 1}
     FurRim: {r: 0.9622642, g: 0.9622642, b: 0.9622642, a: 1}
-    FurSpecularTint: {r: 0, g: 0, b: 0, a: 1}
+    FurSpecularTint: {r: 1, g: 1, b: 1, a: 1}
     FurTransmission: 0
     FurRimBoost: 1
     FurUnderColorMod: 0
     FurOverColorMod: 0.25
     FurBaseTiling: 1
     FurColorTiling: {x: 1, y: 1, z: 1, w: 1}
-    UseCurlyFur: 1
+    UseCurlyFur: 0
     FurCurlAmountX: 1
     FurCurlAmountY: 1
     FurCurlSizeX: 0.0987
@@ -22200,18 +22245,19 @@ MonoBehaviour:
     UseEmissiveFur: 1
     FurEmissionMap: {fileID: 0}
     FurEmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    version: v2.7.0
+    version: v3.0.0
     ReceiveShadows: 0
     CastShadows: 0
-    FurSamples: 10
-    FurUVTiling: 32
+    FurSamples: 12
+    FurUVTiling: 12
     FurColorMap: {fileID: 2800000, guid: a96b0772a0122a14f8cf79149f143111, type: 3}
     FurNormalmap: {fileID: 0}
-    FurData0: {fileID: 2800000, guid: e170b76e37ab5094490cca6644e084a9, type: 3}
-    FurData1: {fileID: 0}
-    SelfWindStrength: 1.26
+    FurData0: {fileID: 2800000, guid: 226e41c11fe4b8744b1cd9807b41b790, type: 3}
+    FurData1: {fileID: 2800000, guid: ca36063b6bb606d48ac371ccc4059126, type: 3}
+    SelfWindStrength: 0
     SkinColorMap: {fileID: 0}
     SkinNormalMap: {fileID: 0}
+    SkinMetalMap: {fileID: 0}
     SkinColor: {r: 1, g: 1, b: 1, a: 1}
     SkinSmoothness: 0.3
   - DoubleSided: 0
@@ -22248,7 +22294,7 @@ MonoBehaviour:
     UseEmissiveFur: 0
     FurEmissionMap: {fileID: 0}
     FurEmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    version: v2.5.0
+    version: v3.0.0
     ReceiveShadows: 1
     CastShadows: 1
     FurSamples: 30
@@ -22260,6 +22306,7 @@ MonoBehaviour:
     SelfWindStrength: 1
     SkinColorMap: {fileID: 0}
     SkinNormalMap: {fileID: 0}
+    SkinMetalMap: {fileID: 0}
     SkinColor: {r: 1, g: 1, b: 1, a: 1}
     SkinSmoothness: 0.3
   mainRenderer:
@@ -22273,19 +22320,19 @@ MonoBehaviour:
     brokenData: 0
     isFurMaterial: 000100
     isLOD: 0
-    furProfiles: ffffffff0000000000000000
+    furProfiles: 000000000000000000000000
   randomModule:
-    pidiSkin2: {fileID: 11400000, guid: 28daee7028e1f19498bf3f55979d4ddf, type: 2}
+    pidiSkin2: {fileID: 0}
     isEnabled: 0
     moduleName: Randomization
     moduleStatus: 3
     experimentalFeatures: 0
-    version: 2.0
+    version: 1.0
     hasMobileMode: 1
     hasSRPMode: 1
     criticalError: 0
     name: XFur Module
-    xfurInstance: {fileID: 1828130212}
+    xfurInstance: {fileID: 4149409310053481277}
     executeInEditor: 0
     RandomizeOnLoad: 1
     RandomSettings:
@@ -22330,7 +22377,7 @@ MonoBehaviour:
         UseEmissiveFur: 0
         FurEmissionMap: {fileID: 0}
         FurEmissionColor: {r: 0, g: 0, b: 0, a: 1}
-        version: v2.5.0
+        version: v3.0.0
         ReceiveShadows: 1
         CastShadows: 1
         FurSamples: 30
@@ -22342,33 +22389,34 @@ MonoBehaviour:
         SelfWindStrength: 1
         SkinColorMap: {fileID: 0}
         SkinNormalMap: {fileID: 0}
+        SkinMetalMap: {fileID: 0}
         SkinColor: {r: 1, g: 1, b: 1, a: 1}
         SkinSmoothness: 0.3
       RandomProfiles: []
-    randomFolds: 01
+    randomFolds: 
   lodModule:
-    pidiSkin2: {fileID: 11400000, guid: 28daee7028e1f19498bf3f55979d4ddf, type: 2}
-    isEnabled: 0
+    pidiSkin2: {fileID: 11400000, guid: 2275c2b9837b25645b2d81aa8d3e1d4d, type: 2}
+    isEnabled: 1
     moduleName: Dynamic LOD
     moduleStatus: 3
     experimentalFeatures: 0
-    version: 2.0
+    version: 1.0
     hasMobileMode: 1
     hasSRPMode: 1
     criticalError: 0
     name: XFur Module
-    xfurInstance: {fileID: 1828130212}
+    xfurInstance: {fileID: 4149409310053481277}
     executeInEditor: 0
     lodRenderers: []
-    furSamples: 1e000000
+    furSamples: 140000000c0000001e000000
     MaxFurDistance: 150
     MinFurDistance: 2
-    FurSamplesRange: {x: 11, y: 39}
+    FurSamplesRange: {x: 12, y: 32}
     SwitchToBasicShells: 0
     BasicShellsSamples: 8
     BasicShellsRegion: {x: 25, y: 40}
     useOverdrawReduction: 1
-    overdrawLODArea: 1.14
+    overdrawLODArea: 1
     overdrawLODStrength: 1
   physicsModule:
     pidiSkin2: {fileID: 0}
@@ -22376,33 +22424,34 @@ MonoBehaviour:
     moduleName: Fur Physics
     moduleStatus: 3
     experimentalFeatures: 0
-    version: 3.0
+    version: 1.0
     hasMobileMode: 1
     hasSRPMode: 1
     criticalError: 0
     name: XFur Module
-    xfurInstance: {fileID: 1828130212}
+    xfurInstance: {fileID: 4149409310053481277}
     executeInEditor: 0
     quality: 2
     disableOnLOD: 0
     gravityStrength: 0.5
     physicsSensitivity: 0.35
+    physicsStrengthMultiplier: 1
     perMatPhysics: 010101
-    PhysicsShader: {fileID: 4800000, guid: 66441ae8344265943b3a5d228504605b, type: 3}
+    PhysicsShader: {fileID: 4800000, guid: a5f5c2f80f6642649b6ed84ffac1cc4f, type: 3}
   vfxModule:
     pidiSkin2: {fileID: 0}
     isEnabled: 0
     moduleName: VFX & Weather
     moduleStatus: 3
     experimentalFeatures: 0
-    version: 3.0
+    version: 1.0
     hasMobileMode: 1
     hasSRPMode: 1
     criticalError: 0
     name: XFur Module
-    xfurInstance: {fileID: 1828130212}
+    xfurInstance: {fileID: 4149409310053481277}
     executeInEditor: 0
-    VFXProgressiveShader: {fileID: 4800000, guid: 91c3b3c969c2c2a4a881214e93ab57b3,
+    VFXProgressiveShader: {fileID: 4800000, guid: fffcab2d25d13254db7bd62e9063a553,
       type: 3}
     disableOnLOD: 0
     quality: 2
@@ -22451,24 +22500,27 @@ MonoBehaviour:
     moduleName: UV Decals
     moduleStatus: 3
     experimentalFeatures: 0
-    version: 2.0
+    version: 1.0
     hasMobileMode: 1
     hasSRPMode: 1
     criticalError: 0
     name: XFur Module
-    xfurInstance: {fileID: 1828130212}
+    xfurInstance: {fileID: 4149409310053481277}
     executeInEditor: 0
-    DecalsShader: {fileID: 4800000, guid: 357427ff6e4c3c44ca0c1737798bf9d4, type: 3}
+    DecalsShader: {fileID: 4800000, guid: 64b7a1faccc7ea949b9faef90fe54456, type: 3}
     ProfileDecals:
     - enabled: 0
-      finalOutput: {fileID: 0}
-      outputMode: 0
-      decals: []
-    - enabled: 1
+      furTint: {r: 0, g: 0, b: 0, a: 0}
       finalOutput: {fileID: 0}
       outputMode: 0
       decals: []
     - enabled: 0
+      furTint: {r: 0, g: 0, b: 0, a: 0}
+      finalOutput: {fileID: 0}
+      outputMode: 0
+      decals: []
+    - enabled: 0
+      furTint: {r: 0, g: 0, b: 0, a: 0}
       finalOutput: {fileID: 0}
       outputMode: 0
       decals: []
@@ -22484,52 +22536,34 @@ MonoBehaviour:
     brokenData: 0
     isFurMaterial: 000100
     isLOD: 0
-    furProfiles: ffffffff0000000000000000
+    furProfiles: 000000000000000000000000
   currentRenderingMode: 0
-  folds: 00010101000000000000000000000000
-  profileFolds: 0101000000000000000000000000000000000000000000000000000000000000
---- !u!54 &261792194
-Rigidbody:
+  folds: 00000001000000000000000000000000
+  profileFolds: 0000000000000000000000000000000000000000000000000000000000000000
+--- !u!205 &424012148120414931
+LODGroup:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5677479699309663618}
   serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 1
-  m_IsKinematic: 1
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
---- !u!135 &261792193
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5677479699309663618}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_LocalReferencePoint: {x: 0, y: 0, z: 0}
+  m_Size: 1
+  m_FadeMode: 0
+  m_AnimateCrossFading: 0
+  m_LastLODIsBillboard: 0
+  m_LODs:
+  - screenRelativeHeight: 0.6
+    fadeTransitionWidth: 0
+    renderers: []
+  - screenRelativeHeight: 0.3
+    fadeTransitionWidth: 0
+    renderers: []
+  - screenRelativeHeight: 0.1
+    fadeTransitionWidth: 0
+    renderers: []
   m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Center: {x: -0.0027680395, y: 0.5990348, z: 0.10534233}
---- !u!65 &261792195
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5677479699309663618}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 0
-  serializedVersion: 2
-  m_Size: {x: 0, y: 0, z: 0}
-  m_Center: {x: -0.0027680395, y: 0.5990348, z: 0.10534233}
 --- !u!1 &5783572227375899335
 GameObject:
   m_ObjectHideFlags: 0
@@ -29560,7 +29594,7 @@ MonoBehaviour:
   animationEventReceiver: {fileID: 2131397238}
   boingBones: {fileID: 1988338272673851255}
   furData: {fileID: 11400000, guid: 6dedd58e395f8124bb004a520776681a, type: 2}
-  xfurInstance: {fileID: 1828130212}
+  xfurInstance: {fileID: 4149409310053481277}
   furIndex: 0
   dangerHPColor: {r: 0.5647059, g: 0.03529412, b: 0.03529412, a: 1}
   normalHPColor: {r: 0, g: 0, b: 0, a: 1}
