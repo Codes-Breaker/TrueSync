@@ -1,0 +1,64 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 903c7a8df5af46545a88bc3a9b938b28, type: 3}
+  m_Name: Mesh_lambert1_Profile
+  m_EditorClassIdentifier: 
+  FurTemplate:
+    DoubleSided: 0
+    ProbeUse: 1
+    FurGroomStrength: 1
+    FurLength: 0.302
+    FurThickness: 1
+    FurThicknessCurve: 0.242
+    FurOcclusion: 0
+    FurOcclusionCurve: 0
+    FurRimPower: 10
+    FurSmoothness: 0
+    FurStrandsAsset: {fileID: 11400000, guid: 996227f02b05a644ba97631625b8ed35, type: 2}
+    FurColorVariation: {fileID: 0}
+    FurMainTint: {r: 1, g: 1, b: 1, a: 1}
+    FurColorA: {r: 1, g: 1, b: 1, a: 1}
+    FurColorB: {r: 1, g: 1, b: 1, a: 1}
+    FurColorC: {r: 1, g: 1, b: 1, a: 1}
+    FurColorD: {r: 1, g: 1, b: 1, a: 1}
+    FurShadowsTint: {r: 1, g: 1, b: 1, a: 1}
+    FurRim: {r: 0.9622642, g: 0.9622642, b: 0.9622642, a: 1}
+    FurSpecularTint: {r: 1, g: 1, b: 1, a: 1}
+    FurTransmission: 0
+    FurRimBoost: 1
+    FurUnderColorMod: 0
+    FurOverColorMod: 0.25
+    FurBaseTiling: 1
+    FurColorTiling: {x: 1, y: 1, z: 1, w: 1}
+    UseCurlyFur: 0
+    FurCurlAmountX: 1
+    FurCurlAmountY: 1
+    FurCurlSizeX: 0.0987
+    FurCurlSizeY: 0.1
+    UseEmissiveFur: 1
+    FurEmissionMap: {fileID: 0}
+    FurEmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    version: v3.0.0
+    ReceiveShadows: 0
+    CastShadows: 0
+    FurSamples: 6
+    FurUVTiling: 12
+    FurColorMap: {fileID: 2800000, guid: a96b0772a0122a14f8cf79149f143111, type: 3}
+    FurNormalmap: {fileID: 0}
+    FurData0: {fileID: 2800000, guid: 226e41c11fe4b8744b1cd9807b41b790, type: 3}
+    FurData1: {fileID: 2800000, guid: ca36063b6bb606d48ac371ccc4059126, type: 3}
+    SelfWindStrength: 8
+    SkinColorMap: {fileID: 0}
+    SkinNormalMap: {fileID: 0}
+    SkinMetalMap: {fileID: 0}
+    SkinColor: {r: 1, g: 1, b: 1, a: 1}
+    SkinSmoothness: 0.3

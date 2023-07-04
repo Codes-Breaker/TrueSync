@@ -56,7 +56,7 @@ public class QTERollStun : QTEBuff
             {
                 recovering = true;
                 character.stunRecoverTime *= character.stunAccumulateTime;
-                character.maxStunValue = Math.Max(character.stunMinValue, character.maxStunValue - character.stunDecreaseRate);
+                //character.maxStunValue = Math.Max(character.stunMinValue, character.maxStunValue - character.stunDecreaseRate);
                 character.currentStunValue = character.maxStunValue;
                 character.IKObject.transform.DOLocalRotate(new Vector3(0, 0, 0), 0.5f).onComplete += () =>
                 {

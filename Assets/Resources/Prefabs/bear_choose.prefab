@@ -1774,11 +1774,11 @@ MonoBehaviour:
     SkinColor: {r: 1, g: 1, b: 1, a: 1}
     SkinSmoothness: 0.3
   - DoubleSided: 0
-    ProbeUse: 0
+    ProbeUse: 1
     FurGroomStrength: 1
-    FurLength: 0.146
-    FurThickness: 0.682
-    FurThicknessCurve: 0.189
+    FurLength: 0.23
+    FurThickness: 0.497
+    FurThicknessCurve: 0.104
     FurOcclusion: 0.006
     FurOcclusionCurve: 0.158
     FurRimPower: 10
@@ -1810,7 +1810,7 @@ MonoBehaviour:
     version: v2.7.0
     ReceiveShadows: 1
     CastShadows: 0
-    FurSamples: 10
+    FurSamples: 32
     FurUVTiling: 32
     FurColorMap: {fileID: 2800000, guid: a96b0772a0122a14f8cf79149f143111, type: 3}
     FurNormalmap: {fileID: 0}
