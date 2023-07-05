@@ -1036,7 +1036,6 @@ public class CharacterContorl : MonoBehaviour
                     }
                     transform.rotation = Quaternion.Slerp(this.ridbody.rotation, Quaternion.Euler(new Vector3(0, targetAngle, 0) + initialRotation), movementRotationRate);
                 }
-                Debug.Log($"{moveTarget},{isTouchingStep},{wallNormal},{forceMagnitude},{gravityScale}");
                 anima.SetBool("isBrake", false);
             }
         }
