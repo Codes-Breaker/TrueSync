@@ -195,6 +195,8 @@ public class CharacterContorl : MonoBehaviour
     public bool isAirWalk;
     private bool hasAirWalk;
     public bool isGrounded;
+    private Vector3 wallNormal;
+    private bool isTouchingStep;
     public bool isStun { get; private set; }
     //起身
     public bool isRecovering { get; private set; }
@@ -900,11 +902,15 @@ public class CharacterContorl : MonoBehaviour
                     var frictionForceMagnitude = ridbody.mass * bodyCollider.material.dynamicFriction * gravityFrictionDivide.magnitude;
                     forceMagnitude = forceMagnitude + frictionForceMagnitude;
                 }
+                
 
                 //补偿重力分量
                 var moveTarget = ridbody.transform.forward;
                 moveTarget = moveTarget.normalized;
-                moveTarget = Vector3.ProjectOnPlane(moveTarget, groundNormal).normalized;
+                if(isTouchingStep)
+                    moveTarget = Vector3.ProjectOnPlane(moveTarget, wallNormal).normalized;
+                else
+                    moveTarget = Vector3.ProjectOnPlane(moveTarget, groundNormal).normalized;
                 if (!hasStunBuff())
                     ridbody.AddForce(moveTarget * forceMagnitude - gravityDivide, ForceMode.Force);
                 //Debug.Log($"isTouchingSlope || isGrounded {isTouchingSlope || isGrounded} forceMagnitude {forceMagnitude} velocity {ridbody.velocity} velocityMagnitude {ridbody.velocity.magnitude}");
@@ -979,7 +985,10 @@ public class CharacterContorl : MonoBehaviour
                 }
                 var moveTarget = ridbody.transform.forward;
                 moveTarget = moveTarget.normalized;
-                moveTarget = Vector3.ProjectOnPlane(moveTarget, groundNormal).normalized;
+                if (isTouchingStep)
+                    moveTarget = Vector3.ProjectOnPlane(moveTarget, wallNormal).normalized;
+                else
+                    moveTarget = Vector3.ProjectOnPlane(moveTarget, groundNormal).normalized;
                 RemoveSliperyBuff();
                 //如果刹车走路状态不在施加推进力
                 if (!hasBrake)
@@ -1643,6 +1652,7 @@ public class CharacterContorl : MonoBehaviour
     private void CheckSlopeAndDirections()
     {
         RaycastHit slopeHit;
+        RaycastHit stepHit;
         isTouchingSlope = false;
         if (Physics.SphereCast(bodyCollider.transform.position + (bodyCollider as SphereCollider).center + transform.forward.normalized * slopeCheckerForwardOffset, slopeCheckerThrashold, Vector3.down, out slopeHit, (bodyCollider as SphereCollider).radius * bodyCollider.transform.localScale.y + 0.01f, groundMask))
         {
@@ -1657,6 +1667,19 @@ public class CharacterContorl : MonoBehaviour
         else
         {
             groundNormal = Vector3.up;
+        }
+
+        if (Physics.SphereCast(bodyCollider.transform.position + (bodyCollider as SphereCollider).center + transform.forward.normalized * slopeCheckerForwardOffset, slopeCheckerThrashold, new Vector3(0, 0, 1), out stepHit, (bodyCollider as SphereCollider).radius * bodyCollider.transform.localScale.y + 0.01f, groundMask))
+        {
+            isTouchingStep = true;
+            wallNormal = stepHit.normal;
+            gravityScale = 0;
+        }
+        else
+        {
+            isTouchingStep = false;
+            wallNormal = Vector3.zero;
+            gravityScale = 1;
         }
     }
 
