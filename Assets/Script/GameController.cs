@@ -21,7 +21,7 @@ public class GameController : MonoBehaviour
     public GameObject infoBg;
     public OceanController oceanController;
     public float RiseSeaLevelTime = 180;
-    private float gameTime = 0;
+    public float gameTime = 0;
     private bool hasRiseSea = false;
     private bool hasStartEvent = false;
     public bool startGame = false;
