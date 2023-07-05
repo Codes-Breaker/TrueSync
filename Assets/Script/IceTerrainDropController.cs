@@ -13,11 +13,16 @@ public class IceTerrainDropController : MonoBehaviour
     private bool preparingDrop = false;
     private bool startDroping = false;
     private float currentDropTime = 0f;
+    private MeshRenderer meshRenderer;
     public void PrepareDrop()
     {
         if (preparingDrop)
             return;
         preparingDrop = true;
+        var rendererBlock = new MaterialPropertyBlock();
+        meshRenderer.GetPropertyBlock(rendererBlock, 0);
+        rendererBlock.SetColor("_Color", Color.red);
+        meshRenderer.SetPropertyBlock(rendererBlock, 0);
         this.transform.DOScale(new Vector3(0.98f, 0.98f, 0.98f), warnTime).onComplete += () =>
         {
             this.transform.DOLocalMoveY(-10, dropTime);
@@ -28,6 +33,11 @@ public class IceTerrainDropController : MonoBehaviour
         //     this.transform.DOLocalMoveY(-10, dropTime);
         //     startDroping = true;
         // };
+    }
+
+    private void Start()
+    {
+        meshRenderer = this.GetComponent<MeshRenderer>();
     }
 
     private void FixedUpdate()
