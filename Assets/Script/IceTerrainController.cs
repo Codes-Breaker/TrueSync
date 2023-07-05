@@ -1,3 +1,4 @@
+using Crest;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,10 +16,11 @@ public class IceTerrainController : MonoBehaviour
     public List<IceTerrainDropController> totalPlanes = new List<IceTerrainDropController>();
     private float nextDropTimes;
     private int currentDropTimes = 0;
-
+    public OceanDepthCache cache;
     private void Start()
     {
         nextDropTimes = dropFrequency;
+        cache.PopulateCache(true);
     }
     // Start is called before the first frame update
     private void FixedUpdate()
@@ -41,7 +43,17 @@ public class IceTerrainController : MonoBehaviour
             var randomIndex = Random.Range(0, totalPlanes.Count);
             var dropPlane = totalPlanes[randomIndex];
             dropPlane.PrepareDrop();
+            dropPlane.onPlatformDropped += () =>
+            {
+                StartCoroutine(DelayRefresh());
+            };
             totalPlanes.RemoveAt(randomIndex);
         }
+    }
+
+    IEnumerator DelayRefresh()
+    {
+        yield return new WaitForSeconds(0.5f);
+        cache.PopulateCache(true);
     }
 }

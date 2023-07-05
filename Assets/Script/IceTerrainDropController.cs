@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using Crest;
+using System;
 
 public class IceTerrainDropController : MonoBehaviour
 {
@@ -13,11 +14,17 @@ public class IceTerrainDropController : MonoBehaviour
     private bool preparingDrop = false;
     private bool startDroping = false;
     private float currentDropTime = 0f;
+    private MeshRenderer meshRenderer;
+    public Action onPlatformDropped;
     public void PrepareDrop()
     {
         if (preparingDrop)
             return;
         preparingDrop = true;
+        var rendererBlock = new MaterialPropertyBlock();
+        meshRenderer.GetPropertyBlock(rendererBlock, 0);
+        rendererBlock.SetColor("_Color", Color.red);
+        meshRenderer.SetPropertyBlock(rendererBlock, 0);
         this.transform.DOScale(new Vector3(0.98f, 0.98f, 0.98f), warnTime).onComplete += () =>
         {
             this.transform.DOLocalMoveY(-10, dropTime);
@@ -30,6 +37,11 @@ public class IceTerrainDropController : MonoBehaviour
         // };
     }
 
+    private void Start()
+    {
+        meshRenderer = this.GetComponent<MeshRenderer>();
+    }
+
     private void FixedUpdate()
     {
         if (startDroping)
@@ -38,7 +50,8 @@ public class IceTerrainDropController : MonoBehaviour
             if (currentDropTime >= dropTime)
             {
                 startDroping = false;
-                GameObject.Destroy(this);
+                onPlatformDropped?.Invoke();
+                GameObject.Destroy(this.gameObject);
             }
         }
     }
