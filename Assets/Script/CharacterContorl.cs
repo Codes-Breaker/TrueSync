@@ -819,7 +819,7 @@ public class CharacterContorl : MonoBehaviour
     private void ClimbStep()
     {
         RaycastHit stepHit;
-        if (Physics.SphereCast(bodyCollider.transform.position + (bodyCollider as SphereCollider).center * bodyCollider.transform.localScale.y + transform.forward.normalized * stepCheckerForwardOffset, slopeCheckerThrashold, transform.forward, out stepHit, (bodyCollider as SphereCollider).radius * bodyCollider.transform.localScale.y + 0.01f, groundMask))
+        if (Physics.SphereCast(bodyCollider.transform.position + (bodyCollider as SphereCollider).center * bodyCollider.transform.localScale.y + -groundNormal.normalized * stepCheckerForwardOffset, slopeCheckerThrashold, transform.forward, out stepHit, (bodyCollider as SphereCollider).radius * bodyCollider.transform.localScale.y + 0.02f, groundMask))
         {
             isTouchingStep = true;
             wallNormal = stepHit.normal;
