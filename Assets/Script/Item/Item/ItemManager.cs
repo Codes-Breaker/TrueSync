@@ -40,25 +40,40 @@ public class ItemManager : MonoBehaviour
     public float itemCreateFrequency;
     [Header("道具刷新点位父级")]
     public GameObject itemPosition;
+    public List<GameObject> itemPositions = new List<GameObject>();
+    public float itemPositionUpdateRate;
     public GameController gameController;
     private float lastSpawnTime = 0;
+    private float lastUpdateRate = 0;
     private void FixedUpdate()
     {
         if (gameController.startGame)
         {
             lastSpawnTime += Time.fixedDeltaTime;
+            lastUpdateRate += Time.fixedDeltaTime;
+            if (lastUpdateRate >= itemPositionUpdateRate)
+            {
+                if (itemPositions.Count > 0)
+                {
+                    var firstItemPosition = itemPositions[0];
+                    itemPositions.RemoveAt(0);
+                    itemPosition = firstItemPosition;
+                }
+            }
             if (lastSpawnTime >= itemCreateFrequency)
             {
                 SpawnItem();
                 lastSpawnTime = 0;
             }
+
+
         }
     }
 
     private void SpawnItem()
     {
         var players = GameObject.FindObjectsOfType<CharacterContorl>();
-        var playerCount = players.Count();
+        var playerCount = players.Count() / 2f;
         var playerWithUnsedAbility = players.Count(x => x.itemAbility != null);
         var spawnCount = playerCount;
         var points = new List<Vector3>();

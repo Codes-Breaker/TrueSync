@@ -1,4 +1,5 @@
 using Cinemachine;
+using Crest;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -21,14 +22,25 @@ public class UFODevice : MonoBehaviour
     public bool isSuction;
 
     public bool active;
-
+    public bool outofwater;
+    private bool hasRemove = false;
     private bool hasAddGroup = false;
     private bool hasRemoveGroup = false;
     public int catchedPlayer => catchedPlayers.Count;
+    public OceanDepthCache oceanDepthCache;
 
     public List<CharacterContorl> catchedPlayers = new List<CharacterContorl>();
     private void LateUpdate()
     {
+        if (!hasRemove)
+        {
+            if (outofwater)
+            {
+                hasRemove = true;
+                oceanDepthCache.PopulateCache(true);
+            }
+        }
+
         if (active)
         {
             if (!hasAddGroup)
@@ -109,7 +121,7 @@ public class UFODevice : MonoBehaviour
         var groups = GameObject.FindObjectsOfType<CinemachineTargetGroup>();
         foreach(var g in groups)
         {
-            g.AddMember(this.transform.parent, 2, 12);
+            g.AddMember(this.transform.parent, 2, 4);
         }
     }
 

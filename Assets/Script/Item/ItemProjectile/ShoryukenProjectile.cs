@@ -20,6 +20,7 @@ public class ShoryukenProjectile : ItemProjectileBase
         character.animationEventReceiver.RegisterEvent(AnimationEventReceiver.EventEnum.ShoryukenEnd, DestroyShoryukenprojectile);
         stunBuffToSelf = new StunBuff(character);
         collisionIneffectiveBuff = new CollisionIneffectiveBuff(character, 2);
+        character.OnGainBuff(collisionIneffectiveBuff);
         character.OnGainBuff(stunBuffToSelf);
         bodyCollider.isTrigger = true;
         character.tag = "StaticObject";

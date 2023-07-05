@@ -17,6 +17,7 @@ public class IceTerrainController : MonoBehaviour
     private float nextDropTimes;
     private int currentDropTimes = 0;
     public OceanDepthCache cache;
+    public bool drop = false;
     private void Start()
     {
         nextDropTimes = dropFrequency;
@@ -25,6 +26,8 @@ public class IceTerrainController : MonoBehaviour
     // Start is called before the first frame update
     private void FixedUpdate()
     {
+        if (!drop)
+            return;
         if (gameController.startGame && currentDropTimes < dropTimes)
         {
             if (gameController.gameTime >= nextDropTimes)

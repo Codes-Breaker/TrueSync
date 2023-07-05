@@ -20,13 +20,15 @@ public class GameController : MonoBehaviour
     public GameObject windIndicator;
     public GameObject infoBg;
     public OceanController oceanController;
-    public float RiseSeaLevelTime = 180;
+    public float RiseSeaLevelTimeFrequency = 180;
+    public int totalRiseSeaTime = 3;
     public float gameTime = 0;
     private bool hasRiseSea = false;
     private bool hasStartEvent = false;
     public bool startGame = false;
     public bool debug = false;
     public bool isGameOver = false;
+    private int currentRiseTime = 0;
     public PlayableDirector director;
     private int winIndex = -1;
     private int winFurIndex = -1;
@@ -41,6 +43,8 @@ public class GameController : MonoBehaviour
     public GameObject splitScreenBlackImage;
     public bool ufoSpeedUpPhase = false;
     public UFODevice ufoDevice;
+    private float nextRiseSeaLevelTime;
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -53,6 +57,8 @@ public class GameController : MonoBehaviour
         isGameOver = false;
         hasStartEvent = false;
         UnityEngine.Random.InitState(System.DateTime.Now.Millisecond);
+
+        nextRiseSeaLevelTime = RiseSeaLevelTimeFrequency;
     }
 
     private void FixedUpdate()
@@ -98,15 +104,17 @@ public class GameController : MonoBehaviour
 
     private void CheckSeaLevelRise()
     {
-        if (!hasRiseSea)
-        {
-            if (gameTime >= RiseSeaLevelTime)
+        if (currentRiseTime >= totalRiseSeaTime)
+            return;
+
+            if (gameTime >= nextRiseSeaLevelTime)
             {
-                //强制结束游戏
-                hasRiseSea = true;
-                oceanController.StartRising();
+            //强制结束游戏
+                nextRiseSeaLevelTime += RiseSeaLevelTimeFrequency;
+                currentRiseTime++;
+                oceanController.Rise(currentRiseTime, 10f);
             }
-        }
+        
 
     }
 
