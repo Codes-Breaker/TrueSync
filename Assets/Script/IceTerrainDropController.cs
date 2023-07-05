@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using Crest;
+using System;
 
 public class IceTerrainDropController : MonoBehaviour
 {
@@ -14,6 +15,7 @@ public class IceTerrainDropController : MonoBehaviour
     private bool startDroping = false;
     private float currentDropTime = 0f;
     private MeshRenderer meshRenderer;
+    public Action onPlatformDropped;
     public void PrepareDrop()
     {
         if (preparingDrop)
@@ -48,7 +50,8 @@ public class IceTerrainDropController : MonoBehaviour
             if (currentDropTime >= dropTime)
             {
                 startDroping = false;
-                GameObject.Destroy(this);
+                onPlatformDropped?.Invoke();
+                GameObject.Destroy(this.gameObject);
             }
         }
     }

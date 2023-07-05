@@ -29264,6 +29264,7 @@ MonoBehaviour:
   movementSpeedUpTime: 3
   movementRotationRate: 0.07
   movementMaxVelocity: 3
+  stepSpeedArgument: 1
   jumpForce: 30
   jumpFrequency: 0.25
   jumpRushFrequency: 2
@@ -29285,6 +29286,7 @@ MonoBehaviour:
     m_Bits: 80
   slopeCheckerThrashold: 0.51
   slopeCheckerForwardOffset: 0.51
+  stepCheckerForwardOffset: 0
   miniClimbableSlopeAngle: -45
   maxClimbableSlopeAngle: 40
   maxStunValue: 100

@@ -27,6 +27,8 @@ public class CharacterContorl : MonoBehaviour
     public float movementRotationRate;
     [Header("最大行走速度")]
     public float movementMaxVelocity;
+    [Header("攀爬速度（和水平速度的比值）")]
+    public float stepSpeedArgument;
     [Space(10)]
     [Header("跳跃力系数")]
     public float jumpForce;
@@ -75,6 +77,8 @@ public class CharacterContorl : MonoBehaviour
     public float slopeCheckerThrashold = 0.51f;
     [Header("斜坡检测点的向前偏移")]
     public float slopeCheckerForwardOffset = 0.41f;
+    [Header("攀爬面检测点向前偏移")]
+    public float stepCheckerForwardOffset = 0.2f;
     [Header("最小斜坡角度")]
     public float miniClimbableSlopeAngle = 5;
     [Header("最大斜坡角度")]
@@ -440,7 +444,8 @@ public class CharacterContorl : MonoBehaviour
         CheckIsGrounded();
         UpdateBuff();
         CheckSlopeAndDirections();
-        CheckSlopeAndDirections();
+        ClimbStep();
+        //CheckSlopeAndDirections();
         CheckIsInWater();
         UpdateHP();
         UpdateStunRecovery();
@@ -775,14 +780,14 @@ public class CharacterContorl : MonoBehaviour
     {
         if (isDead)
             return;
-        if (ridbody.velocity.y >= 0)
-        {
-            gravityScale = ascendingGravityScale;
-        }
-        else if (ridbody.velocity.y < 0)
-        {
-            gravityScale = fallingGravityScale;
-        }
+        //if (ridbody.velocity.y >= 0)
+        //{
+        //    gravityScale = ascendingGravityScale;
+        //}
+        //else if (ridbody.velocity.y < 0)
+        //{
+        //    gravityScale = fallingGravityScale;
+        //}
         ridbody.AddForce(Physics.gravity * (gravityScale) * ridbody.mass);
         currentGravity = Physics.gravity * (gravityScale);
     }
@@ -809,6 +814,22 @@ public class CharacterContorl : MonoBehaviour
                 x.Finish();
             }
         });
+    }
+
+    private void ClimbStep()
+    {
+        RaycastHit stepHit;
+        if (Physics.SphereCast(bodyCollider.transform.position + (bodyCollider as SphereCollider).center * bodyCollider.transform.localScale.y + transform.forward.normalized * stepCheckerForwardOffset, slopeCheckerThrashold, transform.forward, out stepHit, (bodyCollider as SphereCollider).radius * bodyCollider.transform.localScale.y + 0.01f, groundMask))
+        {
+            isTouchingStep = true;
+            wallNormal = stepHit.normal;
+        }
+        else
+        {
+            isTouchingStep = false;
+            wallNormal = Vector3.zero;
+        }
+
     }
 
     public int countRopeStunBuff()
@@ -895,7 +916,15 @@ public class CharacterContorl : MonoBehaviour
                 var acceleration = runMaxVelocity / runSpeedUpTime;
                 var forceMagnitude = ridbody.mass * acceleration;
                 var gravityDivide = Vector3.zero;
-                if (isTouchingSlope || isGrounded)
+                if (isTouchingStep)
+                {
+                    gravityDivide = Vector3.ProjectOnPlane(Physics.gravity, wallNormal) * ridbody.mass;
+                    var gravityFrictionDivide = Physics.gravity - gravityDivide;
+                    var frictionForceMagnitude = ridbody.mass * bodyCollider.material.dynamicFriction * gravityFrictionDivide.magnitude;
+                    forceMagnitude = forceMagnitude + frictionForceMagnitude;
+
+                }
+                else if (isTouchingSlope || isGrounded)
                 {
                     gravityDivide = Vector3.ProjectOnPlane(Physics.gravity, groundNormal) * ridbody.mass;
                     var gravityFrictionDivide = Physics.gravity - gravityDivide;
@@ -907,8 +936,8 @@ public class CharacterContorl : MonoBehaviour
                 //补偿重力分量
                 var moveTarget = ridbody.transform.forward;
                 moveTarget = moveTarget.normalized;
-                if(isTouchingStep)
-                    moveTarget = Vector3.ProjectOnPlane(moveTarget, wallNormal).normalized;
+                if (isTouchingStep)
+                    moveTarget = Vector3.ProjectOnPlane(moveTarget + new Vector3(0, stepSpeedArgument, 0), wallNormal).normalized;
                 else
                     moveTarget = Vector3.ProjectOnPlane(moveTarget, groundNormal).normalized;
                 if (!hasStunBuff())
@@ -976,7 +1005,15 @@ public class CharacterContorl : MonoBehaviour
                 var forceMagnitude = ridbody.mass * acceleration;
 
                 var gravityDivide = Vector3.zero;
-                if (isTouchingSlope || isGrounded)
+                if (isTouchingStep)
+                {
+                    gravityDivide = Vector3.ProjectOnPlane(Physics.gravity, wallNormal) * ridbody.mass;
+                    var gravityFrictionDivide = Physics.gravity - gravityDivide;
+                    var frictionForceMagnitude = ridbody.mass * bodyCollider.material.dynamicFriction * gravityFrictionDivide.magnitude;
+                    forceMagnitude = forceMagnitude + frictionForceMagnitude;
+
+                }
+                else if(isTouchingSlope || isGrounded)
                 {
                     gravityDivide = Vector3.ProjectOnPlane(Physics.gravity, groundNormal) * ridbody.mass;
                     var gravityFrictionDivide = Physics.gravity - gravityDivide;
@@ -986,7 +1023,7 @@ public class CharacterContorl : MonoBehaviour
                 var moveTarget = ridbody.transform.forward;
                 moveTarget = moveTarget.normalized;
                 if (isTouchingStep)
-                    moveTarget = Vector3.ProjectOnPlane(moveTarget, wallNormal).normalized;
+                    moveTarget = Vector3.ProjectOnPlane(moveTarget + new Vector3(0, stepSpeedArgument, 0), wallNormal).normalized;
                 else
                     moveTarget = Vector3.ProjectOnPlane(moveTarget, groundNormal).normalized;
                 RemoveSliperyBuff();
@@ -994,9 +1031,12 @@ public class CharacterContorl : MonoBehaviour
                 if (!hasBrake)
                 {
                     if (!hasStunBuff())
+                    { 
                         ridbody.AddForce(moveTarget * forceMagnitude - gravityDivide, ForceMode.Force);
+                    }
                     transform.rotation = Quaternion.Slerp(this.ridbody.rotation, Quaternion.Euler(new Vector3(0, targetAngle, 0) + initialRotation), movementRotationRate);
                 }
+                Debug.Log($"{moveTarget},{isTouchingStep},{wallNormal},{forceMagnitude},{gravityScale}");
                 anima.SetBool("isBrake", false);
             }
         }
@@ -1652,7 +1692,6 @@ public class CharacterContorl : MonoBehaviour
     private void CheckSlopeAndDirections()
     {
         RaycastHit slopeHit;
-        RaycastHit stepHit;
         isTouchingSlope = false;
         if (Physics.SphereCast(bodyCollider.transform.position + (bodyCollider as SphereCollider).center + transform.forward.normalized * slopeCheckerForwardOffset, slopeCheckerThrashold, Vector3.down, out slopeHit, (bodyCollider as SphereCollider).radius * bodyCollider.transform.localScale.y + 0.01f, groundMask))
         {
@@ -1669,18 +1708,6 @@ public class CharacterContorl : MonoBehaviour
             groundNormal = Vector3.up;
         }
 
-        if (Physics.SphereCast(bodyCollider.transform.position + (bodyCollider as SphereCollider).center + transform.forward.normalized * slopeCheckerForwardOffset, slopeCheckerThrashold, new Vector3(0, 0, 1), out stepHit, (bodyCollider as SphereCollider).radius * bodyCollider.transform.localScale.y + 0.01f, groundMask))
-        {
-            isTouchingStep = true;
-            wallNormal = stepHit.normal;
-            gravityScale = 0;
-        }
-        else
-        {
-            isTouchingStep = false;
-            wallNormal = Vector3.zero;
-            gravityScale = 1;
-        }
     }
 
     #endregion
