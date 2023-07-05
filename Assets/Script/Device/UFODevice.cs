@@ -80,7 +80,7 @@ public class UFODevice : MonoBehaviour
                         catchedPlayers.Add(character);
                     }
                 }
-                Debug.Log($"distance : {distance} hdistance : {hdistance} hforce {hForce}");
+                //Debug.Log($"distance : {distance} hdistance : {hdistance} hforce {hForce}");
             }
         }
         else
