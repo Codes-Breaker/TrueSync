@@ -8,7 +8,7 @@ public class TreeDevice : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         var character = collision.collider.GetComponent<CharacterContorl>();
-        if(character)
+        if (character)
         {
             if(character.buffs.Any(item => item is LargementPotionBuff))
             {
@@ -17,7 +17,7 @@ public class TreeDevice : MonoBehaviour
                     var rb = gameObject.AddComponent<Rigidbody>();
 
                     rb.mass = 40;
-                    gameObject.layer = 6;
+                    //gameObject.layer = 6;
                 }
             }
         }

@@ -258,7 +258,7 @@ public class CharacterContorl : MonoBehaviour
     //当前的重力大大小
     public Vector3 currentGravity;
 
-    private List<Buff> buffs = new List<Buff>();
+    public List<Buff> buffs = new List<Buff>();
 
     public int playerIndex = 1;
 
