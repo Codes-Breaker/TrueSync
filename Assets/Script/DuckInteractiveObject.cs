@@ -15,12 +15,17 @@ public class DuckInteractiveObject : InteractiveObject
         currentScale = this.transform.localScale;
     }
 
+
     private void OnCollisionEnter(UnityEngine.Collision collision)
     {
         if (collision.gameObject.GetComponent<CharacterContorl>() != null)
         {
-            this.transform.DORewind();
-            this.transform.DOShakeScale(0.5f, 1).SetEase(Ease.OutBounce);
+            if(collision.gameObject.GetComponent<CharacterContorl>().velocityBeforeCollision.magnitude > 0.7f)
+            {
+                this.transform.DORewind();
+                this.transform.DOShakeScale(0.5f, 1).SetEase(Ease.OutBounce);
+
+            }
         }
 
     }

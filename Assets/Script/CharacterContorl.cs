@@ -819,7 +819,7 @@ public class CharacterContorl : MonoBehaviour
     private void ClimbStep()
     {
         RaycastHit stepHit;
-        if (Physics.SphereCast(bodyCollider.transform.position + (bodyCollider as SphereCollider).center * bodyCollider.transform.localScale.y + -groundNormal.normalized * stepCheckerForwardOffset, slopeCheckerThrashold, transform.forward, out stepHit, (bodyCollider as SphereCollider).radius * bodyCollider.transform.localScale.y + 0.02f, groundMask))
+        if (Physics.SphereCast(bodyCollider.transform.position + (bodyCollider as SphereCollider).center * bodyCollider.transform.localScale.y + -groundNormal.normalized * stepCheckerForwardOffset, slopeCheckerThrashold, transform.forward, out stepHit, (bodyCollider as SphereCollider).radius * bodyCollider.transform.localScale.y + 0.02f, groundMask) && !stepHit.collider.GetComponent<DuckInteractiveObject>())
         {
             isTouchingStep = true;
             wallNormal = stepHit.normal;
@@ -1930,20 +1930,20 @@ public class CharacterContorl : MonoBehaviour
     /// </summary>
     /// <param name="distance"></param>
     /// <returns></returns>
-    private KnockBackForceStruct KnockBackForce(float distance, Vector3 hitDir)
+    private KnockBackForceStruct KnockBackForce(float distance, Vector3 hitDir,Vector3 normal)
     {
         isRecordingHit = true;
         hasPrint = false;
         hitDistance = distance;
         hitPosition = this.transform.position;
         hitTime = DateTime.Now;
-        var gravityDivide = Vector3.ProjectOnPlane(Physics.gravity, groundNormal) * ridbody.mass;
+        var gravityDivide = Vector3.ProjectOnPlane(Physics.gravity, normal) * ridbody.mass;
         var gravityFrictionDivide = Physics.gravity - gravityDivide;
         var frictionForceAcceleration =  bodyCollider.material.dynamicFriction * gravityFrictionDivide.magnitude;
 
 
         //var deltaV = Vector3.ProjectOnPlane((this.ridbody.velocity - velocityBeforeCollision), groundNormal);
-        var deltaV = Vector3.ProjectOnPlane(this.ridbody.velocity, groundNormal);
+        var deltaV = Vector3.ProjectOnPlane(this.ridbody.velocity, normal);
         var magnitudeDeltaV = Vector3.Dot(deltaV, hitDir.normalized);
 
         var desiredV = (float)Math.Sqrt((2 * frictionForceAcceleration * distance));
@@ -1962,7 +1962,7 @@ public class CharacterContorl : MonoBehaviour
     /// </summary>
     /// <param name="distance"></param>
     /// <returns></returns>
-    private KnockBackForceStruct KnockBackOnAirForce(float distance, Vector3 hitDir)
+    private KnockBackForceStruct KnockBackOnAirForce(float distance, Vector3 hitDir,Vector3 normal)
     {
         isRecordingHit = true;
         hasPrint = false;
@@ -1972,10 +1972,10 @@ public class CharacterContorl : MonoBehaviour
         var currentVelocity = ridbody.velocity;
         float forceMagnitude = 0f;
         float hitTime = 0f;
-        var gravityDivide = Vector3.ProjectOnPlane(Physics.gravity, groundNormal) * ridbody.mass;
+        var gravityDivide = Vector3.ProjectOnPlane(Physics.gravity, normal) * ridbody.mass;
         var gravityFrictionDivide = Physics.gravity - gravityDivide;
         var frictionForceAcceleration = bodyCollider.material.dynamicFriction * gravityFrictionDivide.magnitude;
-        var deltaV = Vector3.ProjectOnPlane(this.ridbody.velocity, groundNormal);
+        var deltaV = Vector3.ProjectOnPlane(this.ridbody.velocity, normal);
         var magnitudeDeltaV = Vector3.Dot(deltaV, hitDir.normalized);
 
         //var deltaV = (this.ridbody.velocity - velocityBeforeCollision);
@@ -2029,10 +2029,9 @@ public class CharacterContorl : MonoBehaviour
         //撞击场景物体处理
         if (collision.gameObject.GetComponent<InteractiveObject>())
         {
-
             //自身速度
             Vector3 velocitySelf = new Vector3(velocityBeforeCollision.x, velocityBeforeCollision.y, velocityBeforeCollision.z);
-            velocitySelf = Vector3.ProjectOnPlane(velocitySelf, groundNormal).normalized * velocitySelf.magnitude;
+            velocitySelf = Vector3.ProjectOnPlane(velocitySelf, Vector3.up).normalized * velocitySelf.magnitude;
 
 
             Vector3 cPoint = collision.contacts[0].point;
@@ -2054,8 +2053,13 @@ public class CharacterContorl : MonoBehaviour
             var eventObjectPrefab = Resources.Load<GameObject>("Prefabs/Effect/StunHit");
             var eventObjectGameObject = Instantiate(eventObjectPrefab, collision.contacts[0].point, Quaternion.Euler(new Vector3(0, 0, 0)));
             var hitDir = Vector3.ProjectOnPlane((ridbody.position - collision.contacts[0].point), Vector3.up).normalized;
-            var targetDistance = Math.Min(hitMaxDistance, collision.gameObject.GetComponent<InteractiveObject>().knockbackDistance * myHitKnockbackCoef + hitKnockbackSelfCurve.Evaluate(momentumSelf * myBuff + 2)) * InteractiveDistanceCoef * hitKnockbackToSelfArgument;
-            var forceData = KnockBackForce(targetDistance, hitDir);
+            var targetDistance = Math.Min(hitMaxDistance * 3 / 5, collision.gameObject.GetComponent<InteractiveObject>().knockbackDistance * myHitKnockbackCoef + hitKnockbackSelfCurve.Evaluate(momentumSelf * myBuff + 2)) * InteractiveDistanceCoef * hitKnockbackToSelfArgument;
+            //var targetDistance = hitMaxDistance; 
+            KnockBackForceStruct forceData;
+            if (isGrounded || isTouchingSlope)
+                forceData = KnockBackForce(targetDistance, hitDir,Vector3.up);
+            else
+                forceData = KnockBackOnAirForce(targetDistance + 2 , hitDir,Vector3.up);
             var targetStun = targetDistance * distanceToStunCoef * InteractiveStunDistanceCoef;
             if (collision.gameObject.GetComponent<InteractiveObject>().canStun)
                 TakeStun((int)(targetStun));
@@ -2148,9 +2152,9 @@ public class CharacterContorl : MonoBehaviour
 
             //施加水平推力
             if (isGrounded || isTouchingSlope)
-                forceData = KnockBackForce(targetDistance, hitDir);
+                forceData = KnockBackForce(targetDistance, hitDir,groundNormal);
             else
-                forceData = KnockBackOnAirForce(targetDistance, hitDir);
+                forceData = KnockBackOnAirForce(targetDistance, hitDir,groundNormal);
             //anima.SetBool("isHit", true);
             if (myHitKnockback > 1 || otherHitKnockback > 1)
             {
