@@ -58,6 +58,7 @@ public class ItemManager : MonoBehaviour
                     var firstItemPosition = itemPositions[0];
                     itemPositions.RemoveAt(0);
                     itemPosition = firstItemPosition;
+                    lastUpdateRate = 0;
                 }
             }
             if (lastSpawnTime >= itemCreateFrequency)
