@@ -2053,7 +2053,7 @@ public class CharacterContorl : MonoBehaviour
 
             var eventObjectPrefab = Resources.Load<GameObject>("Prefabs/Effect/StunHit");
             var eventObjectGameObject = Instantiate(eventObjectPrefab, collision.contacts[0].point, Quaternion.Euler(new Vector3(0, 0, 0)));
-            var hitDir = Vector3.ProjectOnPlane((ridbody.position - collision.contacts[0].point), groundNormal).normalized;
+            var hitDir = Vector3.ProjectOnPlane((ridbody.position - collision.contacts[0].point), Vector3.up).normalized;
             var targetDistance = Math.Min(hitMaxDistance, collision.gameObject.GetComponent<InteractiveObject>().knockbackDistance * myHitKnockbackCoef + hitKnockbackSelfCurve.Evaluate(momentumSelf * myBuff + 2)) * InteractiveDistanceCoef * hitKnockbackToSelfArgument;
             var forceData = KnockBackForce(targetDistance, hitDir);
             var targetStun = targetDistance * distanceToStunCoef * InteractiveStunDistanceCoef;
