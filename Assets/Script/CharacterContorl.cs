@@ -1560,10 +1560,10 @@ public class CharacterContorl : MonoBehaviour
                 cinemachineTargetGroup.RemoveMember(lastSeenView.transform);
             }
 
-            if (gameController.screenMode == ScreenMode.Split && cinemachineTargetGroup.FindMember(closeTarget.transform) == -1)
-            {
-                cinemachineTargetGroup.AddMember(closeTarget.transform, 2, 2);
-            }
+            //if (gameController.screenMode == ScreenMode.Split && cinemachineTargetGroup.FindMember(closeTarget.transform) == -1)
+            //{
+            //    cinemachineTargetGroup.AddMember(closeTarget.transform, 2, 2);
+            //}
 
             lastSeenView = viewRangeDector.closeTargets.FirstOrDefault(x => !x.isDead);
 
